@@ -11,27 +11,53 @@ export default function HeroSection() {
         playsInline 
         className="absolute inset-0 w-full h-full object-cover z-0"
       >
-        {/* Placeholder Nepal/Nature Video. User can replace the src URL with their own drone footage */}
         <source src="https://cdn.pixabay.com/video/2022/11/22/140111-774431835_large.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 
-      {/* Dark Overlay for text readability (kept explicitly dark because it's overlaid on video) */}
-      <div className="absolute inset-0 z-10 bg-black/40" />
+      {/* Dark Overlay for text readability (kept dynamically dark because it's overlaid on video) */}
+      <div className="absolute inset-0 z-10 bg-black/60" />
 
-      {/* Text Content */}
-      <div className="relative z-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-2 leading-tight drop-shadow-xl tracking-wide">
-          Elevate Your Life.
+      {/* 🌟 Content */}
+      <div className="relative z-20 max-w-4xl px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center mt-8">
+        
+        {/* H1 */}
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-xl mb-6">
+          Live and Work in Nepal as a Digital Nomad
         </h1>
-        <h2 className="text-2xl md:text-4xl text-white/90 italic mb-10 font-medium drop-shadow-md">
-          Work From the Roof of the World.
-        </h2>
-        <Link href="/community" className="px-10 py-4 bg-primary text-black font-bold rounded-full hover:bg-white hover:text-black transition-colors text-xl text-center shadow-lg mb-6">
-          Join the Community
-        </Link>
-        <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto font-medium tracking-wide drop-shadow-sm uppercase">
-          Live. Work. Explore Nepal as a Digital Nomad.
+
+        {/* Subheadline */}
+        <p className="text-lg md:text-2xl text-gray-200 font-medium drop-shadow-md max-w-3xl mb-2">
+          Cost of living, visa, internet, and the best cities to live and work remotely in Nepal.
+        </p>
+
+        {/* Extra SEO Line */}
+        <p className="text-sm md:text-base text-primary/90 font-medium drop-shadow mb-10 tracking-wide">
+          Guides for digital nomads in Kathmandu, Pokhara, and across Nepal.
+        </p>
+
+        {/* CTA Buttons */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full sm:w-auto">
+          {/* Primary CTA */}
+          <Link
+            href="/community"
+            className="w-full sm:w-auto bg-primary text-black font-bold px-8 py-4 rounded-full transition-all transform hover:scale-105 hover:bg-white hover:shadow-xl text-lg"
+          >
+            Join the Free Nomad Community →
+          </Link>
+
+          {/* Secondary CTA */}
+          <Link
+            href="/blog"
+            className="w-full sm:w-auto text-white font-semibold border-2 border-white px-8 py-4 rounded-full hover:border-primary hover:text-primary transition-all text-lg"
+          >
+            Read the Blog →
+          </Link>
+        </div>
+
+        {/* Trust Line */}
+        <p className="mt-10 text-gray-400 text-sm italic font-medium tracking-wide">
+          Join thousands of digital nomads already working remotely from Nepal.
         </p>
       </div>
 
