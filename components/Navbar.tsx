@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Menu, X, ChevronDown } from "lucide-react"
 import { ThemeToggle } from "./ThemeToggle"
+import Image from "next/image"
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -41,12 +42,17 @@ export default function Navbar() {
   ]
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? "bg-background/95 backdrop-blur-md border-b border-border shadow-sm" : "bg-transparent dark:bg-transparent"}`}>
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? "bg-background/95 backdrop-blur-md border-b border-border shadow-sm py-1" : "bg-transparent dark:bg-transparent py-2"}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-          <div className="flex-shrink-0">
-            <Link href="/" className="text-primary font-bold text-2xl tracking-tighter drop-shadow-sm">
-              DN Nepal
+          <div className="flex-shrink-0 flex items-center">
+            <Link href="/" className="flex items-center gap-3">
+              <div className="relative w-14 h-14 md:w-16 md:h-16 rounded-full overflow-hidden border-2 border-white shadow-lg bg-white">
+                <Image src="/logo.png" alt="Digital Nomads in Nepal Logo" fill className="object-cover" priority />
+              </div>
+              <span className={`font-bold text-xl md:text-2xl tracking-tighter drop-shadow-sm transition-colors ${isScrolled ? "text-foreground" : "text-white"}`}>
+                DN Nepal
+              </span>
             </Link>
           </div>
           

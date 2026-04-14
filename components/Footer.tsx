@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 
 export default function Footer() {
   return (
@@ -7,9 +8,9 @@ export default function Footer() {
         
         {/* Column 1: Brand & Socials */}
         <div className="col-span-1 lg:col-span-1 flex flex-col">
-          <Link href="/" className="flex items-center gap-2 mb-4">
-            <div className="w-10 h-10 bg-accent text-white flex items-center justify-center rounded-full font-bold text-lg">
-              DN
+          <Link href="/" className="flex items-center gap-3 mb-4">
+            <div className="relative w-12 h-12 rounded-full overflow-hidden border border-border shadow-md bg-white">
+              <Image src="/logo.png" alt="Digital Nomads in Nepal Logo" fill className="object-cover" />
             </div>
             <span className="font-bold text-xl tracking-tight text-foreground">
               DigiNomads<span className="text-accent">Nepal</span>
