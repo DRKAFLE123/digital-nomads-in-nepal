@@ -39,6 +39,8 @@ export default function Navbar() {
       ]
     },
     { name: "Community", href: "/community" },
+    { name: "Events", href: "/events" },
+    { name: "Partners", href: "/partners" },
   ]
 
   return (
