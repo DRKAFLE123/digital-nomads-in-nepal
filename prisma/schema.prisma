@@ -38,3 +38,49 @@ model ResourceItem {
   category    String
   createdAt   DateTime @default(now())
 }
+
+// ─── GUIDE MARKETPLACE ───────────────────────────────
+
+enum Role {
+  NOMAD
+  GUIDE
+  ADMIN
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  role      Role     @default(NOMAD)
+  createdAt DateTime @default(now())
+  reviews   Review[]
+}
+
+model Guide {
+  id           String   @id @default(cuid())
+  name         String
+  bio          String
+  location     String
+  specialties  String[]
+  photoUrl     String?
+  contactEmail String
+  isVerified   Boolean  @default(false)
+  avgRating    Float    @default(0)
+  totalReviews Int      @default(0)
+  createdAt    DateTime @default(now())
+  reviews      Review[]
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  comment   String
+  guideId   String
+  guide     Guide    @relation(fields: [guideId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([guideId, userId])
+}
