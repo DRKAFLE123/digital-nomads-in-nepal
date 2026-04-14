@@ -21,13 +21,13 @@ export default function HeroSection() {
 
       {/* Text Content */}
       <div className="relative z-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium text-white mb-6 leading-snug drop-shadow-lg tracking-wide">
-          Live Everywhere, Work Anywhere <br className="hidden lg:block" /> Inspire Each Other
+        <h1 className="text-4xl md:text-5xl lg:text-7xl font-medium text-white mb-6 leading-tight drop-shadow-lg tracking-wide">
+          Elevate Your Life. <br className="hidden lg:block" /> Work From the Roof of the World.
         </h1>
         <p className="text-xl md:text-2xl text-white max-w-3xl mx-auto mb-10 font-normal drop-shadow-md">
-          The Leading Global Community <br className="hidden sm:block" /> of Digital Nomads & Remote Professionals
+          The Leading Community of Digital Nomads <br className="hidden sm:block" /> & Remote Professionals in Nepal
         </p>
-        <Link href="/community" className="px-10 py-4 bg-[#2D9CDB] text-white font-medium rounded-full hover:bg-[#2083B8] transition-colors text-lg text-center shadow-lg">
+        <Link href="/community" className="px-10 py-4 bg-[#3498db] text-white font-medium rounded-full hover:bg-[#2980b9] transition-colors text-lg text-center shadow-lg">
           JOIN NOW
         </Link>
       </div>
