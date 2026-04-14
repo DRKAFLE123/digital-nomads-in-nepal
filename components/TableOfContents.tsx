@@ -8,14 +8,16 @@ export default function TableOfContents({ source }: { source: string }) {
   const [activeId, setActiveId] = useState("")
 
   useEffect(() => {
-    // Simple regex to extract headings (H2 and H3)
     const headingsRegex = /^(##|###)\s+(.+)$/gm
-    const matches = Array.from(source.matchAll(headingsRegex))
-    const extractedToc = matches.map((match) => ({
-      level: match[1].length,
-      text: match[2],
-      id: match[2].toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, ''),
-    }))
+    const extractedToc: TOCItem[] = []
+    let match
+    while ((match = headingsRegex.exec(source)) !== null) {
+      extractedToc.push({
+        level: match[1].length,
+        text: match[2],
+        id: match[2].toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, ''),
+      })
+    }
     setToc(extractedToc)
 
     const handleScroll = () => {
