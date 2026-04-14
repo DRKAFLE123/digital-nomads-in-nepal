@@ -5,41 +5,60 @@ export default function Footer() {
   return (
     <footer
       className="bg-background text-foreground border-t border-border mt-20"
-      aria-label="Site Footer"
+      aria-label="Footer"
     >
-      <div className="max-w-7xl mx-auto px-6 py-16 grid gap-12 md:grid-cols-2 lg:grid-cols-5">
+      <div className="max-w-7xl mx-auto px-6 py-16 grid gap-12 md:grid-cols-2 lg:grid-cols-6">
 
-        {/* 1. Brand Section */}
+        {/* BRAND */}
         <div className="lg:col-span-2">
           <Link href="/" className="flex items-center gap-3 mb-6 group inline-flex">
             <div className="relative w-12 h-12 rounded-full overflow-hidden border border-border shadow-md bg-white group-hover:scale-105 transition-transform duration-300">
               <Image src="/logo.png" alt="Digital Nomads in Nepal Logo" fill className="object-cover" />
             </div>
-            <span className="font-extrabold text-2xl tracking-tight text-foreground transition-colors group-hover:text-primary">
-              Digital Nomads <span className="text-primary">in Nepal</span>
-            </span>
+            <h2 className="text-2xl font-bold tracking-tight transition-colors group-hover:text-primary">
+              Digital Nomads in Nepal
+            </h2>
           </Link>
 
-          <p className="text-muted text-sm leading-relaxed max-w-sm">
-            The #1 resource for digital nomads in Nepal. Learn about cost of living,
-            visa, remote work setup, and the best cities like Kathmandu and Pokhara.
+          {/* SEO-optimized description (UPDATED) */}
+          <p className="text-muted text-sm leading-relaxed max-w-sm mt-4">
+            The definitive guide for digital nomads in Nepal. Get up-to-date info on
+            the Nepal Nomad Visa, Pokhara remote work hubs, and the cost of living
+            in Kathmandu for 2026.
           </p>
 
           <p className="text-xs text-muted/60 mt-4">
-            Built for digital nomads, remote workers, and freelancers exploring Nepal.
+            Built for remote workers, freelancers, and location-independent entrepreneurs exploring Nepal.
           </p>
 
-          {/* Social */}
+          {/* SOCIAL (E-E-A-T BOOST) */}
           <div className="flex gap-4 mt-6 text-sm">
-            <a href="#" className="hover:text-primary transition-colors font-medium">Instagram</a>
-            <a href="#" className="hover:text-primary transition-colors font-medium">X</a>
-            <a href="#" className="hover:text-primary transition-colors font-medium">YouTube</a>
+            <a href="https://instagram.com/yourprofile"
+               target="_blank"
+               rel="noopener noreferrer"
+               className="hover:text-primary transition-colors font-medium text-muted">
+              Instagram
+            </a>
+
+            <a href="https://x.com/yourprofile"
+               target="_blank"
+               rel="noopener noreferrer"
+               className="hover:text-primary transition-colors font-medium text-muted">
+              X
+            </a>
+
+            <a href="https://youtube.com/yourchannel"
+               target="_blank"
+               rel="noopener noreferrer"
+               className="hover:text-primary transition-colors font-medium text-muted">
+              YouTube
+            </a>
           </div>
         </div>
 
-        {/* 2. Community */}
+        {/* COMMUNITY */}
         <div>
-          <h3 className="font-semibold mb-4 text-foreground">Community</h3>
+          <h3 className="font-semibold mb-4 text-foreground text-sm uppercase tracking-wider">Community</h3>
           <ul className="space-y-3 text-sm text-muted">
             <li><Link href="/forum" className="hover:text-primary transition-colors">Nomad Forum</Link></li>
             <li><Link href="/directory" className="hover:text-primary transition-colors">Member Directory</Link></li>
@@ -48,21 +67,52 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* 3. Resources */}
+        {/* RESOURCES (SEO EXPANDED) */}
         <div>
-          <h3 className="font-semibold mb-4 text-foreground">Resources</h3>
+          <h3 className="font-semibold mb-4 text-foreground text-sm uppercase tracking-wider">Resources</h3>
           <ul className="space-y-3 text-sm text-muted">
-            <li><Link href="/visa-guide" className="hover:text-primary transition-colors">Nepal Visa Guide for Digital Nomads</Link></li>
-            <li><Link href="/cost-of-living" className="hover:text-primary transition-colors">Cost of Living in Nepal</Link></li>
-            <li><Link href="/setup" className="hover:text-primary transition-colors">Internet & Remote Work Setup</Link></li>
-            <li><Link href="/banking" className="hover:text-primary transition-colors">Banking & Payments in Nepal</Link></li>
-            <li><Link href="/healthcare" className="hover:text-primary transition-colors">Healthcare in Nepal</Link></li>
+            <li>
+              <Link href="/visa-guide" className="hover:text-primary transition-colors">
+                Nepal Visa Guide for Digital Nomads
+              </Link>
+            </li>
+            <li>
+              <Link href="/cost-of-living" className="hover:text-primary transition-colors">
+                Cost of Living in Nepal
+              </Link>
+            </li>
+            <li>
+              <Link href="/setup" className="hover:text-primary transition-colors">
+                Internet & Remote Work Setup
+              </Link>
+            </li>
+            {/* NEW HIGH SEO TERM */}
+            <li>
+              <Link href="/coworking" className="hover:text-primary transition-colors">
+                Best Coworking Spaces in Nepal
+              </Link>
+            </li>
+            <li>
+              <Link href="/coworking-guide" className="hover:text-primary transition-colors">
+                Co-Working in Nepal (Guide)
+              </Link>
+            </li>
+            <li>
+              <Link href="/banking" className="hover:text-primary transition-colors">
+                Banking & Payments in Nepal
+              </Link>
+            </li>
+            <li>
+              <Link href="/healthcare" className="hover:text-primary transition-colors">
+                Healthcare in Nepal
+              </Link>
+            </li>
           </ul>
         </div>
 
-        {/* 4. Destinations (SEO BOOST) */}
+        {/* DESTINATIONS (SEO CORE) */}
         <div>
-          <h3 className="font-semibold mb-4 text-foreground">Destinations</h3>
+          <h3 className="font-semibold mb-4 text-foreground text-sm uppercase tracking-wider">Destinations</h3>
           <ul className="space-y-3 text-sm text-muted">
             <li>
               <Link href="/destinations/kathmandu" className="hover:text-primary transition-colors">
@@ -86,12 +136,23 @@ export default function Footer() {
             </li>
           </ul>
         </div>
+
+        {/* PARTNERS (NEW SEO + AUTHORITY SIGNAL) */}
+        <div>
+          <h3 className="font-semibold mb-4 text-foreground text-sm uppercase tracking-wider">Partners</h3>
+          <ul className="space-y-3 text-sm text-muted">
+            <li><Link href="/partners/coworking" className="hover:text-primary transition-colors">Coworking Spaces</Link></li>
+            <li><Link href="/partners/insurance" className="hover:text-primary transition-colors">Travel Insurance</Link></li>
+            <li><Link href="/partners/jobs" className="hover:text-primary transition-colors">Remote Job Boards</Link></li>
+            <li><Link href="/partners/affiliates" className="hover:text-primary transition-colors">Affiliate Partners</Link></li>
+          </ul>
+        </div>
       </div>
 
-      {/* Newsletter */}
+      {/* NEWSLETTER */}
       <div className="max-w-7xl mx-auto px-6 pb-14">
         <div className="bg-card border border-border p-8 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm hover:border-primary/50 transition-colors">
-          
+
           <div>
             <h3 className="text-xl font-semibold text-foreground">
               Get the Nepal Digital Nomad Starter Kit
@@ -106,12 +167,10 @@ export default function Footer() {
               type="email"
               placeholder="Enter your email"
               className="px-4 py-3 rounded-lg bg-background border border-border text-foreground text-sm focus:outline-none focus:ring-1 focus:ring-primary w-full md:w-72 transition-all placeholder:text-muted"
-              aria-label="Email address"
-              required
             />
             <button
               type="submit"
-              className="px-6 py-3 rounded-lg bg-primary text-black font-semibold hover:bg-white hover:text-black transition-colors"
+              className="px-6 py-3 rounded-lg bg-primary text-black font-semibold hover:bg-white transition-colors"
             >
               Get Free Guide
             </button>
@@ -119,22 +178,34 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Bottom Bar */}
+      {/* BOTTOM BAR (NOW FULLY CLICKABLE SEO LINKS) */}
       <div className="border-t border-border py-6 text-sm text-muted">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          
+
           <p className="font-medium">
             © {new Date().getFullYear()} Digital Nomads in Nepal. All rights reserved.
           </p>
 
-          <div className="flex gap-6 font-medium">
-            <Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-primary transition-colors">Terms</Link>
-            <Link href="/sitemap" className="hover:text-primary transition-colors">Sitemap</Link>
+          <div className="flex flex-wrap gap-6 font-medium">
+            <Link href="/privacy" className="hover:text-primary transition-colors">
+              Privacy Policy
+            </Link>
+
+            <Link href="/terms" className="hover:text-primary transition-colors">
+              Terms of Service
+            </Link>
+
+            <Link href="/sitemap" className="hover:text-primary transition-colors">
+              Sitemap
+            </Link>
+
+            <Link href="/disclaimer" className="hover:text-primary transition-colors">
+              Disclaimer
+            </Link>
           </div>
         </div>
 
-        {/* SEO micro text */}
+        {/* SEO FOOTER LINE */}
         <p className="text-center text-muted/50 mt-6 text-[11px] uppercase tracking-widest font-bold max-w-4xl mx-auto px-4">
           Popular searches: Digital nomad Nepal | Cost of living Nepal | Nepal visa for remote workers | Best cities in Nepal for expats
         </p>
