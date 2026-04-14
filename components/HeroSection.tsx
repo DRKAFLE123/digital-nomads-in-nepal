@@ -3,7 +3,7 @@ import Image from "next/image"
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-background">
+    <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-[#0B0B0B]">
       {/* Mountain Peak Background */}
       <div className="absolute inset-0 z-0">
         <Image 
@@ -16,7 +16,7 @@ export default function HeroSection() {
       </div>
 
       {/* Dark Overlay for text readability (matches the image's deep navy/black overlay design seamlessly) */}
-      <div className="absolute inset-0 z-10 bg-black/30 bg-gradient-to-t from-background via-black/40 to-transparent" />
+      <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#0B0B0B] via-black/50 to-black/20" />
 
       {/* 🌟 Content */}
       <div className="relative z-20 max-w-4xl px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center mt-8">
