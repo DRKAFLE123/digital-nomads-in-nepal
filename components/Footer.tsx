@@ -8,12 +8,12 @@ export default function Footer() {
         
         {/* Column 1: Brand & Socials */}
         <div className="col-span-1 lg:col-span-1 flex flex-col">
-          <Link href="/" className="flex items-center gap-3 mb-4">
-            <div className="relative w-12 h-12 rounded-full overflow-hidden border border-border shadow-md bg-white">
+          <Link href="/" className="flex items-center gap-3 mb-4 group">
+            <div className="relative w-14 h-14 rounded-full overflow-hidden border border-border shadow-md bg-white group-hover:scale-105 transition-transform duration-300">
               <Image src="/logo.png" alt="Digital Nomads in Nepal Logo" fill className="object-cover" />
             </div>
-            <span className="font-bold text-xl tracking-tight text-foreground">
-              DigiNomads<span className="text-accent">Nepal</span>
+            <span className="font-extrabold text-xl tracking-tight text-foreground transition-colors">
+              Digital Nomads <span className="text-primary">in Nepal</span>
             </span>
           </Link>
           <p className="mt-2 text-muted text-sm leading-relaxed max-w-xs">

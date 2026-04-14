@@ -50,8 +50,8 @@ export default function Navbar() {
               <div className="relative w-14 h-14 md:w-16 md:h-16 rounded-full overflow-hidden border-2 border-white shadow-lg bg-white">
                 <Image src="/logo.png" alt="Digital Nomads in Nepal Logo" fill className="object-cover" priority />
               </div>
-              <span className={`font-bold text-xl md:text-2xl tracking-tighter drop-shadow-sm transition-colors ${isScrolled ? "text-foreground" : "text-white"}`}>
-                DN Nepal
+              <span className={`hidden sm:block font-extrabold text-xl md:text-2xl tracking-tight drop-shadow-sm transition-colors ${isScrolled ? "text-foreground" : "text-white"}`}>
+                Digital Nomads <span className={isScrolled ? "text-primary" : "text-accent"}>in Nepal</span>
               </span>
             </Link>
           </div>
