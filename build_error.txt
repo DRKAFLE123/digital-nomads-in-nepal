@@ -1,0 +1,32 @@
+
+> digital-nomads-in-nepal@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.35
+  - Environments: .env
+
+   Creating an optimized production build ...
+Warning: Contentlayer might not work as expected on Windows
+Generated 3 documents in .contentlayer
+Failed to compile.
+
+./app/blog/[slug]/page.tsx
+Module not found: Package path ./generated is not exported from package E:\Projects\DigitalNomadsInNepal\node_modules\contentlayer (see exports field in E:\Projects\DigitalNomadsInNepal\node_modules\contentlayer\package.json)
+
+https://nextjs.org/docs/messages/module-not-found
+
+./app/blog/page.tsx
+Module not found: Package path ./generated is not exported from package E:\Projects\DigitalNomadsInNepal\node_modules\contentlayer (see exports field in E:\Projects\DigitalNomadsInNepal\node_modules\contentlayer\package.json)
+
+https://nextjs.org/docs/messages/module-not-found
+
+./app/sitemap.ts
+Module not found: Package path ./generated is not exported from package E:\Projects\DigitalNomadsInNepal\node_modules\contentlayer (see exports field in E:\Projects\DigitalNomadsInNepal\node_modules\contentlayer\package.json)
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/next-metadata-route-loader.js?page=%2Fsitemap.xml%2Froute&filePath=E%3A%5CProjects%5CDigitalNomadsInNepal%5Capp%5Csitemap.ts&isDynamic=1!?__next_metadata_route__
+
+
+> Build failed because of webpack errors

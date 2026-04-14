@@ -1,0 +1,32 @@
+{
+  "title": "Cost of Living in Nepal 2026 — Complete Guide",
+  "slug": "cost-of-living-nepal-2026",
+  "excerpt": "Everything you need to know about living costs in Nepal as a digital nomad in 2026.",
+  "coverImage": "",
+  "category": "Cost of Living",
+  "tags": [
+    "nepal",
+    "budget",
+    "cost of living",
+    "digital nomad"
+  ],
+  "date": "2026-04-14T00:00:00.000Z",
+  "readTime": "8 min read",
+  "affiliates": true,
+  "featured": true,
+  "author": "DN Nepal Team",
+  "body": {
+    "raw": "\n## Introduction\n\nNepal remains one of the most affordable and visually stunning places in the world to live and work. Whether you’re staying in Kathmandu or heading to Pokhara, you can enjoy a high quality of life on a budget.\n\n## Housing Costs\n\n### Kathmandu\nRenting a 1-bedroom apartment in a central area like Sanepa, Patan, or Thamel will cost between $200 and $400 per month depending on how modern the building is.\n\n### Pokhara\nLakeside Pokhara is even more affordable. You can find lovely guesthouses with views of Phewa Lake for under $250 a month, often including weekly cleaning.\n\n## Food and Dining\n\nEating local is incredibly cheap. A hearty plate of Dal Bhat costs around $2 to $3. If you prefer Western cafes (which are plentiful in tourist hubs), expect to pay $4 to $8 per meal. \n\n## Final Thoughts\n\nA comfortable budget for a digital nomad in Nepal is around $600 to $900 per month. This allows for eating out daily, renting a nice apartment, and using coworking spaces without stress.\n",
+    "code": "var Component=(()=>{var c=Object.create;var i=Object.defineProperty;var u=Object.getOwnPropertyDescriptor;var g=Object.getOwnPropertyNames;var p=Object.getPrototypeOf,m=Object.prototype.hasOwnProperty;var f=(n,e)=>()=>(e||n((e={exports:{}}).exports,e),e.exports),y=(n,e)=>{for(var t in e)i(n,t,{get:e[t],enumerable:!0})},l=(n,e,t,r)=>{if(e&&typeof e==\"object\"||typeof e==\"function\")for(let o of g(e))!m.call(n,o)&&o!==t&&i(n,o,{get:()=>e[o],enumerable:!(r=u(e,o))||r.enumerable});return n};var w=(n,e,t)=>(t=n!=null?c(p(n)):{},l(e||!n||!n.__esModule?i(t,\"default\",{value:n,enumerable:!0}):t,n)),b=n=>l(i({},\"__esModule\",{value:!0}),n);var d=f((_,s)=>{s.exports=_jsx_runtime});var $={};y($,{default:()=>k,frontmatter:()=>v});var a=w(d()),v={title:\"Cost of Living in Nepal 2026 \\u2014 Complete Guide\",slug:\"cost-of-living-nepal-2026\",excerpt:\"Everything you need to know about living costs in Nepal as a digital nomad in 2026.\",coverImage:\"\",category:\"Cost of Living\",tags:[\"nepal\",\"budget\",\"cost of living\",\"digital nomad\"],date:\"2026-04-14\",readTime:\"8 min read\",affiliates:!0,featured:!0,author:\"DN Nepal Team\"};function h(n){let e=Object.assign({h2:\"h2\",p:\"p\",h3:\"h3\"},n.components);return(0,a.jsxs)(a.Fragment,{children:[(0,a.jsx)(e.h2,{children:\"Introduction\"}),`\n`,(0,a.jsx)(e.p,{children:\"Nepal remains one of the most affordable and visually stunning places in the world to live and work. Whether you\\u2019re staying in Kathmandu or heading to Pokhara, you can enjoy a high quality of life on a budget.\"}),`\n`,(0,a.jsx)(e.h2,{children:\"Housing Costs\"}),`\n`,(0,a.jsx)(e.h3,{children:\"Kathmandu\"}),`\n`,(0,a.jsx)(e.p,{children:\"Renting a 1-bedroom apartment in a central area like Sanepa, Patan, or Thamel will cost between $200 and $400 per month depending on how modern the building is.\"}),`\n`,(0,a.jsx)(e.h3,{children:\"Pokhara\"}),`\n`,(0,a.jsx)(e.p,{children:\"Lakeside Pokhara is even more affordable. You can find lovely guesthouses with views of Phewa Lake for under $250 a month, often including weekly cleaning.\"}),`\n`,(0,a.jsx)(e.h2,{children:\"Food and Dining\"}),`\n`,(0,a.jsx)(e.p,{children:\"Eating local is incredibly cheap. A hearty plate of Dal Bhat costs around $2 to $3. If you prefer Western cafes (which are plentiful in tourist hubs), expect to pay $4 to $8 per meal.\"}),`\n`,(0,a.jsx)(e.h2,{children:\"Final Thoughts\"}),`\n`,(0,a.jsx)(e.p,{children:\"A comfortable budget for a digital nomad in Nepal is around $600 to $900 per month. This allows for eating out daily, renting a nice apartment, and using coworking spaces without stress.\"})]})}function x(n={}){let{wrapper:e}=n.components||{};return e?(0,a.jsx)(e,Object.assign({},n,{children:(0,a.jsx)(h,n)})):h(n)}var k=x;return b($);})();\n;return Component;"
+  },
+  "_id": "blog/cost-of-living-nepal-2026.mdx",
+  "_raw": {
+    "sourceFilePath": "blog/cost-of-living-nepal-2026.mdx",
+    "sourceFileName": "cost-of-living-nepal-2026.mdx",
+    "sourceFileDir": "blog",
+    "contentType": "mdx",
+    "flattenedPath": "blog/cost-of-living-nepal-2026"
+  },
+  "type": "Post",
+  "url": "/blog/cost-of-living-nepal-2026"
+}

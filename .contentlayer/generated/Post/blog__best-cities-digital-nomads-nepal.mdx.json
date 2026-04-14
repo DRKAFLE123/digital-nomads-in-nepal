@@ -1,0 +1,31 @@
+{
+  "title": "Best Cities for Digital Nomads in Nepal",
+  "slug": "best-cities-digital-nomads-nepal",
+  "excerpt": "From the bustling streets of Kathmandu to the lakeside tranquility of Pokhara, where should you base yourself?",
+  "coverImage": "",
+  "category": "Destinations",
+  "tags": [
+    "destinations",
+    "kathmandu",
+    "pokhara"
+  ],
+  "date": "2026-04-10T00:00:00.000Z",
+  "readTime": "6 min read",
+  "affiliates": false,
+  "featured": false,
+  "author": "DN Nepal Team",
+  "body": {
+    "raw": "\n## 1. Patan (Lalitpur)\n\nSeparated from Kathmandu only by the Bagmati River, Patan is the historical artisan hub of the valley. It features some of the best cafes, bakeries, and coworking spaces, making it the premier choice for expats and nomads.\n\n## 2. Pokhara\n\nIf you prefer nature over city bustle, Pokhara is your haven. Nestled beside Phewa Lake with the Annapurna mountain range as a backdrop, the air is clean and the vibe is exceptionally relaxed.\n\n## 3. Kathmandu (Thamel & Lazimpat)\n\nFor those who want to be in the center of the action. While Thamel is very tourist-heavy, neighborhoods like Lazimpat offer a quieter, more upscale residential feel with fast internet and great global cuisine.\n",
+    "code": "var Component=(()=>{var d=Object.create;var r=Object.defineProperty;var m=Object.getOwnPropertyDescriptor;var u=Object.getOwnPropertyNames;var f=Object.getPrototypeOf,p=Object.prototype.hasOwnProperty;var g=(a,e)=>()=>(e||a((e={exports:{}}).exports,e),e.exports),b=(a,e)=>{for(var n in e)r(a,n,{get:e[n],enumerable:!0})},o=(a,e,n,s)=>{if(e&&typeof e==\"object\"||typeof e==\"function\")for(let i of u(e))!p.call(a,i)&&i!==n&&r(a,i,{get:()=>e[i],enumerable:!(s=m(e,i))||s.enumerable});return a};var y=(a,e,n)=>(n=a!=null?d(f(a)):{},o(e||!a||!a.__esModule?r(n,\"default\",{value:a,enumerable:!0}):n,a)),x=a=>o(r({},\"__esModule\",{value:!0}),a);var l=g((P,h)=>{h.exports=_jsx_runtime});var j={};b(j,{default:()=>w,frontmatter:()=>k});var t=y(l()),k={title:\"Best Cities for Digital Nomads in Nepal\",slug:\"best-cities-digital-nomads-nepal\",excerpt:\"From the bustling streets of Kathmandu to the lakeside tranquility of Pokhara, where should you base yourself?\",coverImage:\"\",category:\"Destinations\",tags:[\"destinations\",\"kathmandu\",\"pokhara\"],date:\"2026-04-10\",readTime:\"6 min read\",affiliates:!1,featured:!1,author:\"DN Nepal Team\"};function c(a){let e=Object.assign({h2:\"h2\",p:\"p\"},a.components);return(0,t.jsxs)(t.Fragment,{children:[(0,t.jsx)(e.h2,{children:\"1. Patan (Lalitpur)\"}),`\n`,(0,t.jsx)(e.p,{children:\"Separated from Kathmandu only by the Bagmati River, Patan is the historical artisan hub of the valley. It features some of the best cafes, bakeries, and coworking spaces, making it the premier choice for expats and nomads.\"}),`\n`,(0,t.jsx)(e.h2,{children:\"2. Pokhara\"}),`\n`,(0,t.jsx)(e.p,{children:\"If you prefer nature over city bustle, Pokhara is your haven. Nestled beside Phewa Lake with the Annapurna mountain range as a backdrop, the air is clean and the vibe is exceptionally relaxed.\"}),`\n`,(0,t.jsx)(e.h2,{children:\"3. Kathmandu (Thamel & Lazimpat)\"}),`\n`,(0,t.jsx)(e.p,{children:\"For those who want to be in the center of the action. While Thamel is very tourist-heavy, neighborhoods like Lazimpat offer a quieter, more upscale residential feel with fast internet and great global cuisine.\"})]})}function v(a={}){let{wrapper:e}=a.components||{};return e?(0,t.jsx)(e,Object.assign({},a,{children:(0,t.jsx)(c,a)})):c(a)}var w=v;return x(j);})();\n;return Component;"
+  },
+  "_id": "blog/best-cities-digital-nomads-nepal.mdx",
+  "_raw": {
+    "sourceFilePath": "blog/best-cities-digital-nomads-nepal.mdx",
+    "sourceFileName": "best-cities-digital-nomads-nepal.mdx",
+    "sourceFileDir": "blog",
+    "contentType": "mdx",
+    "flattenedPath": "blog/best-cities-digital-nomads-nepal"
+  },
+  "type": "Post",
+  "url": "/blog/best-cities-digital-nomads-nepal"
+}

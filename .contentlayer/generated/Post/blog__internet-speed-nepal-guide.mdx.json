@@ -1,0 +1,31 @@
+{
+  "title": "Internet Speed in Nepal: A Nomad's Reality",
+  "slug": "internet-speed-nepal-guide",
+  "excerpt": "Is the internet in Nepal fast enough for video calls? We test fiber optics across major cities.",
+  "coverImage": "",
+  "category": "Work Setup",
+  "tags": [
+    "internet",
+    "wifi",
+    "coworking"
+  ],
+  "date": "2026-04-05T00:00:00.000Z",
+  "readTime": "5 min read",
+  "affiliates": true,
+  "featured": false,
+  "author": "DN Nepal Team",
+  "body": {
+    "raw": "\n## The Fiber Optic Revolution\n\nGone are the days when Nepal was disconnected from the fast web. Over the last few years, local ISPs like WorldLink, Vianet, and ClassicTech have deployed fiber optics across major cities. \n\n## What Speeds Can You Expect?\n\nIf you are staying in a higher-end apartment or working from a dedicated coworking space, you will generally experience speeds between 50 Mbps and 200 Mbps.\n\n## Mobile Internet Data (4G/5G)\n\nBoth Ncell and NTC provide robust 4G coverage. Ncell has also started rolling out 5G in select areas. Mobile data is cheap, and acting as a hotspot is a viable backup if the main power goes out (though most places now have power backups).\n",
+    "code": "var Component=(()=>{var p=Object.create;var r=Object.defineProperty;var h=Object.getOwnPropertyDescriptor;var u=Object.getOwnPropertyNames;var g=Object.getPrototypeOf,m=Object.prototype.hasOwnProperty;var f=(t,e)=>()=>(e||t((e={exports:{}}).exports,e),e.exports),b=(t,e)=>{for(var n in e)r(t,n,{get:e[n],enumerable:!0})},i=(t,e,n,s)=>{if(e&&typeof e==\"object\"||typeof e==\"function\")for(let o of u(e))!m.call(t,o)&&o!==n&&r(t,o,{get:()=>e[o],enumerable:!(s=h(e,o))||s.enumerable});return t};var w=(t,e,n)=>(n=t!=null?p(g(t)):{},i(e||!t||!t.__esModule?r(n,\"default\",{value:t,enumerable:!0}):n,t)),x=t=>i(r({},\"__esModule\",{value:!0}),t);var l=f((M,c)=>{c.exports=_jsx_runtime});var N={};b(N,{default:()=>v,frontmatter:()=>y});var a=w(l()),y={title:\"Internet Speed in Nepal: A Nomad's Reality\",slug:\"internet-speed-nepal-guide\",excerpt:\"Is the internet in Nepal fast enough for video calls? We test fiber optics across major cities.\",coverImage:\"\",category:\"Work Setup\",tags:[\"internet\",\"wifi\",\"coworking\"],date:\"2026-04-05\",readTime:\"5 min read\",affiliates:!0,featured:!1,author:\"DN Nepal Team\"};function d(t){let e=Object.assign({h2:\"h2\",p:\"p\"},t.components);return(0,a.jsxs)(a.Fragment,{children:[(0,a.jsx)(e.h2,{children:\"The Fiber Optic Revolution\"}),`\n`,(0,a.jsx)(e.p,{children:\"Gone are the days when Nepal was disconnected from the fast web. Over the last few years, local ISPs like WorldLink, Vianet, and ClassicTech have deployed fiber optics across major cities.\"}),`\n`,(0,a.jsx)(e.h2,{children:\"What Speeds Can You Expect?\"}),`\n`,(0,a.jsx)(e.p,{children:\"If you are staying in a higher-end apartment or working from a dedicated coworking space, you will generally experience speeds between 50 Mbps and 200 Mbps.\"}),`\n`,(0,a.jsx)(e.h2,{children:\"Mobile Internet Data (4G/5G)\"}),`\n`,(0,a.jsx)(e.p,{children:\"Both Ncell and NTC provide robust 4G coverage. Ncell has also started rolling out 5G in select areas. Mobile data is cheap, and acting as a hotspot is a viable backup if the main power goes out (though most places now have power backups).\"})]})}function j(t={}){let{wrapper:e}=t.components||{};return e?(0,a.jsx)(e,Object.assign({},t,{children:(0,a.jsx)(d,t)})):d(t)}var v=j;return x(N);})();\n;return Component;"
+  },
+  "_id": "blog/internet-speed-nepal-guide.mdx",
+  "_raw": {
+    "sourceFilePath": "blog/internet-speed-nepal-guide.mdx",
+    "sourceFileName": "internet-speed-nepal-guide.mdx",
+    "sourceFileDir": "blog",
+    "contentType": "mdx",
+    "flattenedPath": "blog/internet-speed-nepal-guide"
+  },
+  "type": "Post",
+  "url": "/blog/internet-speed-nepal-guide"
+}
