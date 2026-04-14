@@ -21,15 +21,18 @@ export default function HeroSection() {
 
       {/* Text Content */}
       <div className="relative z-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
-        <h1 className="text-4xl md:text-5xl lg:text-7xl font-medium text-white mb-6 leading-tight drop-shadow-lg tracking-wide">
-          Elevate Your Life. <br className="hidden lg:block" /> Work From the Roof of the World.
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-2 leading-tight drop-shadow-xl tracking-wide">
+          Elevate Your Life.
         </h1>
-        <p className="text-xl md:text-2xl text-white max-w-3xl mx-auto mb-10 font-normal drop-shadow-md">
-          The Leading Community of Digital Nomads <br className="hidden sm:block" /> & Remote Professionals in Nepal
-        </p>
-        <Link href="/community" className="px-10 py-4 bg-accent text-white font-medium rounded-full hover:opacity-90 transition-opacity text-lg text-center shadow-lg">
-          JOIN NOW
+        <h2 className="text-2xl md:text-4xl text-white/90 italic mb-10 font-medium drop-shadow-md">
+          Work From the Roof of the World.
+        </h2>
+        <Link href="/community" className="px-10 py-4 bg-primary text-black font-bold rounded-full hover:bg-white hover:text-black transition-colors text-xl text-center shadow-lg mb-6">
+          Join the Community
         </Link>
+        <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto font-medium tracking-wide drop-shadow-sm uppercase">
+          Live. Work. Explore Nepal as a Digital Nomad.
+        </p>
       </div>
 
       {/* Curved Arch Edge SVG mask at the bottom smoothly transitioning into the theme */}
