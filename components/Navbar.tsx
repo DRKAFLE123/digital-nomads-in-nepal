@@ -18,33 +18,47 @@ export default function Navbar() {
   }, [])
 
   const navItems = [
-    { name: "Blog", href: "/blog" },
     { 
       name: "Destinations", 
       href: "/destinations",
       dropdown: [
-        { name: "Kathmandu", desc: "The bustling capital hub", href: "/destinations/kathmandu" },
-        { name: "Pokhara", desc: "Lakeside nomad capital", href: "/destinations/pokhara" },
+        { name: "Kathmandu", desc: "Capital hub for digital nomads", href: "/destinations/kathmandu" },
+        { name: "Pokhara", desc: "Lakeside remote work paradise", href: "/destinations/pokhara" },
         { name: "Bandipur", desc: "Quiet mountain retreat", href: "/destinations/bandipur" },
+        { name: "Nomad Map", desc: "Explore all Nepal destinations", href: "/map" },
       ]
     },
-    { name: "Guides", href: "/guides" },
     { 
       name: "Resources", 
       href: "/resources",
       dropdown: [
-        { name: "Visa Guide", desc: "Navigating Nepal visas", href: "/resources/visa" },
-        { name: "Co-Working", desc: "Best cafes & spaces", href: "/resources/coworking" },
-        { name: "Cost of Living", desc: "Budgeting your stay", href: "/resources/cost-of-living" },
+        { name: "Visa Guide", desc: "Nepal visa for digital nomads", href: "/resources/visa" },
+        { name: "Cost of Living", desc: "Budgeting your stay in Nepal", href: "/resources/cost-of-living" },
+        { name: "Transportation", desc: "Getting around Nepal", href: "/resources/transportation" },
+        { name: "Banking & Money", desc: "Payments & finance in Nepal", href: "/resources/banking" },
+        { name: "Coworking Spaces", desc: "Best spaces in Nepal", href: "/resources/coworking" },
       ]
     },
-    { name: "Community", href: "/community" },
-    { name: "Events", href: "/events" },
-    { name: "Partners", href: "/partners" },
+    { 
+      name: "Community", 
+      href: "/community",
+      dropdown: [
+        { name: "Forum", desc: "Ask questions, share tips", href: "/forum" },
+        { name: "Member Directory", desc: "Find nomads in Nepal", href: "/directory" },
+        { name: "Events", desc: "Meetups & workshops", href: "/events" },
+      ]
+    },
+    { name: "Blog", href: "/blog" },
+    { name: "About", href: "/about" },
   ]
 
+
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? "bg-background/95 backdrop-blur-md border-b border-border shadow-sm py-1" : "bg-transparent dark:bg-transparent py-2"}`}>
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+      isScrolled 
+        ? "bg-[#0B0B0B] border-b border-border shadow-lg py-1" 
+        : "bg-transparent py-2"
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <div className="flex-shrink-0 flex items-center">
