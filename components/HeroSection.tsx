@@ -18,30 +18,31 @@ export default function HeroSection() {
       {/* Dark Overlay for text readability (matches the image's deep navy/black overlay design seamlessly) */}
       <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#0B0B0B] via-black/50 to-black/20" />
 
-      {/* 🌟 Content */}
-      <div className="relative z-20 max-w-4xl px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center mt-8">
+      {/* Content */}
+      <div className="relative z-20 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center py-16 md:py-24">
         
         {/* H1 */}
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-xl mb-6">
-          Live and Work in Nepal as a Digital Nomad
+        <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-xl mb-4">
+          Live and Work in Nepal<br className="hidden sm:block" />{" "}
+          <span className="text-primary">on a Nomad Visa</span>
         </h1>
 
         {/* Subheadline */}
-        <p className="text-lg md:text-2xl text-gray-200 font-medium drop-shadow-md max-w-3xl mb-2">
+        <p className="text-base sm:text-lg md:text-xl text-gray-200 font-medium drop-shadow-md max-w-2xl mb-2 px-2">
           Cost of living, visa, internet, and the best cities to live and work remotely in Nepal.
         </p>
 
         {/* Extra SEO Line */}
-        <p className="text-sm md:text-base text-primary/90 font-medium drop-shadow mb-10 tracking-wide">
+        <p className="text-xs sm:text-sm text-primary/90 font-medium drop-shadow mb-8 tracking-wide px-2">
           Guides for digital nomads in Kathmandu, Pokhara, and across Nepal.
         </p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-md sm:max-w-none">
           {/* Primary CTA */}
           <Link
             href="/community"
-            className="w-full sm:w-auto bg-primary text-black font-bold px-8 py-4 rounded-full transition-all transform hover:scale-105 hover:bg-white hover:shadow-xl text-lg"
+            className="w-full sm:w-auto bg-primary text-black font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-full transition-all transform hover:scale-105 hover:bg-white hover:shadow-xl text-base sm:text-lg text-center"
           >
             Join the Free Nomad Community →
           </Link>
@@ -49,14 +50,14 @@ export default function HeroSection() {
           {/* Secondary CTA */}
           <Link
             href="/blog"
-            className="w-full sm:w-auto text-white font-semibold border-2 border-white px-8 py-4 rounded-full hover:border-primary hover:text-primary transition-all text-lg"
+            className="w-full sm:w-auto text-white font-semibold border-2 border-white px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:border-primary hover:text-primary transition-all text-base sm:text-lg text-center"
           >
             Read the Blog →
           </Link>
         </div>
 
-        {/* Trust Line */}
-        <p className="mt-10 text-gray-400 text-sm italic font-medium tracking-wide">
+        {/* Trust Line — hidden on very small screens to reduce clutter */}
+        <p className="hidden sm:block mt-8 text-gray-400 text-sm italic font-medium tracking-wide">
           Join thousands of digital nomads already working remotely from Nepal.
         </p>
       </div>
