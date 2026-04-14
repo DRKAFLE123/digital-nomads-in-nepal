@@ -2,7 +2,7 @@ import Link from "next/link"
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-[#0B0B0B]">
+    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-background">
       {/* Video Background */}
       <video 
         autoPlay 
@@ -16,7 +16,7 @@ export default function HeroSection() {
         Your browser does not support the video tag.
       </video>
 
-      {/* Dark Overlay for text readability */}
+      {/* Dark Overlay for text readability (kept explicitly dark because it's overlaid on video) */}
       <div className="absolute inset-0 z-10 bg-black/40" />
 
       {/* Text Content */}
@@ -27,15 +27,15 @@ export default function HeroSection() {
         <p className="text-xl md:text-2xl text-white max-w-3xl mx-auto mb-10 font-normal drop-shadow-md">
           The Leading Community of Digital Nomads <br className="hidden sm:block" /> & Remote Professionals in Nepal
         </p>
-        <Link href="/community" className="px-10 py-4 bg-[#3498db] text-white font-medium rounded-full hover:bg-[#2980b9] transition-colors text-lg text-center shadow-lg">
+        <Link href="/community" className="px-10 py-4 bg-accent text-white font-medium rounded-full hover:opacity-90 transition-opacity text-lg text-center shadow-lg">
           JOIN NOW
         </Link>
       </div>
 
-      {/* Curved Arch Edge SVG mask at the bottom smoothly transitioning into the dark theme */}
-      <div className="absolute bottom-0 left-0 w-full z-20 overflow-hidden leading-none pointer-events-none translate-y-[2px]">
+      {/* Curved Arch Edge SVG mask at the bottom smoothly transitioning into the theme */}
+      <div className="absolute bottom-0 left-0 w-full z-20 overflow-hidden leading-none pointer-events-none translate-y-[2px] text-background">
         <svg className="relative block w-[calc(100%+5px)] h-[50px] md:h-[80px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-            <path d="M600,112.77C268.63,112.77,0,65.52,0,7.23V120H1200V7.23C1200,65.52,931.37,112.77,600,112.77Z" fill="#0B0B0B"></path>
+            <path d="M600,112.77C268.63,112.77,0,65.52,0,7.23V120H1200V7.23C1200,65.52,931.37,112.77,600,112.77Z" fill="currentColor"></path>
         </svg>
       </div>
     </section>

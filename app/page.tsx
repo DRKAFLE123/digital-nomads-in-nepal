@@ -42,50 +42,50 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <main className="flex min-h-screen flex-col items-center justify-between">
+      <main className="flex min-h-screen flex-col items-center justify-between bg-background">
         <HeroSection />
 
         {/* Value Section */}
-        <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-[#0B0B0B] border-t border-[#222222]">
+        <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-background border-t border-border">
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-[#141414] p-8 border border-[#222222] text-center rounded-xl hover:border-[#FFD700] transition-colors">
-              <Wallet className="mx-auto text-[#FFD700] mb-4" size={40} />
-              <h3 className="text-xl font-bold text-white mb-2">Cost of Living</h3>
-              <p className="text-[#A0A0A0]">From $500/month</p>
+            <div className="bg-card p-8 border border-border text-center rounded-xl hover:border-primary transition-colors">
+              <Wallet className="mx-auto text-primary mb-4" size={40} />
+              <h3 className="text-xl font-bold text-foreground mb-2">Cost of Living</h3>
+              <p className="text-muted-foreground">From $500/month</p>
             </div>
-            <div className="bg-[#141414] p-8 border border-[#222222] text-center rounded-xl hover:border-[#FFD700] transition-colors">
-              <Wifi className="mx-auto text-[#FFD700] mb-4" size={40} />
-              <h3 className="text-xl font-bold text-white mb-2">Internet</h3>
-              <p className="text-[#A0A0A0]">Fast fiber in cities</p>
+            <div className="bg-card p-8 border border-border text-center rounded-xl hover:border-primary transition-colors">
+              <Wifi className="mx-auto text-primary mb-4" size={40} />
+              <h3 className="text-xl font-bold text-foreground mb-2">Internet</h3>
+              <p className="text-muted-foreground">Fast fiber in cities</p>
             </div>
-            <div className="bg-[#141414] p-8 border border-[#222222] text-center rounded-xl hover:border-[#FFD700] transition-colors">
-              <MapPin className="mx-auto text-[#FFD700] mb-4" size={40} />
-              <h3 className="text-xl font-bold text-white mb-2">Coworking</h3>
-              <p className="text-[#A0A0A0]">10+ spaces in Kathmandu</p>
+            <div className="bg-card p-8 border border-border text-center rounded-xl hover:border-primary transition-colors">
+              <MapPin className="mx-auto text-primary mb-4" size={40} />
+              <h3 className="text-xl font-bold text-foreground mb-2">Coworking</h3>
+              <p className="text-muted-foreground">10+ spaces in Kathmandu</p>
             </div>
-            <div className="bg-[#141414] p-8 border border-[#222222] text-center rounded-xl hover:border-[#FFD700] transition-colors">
-              <Mountain className="mx-auto text-[#FFD700] mb-4" size={40} />
-              <h3 className="text-xl font-bold text-white mb-2">Lifestyle</h3>
-              <p className="text-[#A0A0A0]">Mountains + culture</p>
+            <div className="bg-card p-8 border border-border text-center rounded-xl hover:border-primary transition-colors">
+              <Mountain className="mx-auto text-primary mb-4" size={40} />
+              <h3 className="text-xl font-bold text-foreground mb-2">Lifestyle</h3>
+              <p className="text-muted-foreground">Mountains + culture</p>
             </div>
           </div>
         </section>
 
         {/* Featured Blogs Section */}
-        <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-[#111111]">
+        <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-background">
           <div className="max-w-7xl mx-auto">
             <div className="flex justify-between items-end gap-4 mb-12 flex-wrap">
-              <h2 className="text-3xl md:text-5xl font-black text-white px-2 border-l-4 border-[#FFD700]">Latest from the Blog</h2>
-              <a href="/blog" className="text-[#A0A0A0] hover:text-[#FFD700] transition-colors font-medium border-b border-transparent hover:border-[#FFD700]">View All Posts &rarr;</a>
+              <h2 className="text-3xl md:text-5xl font-black text-foreground px-2 border-l-4 border-primary">Latest from the Blog</h2>
+              <a href="/blog" className="text-muted-foreground hover:text-primary transition-colors font-medium border-b border-transparent hover:border-primary">View All Posts &rarr;</a>
             </div>
             <BlogGrid posts={mockPosts} />
           </div>
         </section>
 
         {/* Destinations Section */}
-        <section className="w-full py-24 px-4 sm:px-6 lg:px-8 bg-[#0B0B0B]">
+        <section className="w-full py-24 px-4 sm:px-6 lg:px-8 bg-background">
           <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl md:text-5xl font-black text-white px-2 border-l-4 border-[#FFD700] mb-12 text-center mx-auto inline-block">Top Nomad Destinations</h2>
+            <h2 className="text-3xl md:text-5xl font-black text-foreground px-2 border-l-4 border-primary mb-12 text-center mx-auto inline-block">Top Nomad Destinations</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               <DestinationCard name="Kathmandu" description="The bustling cultural and historical heart of Nepal." image="" slug="kathmandu" />
               <DestinationCard name="Pokhara" description="Lakeside calm and gateway to the Annapurna circuit." image="" slug="pokhara" />
@@ -96,21 +96,21 @@ export default function Home() {
         </section>
 
         {/* Why Nepal Section */}
-        <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-[#141414] border-y border-[#222222]">
+        <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-card border-y border-border">
           <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl md:text-5xl font-black text-white text-center mb-16">Why Choose Nepal?</h2>
+            <h2 className="text-3xl md:text-5xl font-black text-foreground text-center mb-16">Why Choose Nepal?</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-              <div className="p-8 border border-[#222222] border-t-4 border-t-[#FFD700] bg-[#0B0B0B] rounded-xl hover:-translate-y-2 transition-transform duration-300">
-                <h3 className="text-2xl font-bold text-white mb-4">Unbeatable Cost</h3>
-                <p className="text-[#A0A0A0] leading-relaxed">Nepal remains one of the most affordable countries in the world. You can find comfortable apartments, eat out daily, and enjoy a vibrant lifestyle for a fraction of the cost of Western cities.</p>
+              <div className="p-8 border border-border border-t-4 border-t-primary bg-background rounded-xl hover:-translate-y-2 transition-transform duration-300">
+                <h3 className="text-2xl font-bold text-foreground mb-4">Unbeatable Cost</h3>
+                <p className="text-muted-foreground leading-relaxed">Nepal remains one of the most affordable countries in the world. You can find comfortable apartments, eat out daily, and enjoy a vibrant lifestyle for a fraction of the cost of Western cities.</p>
               </div>
-              <div className="p-8 border border-[#222222] border-t-4 border-t-[#FFD700] bg-[#0B0B0B] rounded-xl hover:-translate-y-2 transition-transform duration-300">
-                <h3 className="text-2xl font-bold text-white mb-4">Nature & Mountains</h3>
-                <p className="text-[#A0A0A0] leading-relaxed">Escape the screen and step into the Himalayas. Weekends can be spent hiking, trekking, and exploring eight of the world's highest peaks just a short trip from your desk.</p>
+              <div className="p-8 border border-border border-t-4 border-t-primary bg-background rounded-xl hover:-translate-y-2 transition-transform duration-300">
+                <h3 className="text-2xl font-bold text-foreground mb-4">Nature & Mountains</h3>
+                <p className="text-muted-foreground leading-relaxed">Escape the screen and step into the Himalayas. Weekends can be spent hiking, trekking, and exploring eight of the world's highest peaks just a short trip from your desk.</p>
               </div>
-              <div className="p-8 border border-[#222222] border-t-4 border-t-[#FFD700] bg-[#0B0B0B] rounded-xl hover:-translate-y-2 transition-transform duration-300">
-                <h3 className="text-2xl font-bold text-white mb-4">Growing Remote Culture</h3>
-                <p className="text-[#A0A0A0] leading-relaxed">With fiber optic internet expanding and new dedicated coworking spaces opening up, Nepal is rapidly adjusting to accommodate the global remote workforce.</p>
+              <div className="p-8 border border-border border-t-4 border-t-primary bg-background rounded-xl hover:-translate-y-2 transition-transform duration-300">
+                <h3 className="text-2xl font-bold text-foreground mb-4">Growing Remote Culture</h3>
+                <p className="text-muted-foreground leading-relaxed">With fiber optic internet expanding and new dedicated coworking spaces opening up, Nepal is rapidly adjusting to accommodate the global remote workforce.</p>
               </div>
             </div>
           </div>

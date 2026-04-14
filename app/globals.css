@@ -3,7 +3,29 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --background: #FFFFFF;
+    --foreground: #0B0B0B;
+    --card: #F9FAFB;
+    --border: #E5E7EB;
+    --muted: #4B5563;
+    --accent: #2FA4E7;
+    --primary: #FFD700;
+  }
+
+  .dark {
+    --background: #0B0B0B;
+    --foreground: #FFFFFF;
+    --card: #141414;
+    --border: #222222;
+    --muted: #A0A0A0;
+    --accent: #FFD700;
+    --primary: #FFD700;
+  }
+}
+
+@layer base {
   body {
-    @apply bg-primary text-white antialiased selection:bg-accent selection:text-black;
+    @apply bg-background text-foreground antialiased selection:bg-primary selection:text-black;
   }
 }

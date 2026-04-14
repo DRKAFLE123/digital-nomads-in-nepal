@@ -15,12 +15,12 @@ export default function BlogPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#0B0B0B] pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+      <main className="min-h-screen bg-background pt-32 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12 flex flex-col items-center">
-            <h1 className="text-4xl md:text-5xl font-black text-white mb-6 border-b-4 border-[#FFD700] inline-block pb-2">Digital Nomad Blog</h1>
-            <p className="text-[#A0A0A0] text-lg max-w-2xl">
-              Everything you need to know to successfully transition to a remote working lifestyle in the Himalayas.
+          <div className="mb-16">
+            <h1 className="text-4xl md:text-6xl font-black text-foreground mb-6">Latest Blog Posts</h1>
+            <p className="text-xl text-muted-foreground max-w-2xl border-l-4 border-primary pl-4">
+              Insights, guides, and stories from digital nomads living and working across Nepal.
             </p>
           </div>
 

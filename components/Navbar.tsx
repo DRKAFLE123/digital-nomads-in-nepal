@@ -1,7 +1,8 @@
 "use client"
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Menu, X } from "lucide-react"
+import { Menu, X, ChevronDown } from "lucide-react"
+import { ThemeToggle } from "./ThemeToggle"
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -15,39 +16,76 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const navLinks = [
+  const navItems = [
     { name: "Blog", href: "/blog" },
-    { name: "Destinations", href: "/destinations" },
+    { 
+      name: "Destinations", 
+      href: "/destinations",
+      dropdown: [
+        { name: "Kathmandu", desc: "The bustling capital hub", href: "/destinations/kathmandu" },
+        { name: "Pokhara", desc: "Lakeside nomad capital", href: "/destinations/pokhara" },
+        { name: "Bandipur", desc: "Quiet mountain retreat", href: "/destinations/bandipur" },
+      ]
+    },
     { name: "Guides", href: "/guides" },
-    { name: "Resources", href: "/resources" },
+    { 
+      name: "Resources", 
+      href: "/resources",
+      dropdown: [
+        { name: "Visa Guide", desc: "Navigating Nepal visas", href: "/resources/visa" },
+        { name: "Co-Working", desc: "Best cafes & spaces", href: "/resources/coworking" },
+        { name: "Cost of Living", desc: "Budgeting your stay", href: "/resources/cost-of-living" },
+      ]
+    },
     { name: "Community", href: "/community" },
   ]
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-colors duration-300 ${isScrolled ? "bg-[#0B0B0B] border-b border-[#222222]" : "bg-transparent"}`}>
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? "bg-background/95 backdrop-blur-md border-b border-border shadow-sm" : "bg-transparent dark:bg-transparent"}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <div className="flex-shrink-0">
-            <Link href="/" className="text-[#FFD700] font-bold text-2xl tracking-tighter">
+            <Link href="/" className="text-primary font-bold text-2xl tracking-tighter drop-shadow-sm">
               DN Nepal
             </Link>
           </div>
           
           {/* Desktop Menu */}
-          <div className="hidden md:flex space-x-8 items-center">
-            {navLinks.map((link) => (
-              <Link key={link.name} href={link.href} className="text-white hover:text-[#FFD700] transition-colors font-medium">
-                {link.name}
-              </Link>
+          <div className="hidden md:flex space-x-6 items-center">
+            {navItems.map((item) => (
+              <div key={item.name} className="relative group h-20 flex items-center">
+                <Link href={item.href} className={`flex items-center gap-1 font-medium transition-colors ${isScrolled ? "text-foreground hover:text-primary" : "text-white drop-shadow-sm hover:text-gray-200"}`}>
+                  {item.name}
+                  {item.dropdown && <ChevronDown size={14} className="mt-0.5 group-hover:rotate-180 transition-transform duration-200" />}
+                </Link>
+                
+                {/* Mega Menu Dropdown */}
+                {item.dropdown && (
+                  <div className="absolute top-20 left-1/2 -translate-x-1/2 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top scale-95 group-hover:scale-100">
+                    <div className="bg-card border border-border rounded-xl shadow-xl overflow-hidden py-2.5">
+                      {item.dropdown.map((sub, idx) => (
+                        <Link key={idx} href={sub.href} className="block px-5 py-3 hover:bg-background transition-colors">
+                          <div className="text-foreground font-semibold text-sm">{sub.name}</div>
+                          <div className="text-muted text-xs mt-0.5">{sub.desc}</div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             ))}
-            <Link href="/community" className="px-5 py-2.5 border-2 border-[#FFD700] text-[#FFD700] font-semibold hover:bg-[#FFD700] hover:text-black transition-colors rounded-none">
+            
+            <ThemeToggle />
+
+            <Link href="/community" className={`px-5 py-2 border-2 font-bold rounded-full transition-all ${isScrolled ? "border-primary text-primary hover:bg-primary hover:text-black" : "border-white text-white hover:bg-white hover:text-black shadow-lg"}`}>
               Join Community
             </Link>
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden flex items-center">
-            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="text-white hover:text-[#FFD700]">
+          <div className="md:hidden flex items-center gap-4">
+            <ThemeToggle />
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className={isScrolled ? "text-foreground" : "text-white"}>
               {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
           </div>
@@ -56,16 +94,30 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-[#0B0B0B] border-b border-[#222222]">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {navLinks.map((link) => (
-              <Link key={link.name} href={link.href} className="block px-3 py-2 text-base font-medium text-white hover:text-[#FFD700]">
-                {link.name}
-              </Link>
+        <div className="md:hidden bg-background border-b border-border absolute w-full">
+          <div className="px-4 pt-2 pb-6 space-y-2 shadow-xl">
+            {navItems.map((item) => (
+              <div key={item.name}>
+                <Link href={item.href} className="block px-2 py-3 text-base font-semibold text-foreground hover:text-primary border-b border-border/50">
+                  {item.name}
+                </Link>
+                {item.dropdown && (
+                  <div className="pl-4 py-2 space-y-2 bg-muted/5 rounded-b-lg">
+                    {item.dropdown.map((sub, idx) => (
+                      <Link key={idx} href={sub.href} className="block px-2 py-2">
+                        <div className="text-foreground text-sm font-medium">{sub.name}</div>
+                        <div className="text-muted text-xs">{sub.desc}</div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
-            <Link href="/community" className="block w-full text-center mt-4 px-5 py-2.5 bg-transparent border-2 border-[#FFD700] text-[#FFD700] font-bold hover:bg-[#FFD700] hover:text-black transition-colors rounded-none">
-              Join Community
-            </Link>
+            <div className="pt-4">
+              <Link href="/community" className="block w-full text-center px-5 py-3 bg-primary text-black font-bold rounded-xl shadow-md hover:bg-primary/90 transition-colors">
+                Join Community
+              </Link>
+            </div>
           </div>
         </div>
       )}

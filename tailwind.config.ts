@@ -5,14 +5,17 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        primary: "#0B0B0B",
-        accent: "#FFD700",
-        card: "#141414",
-        border: "#222222",
-        muted: "#A0A0A0"
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+        primary: "var(--primary)",
+        accent: "var(--accent)",
+        card: "var(--card)",
+        border: "var(--border)",
+        muted: "var(--muted)"
       },
     },
   },
