@@ -1,22 +1,22 @@
 import Link from "next/link"
+import Image from "next/image"
 
 export default function HeroSection() {
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-background">
-      {/* Video Background */}
-      <video 
-        autoPlay 
-        loop 
-        muted 
-        playsInline 
-        className="absolute inset-0 w-full h-full object-cover z-0"
-      >
-        <source src="https://cdn.pixabay.com/video/2022/11/22/140111-774431835_large.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      {/* Mountain Peak Background */}
+      <div className="absolute inset-0 z-0">
+        <Image 
+          src="/hero-bg.png" 
+          alt="Cinematic Himalayan Mountain Peak in Nepal" 
+          fill 
+          className="object-cover object-top"
+          priority
+        />
+      </div>
 
-      {/* Dark Overlay for text readability (kept dynamically dark because it's overlaid on video) */}
-      <div className="absolute inset-0 z-10 bg-black/60" />
+      {/* Dark Overlay for text readability (matches the image's deep navy/black overlay design seamlessly) */}
+      <div className="absolute inset-0 z-10 bg-black/30 bg-gradient-to-t from-background via-black/40 to-transparent" />
 
       {/* 🌟 Content */}
       <div className="relative z-20 max-w-4xl px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center mt-8">
