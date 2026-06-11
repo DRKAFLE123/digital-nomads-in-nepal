@@ -6,18 +6,6 @@ import {
   Image as ImageIcon, Eye, Columns, FileText, 
   X, Upload, Check, Loader2, Bold, List, Italic 
 } from "lucide-react"
-
-const YoutubeIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg
-    viewBox="0 0 24 24"
-    width="1em"
-    height="1em"
-    fill="currentColor"
-    {...props}
-  >
-    <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.108C19.524 3.545 12 3.545 12 3.545s-7.525 0-9.388.51a3.002 3.002 0 0 0-2.11 2.108C0 8.026 0 12 0 12s0 3.974.502 5.837a3.003 3.003 0 0 0 2.11 2.108c1.863.51 9.388.51 9.388.51s7.524 0 9.388-.51a3.002 3.002 0 0 0 2.11-2.108C24 15.974 24 12 24 12s0-3.974-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-  </svg>
-)
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 
@@ -100,6 +88,14 @@ export default function PostEditor({ initialData }: { initialData?: Post }) {
   const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null)
   const [externalUrl, setExternalUrl] = useState("")
 
+  // Auto-slug controls
+  const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false)
+
+  // Slash Commands state
+  const [showSlashMenu, setShowSlashMenu] = useState(false)
+  const [slashQuery, setSlashQuery] = useState("")
+  const [slashIndex, setSlashIndex] = useState(0)
+
   const [form, setForm] = useState<Post>({
     title: initialData?.title || "",
     slug: initialData?.slug || "",
@@ -108,7 +104,7 @@ export default function PostEditor({ initialData }: { initialData?: Post }) {
     coverImage: initialData?.coverImage || "",
     category: initialData?.category || "Cost of Living",
     tags: initialData?.tags || [],
-    readTime: initialData?.readTime || "5 min read",
+    readTime: initialData?.readTime || "1 min read",
     author: initialData?.author || "Admin",
     published: initialData?.published ?? true,
     affiliates: initialData?.affiliates ?? false,
@@ -116,6 +112,15 @@ export default function PostEditor({ initialData }: { initialData?: Post }) {
   })
 
   const [tagsInput, setTagsInput] = useState(form.tags.join(", "))
+
+  // Word count & Read time calculation
+  const wordCount = form.content.trim().split(/\s+/).filter(Boolean).length
+
+  // Dynamically update read time based on word count
+  useEffect(() => {
+    const mins = Math.max(1, Math.ceil(wordCount / 200))
+    setForm(f => ({ ...f, readTime: `${mins} min read` }))
+  }, [wordCount])
 
   // Fetch media library items
   async function fetchMedia() {
@@ -205,6 +210,21 @@ export default function PostEditor({ initialData }: { initialData?: Post }) {
       ...f,
       slug: f.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '')
     }))
+    setIsSlugManuallyEdited(false)
+  }
+
+  function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const newTitle = e.target.value
+    const newSlug = isSlugManuallyEdited 
+      ? form.slug 
+      : newTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '')
+    
+    setForm(f => ({ ...f, title: newTitle, slug: newSlug }))
+  }
+
+  function handleSlugChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setForm({ ...form, slug: e.target.value })
+    setIsSlugManuallyEdited(true)
   }
 
   // Helper to insert markdown tags at selection
@@ -238,7 +258,6 @@ export default function PostEditor({ initialData }: { initialData?: Post }) {
   function insertYouTube() {
     const url = prompt("Enter YouTube Video URL:")
     if (!url) return
-    // Ensure clean link format for our markdown renderer to capture
     insertAtCursor(`\n[YouTube Video](${url.trim()})\n`)
   }
 
@@ -262,6 +281,101 @@ export default function PostEditor({ initialData }: { initialData?: Post }) {
       setExternalUrl("")
     }
   }
+
+  // Formatting Slash Command setup
+  const slashCommandsList = [
+    { name: "h2", label: "Heading 2", shortcut: "/h2", before: "\n## ", after: "\n" },
+    { name: "h3", label: "Heading 3", shortcut: "/h3", before: "\n### ", after: "\n" },
+    { name: "bold", label: "Bold Text", shortcut: "/bold", before: "**", after: "**" },
+    { name: "italic", label: "Italic Text", shortcut: "/italic", before: "*", after: "*" },
+    { name: "list", label: "Bullet List", shortcut: "/list", before: "\n- ", after: "" },
+    { name: "link", label: "Insert Link", shortcut: "/link", type: "prompt-link" },
+    { name: "table", label: "Markdown Table", shortcut: "/table", type: "table" },
+    { name: "youtube", label: "YouTube Video", shortcut: "/youtube", type: "youtube" },
+    { name: "image", label: "Media Library", shortcut: "/image", type: "media" },
+  ]
+
+  const filteredCommands = slashCommandsList.filter(c => 
+    c.name.includes(slashQuery.toLowerCase()) || c.label.toLowerCase().includes(slashQuery.toLowerCase())
+  )
+
+  function executeSlashCommand(cmd: typeof slashCommandsList[0]) {
+    const textarea = textareaRef.current
+    if (!textarea) return
+
+    const cursor = textarea.selectionStart
+    const value = form.content
+    const textBeforeCursor = value.substring(0, cursor)
+    const lastSlashIndex = textBeforeCursor.lastIndexOf("/")
+
+    if (lastSlashIndex === -1) return
+
+    // Clean slash text
+    const cleanContent = value.substring(0, lastSlashIndex) + value.substring(cursor)
+    setForm(f => ({ ...f, content: cleanContent }))
+
+    setTimeout(() => {
+      textarea.focus()
+      textarea.setSelectionRange(lastSlashIndex, lastSlashIndex)
+
+      if (cmd.type === "table") {
+        insertTable()
+      } else if (cmd.type === "youtube") {
+        insertYouTube()
+      } else if (cmd.type === "media") {
+        setIsMediaOpen(true)
+      } else if (cmd.type === "prompt-link") {
+        const text = prompt("Link Text:")
+        const url = prompt("URL:")
+        if (text && url) insertAtCursor(`[${text}](${url})`)
+      } else {
+        insertAtCursor(cmd.before || "", cmd.after || "")
+      }
+    }, 50)
+
+    setShowSlashMenu(false)
+    setSlashIndex(0)
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (showSlashMenu && filteredCommands.length > 0) {
+      if (e.key === "ArrowDown") {
+        e.preventDefault()
+        setSlashIndex(prev => (prev + 1) % filteredCommands.length)
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault()
+        setSlashIndex(prev => (prev - 1 + filteredCommands.length) % filteredCommands.length)
+      } else if (e.key === "Enter") {
+        e.preventDefault()
+        executeSlashCommand(filteredCommands[slashIndex])
+      } else if (e.key === "Escape") {
+        e.preventDefault()
+        setShowSlashMenu(false)
+      }
+    }
+  }
+
+  function handleKeyUp(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    const textarea = e.currentTarget
+    const value = textarea.value
+    const cursor = textarea.selectionStart
+
+    const textBeforeCursor = value.substring(0, cursor)
+    const match = textBeforeCursor.match(/\/(\w*)$/)
+
+    if (match) {
+      setShowSlashMenu(true)
+      setSlashQuery(match[1])
+    } else {
+      setShowSlashMenu(false)
+    }
+  }
+
+  const YoutubeIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" {...props}>
+      <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.108C19.524 3.545 12 3.545 12 3.545s-7.525 0-9.388.51a3.002 3.002 0 0 0-2.11 2.108C0 8.026 0 12 0 12s0 3.974.502 5.837a3.003 3.003 0 0 0 2.11 2.108c1.863.51 9.388.51 9.388.51s7.524 0 9.388-.51a3.002 3.002 0 0 0 2.11-2.108C24 15.974 24 12 24 12s0-3.974-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+    </svg>
+  )
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
@@ -306,7 +420,7 @@ export default function PostEditor({ initialData }: { initialData?: Post }) {
                   type="text" 
                   required 
                   value={form.title} 
-                  onChange={e => setForm({ ...form, title: e.target.value })}
+                  onChange={handleTitleChange}
                   placeholder="e.g. Living in Kathmandu as a Nomad"
                   className="w-full bg-black border border-[#222] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500/50 transition-all text-sm" 
                 />
@@ -320,7 +434,7 @@ export default function PostEditor({ initialData }: { initialData?: Post }) {
                   type="text" 
                   required 
                   value={form.slug} 
-                  onChange={e => setForm({ ...form, slug: e.target.value })}
+                  onChange={handleSlugChange}
                   placeholder="living-in-kathmandu"
                   className="w-full bg-black border border-[#222] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500/50 transition-all text-sm" 
                 />
@@ -436,15 +550,46 @@ export default function PostEditor({ initialData }: { initialData?: Post }) {
               {/* Editor Workspace Content */}
               <div className="grid grid-cols-1 gap-4">
                 {activeTab === "write" && (
-                  <textarea 
-                    ref={textareaRef}
-                    required 
-                    rows={18} 
-                    value={form.content} 
-                    onChange={e => setForm({ ...form, content: e.target.value })}
-                    placeholder="Write your blog content here in markdown..."
-                    className="w-full font-mono text-sm bg-black border border-[#222] rounded-xl p-4 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500/50 transition-all leading-relaxed" 
-                  />
+                  <div className="relative">
+                    <textarea 
+                      ref={textareaRef}
+                      required 
+                      rows={18} 
+                      value={form.content} 
+                      onChange={e => setForm({ ...form, content: e.target.value })}
+                      onKeyDown={handleKeyDown}
+                      onKeyUp={handleKeyUp}
+                      placeholder="Write your blog content here in markdown... Type '/' for formatting commands."
+                      className="w-full font-mono text-sm bg-black border border-[#222] rounded-xl p-4 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500/50 transition-all leading-relaxed" 
+                    />
+                    
+                    {/* Floating Slash Commands Dropdown */}
+                    {showSlashMenu && filteredCommands.length > 0 && (
+                      <div className="absolute bottom-4 left-4 z-40 bg-[#161616] border border-[#222] rounded-xl p-2 w-64 shadow-2xl animate-in fade-in slide-in-from-bottom-2 duration-150">
+                        <div className="text-[10px] uppercase font-bold text-gray-500 tracking-wider px-3 py-1 mb-1">Slash Commands</div>
+                        <div className="space-y-0.5 max-h-48 overflow-y-auto">
+                          {filteredCommands.map((cmd, idx) => {
+                            const isSelected = idx === slashIndex
+                            return (
+                              <button
+                                key={cmd.name}
+                                type="button"
+                                onClick={() => executeSlashCommand(cmd)}
+                                className={`w-full text-left px-3 py-2 rounded-lg text-xs font-semibold transition-all flex items-center justify-between ${
+                                  isSelected 
+                                    ? "bg-yellow-400 text-black font-bold" 
+                                    : "text-gray-300 hover:bg-[#222] hover:text-white"
+                                }`}
+                              >
+                                <span>{cmd.label}</span>
+                                <span className={`text-[10px] font-mono ${isSelected ? "text-black/60" : "text-gray-500"}`}>{cmd.shortcut}</span>
+                              </button>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 )}
 
                 {activeTab === "preview" && (
@@ -457,15 +602,46 @@ export default function PostEditor({ initialData }: { initialData?: Post }) {
 
                 {activeTab === "split" && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <textarea 
-                      ref={textareaRef}
-                      required 
-                      rows={18} 
-                      value={form.content} 
-                      onChange={e => setForm({ ...form, content: e.target.value })}
-                      placeholder="Write your content..."
-                      className="w-full font-mono text-sm bg-black border border-[#222] rounded-xl p-4 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500/50 transition-all leading-relaxed" 
-                    />
+                    <div className="relative">
+                      <textarea 
+                        ref={textareaRef}
+                        required 
+                        rows={18} 
+                        value={form.content} 
+                        onChange={e => setForm({ ...form, content: e.target.value })}
+                        onKeyDown={handleKeyDown}
+                        onKeyUp={handleKeyUp}
+                        placeholder="Write your content... Type '/' for formatting commands."
+                        className="w-full font-mono text-sm bg-black border border-[#222] rounded-xl p-4 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500/50 transition-all leading-relaxed" 
+                      />
+                      
+                      {/* Floating Slash Commands Dropdown */}
+                      {showSlashMenu && filteredCommands.length > 0 && (
+                        <div className="absolute bottom-4 left-4 z-40 bg-[#161616] border border-[#222] rounded-xl p-2 w-64 shadow-2xl animate-in fade-in slide-in-from-bottom-2 duration-150">
+                          <div className="text-[10px] uppercase font-bold text-gray-500 tracking-wider px-3 py-1 mb-1">Slash Commands</div>
+                          <div className="space-y-0.5 max-h-48 overflow-y-auto">
+                            {filteredCommands.map((cmd, idx) => {
+                              const isSelected = idx === slashIndex
+                              return (
+                                <button
+                                  key={cmd.name}
+                                  type="button"
+                                  onClick={() => executeSlashCommand(cmd)}
+                                  className={`w-full text-left px-3 py-2 rounded-lg text-xs font-semibold transition-all flex items-center justify-between ${
+                                    isSelected 
+                                      ? "bg-yellow-400 text-black font-bold" 
+                                      : "text-gray-300 hover:bg-[#222] hover:text-white"
+                                  }`}
+                                >
+                                  <span>{cmd.label}</span>
+                                  <span className={`text-[10px] font-mono ${isSelected ? "text-black/60" : "text-gray-500"}`}>{cmd.shortcut}</span>
+                                </button>
+                              )
+                            })}
+                          </div>
+                        </div>
+                      )}
+                    </div>
                     <div className="prose prose-invert prose-sm max-w-none w-full bg-black border border-[#222] rounded-xl p-5 overflow-y-auto max-h-[440px]">
                       <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                         {form.content || "*Nothing to preview.*"}
@@ -520,8 +696,12 @@ export default function PostEditor({ initialData }: { initialData?: Post }) {
                 value={form.readTime} 
                 onChange={e => setForm({ ...form, readTime: e.target.value })}
                 placeholder="5 min read"
-                className="w-full bg-black border border-[#222] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500/50 text-sm" 
+                className="w-full bg-black border border-[#222] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500/50 text-sm animate-pulse" 
               />
+              <div className="text-[10px] text-gray-500 mt-1 font-medium flex items-center justify-between">
+                <span>Auto-calculated:</span>
+                <span className="text-yellow-400 font-bold">{wordCount.toLocaleString()} words</span>
+              </div>
             </div>
 
             <div>
