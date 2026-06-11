@@ -213,12 +213,12 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
               </ReactMarkdown>
             </div>
 
+            <RelatedPosts posts={related} />
+
             {/* Newsletter Bottom */}
             <div className="mt-20 pt-10 border-t border-[#222222]">
               <NewsletterSignup />
             </div>
-
-            <RelatedPosts posts={related} />
           </article>
 
           {/* Sidebar */}

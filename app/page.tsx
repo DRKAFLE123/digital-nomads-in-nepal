@@ -65,6 +65,14 @@ export default async function Home() {
           </div>
         </section>
 
+        {/* Email Signup Section */}
+        <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-[#111111]">
+          <div className="max-w-4xl mx-auto">
+            <NewsletterSignup />
+          </div>
+        </section>
+
+
         {/* Destinations Section */}
         <section className="w-full py-24 px-4 sm:px-6 lg:px-8 bg-background">
           <div className="max-w-7xl mx-auto">
@@ -122,13 +130,6 @@ export default async function Home() {
                 <span className="text-white font-medium mt-2">X</span>
               </a>
             </div>
-          </div>
-        </section>
-
-        {/* Email Signup Section */}
-        <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-[#111111]">
-          <div className="max-w-4xl mx-auto">
-            <NewsletterSignup />
           </div>
         </section>
       </main>
