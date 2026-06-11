@@ -15,6 +15,7 @@ import {
   Shield,
   FileText,
   Image as ImageIcon,
+  Settings,
 } from "lucide-react"
 
 const navItems = [
@@ -25,6 +26,7 @@ const navItems = [
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/subscribers", label: "Subscribers", icon: Mail },
   { href: "/admin/destinations", label: "Destinations", icon: MapPin },
+  { href: "/admin/settings", label: "Settings", icon: Settings },
 ]
 
 interface Props {
