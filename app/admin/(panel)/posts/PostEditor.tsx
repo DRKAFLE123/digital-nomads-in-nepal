@@ -26,10 +26,12 @@ interface Post {
 }
 
 interface MediaItem {
+  id?: string
   name: string
   url: string
   size: number
   createdAt: string
+  alt?: string | null
 }
 
 const markdownComponents = {
@@ -90,6 +92,9 @@ export default function PostEditor({ initialData }: { initialData?: Post }) {
 
   // Auto-slug controls
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false)
+
+  // Alt Text state
+  const [altText, setAltText] = useState("")
 
   // Slash Commands state
   const [showSlashMenu, setShowSlashMenu] = useState(false)
@@ -162,6 +167,7 @@ export default function PostEditor({ initialData }: { initialData?: Post }) {
         const newMedia = await res.json()
         setMediaList(prev => [newMedia, ...prev])
         setSelectedMedia(newMedia)
+        setAltText("")
       } else {
         const errData = await res.json()
         alert(errData.error || "Upload failed")
@@ -274,11 +280,13 @@ export default function PostEditor({ initialData }: { initialData?: Post }) {
     } else {
       const url = selectedMedia ? selectedMedia.url : externalUrl
       if (url) {
-        insertAtCursor(`\n![Image description](${url})\n`)
+        const alt = altText.trim() || "Image description"
+        insertAtCursor(`\n![${alt}](${url})\n`)
       }
       setIsMediaOpen(false)
       setSelectedMedia(null)
       setExternalUrl("")
+      setAltText("")
     }
   }
 
@@ -846,26 +854,43 @@ export default function PostEditor({ initialData }: { initialData?: Post }) {
                     onChange={e => {
                       setSelectedMedia(null)
                       setExternalUrl(e.target.value)
+                      setAltText("")
                     }}
                     placeholder="https://images.unsplash.com/..."
                     className="w-full bg-black border border-[#222] rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500/50 text-xs mb-3" 
                   />
                   {(selectedMedia || externalUrl) && (
-                    <div className="flex flex-col gap-2">
-                      <button 
-                        type="button" 
-                        onClick={() => handleMediaSelectAction("editor")}
-                        className="w-full py-2 bg-yellow-400 text-black font-bold text-xs rounded-lg hover:bg-yellow-500 transition-all shadow"
-                      >
-                        Insert Into Post Content
-                      </button>
-                      <button 
-                        type="button" 
-                        onClick={() => handleMediaSelectAction("cover")}
-                        className="w-full py-2 bg-white/10 text-white font-semibold text-xs border border-white/10 hover:bg-white/20 rounded-lg transition-all"
-                      >
-                        Set as Cover Image
-                      </button>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                          <span>Image Alt Text</span>
+                          <span className="text-gray-600 lowercase">(for SEO/accessibility)</span>
+                        </label>
+                        <input
+                          type="text"
+                          value={altText}
+                          onChange={e => setAltText(e.target.value)}
+                          placeholder="Brief description of the image..."
+                          className="w-full bg-black border border-[#222] rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500/50 text-xs"
+                        />
+                      </div>
+                      
+                      <div className="flex flex-col gap-2">
+                        <button 
+                          type="button" 
+                          onClick={() => handleMediaSelectAction("editor")}
+                          className="w-full py-2 bg-yellow-400 text-black font-bold text-xs rounded-lg hover:bg-yellow-500 transition-all shadow"
+                        >
+                          Insert Into Post Content
+                        </button>
+                        <button 
+                          type="button" 
+                          onClick={() => handleMediaSelectAction("cover")}
+                          className="w-full py-2 bg-white/10 text-white font-semibold text-xs border border-white/10 hover:bg-white/20 rounded-lg transition-all"
+                        >
+                          Set as Cover Image
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -893,6 +918,7 @@ export default function PostEditor({ initialData }: { initialData?: Post }) {
                           onClick={() => {
                             setExternalUrl("")
                             setSelectedMedia(media)
+                            setAltText(media.alt || "")
                           }}
                           className={`group relative aspect-square rounded-xl overflow-hidden cursor-pointer border-2 bg-black transition-all ${
                             isSelected ? "border-yellow-400 scale-[0.98] shadow-lg shadow-yellow-500/5" : "border-[#222] hover:border-gray-500"

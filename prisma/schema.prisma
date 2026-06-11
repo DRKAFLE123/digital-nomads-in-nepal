@@ -109,5 +109,6 @@ model Media {
   name      String
   url       String   @db.Text
   size      Int
+  alt       String?  @db.Text
   createdAt DateTime @default(now())
 }

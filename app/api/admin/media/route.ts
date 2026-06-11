@@ -42,6 +42,7 @@ export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData()
     const file = formData.get("file") as File | null
+    const alt = formData.get("alt") as string | null
     if (!file) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 })
     }
@@ -107,6 +108,7 @@ export async function POST(req: NextRequest) {
         name: filename,
         url: imageUrl,
         size: file.size,
+        alt: alt || null,
       }
     })
 

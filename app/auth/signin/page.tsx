@@ -41,8 +41,8 @@ function SignInForm() {
         {/* Logo */}
         <div className="text-center mb-10">
           <Link href="/" className="inline-flex items-center gap-3">
-            <div className="relative w-12 h-12 rounded-full overflow-hidden border border-border bg-white">
-              <Image src="/nomadlogo.png" alt="Logo" fill className="object-cover" />
+            <div className="relative w-12 h-12 overflow-hidden">
+              <Image src="/nomadlogo.png" alt="Logo" fill className="object-contain" />
             </div>
             <span className="font-extrabold text-xl text-foreground">Digital Nomads <span className="text-primary">in Nepal</span></span>
           </Link>

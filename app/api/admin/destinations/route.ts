@@ -17,13 +17,19 @@ export async function POST(req: NextRequest) {
   const { error } = await requireAdmin()
   if (error) return error
 
-  const { name, slug, description, image } = await req.json()
+  const { name, slug, description, image, tags } = await req.json()
   if (!name || !slug) {
     return NextResponse.json({ error: "Name and slug are required" }, { status: 400 })
   }
 
   const destination = await prisma.destination.create({
-    data: { name, slug, description: description ?? null, image: image ?? null },
+    data: { 
+      name, 
+      slug, 
+      description: description ?? null, 
+      image: image ?? null,
+      tags: tags ?? null
+    },
   })
 
   return NextResponse.json(destination, { status: 201 })
@@ -33,10 +39,16 @@ export async function PATCH(req: NextRequest) {
   const { error } = await requireAdmin()
   if (error) return error
 
-  const { id, name, slug, description, image } = await req.json()
+  const { id, name, slug, description, image, tags } = await req.json()
   const destination = await prisma.destination.update({
     where: { id },
-    data: { name, slug, description: description ?? null, image: image ?? null },
+    data: { 
+      name, 
+      slug, 
+      description: description ?? null, 
+      image: image ?? null,
+      tags: tags ?? null
+    },
   })
 
   return NextResponse.json(destination)

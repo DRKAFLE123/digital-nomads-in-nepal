@@ -2,18 +2,45 @@
 import { useEffect, useState, useCallback } from "react"
 import { Plus, Pencil, Trash2, RefreshCw, X, Check } from "lucide-react"
 
+interface DestinationTags {
+  score?: string
+  cost?: string
+  speed?: string
+  safety?: string
+  power?: string
+  sim?: string
+  coworking?: string[]
+  pros?: string[]
+  cons?: string[]
+}
+
 interface Destination {
   id: string
   name: string
   slug: string
   description: string | null
   image: string | null
+  tags?: DestinationTags | null
   createdAt: string
 }
 
 type ModalMode = "add" | "edit"
 
-const EMPTY = { name: "", slug: "", description: "", image: "" }
+const EMPTY = { 
+  name: "", 
+  slug: "", 
+  description: "", 
+  image: "",
+  score: "4.0",
+  cost: "$600 / month",
+  speed: "100 Mbps",
+  safety: "High",
+  power: "Good",
+  sim: "Ncell & NTC 4G",
+  coworking: "",
+  pros: "",
+  cons: ""
+}
 
 export default function AdminDestinationsPage() {
   const [destinations, setDestinations] = useState<Destination[]>([])
@@ -41,11 +68,21 @@ export default function AdminDestinationsPage() {
   }
 
   function openEdit(item: Destination) {
+    const t = (item.tags && typeof item.tags === "object" && !Array.isArray(item.tags)) ? (item.tags as DestinationTags) : {}
     setForm({
       name: item.name,
       slug: item.slug,
       description: item.description ?? "",
       image: item.image ?? "",
+      score: t.score ?? "4.0",
+      cost: t.cost ?? "$600 / month",
+      speed: t.speed ?? "100 Mbps",
+      safety: t.safety ?? "High",
+      power: t.power ?? "Good",
+      sim: t.sim ?? "Ncell & NTC 4G",
+      coworking: Array.isArray(t.coworking) ? t.coworking.join("\n") : "",
+      pros: Array.isArray(t.pros) ? t.pros.join("\n") : "",
+      cons: Array.isArray(t.cons) ? t.cons.join("\n") : ""
     })
     setFormError("")
     setModal({ mode: "edit", item })
@@ -63,11 +100,31 @@ export default function AdminDestinationsPage() {
     setSaving(true)
     setFormError("")
 
+    const tagsPayload = {
+      score: form.score,
+      cost: form.cost,
+      speed: form.speed,
+      safety: form.safety,
+      power: form.power,
+      sim: form.sim,
+      coworking: form.coworking.split("\n").map(s => s.trim()).filter(Boolean),
+      pros: form.pros.split("\n").map(s => s.trim()).filter(Boolean),
+      cons: form.cons.split("\n").map(s => s.trim()).filter(Boolean)
+    }
+
+    const payload = {
+      name: form.name,
+      slug: form.slug,
+      description: form.description,
+      image: form.image,
+      tags: tagsPayload
+    }
+
     if (modal?.mode === "add") {
       const res = await fetch("/api/admin/destinations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       })
       if (res.ok) {
         const created = await res.json()
@@ -81,7 +138,7 @@ export default function AdminDestinationsPage() {
       const res = await fetch("/api/admin/destinations", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: modal.item.id, ...form }),
+        body: JSON.stringify({ id: modal.item.id, ...payload }),
       })
       if (res.ok) {
         const updated = await res.json()
@@ -204,46 +261,147 @@ export default function AdminDestinationsPage() {
               </div>
             )}
 
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm text-gray-400 mb-1.5 block">Name *</label>
-                <input
-                  value={form.name}
-                  onChange={(e) => {
-                    const name = e.target.value
-                    setForm((f) => ({ ...f, name, slug: modal.mode === "add" ? autoSlug(name) : f.slug }))
-                  }}
-                  placeholder="Kathmandu"
-                  className="w-full bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500/30 placeholder:text-gray-600"
-                />
+            {/* Modal Scrollable Content */}
+            <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs text-gray-400 mb-1 block">Name *</label>
+                  <input
+                    value={form.name}
+                    onChange={(e) => {
+                      const name = e.target.value
+                      setForm((f) => ({ ...f, name, slug: modal.mode === "add" ? autoSlug(name) : f.slug }))
+                    }}
+                    placeholder="Kathmandu"
+                    className="w-full bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl px-4 py-2 text-white text-xs focus:outline-none focus:ring-2 focus:ring-yellow-500/30 placeholder:text-gray-600"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-gray-400 mb-1 block">Slug *</label>
+                  <input
+                    value={form.slug}
+                    onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))}
+                    placeholder="kathmandu"
+                    className="w-full bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl px-4 py-2 text-white text-xs focus:outline-none focus:ring-2 focus:ring-yellow-500/30 placeholder:text-gray-600 font-mono"
+                  />
+                </div>
               </div>
+
               <div>
-                <label className="text-sm text-gray-400 mb-1.5 block">Slug *</label>
-                <input
-                  value={form.slug}
-                  onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))}
-                  placeholder="kathmandu"
-                  className="w-full bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500/30 placeholder:text-gray-600 font-mono"
-                />
-              </div>
-              <div>
-                <label className="text-sm text-gray-400 mb-1.5 block">Description</label>
+                <label className="text-xs text-gray-400 mb-1 block">Description</label>
                 <textarea
                   value={form.description}
                   onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
-                  rows={3}
+                  rows={2}
                   placeholder="Short description of the destination…"
-                  className="w-full bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500/30 placeholder:text-gray-600 resize-none"
+                  className="w-full bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl px-4 py-2 text-white text-xs focus:outline-none focus:ring-2 focus:ring-yellow-500/30 placeholder:text-gray-600 resize-none"
                 />
               </div>
+
+              <div className="grid grid-cols-2 gap-4 border-t border-[#222] pt-4">
+                <div>
+                  <label className="text-xs text-gray-400 mb-1 block">Nomad Score *</label>
+                  <input
+                    value={form.score}
+                    onChange={(e) => setForm((f) => ({ ...f, score: e.target.value }))}
+                    placeholder="4.2"
+                    className="w-full bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl px-4 py-2 text-white text-xs focus:outline-none focus:ring-2 focus:ring-yellow-500/30"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-gray-400 mb-1 block">Est. Cost / Month *</label>
+                  <input
+                    value={form.cost}
+                    onChange={(e) => setForm((f) => ({ ...f, cost: e.target.value }))}
+                    placeholder="$700 / month"
+                    className="w-full bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl px-4 py-2 text-white text-xs focus:outline-none focus:ring-2 focus:ring-yellow-500/30"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs text-gray-400 mb-1 block">Internet Speed *</label>
+                  <input
+                    value={form.speed}
+                    onChange={(e) => setForm((f) => ({ ...f, speed: e.target.value }))}
+                    placeholder="100 - 300 Mbps"
+                    className="w-full bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl px-4 py-2 text-white text-xs focus:outline-none focus:ring-2 focus:ring-yellow-500/30"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-gray-400 mb-1 block">Safety Rating *</label>
+                  <input
+                    value={form.safety}
+                    onChange={(e) => setForm((f) => ({ ...f, safety: e.target.value }))}
+                    placeholder="High"
+                    className="w-full bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl px-4 py-2 text-white text-xs focus:outline-none focus:ring-2 focus:ring-yellow-500/30"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs text-gray-400 mb-1 block">Power Grid Status *</label>
+                  <input
+                    value={form.power}
+                    onChange={(e) => setForm((f) => ({ ...f, power: e.target.value }))}
+                    placeholder="Excellent"
+                    className="w-full bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl px-4 py-2 text-white text-xs focus:outline-none focus:ring-2 focus:ring-yellow-500/30"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-gray-400 mb-1 block">Sim Card Status *</label>
+                  <input
+                    value={form.sim}
+                    onChange={(e) => setForm((f) => ({ ...f, sim: e.target.value }))}
+                    placeholder="Ncell & NTC 4G"
+                    className="w-full bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl px-4 py-2 text-white text-xs focus:outline-none focus:ring-2 focus:ring-yellow-500/30"
+                  />
+                </div>
+              </div>
+
               <div>
-                <label className="text-sm text-gray-400 mb-1.5 block">Image URL</label>
+                <label className="text-xs text-gray-400 mb-1 block">Image URL</label>
                 <input
                   value={form.image}
                   onChange={(e) => setForm((f) => ({ ...f, image: e.target.value }))}
                   placeholder="https://res.cloudinary.com/…"
-                  className="w-full bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500/30 placeholder:text-gray-600"
+                  className="w-full bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl px-4 py-2 text-white text-xs focus:outline-none focus:ring-2 focus:ring-yellow-500/30"
                 />
+              </div>
+
+              <div className="border-t border-[#222] pt-4 space-y-4">
+                <div>
+                  <label className="text-xs text-gray-400 mb-1 block">Vetted Coworking Spaces (one per line)</label>
+                  <textarea
+                    value={form.coworking}
+                    onChange={(e) => setForm((f) => ({ ...f, coworking: e.target.value }))}
+                    rows={2}
+                    placeholder="Work Around&#10;Impact Hub"
+                    className="w-full bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl px-4 py-2 text-white text-xs focus:outline-none focus:ring-2 focus:ring-yellow-500/30 font-mono"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-gray-400 mb-1 block">Nomad Pros (one per line)</label>
+                  <textarea
+                    value={form.pros}
+                    onChange={(e) => setForm((f) => ({ ...f, pros: e.target.value }))}
+                    rows={2}
+                    placeholder="Great culture&#10;Fast fiber internet"
+                    className="w-full bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl px-4 py-2 text-white text-xs focus:outline-none focus:ring-2 focus:ring-yellow-500/30 font-mono"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-gray-400 mb-1 block">Nomad Cons (one per line)</label>
+                  <textarea
+                    value={form.cons}
+                    onChange={(e) => setForm((f) => ({ ...f, cons: e.target.value }))}
+                    rows={2}
+                    placeholder="Traffic and dust&#10;Monsoon rains"
+                    className="w-full bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl px-4 py-2 text-white text-xs focus:outline-none focus:ring-2 focus:ring-yellow-500/30 font-mono"
+                  />
+                </div>
               </div>
             </div>
 

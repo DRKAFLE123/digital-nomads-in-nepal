@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import type { Metadata } from "next"
 import GuidesClient from "./GuidesClient"
+import TrekkingGuideIcon from "@/components/TrekkingGuideIcon"
 
 export const metadata: Metadata = {
   title: "Find Local Guides in Nepal | Digital Nomads in Nepal",
@@ -32,8 +33,9 @@ export default async function GuidesPage() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
             <div>
               <span className="text-primary text-xs font-bold uppercase tracking-widest mb-3 block">Guide Marketplace</span>
-              <h1 className="text-4xl sm:text-5xl font-black text-foreground leading-tight mb-4">
+              <h1 className="text-4xl sm:text-5xl font-black text-foreground leading-tight mb-4 flex items-center gap-3 flex-wrap">
                 Find a Local Guide in Nepal
+                <TrekkingGuideIcon size={40} className="translate-y-[-2px]" />
               </h1>
               <p className="text-muted text-lg max-w-xl">
                 Connect with verified Nepalese locals for trekking, cultural tours, food walks, and more.

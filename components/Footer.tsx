@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import TrekkingGuideIcon from "./TrekkingGuideIcon";
 
 export default function Footer() {
   return (
@@ -11,8 +12,8 @@ export default function Footer() {
           {/* Column 1: Brand/Bio */}
           <div className="flex flex-col lg:pr-8">
             <Link href="/" className="inline-block mb-6 transition-transform hover:scale-105 active:scale-95 duration-300">
-              <div className="relative w-16 h-16 rounded-full overflow-hidden border border-gray-800 bg-white shadow-xl">
-                <Image src="/nomadlogo.png" alt="Digital Nomads in Nepal Logo" fill className="object-cover" />
+              <div className="relative w-16 h-16 overflow-hidden">
+                <Image src="/nomadlogo.png" alt="Digital Nomads in Nepal Logo" fill className="object-contain" />
               </div>
             </Link>
             <p className="text-sm leading-relaxed text-gray-400 mb-6">
@@ -54,7 +55,15 @@ export default function Footer() {
             <ul className="flex flex-col space-y-4">
               <li><Link href="/forum" className="text-sm text-gray-400 hover:text-[#FFD700] transition-colors inline-block group">Nomad Forum<span className="block h-px w-0 bg-[#FFD700] transition-all group-hover:w-full"></span></Link></li>
               <li><Link href="/directory" className="text-sm text-gray-400 hover:text-[#FFD700] transition-colors inline-block group">Member Directory<span className="block h-px w-0 bg-[#FFD700] transition-all group-hover:w-full"></span></Link></li>
-              <li><Link href="/guides" className="text-sm text-gray-400 hover:text-[#FFD700] transition-colors inline-block group">Find a Local Guide 🏔️<span className="block h-px w-0 bg-[#FFD700] transition-all group-hover:w-full"></span></Link></li>
+              <li>
+                <Link href="/guides" className="text-sm text-gray-400 hover:text-[#FFD700] transition-colors flex items-center gap-1.5 group w-fit">
+                  <span className="relative">
+                    Find a Local Guide
+                    <span className="block absolute bottom-[-2px] left-0 h-px w-0 bg-[#FFD700] transition-all group-hover:w-full"></span>
+                  </span>
+                  <TrekkingGuideIcon size={14} className="text-gray-400 group-hover:text-[#FFD700] transition-colors" />
+                </Link>
+              </li>
               <li><Link href="/events" className="text-sm text-gray-400 hover:text-[#FFD700] transition-colors inline-block group">Events in Nepal<span className="block h-px w-0 bg-[#FFD700] transition-all group-hover:w-full"></span></Link></li>
               <li><Link href="/newsletter" className="text-sm text-gray-400 hover:text-[#FFD700] transition-colors inline-block group">Join Newsletter<span className="block h-px w-0 bg-[#FFD700] transition-all group-hover:w-full"></span></Link></li>
             </ul>

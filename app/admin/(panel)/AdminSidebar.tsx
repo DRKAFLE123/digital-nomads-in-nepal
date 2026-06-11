@@ -14,12 +14,14 @@ import {
   X,
   Shield,
   FileText,
+  Image as ImageIcon,
 } from "lucide-react"
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/guides", label: "Guides", icon: BookOpen },
   { href: "/admin/posts", label: "Blog Posts", icon: FileText },
+  { href: "/admin/media", label: "Media Library", icon: ImageIcon },
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/subscribers", label: "Subscribers", icon: Mail },
   { href: "/admin/destinations", label: "Destinations", icon: MapPin },

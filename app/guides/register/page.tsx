@@ -4,6 +4,7 @@ import { useState } from "react"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import Link from "next/link"
+import TrekkingGuideIcon from "@/components/TrekkingGuideIcon"
 
 const LOCATIONS = ["Kathmandu", "Pokhara", "Bandipur", "Chitwan", "Lumbini", "Nagarkot", "Mustang"]
 const ALL_SPECIALTIES = ["Trekking", "Foodie", "History", "Photography", "Cultural", "Wildlife", "Adventure", "Language", "Yoga & Wellness", "Day Trips"]
@@ -208,7 +209,9 @@ export default function GuideRegisterPage() {
             {/* STEP 5 — Success */}
             {step === 5 && (
               <div className="text-center py-6">
-                <div className="text-5xl mb-6">🏔️</div>
+                <div className="mb-6 flex justify-center">
+                  <TrekkingGuideIcon size={56} />
+                </div>
                 <h2 className="text-2xl font-black text-foreground mb-3">Application Submitted!</h2>
                 <p className="text-muted mb-8 max-w-sm mx-auto">
                   Thank you, <strong>{form.name}</strong>! Your guide profile has been submitted for verification. Our team will review it within 2–3 days.

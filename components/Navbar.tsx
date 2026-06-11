@@ -4,6 +4,18 @@ import Link from "next/link"
 import { Menu, X, ChevronDown } from "lucide-react"
 import { ThemeToggle } from "./ThemeToggle"
 import Image from "next/image"
+import TrekkingGuideIcon from "./TrekkingGuideIcon"
+
+interface NavItem {
+  name: string
+  href: string
+  dropdown?: {
+    name: string
+    desc: string
+    href: string
+    hasIcon?: boolean
+  }[]
+}
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -17,7 +29,7 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const navItems = [
+  const navItems: NavItem[] = [
     { 
       name: "Destinations", 
       href: "/destinations",
@@ -44,7 +56,7 @@ export default function Navbar() {
       name: "Local Experts", 
       href: "/guides",
       dropdown: [
-        { name: "Find a Guide 🏔️", desc: "Discover verified local experts", href: "/guides" },
+        { name: "Find a Local Guide", desc: "Discover verified local experts", href: "/guides", hasIcon: true },
         { name: "Become a Guide", desc: "Join our expert network", href: "/guides/register" },
       ]
     },
@@ -71,8 +83,8 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-20">
           <div className="flex-shrink-0 flex items-center">
             <Link href="/" className="flex items-center gap-3">
-              <div className="relative w-14 h-14 md:w-16 md:h-16 rounded-full overflow-hidden border-2 border-white shadow-lg bg-white">
-                <Image src="/nomadlogo.png" alt="Digital Nomads in Nepal Logo" fill className="object-cover" priority />
+              <div className="relative w-14 h-14 md:w-16 md:h-16 overflow-hidden">
+                <Image src="/nomadlogo.png" alt="Digital Nomads in Nepal Logo" fill className="object-contain" priority />
               </div>
               <span className={`hidden sm:block font-extrabold text-xl md:text-2xl tracking-tight drop-shadow-sm transition-colors ${isScrolled ? "text-foreground" : "text-white"}`}>
                 Digital Nomads <span className={isScrolled ? "text-primary" : "text-accent"}>Nepal</span>
@@ -95,7 +107,10 @@ export default function Navbar() {
                     <div className="bg-card border border-border rounded-xl shadow-xl overflow-hidden py-2.5">
                       {item.dropdown.map((sub, idx) => (
                         <Link key={idx} href={sub.href} className="block px-5 py-3 hover:bg-background transition-colors">
-                          <div className="text-foreground font-semibold text-sm">{sub.name}</div>
+                          <div className="text-foreground font-semibold text-sm flex items-center gap-1.5">
+                            {sub.name}
+                            {sub.hasIcon && <TrekkingGuideIcon size={16} className="translate-y-[-1px]" />}
+                          </div>
                           <div className="text-muted text-xs mt-0.5">{sub.desc}</div>
                         </Link>
                       ))}
@@ -145,7 +160,10 @@ export default function Navbar() {
                       onClick={() => setMobileMenuOpen(false)}
                       className="block px-3 py-2.5 rounded-lg hover:bg-muted/50 transition-colors"
                     >
-                      <div className="text-foreground text-sm font-semibold">{sub.name}</div>
+                      <div className="text-foreground text-sm font-semibold flex items-center gap-1.5">
+                        {sub.name}
+                        {sub.hasIcon && <TrekkingGuideIcon size={14} className="translate-y-[-1px]" />}
+                      </div>
                       <div className="text-muted text-[11px] leading-tight">{sub.desc}</div>
                     </Link>
                   ))}

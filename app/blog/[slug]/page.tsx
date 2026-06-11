@@ -51,21 +51,10 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   }
 
   // Find related posts (same category, exclude current, limit to 6)
-  let dbRelated = await prisma.post.findMany({
+  const dbRelated = await prisma.post.findMany({
     where: { category: post.category, slug: { not: post.slug }, published: true },
     take: 6
   })
-  
-  // If we have fewer than 6, backfill with other recent posts
-  if (dbRelated.length < 6) {
-    const excludedSlugs = [post.slug, ...dbRelated.map(p => p.slug)]
-    const additional = await prisma.post.findMany({
-      where: { slug: { notIn: excludedSlugs }, published: true },
-      take: 6 - dbRelated.length,
-      orderBy: { createdAt: 'desc' }
-    })
-    dbRelated = [...dbRelated, ...additional]
-  }
   
   const related = dbRelated.map(p => ({
     ...p,
@@ -132,8 +121,8 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       <ReadingProgressBar />
       <Navbar />
       <main className="min-h-screen bg-background pb-20">
-        {/* Full-width Hero Banner */}
-        <div className="relative w-full h-[55vh] md:h-[70vh] min-h-[460px] flex items-end">
+        {/* Full-width Hero Banner with bright mountain details (40% overlay) */}
+        <div className="relative w-full h-[45vh] md:h-[55vh] min-h-[350px]">
           {/* Background Cover Image */}
           <div className="absolute inset-0 z-0">
             <Image 
@@ -143,36 +132,38 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
               className="object-cover"
               priority
             />
-            {/* Multi-layered Premium Dark Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-black/35 z-10" />
-            <div className="absolute inset-0 bg-black/20 z-10" />
+            {/* Lighter overlay to show bright mountain details */}
+            <div className="absolute inset-0 bg-black/40 z-10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-black/10 z-10" />
           </div>
-          
-          {/* Content Overlaid on Hero */}
-          <div className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 md:pb-16 pt-28">
-            <div className="max-w-4xl">
-              {/* Category Badge */}
-              <span className="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-black bg-primary text-black uppercase tracking-wider mb-4 shadow-lg shadow-primary/10">
-                {post.category}
+        </div>
+
+        {/* Text Area Card with a slight blur behind it (Glassmorphic) */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 -mt-20 md:-mt-28">
+          <div className="max-w-4xl bg-[#141414]/85 backdrop-blur-lg border border-[#222222] p-8 md:p-10 rounded-2xl shadow-2xl">
+            {/* Category */}
+            <span className="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-black bg-primary text-black uppercase tracking-wider mb-4 shadow-lg shadow-primary/10">
+              {post.category}
+            </span>
+            
+            {/* Title */}
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-6 leading-tight">
+              {post.title}
+            </h1>
+            
+            {/* Meta information: Author • Date • Reading Time */}
+            <div className="flex flex-wrap items-center text-gray-300 text-sm font-semibold">
+              <span className="flex items-center gap-2">
+                <User size={14} className="text-primary" /> {post.author}
               </span>
-              
-              {/* Title */}
-              <h1 className="text-3xl sm:text-4xl md:text-6xl font-black text-white mb-6 leading-tight drop-shadow-md">
-                {post.title}
-              </h1>
-              
-              {/* Meta information */}
-              <div className="flex flex-wrap items-center text-gray-300 text-sm gap-3">
-                <span className="flex items-center gap-2 bg-black/45 backdrop-blur-md px-3.5 py-2 rounded-full border border-white/10">
-                  <User size={14} className="text-primary" /> {post.author}
-                </span>
-                <span className="flex items-center gap-2 bg-black/45 backdrop-blur-md px-3.5 py-2 rounded-full border border-white/10">
-                  <Calendar size={14} className="text-primary" /> {new Date(post.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-                </span>
-                <span className="flex items-center gap-2 bg-black/45 backdrop-blur-md px-3.5 py-2 rounded-full border border-white/10">
-                  <Clock size={14} className="text-primary" /> {post.readTime}
-                </span>
-              </div>
+              <span className="mx-3 text-gray-600">•</span>
+              <span className="flex items-center gap-2">
+                <Calendar size={14} className="text-primary" /> {new Date(post.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+              </span>
+              <span className="mx-3 text-gray-600">•</span>
+              <span className="flex items-center gap-2">
+                <Clock size={14} className="text-primary" /> {post.readTime}
+              </span>
             </div>
           </div>
         </div>
