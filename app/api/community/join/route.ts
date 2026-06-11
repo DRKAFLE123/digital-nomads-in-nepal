@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import bcrypt from "bcryptjs"
 
 export async function POST(req: Request) {
   try {
@@ -7,6 +8,7 @@ export async function POST(req: Request) {
     const {
       name,
       email,
+      password, // optional password field
       country,
       currentCity,
       workType,
@@ -35,7 +37,7 @@ export async function POST(req: Request) {
       )
     }
 
-    // Create NomadProfile
+    // Create NomadProfile (with optional password hash)
     const profile = await prisma.nomadProfile.create({
       data: {
         name,
@@ -46,7 +48,8 @@ export async function POST(req: Request) {
         bio: bio || null,
         linkedinUrl: linkedinUrl || null,
         twitterUrl: twitterUrl || null,
-        emailAlerts: !!emailAlerts
+        emailAlerts: !!emailAlerts,
+        ...(password ? { passwordHash: await bcrypt.hash(password, 10) } : {})
       }
     })
 
