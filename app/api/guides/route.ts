@@ -10,13 +10,16 @@ export async function GET(req: NextRequest) {
   const guides = await prisma.guide.findMany({
     where: {
       ...(city ? { location: city } : {}),
-      ...(specialty ? { specialties: { has: specialty } } : {}),
     },
     orderBy: { avgRating: "desc" },
     include: { _count: { select: { reviews: true } } },
   })
 
-  return NextResponse.json(guides)
+  const filteredGuides = specialty 
+    ? guides.filter(g => Array.isArray(g.specialties) && (g.specialties as string[]).includes(specialty))
+    : guides
+
+  return NextResponse.json(filteredGuides)
 }
 
 // POST /api/guides — register a new guide

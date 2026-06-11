@@ -4,7 +4,18 @@ import BlogGrid from "@/components/BlogGrid"
 import SearchBar from "@/components/SearchBar"
 import Fuse from "fuse.js"
 
-export default function BlogListClient({ posts }: { posts: any[] }) {
+export type BlogPost = {
+  title: string
+  slug: string
+  excerpt: string
+  coverImage: string
+  category: string
+  readTime: string
+  date: string
+  tags?: string[]
+}
+
+export default function BlogListClient({ posts }: { posts: BlogPost[] }) {
   const [query, setQuery] = useState("")
   const [category, setCategory] = useState("All")
 

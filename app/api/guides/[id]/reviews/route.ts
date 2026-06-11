@@ -17,7 +17,7 @@ export async function GET(_: NextRequest, { params }: { params: { id: string } }
 export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions)
 
-  if (!session || (session.user as any)?.role !== "NOMAD") {
+  if (!session || (session.user as { role?: string })?.role !== "NOMAD") {
     return NextResponse.json({ error: "Sign in as a Nomad to leave a review." }, { status: 401 })
   }
 
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     return NextResponse.json({ error: "Rating (1-5) and comment are required." }, { status: 400 })
   }
 
-  const userId = (session.user as any).id
+  const userId = (session.user as { id: string }).id
 
   // Check if guide exists
   const guide = await prisma.guide.findUnique({ where: { id: params.id } })
@@ -50,8 +50,8 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     })
 
     return NextResponse.json(review, { status: 201 })
-  } catch (e: any) {
-    if (e.code === "P2002") {
+  } catch (e: unknown) {
+    if (e && typeof e === 'object' && 'code' in e && e.code === "P2002") {
       return NextResponse.json({ error: "You have already reviewed this guide." }, { status: 409 })
     }
     return NextResponse.json({ error: "Something went wrong." }, { status: 500 })

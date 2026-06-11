@@ -1,6 +1,6 @@
-import BlogGrid from "./BlogGrid"
+import BlogGrid, { GridPost } from "./BlogGrid"
 
-export default function RelatedPosts({ posts }: { posts: any[] }) {
+export default function RelatedPosts({ posts }: { posts: GridPost[] }) {
   if (!posts || posts.length === 0) return null
 
   return (

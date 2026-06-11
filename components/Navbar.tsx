@@ -32,11 +32,20 @@ export default function Navbar() {
       name: "Resources", 
       href: "/resources",
       dropdown: [
-        { name: "Visa Guide", desc: "Nepal visa for digital nomads", href: "/resources/visa" },
-        { name: "Cost of Living", desc: "Budgeting your stay in Nepal", href: "/resources/cost-of-living" },
-        { name: "Transportation", desc: "Getting around Nepal", href: "/resources/transportation" },
-        { name: "Banking & Money", desc: "Payments & finance in Nepal", href: "/resources/banking" },
-        { name: "Coworking Spaces", desc: "Best spaces in Nepal", href: "/resources/coworking" },
+        { name: "Nepal Digital Nomad Visa Guide (2026)", desc: "Latest requirements & application steps", href: "/resources/visa" },
+        { name: "Cost of Living in Nepal for Remote Workers", desc: "Budget breakdowns for Kathmandu & Pokhara", href: "/resources/cost-of-living" },
+        { name: "Best Coworking Spaces in Nepal ⭐", desc: "Workspaces tested for speed & backup power", href: "/resources/coworking" },
+        { name: "SIM Cards, Internet & Remote Setup", desc: "Stay connected anywhere you go", href: "/resources/connectivity" },
+        { name: "Transport & Apps", desc: "Navigating with InDrive, Pathao & domestic flights", href: "/resources/transportation" },
+        { name: "Banking & Payments in Nepal", desc: "ATMs, QR codes, and foreign cards", href: "/resources/banking" },
+      ]
+    },
+    { 
+      name: "Local Experts", 
+      href: "/guides",
+      dropdown: [
+        { name: "Find a Guide 🏔️", desc: "Discover verified local experts", href: "/guides" },
+        { name: "Become a Guide", desc: "Join our expert network", href: "/guides/register" },
       ]
     },
     { 
@@ -49,7 +58,6 @@ export default function Navbar() {
       ]
     },
     { name: "Blog", href: "/blog" },
-    { name: "About", href: "/about" },
   ]
 
 
@@ -67,7 +75,7 @@ export default function Navbar() {
                 <Image src="/logo.png" alt="Digital Nomads in Nepal Logo" fill className="object-cover" priority />
               </div>
               <span className={`hidden sm:block font-extrabold text-xl md:text-2xl tracking-tight drop-shadow-sm transition-colors ${isScrolled ? "text-foreground" : "text-white"}`}>
-                Digital Nomads <span className={isScrolled ? "text-primary" : "text-accent"}>in Nepal</span>
+                Digital Nomads <span className={isScrolled ? "text-primary" : "text-accent"}>Nepal</span>
               </span>
             </Link>
           </div>
@@ -83,7 +91,7 @@ export default function Navbar() {
                 
                 {/* Mega Menu Dropdown */}
                 {item.dropdown && (
-                  <div className="absolute top-20 left-1/2 -translate-x-1/2 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top scale-95 group-hover:scale-100">
+                  <div className="absolute top-20 left-1/2 -translate-x-1/2 w-96 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top scale-95 group-hover:scale-100">
                     <div className="bg-card border border-border rounded-xl shadow-xl overflow-hidden py-2.5">
                       {item.dropdown.map((sub, idx) => (
                         <Link key={idx} href={sub.href} className="block px-5 py-3 hover:bg-background transition-colors">
@@ -115,34 +123,47 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-background border-b border-border absolute w-full">
-          <div className="px-4 pt-2 pb-6 space-y-2 shadow-xl">
-            {navItems.map((item) => (
-              <div key={item.name}>
-                <Link href={item.href} className="block px-2 py-3 text-base font-semibold text-foreground hover:text-primary border-b border-border/50">
-                  {item.name}
-                </Link>
-                {item.dropdown && (
-                  <div className="pl-4 py-2 space-y-2 bg-muted/5 rounded-b-lg">
-                    {item.dropdown.map((sub, idx) => (
-                      <Link key={idx} href={sub.href} className="block px-2 py-2">
-                        <div className="text-foreground text-sm font-medium">{sub.name}</div>
-                        <div className="text-muted text-xs">{sub.desc}</div>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-            <div className="pt-4">
-              <Link href="/community" className="block w-full text-center px-5 py-3 bg-primary text-black font-bold rounded-xl shadow-md hover:bg-primary/90 transition-colors">
-                Join Community
+      <div className={`md:hidden fixed inset-x-0 top-20 bg-background border-b border-border shadow-2xl transition-all duration-300 transform ${
+        mobileMenuOpen ? "opacity-100 translate-y-0 visible" : "opacity-0 -translate-y-4 invisible"
+      }`}>
+        <div className="px-4 pt-2 pb-8 space-y-2 overflow-y-auto max-h-[calc(100vh-5rem)]">
+          {navItems.map((item) => (
+            <div key={item.name} className="py-1">
+              <Link 
+                href={item.href} 
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-3 text-lg font-bold text-foreground hover:text-primary transition-colors border-b border-border/30"
+              >
+                {item.name}
               </Link>
+              {item.dropdown && (
+                <div className="mt-1 pl-4 space-y-1 border-l-2 border-border/20 ml-3">
+                  {item.dropdown.map((sub, idx) => (
+                    <Link 
+                      key={idx} 
+                      href={sub.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block px-3 py-2.5 rounded-lg hover:bg-muted/50 transition-colors"
+                    >
+                      <div className="text-foreground text-sm font-semibold">{sub.name}</div>
+                      <div className="text-muted text-[11px] leading-tight">{sub.desc}</div>
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
+          ))}
+          <div className="pt-6 px-3">
+            <Link 
+              href="/community" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="block w-full text-center px-6 py-4 bg-primary text-black font-black rounded-2xl shadow-xl shadow-primary/10 hover:bg-primary/90 transition-all active:scale-[0.98]"
+            >
+              Join Community
+            </Link>
           </div>
         </div>
-      )}
+      </div>
     </nav>
   )
 }

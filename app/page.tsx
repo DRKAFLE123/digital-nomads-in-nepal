@@ -6,39 +6,22 @@ import NewsletterSignup from "@/components/NewsletterSignup"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import { Wallet, Wifi, MapPin, Mountain, MessageCircle, Camera, Video, MessageSquare } from "lucide-react"
+import { prisma } from "@/lib/prisma"
 
-// For testing purposes before ContentLayer is fully wired with real data
-const mockPosts = [
-  {
-    title: "Cost of Living in Nepal 2026 — Complete Guide",
-    slug: "cost-of-living-nepal-2026",
-    excerpt: "Everything you need to know about living costs in Nepal as a digital nomad. Find out how far $500 can take you.",
-    coverImage: "",
-    category: "Cost of Living",
-    readTime: "8 min read",
-    date: "2026-04-14"
-  },
-  {
-    title: "Best Cities for Digital Nomads in Nepal",
-    slug: "best-cities-digital-nomads-nepal",
-    excerpt: "From the bustling streets of Kathmandu to the lakeside tranquility of Pokhara, where should you base yourself?",
-    coverImage: "",
-    category: "Destinations",
-    readTime: "6 min read",
-    date: "2026-04-10"
-  },
-  {
-    title: "Internet Speed in Nepal: A Nomad's Reality",
-    slug: "internet-speed-nepal-guide",
-    excerpt: "Is the internet in Nepal fast enough for video calls? We test fiber optics across major cities.",
-    coverImage: "",
-    category: "Work Setup",
-    readTime: "5 min read",
-    date: "2026-04-05"
-  }
-]
+export const dynamic = "force-dynamic"
 
-export default function Home() {
+export default async function Home() {
+  const dbPosts = await prisma.post.findMany({
+    where: { published: true },
+    orderBy: { createdAt: "desc" },
+    take: 3
+  })
+  
+  const posts = dbPosts.map(p => ({
+    ...p,
+    date: p.createdAt.toISOString()
+  }))
+
   return (
     <>
       <Navbar />
@@ -78,7 +61,7 @@ export default function Home() {
               <h2 className="text-3xl md:text-5xl font-black text-foreground px-2 border-l-4 border-primary">Latest from the Blog</h2>
               <a href="/blog" className="text-muted-foreground hover:text-primary transition-colors font-medium border-b border-transparent hover:border-primary">View All Posts &rarr;</a>
             </div>
-            <BlogGrid posts={mockPosts} />
+            <BlogGrid posts={posts} />
           </div>
         </section>
 
@@ -106,7 +89,7 @@ export default function Home() {
               </div>
               <div className="p-8 border border-border border-t-4 border-t-primary bg-background rounded-xl hover:-translate-y-2 transition-transform duration-300">
                 <h3 className="text-2xl font-bold text-foreground mb-4">Nature & Mountains</h3>
-                <p className="text-muted-foreground leading-relaxed">Escape the screen and step into the Himalayas. Weekends can be spent hiking, trekking, and exploring eight of the world's highest peaks just a short trip from your desk.</p>
+                <p className="text-muted-foreground leading-relaxed">Escape the screen and step into the Himalayas. Weekends can be spent hiking, trekking, and exploring eight of the world&apos;s highest peaks just a short trip from your desk.</p>
               </div>
               <div className="p-8 border border-border border-t-4 border-t-primary bg-background rounded-xl hover:-translate-y-2 transition-transform duration-300">
                 <h3 className="text-2xl font-bold text-foreground mb-4">Growing Remote Culture</h3>

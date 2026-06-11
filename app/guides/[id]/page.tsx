@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import { prisma } from "@/lib/prisma"
@@ -83,7 +84,7 @@ export default async function GuideProfilePage({ params }: { params: { id: strin
 
               {/* Specialties */}
               <div className="flex flex-wrap gap-2">
-                {guide.specialties.map(s => (
+                {Array.isArray(guide.specialties) && (guide.specialties as string[]).map((s: string) => (
                   <span key={s} className="px-3 py-1 bg-primary/10 text-primary text-sm font-semibold rounded-full">#{s}</span>
                 ))}
               </div>
@@ -97,7 +98,7 @@ export default async function GuideProfilePage({ params }: { params: { id: strin
           </div>
 
           {/* Reviews */}
-          <ReviewSection guideId={guide.id} initialReviews={guide.reviews as any} />
+          <ReviewSection guideId={guide.id} initialReviews={guide.reviews.map(r => ({ ...r, createdAt: r.createdAt.toISOString() }))} />
         </div>
       </main>
       <Footer />

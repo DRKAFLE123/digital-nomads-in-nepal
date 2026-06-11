@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -25,6 +25,7 @@ model Destination {
   name        String
   slug        String   @unique
   description String?
+  tags        Json?
   image       String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -62,7 +63,7 @@ model Guide {
   name         String
   bio          String
   location     String
-  specialties  String[]
+  specialties  Json
   photoUrl     String?
   contactEmail String
   isVerified   Boolean  @default(false)
@@ -83,4 +84,22 @@ model Review {
   createdAt DateTime @default(now())
 
   @@unique([guideId, userId])
+}
+
+model Post {
+  id         String   @id @default(cuid())
+  slug       String   @unique
+  title      String
+  excerpt    String
+  content    String   @db.Text
+  coverImage String
+  category   String
+  tags       Json
+  readTime   String
+  affiliates Boolean  @default(false)
+  featured   Boolean  @default(false)
+  author     String
+  published  Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }

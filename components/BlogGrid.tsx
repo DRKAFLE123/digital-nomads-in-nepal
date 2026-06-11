@@ -1,7 +1,16 @@
 import BlogCard from "./BlogCard"
+export interface GridPost {
+  title: string
+  slug: string
+  excerpt: string
+  coverImage: string
+  category: string
+  readTime: string
+  date: string | Date
+}
 
 interface BlogGridProps {
-  posts: any[]
+  posts: GridPost[]
 }
 
 export default function BlogGrid({ posts }: BlogGridProps) {
@@ -12,7 +21,7 @@ export default function BlogGrid({ posts }: BlogGridProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
       {posts.map((post) => (
-        <BlogCard 
+        <BlogCard
           key={post.slug}
           title={post.title}
           slug={post.slug}

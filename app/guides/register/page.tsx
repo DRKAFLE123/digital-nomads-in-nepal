@@ -1,6 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 "use client"
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import Link from "next/link"
@@ -14,7 +14,6 @@ type FormData = {
 }
 
 export default function GuideRegisterPage() {
-  const router = useRouter()
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")

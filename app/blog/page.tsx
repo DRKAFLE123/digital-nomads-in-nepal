@@ -1,5 +1,4 @@
-import { allPosts } from "contentlayer/generated"
-import { compareDesc } from "date-fns"
+import { prisma } from "@/lib/prisma"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import BlogListClient from "./BlogListClient"
@@ -9,8 +8,19 @@ export const metadata = {
   description: 'Read the latest guides, tips, and stories about living and working remotely in Nepal.',
 }
 
-export default function BlogPage() {
-  const posts = allPosts.sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)))
+export const dynamic = "force-dynamic"
+
+export default async function BlogPage() {
+  const dbPosts = await prisma.post.findMany({
+    where: { published: true },
+    orderBy: { createdAt: "desc" }
+  })
+  
+  const posts = dbPosts.map(p => ({
+    ...p,
+    date: p.createdAt.toISOString(),
+    tags: Array.isArray(p.tags) ? (p.tags as string[]) : []
+  }))
 
   return (
     <>

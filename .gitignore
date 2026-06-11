@@ -36,3 +36,11 @@ yarn-error.log*
 next-env.d.ts
 
 /lib/generated/prisma
+
+.vercel
+.env
+lint_final.txt
+lint_output.txt
+lint_utf8.txt
+scratch-check-admins.ts
+scratch-seed-admin.js

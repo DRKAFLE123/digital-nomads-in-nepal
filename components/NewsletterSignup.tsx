@@ -41,7 +41,7 @@ export default function NewsletterSignup() {
         {status === "success" ? (
           <div className="flex flex-col items-center justify-center text-[#FFD700] bg-[#0B0B0B] border border-[#FFD700] p-6 rounded-lg max-w-md mx-auto">
             <CheckCircle size={40} className="mb-3" />
-            <h3 className="text-xl font-bold mb-1">Awesome! You're in.</h3>
+            <h3 className="text-xl font-bold mb-1">Awesome! You&apos;re in.</h3>
             <p className="text-[#A0A0A0] text-sm">Check your inbox for the starter kit.</p>
           </div>
         ) : (

@@ -29,7 +29,7 @@ function StarPicker({ value, onChange }: { value: number; onChange: (n: number) 
 
 export default function ReviewSection({ guideId, initialReviews }: { guideId: string; initialReviews: Review[] }) {
   const { data: session } = useSession()
-  const userRole = (session?.user as any)?.role
+  const userRole = (session?.user as { role?: string })?.role
 
   const [reviews, setReviews] = useState<Review[]>(initialReviews)
   const [rating, setRating] = useState(0)

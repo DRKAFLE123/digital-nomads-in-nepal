@@ -160,7 +160,7 @@ export default function EventsPage() {
               Want to host an event?
             </h2>
             <p className="text-muted max-w-md mx-auto mb-8">
-              We help digital nomads run meetups, workshops, and retreats across Nepal. Get in touch and we'll help you organize it.
+              We help digital nomads run meetups, workshops, and retreats across Nepal. Get in touch and we&apos;ll help you organize it.
             </p>
             <Link
               href="/contact"

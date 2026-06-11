@@ -10,12 +10,17 @@ export const metadata: Metadata = {
   description: "Discover and connect with verified local Nepalese guides — trekking, culture, food, and more. Leave reviews and ratings.",
 }
 
-export const revalidate = 60
+export const dynamic = "force-dynamic"
 
 export default async function GuidesPage() {
   const guides = await prisma.guide.findMany({
     orderBy: { avgRating: "desc" },
   })
+
+  const serializedGuides = guides.map(g => ({
+    ...g,
+    specialties: Array.isArray(g.specialties) ? (g.specialties as string[]) : []
+  }))
 
   return (
     <>
@@ -42,7 +47,7 @@ export default async function GuidesPage() {
             </Link>
           </div>
 
-          <GuidesClient guides={guides} />
+          <GuidesClient guides={serializedGuides} />
         </div>
       </main>
       <Footer />
