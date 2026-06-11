@@ -12,7 +12,7 @@ export default function Footer() {
           <div className="flex flex-col lg:pr-8">
             <Link href="/" className="inline-block mb-6 transition-transform hover:scale-105 active:scale-95 duration-300">
               <div className="relative w-16 h-16 rounded-full overflow-hidden border border-gray-800 bg-white shadow-xl">
-                <Image src="/logo.png" alt="Digital Nomads in Nepal Logo" fill className="object-cover" />
+                <Image src="/nomadlogo.png" alt="Digital Nomads in Nepal Logo" fill className="object-cover" />
               </div>
             </Link>
             <p className="text-sm leading-relaxed text-gray-400 mb-6">

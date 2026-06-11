@@ -37,7 +37,7 @@ export default function RegisterPage() {
         <div className="text-center mb-10">
           <Link href="/" className="inline-flex items-center gap-3">
             <div className="relative w-12 h-12 rounded-full overflow-hidden border border-border bg-white">
-              <Image src="/logo.png" alt="Logo" fill className="object-cover" />
+              <Image src="/nomadlogo.png" alt="Logo" fill className="object-cover" />
             </div>
             <span className="font-extrabold text-xl text-foreground">Digital Nomads <span className="text-primary">in Nepal</span></span>
           </Link>
