@@ -50,11 +50,22 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     notFound()
   }
 
-  // Find related posts (same category, exclude current)
-  const dbRelated = await prisma.post.findMany({
+  // Find related posts (same category, exclude current, limit to 6)
+  let dbRelated = await prisma.post.findMany({
     where: { category: post.category, slug: { not: post.slug }, published: true },
-    take: 3
+    take: 6
   })
+  
+  // If we have fewer than 6, backfill with other recent posts
+  if (dbRelated.length < 6) {
+    const excludedSlugs = [post.slug, ...dbRelated.map(p => p.slug)]
+    const additional = await prisma.post.findMany({
+      where: { slug: { notIn: excludedSlugs }, published: true },
+      take: 6 - dbRelated.length,
+      orderBy: { createdAt: 'desc' }
+    })
+    dbRelated = [...dbRelated, ...additional]
+  }
   
   const related = dbRelated.map(p => ({
     ...p,
