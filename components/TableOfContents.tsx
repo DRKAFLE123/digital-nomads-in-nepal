@@ -38,7 +38,7 @@ export default function TableOfContents({ source }: { source: string }) {
   if (toc.length === 0) return null
 
   return (
-    <div className="sticky top-28 bg-[#141414] border border-[#222222] p-6 rounded-xl hidden lg:block">
+    <div className="bg-[#141414] border border-[#222222] p-6 rounded-xl">
       <h3 className="text-white font-bold mb-4 uppercase tracking-wider text-sm border-b border-[#222222] pb-2">Table of Contents</h3>
       <ul className="space-y-3">
         {toc.map((item, index) => (

@@ -238,36 +238,6 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
           {/* Sidebar */}
           <aside className="w-full lg:w-[30%] space-y-8 relative">
-            {/* Post Navigation */}
-            {(prevPost || nextPost) && (
-              <div className="bg-[#141414] border border-[#222222] p-6 rounded-xl space-y-4">
-                <h3 className="text-white font-bold uppercase tracking-wider text-sm border-b border-[#222222] pb-2">Post Navigation</h3>
-                <div className="grid grid-cols-1 gap-4">
-                  {prevPost && (
-                    <a href={`/blog/${prevPost.slug}`} className="group block space-y-1">
-                      <span className="text-xs text-[#A0A0A0] group-hover:text-primary transition-colors flex items-center gap-1 font-semibold uppercase">
-                        ← Previous Post
-                      </span>
-                      <span className="text-sm font-bold text-white group-hover:text-primary transition-colors line-clamp-2">
-                        {prevPost.title}
-                      </span>
-                    </a>
-                  )}
-                  {prevPost && nextPost && <div className="border-t border-[#222222]" />}
-                  {nextPost && (
-                    <a href={`/blog/${nextPost.slug}`} className="group block space-y-1 text-right">
-                      <span className="text-xs text-[#A0A0A0] group-hover:text-primary transition-colors flex items-center justify-end gap-1 font-semibold uppercase">
-                        Next Post →
-                      </span>
-                      <span className="text-sm font-bold text-white group-hover:text-primary transition-colors line-clamp-2">
-                        {nextPost.title}
-                      </span>
-                    </a>
-                  )}
-                </div>
-              </div>
-            )}
-
             {/* Recent Posts Thumbnail List */}
             {recentPosts && recentPosts.length > 0 && (
               <div className="bg-[#141414] border border-[#222222] p-6 rounded-xl space-y-6">
@@ -297,8 +267,43 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
               </div>
             )}
 
-            {/* Table of Contents - Sticky at the bottom to avoid overlap */}
-            <TableOfContents source={post.content} />
+            {/* Sticky Wrapper on Desktop for Table of Contents and Post Navigation */}
+            <div className="lg:sticky lg:top-28 space-y-8">
+              {/* Table of Contents - Hidden on mobile/tablet */}
+              <div className="hidden lg:block">
+                <TableOfContents source={post.content} />
+              </div>
+
+              {/* Post Navigation - Always visible below Table of Contents */}
+              {(prevPost || nextPost) && (
+                <div className="bg-[#141414] border border-[#222222] p-6 rounded-xl space-y-4">
+                  <h3 className="text-white font-bold uppercase tracking-wider text-sm border-b border-[#222222] pb-2">Post Navigation</h3>
+                  <div className="grid grid-cols-1 gap-4">
+                    {prevPost && (
+                      <a href={`/blog/${prevPost.slug}`} className="group block space-y-1">
+                        <span className="text-xs text-[#A0A0A0] group-hover:text-primary transition-colors flex items-center gap-1 font-semibold uppercase">
+                          ← Previous Post
+                        </span>
+                        <span className="text-sm font-bold text-white group-hover:text-primary transition-colors line-clamp-2">
+                          {prevPost.title}
+                        </span>
+                      </a>
+                    )}
+                    {prevPost && nextPost && <div className="border-t border-[#222222]" />}
+                    {nextPost && (
+                      <a href={`/blog/${nextPost.slug}`} className="group block space-y-1 text-right">
+                        <span className="text-xs text-[#A0A0A0] group-hover:text-primary transition-colors flex items-center justify-end gap-1 font-semibold uppercase">
+                          Next Post →
+                        </span>
+                        <span className="text-sm font-bold text-white group-hover:text-primary transition-colors line-clamp-2">
+                          {nextPost.title}
+                        </span>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           </aside>
         </div>
       </main>
