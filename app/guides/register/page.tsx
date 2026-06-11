@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import Link from "next/link"
 import TrekkingGuideIcon from "@/components/TrekkingGuideIcon"
+import { Upload, Link2, Loader2 } from "lucide-react"
 
 const LOCATIONS = ["Kathmandu", "Pokhara", "Bandipur", "Chitwan", "Lumbini", "Nagarkot", "Mustang"]
 const ALL_SPECIALTIES = ["Trekking", "Foodie", "History", "Photography", "Cultural", "Wildlife", "Adventure", "Language", "Yoga & Wellness", "Day Trips"]
@@ -18,10 +19,43 @@ export default function GuideRegisterPage() {
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [uploading, setUploading] = useState(false)
+  const [uploadError, setUploadError] = useState("")
   const [form, setForm] = useState<FormData>({
     name: "", email: "", location: "",
     specialties: [], bio: "", photoUrl: "",
   })
+
+  async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setUploading(true)
+    setUploadError("")
+
+    const formData = new FormData()
+    formData.append("file", file)
+
+    try {
+      const res = await fetch("/api/guides/upload", {
+        method: "POST",
+        body: formData,
+      })
+
+      if (res.ok) {
+        const data = await res.json()
+        setForm(p => ({ ...p, photoUrl: data.url }))
+      } else {
+        const errData = await res.json()
+        setUploadError(errData.error || "Failed to upload image.")
+      }
+    } catch (err) {
+      console.error(err)
+      setUploadError("An error occurred during upload.")
+    } finally {
+      setUploading(false)
+    }
+  }
 
   function toggleSpecialty(s: string) {
     setForm(f => ({
@@ -150,22 +184,105 @@ export default function GuideRegisterPage() {
             {/* STEP 3 */}
             {step === 3 && (
               <div className="space-y-6">
-                <h2 className="text-lg font-bold text-foreground mb-4">Profile Photo</h2>
-                <div>
-                  <label className="text-sm font-medium text-foreground mb-2 block">Photo URL <span className="text-muted">(paste a link to your photo)</span></label>
-                  <input type="url" value={form.photoUrl} onChange={e => setForm(p => ({ ...p, photoUrl: e.target.value }))}
-                    placeholder="https://example.com/your-photo.jpg"
-                    className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-muted" />
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-lg font-bold text-foreground">Profile Photo</h2>
+                  <span className="text-xs text-muted">Step 3 of 4</span>
                 </div>
-                {form.photoUrl && (
-                  <div className="flex justify-center">
-                    <img src={form.photoUrl} alt="Preview" className="w-32 h-32 rounded-full object-cover border-4 border-primary shadow-lg" />
+
+                {uploadError && (
+                  <div className="px-4 py-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">
+                    {uploadError}
                   </div>
                 )}
-                <p className="text-xs text-muted text-center">Don&apos;t have a photo URL? You can skip this and add it later.</p>
-                <div className="flex gap-3">
-                  <button onClick={() => setStep(2)} className="flex-1 border border-border text-foreground font-semibold py-3 rounded-lg hover:border-primary transition-all">← Back</button>
-                  <button onClick={() => setStep(4)} className="flex-1 bg-primary text-black font-bold py-3 rounded-lg hover:bg-white hover:text-black transition-all">
+
+                {/* Upload Area */}
+                <div className="space-y-4">
+                  <label className="text-sm font-medium text-foreground block">Upload Profile Picture</label>
+                  
+                  <div className="flex flex-col items-center justify-center border-2 border-dashed border-border rounded-xl p-6 hover:border-primary/50 transition-colors relative bg-background/50 group cursor-pointer">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileUpload}
+                      disabled={uploading}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10 disabled:cursor-not-allowed"
+                    />
+                    
+                    {uploading ? (
+                      <div className="flex flex-col items-center py-4">
+                        <Loader2 className="w-8 h-8 text-primary animate-spin mb-2" />
+                        <span className="text-sm text-muted">Uploading image...</span>
+                      </div>
+                    ) : form.photoUrl ? (
+                      <div className="flex flex-col items-center">
+                        <img
+                          src={form.photoUrl}
+                          alt="Profile preview"
+                          className="w-24 h-24 rounded-full object-cover border-2 border-primary mb-3 shadow-md"
+                        />
+                        <span className="text-xs text-primary font-bold bg-primary/10 px-2.5 py-1 rounded-full border border-primary/20">
+                          ✓ Uploaded Successfully
+                        </span>
+                        <span className="text-[11px] text-muted mt-2 group-hover:text-foreground transition-colors">
+                          Click or drag to replace photo
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center py-4 text-center">
+                        <Upload className="w-8 h-8 text-muted group-hover:text-primary transition-colors mb-3" />
+                        <span className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+                          Choose image file
+                        </span>
+                        <span className="text-xs text-muted mt-1">
+                          PNG, JPG or WEBP (Max 5MB)
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Divider */}
+                <div className="relative flex py-2 items-center">
+                  <div className="flex-grow border-t border-border/55"></div>
+                  <span className="flex-shrink mx-4 text-xs font-bold text-muted uppercase">Or Paste Link</span>
+                  <div className="flex-grow border-t border-border/55"></div>
+                </div>
+
+                {/* Direct Link Input */}
+                <div>
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <Link2 className="w-3.5 h-3.5 text-muted" />
+                    <label className="text-sm font-medium text-foreground">External Photo URL</label>
+                  </div>
+                  <input
+                    type="url"
+                    value={form.photoUrl}
+                    onChange={e => {
+                      setForm(p => ({ ...p, photoUrl: e.target.value }))
+                      setUploadError("")
+                    }}
+                    placeholder="https://example.com/your-photo.jpg"
+                    className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-muted"
+                  />
+                </div>
+
+                <p className="text-[11px] text-muted text-center leading-relaxed">Don&apos;t have a photo? You can skip this step and add one later.</p>
+
+                <div className="flex gap-3 pt-2">
+                  <button
+                    onClick={() => {
+                      setStep(2)
+                      setUploadError("")
+                    }}
+                    className="flex-1 border border-border text-foreground font-semibold py-3 rounded-lg hover:border-primary transition-all"
+                  >
+                    ← Back
+                  </button>
+                  <button
+                    onClick={() => setStep(4)}
+                    disabled={uploading}
+                    className="flex-1 bg-primary text-black font-bold py-3 rounded-lg hover:bg-white hover:text-black transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
                     Continue →
                   </button>
                 </div>
