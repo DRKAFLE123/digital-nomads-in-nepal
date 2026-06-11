@@ -16,6 +16,7 @@ import {
   FileText,
   Image as ImageIcon,
   Settings,
+  Building,
 } from "lucide-react"
 
 const navItems = [
@@ -26,6 +27,7 @@ const navItems = [
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/subscribers", label: "Subscribers", icon: Mail },
   { href: "/admin/destinations", label: "Destinations", icon: MapPin },
+  { href: "/admin/work-hubs", label: "Work Hubs", icon: Building },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ]
 

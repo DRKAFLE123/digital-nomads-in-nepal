@@ -6,7 +6,7 @@ import Link from "next/link"
 import Image from "next/image"
 import type { Metadata } from "next"
 import TrekkingGuideIcon from "@/components/TrekkingGuideIcon"
-import { Shield, Wifi, Wallet, Star, CheckCircle, AlertCircle, ArrowLeft } from "lucide-react"
+import { Shield, Wifi, Wallet, Star, CheckCircle, AlertCircle, ArrowLeft, Building, Sparkles } from "lucide-react"
 interface DestinationTags {
   score?: string
   cost?: string
@@ -112,6 +112,12 @@ export default async function DestinationPage({ params }: { params: { slug: stri
     }
   }
 
+  // Fetch dynamic vetted work hubs for this city
+  const dbHubs = await prisma.workHub.findMany({
+    where: { city: dest.name },
+    orderBy: { rating: "desc" }
+  })
+
   // Get related posts dynamically
   const dbPosts = await prisma.post.findMany({
     where: { published: true }
@@ -208,24 +214,67 @@ export default async function DestinationPage({ params }: { params: { slug: stri
 
               {/* Coworking Directory */}
               <div className="bg-card border border-border rounded-2xl p-6 sm:p-8 shadow-sm">
-                <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                  <Wifi className="text-primary" size={22} /> Tested Coworking & Work Hubs
-                </h3>
-                <p className="text-muted text-sm mb-6">
-                  These locations have been vetted by our members for high-speed fiber internet and power backup generator status.
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {factData.coworking.map((space, i) => (
-                    <div key={i} className="p-4 bg-background border border-border rounded-xl flex items-center gap-3">
-                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-bold">
-                        {space[0]}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                  <div>
+                    <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
+                      <Building className="text-primary" size={22} /> Tested Coworking & Work Hubs
+                    </h3>
+                    <p className="text-muted text-xs mt-1">
+                      These locations are partner spaces tested for high-speed fiber internet and power backup generator status.
+                    </p>
+                  </div>
+                  <Link href="/resources/coworking" className="text-xs font-bold text-primary hover:underline bg-primary/10 px-3.5 py-2 rounded-full whitespace-nowrap">
+                    View All Hubs →
+                  </Link>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {dbHubs.length > 0 ? (
+                    dbHubs.map(hub => {
+                      return (
+                        <Link key={hub.id} href={`/resources/coworking/${hub.slug}`} className="p-5 bg-background border border-border rounded-xl hover:border-primary/50 hover:shadow-lg transition-all group block flex flex-col justify-between">
+                          <div>
+                            <div className="flex justify-between items-start mb-3">
+                              <span className="text-[10px] font-bold px-2 py-0.5 bg-primary/10 text-primary border border-primary/20 rounded-md">
+                                {hub.city}
+                              </span>
+                              <div className="flex gap-1">
+                                {hub.isPartner && <Sparkles size={14} className="text-[#FFD700]" />}
+                                {hub.isVerified && <CheckCircle size={14} className="text-green-500" />}
+                              </div>
+                            </div>
+                            <h4 className="font-bold text-base text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                              {hub.name}
+                            </h4>
+                            <p className="text-muted text-[11px] leading-relaxed line-clamp-2 mt-2 mb-4">
+                              {hub.description}
+                            </p>
+                          </div>
+                          <div className="flex items-center justify-between border-t border-border/60 pt-3 text-[11px] text-muted">
+                            <span className="flex items-center gap-1 font-semibold text-foreground">
+                              <Star size={12} className="text-primary fill-primary" />
+                              {hub.rating.toFixed(1)} ({hub.totalReviews})
+                            </span>
+                            <span className="text-primary font-bold group-hover:translate-x-0.5 transition-transform">
+                              Reserve Seat →
+                            </span>
+                          </div>
+                        </Link>
+                      )
+                    })
+                  ) : (
+                    factData.coworking.map((space, i) => (
+                      <div key={i} className="p-4 bg-background border border-border rounded-xl flex items-center gap-3">
+                        <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-bold">
+                          {space[0]}
+                        </div>
+                        <div>
+                          <div className="font-bold text-sm text-foreground">{space}</div>
+                          <div className="text-xs text-muted">Verified Workspace</div>
+                        </div>
                       </div>
-                      <div>
-                        <div className="font-bold text-sm text-foreground">{space}</div>
-                        <div className="text-xs text-muted">Verified Workspace</div>
-                      </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               </div>
             </div>

@@ -118,3 +118,45 @@ model Setting {
   value     String   @db.Text
   updatedAt DateTime @updatedAt
 }
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+model WorkHub {
+  id           String       @id @default(cuid())
+  name         String
+  slug         String       @unique
+  city         String       
+  description  String       @db.Text
+  address      String
+  rating       Float        @default(0)
+  totalReviews Int          @default(0)
+  isVerified   Boolean      @default(false) 
+  isPartner    Boolean      @default(false) 
+  photoUrl     String?      @db.Text
+  facilities   Json         
+  priceDaily   Float?
+  priceMonthly Float?
+  contactEmail String
+  website      String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  bookings     HubBooking[]
+}
+
+model HubBooking {
+  id           String        @id @default(cuid())
+  hubId        String
+  hub          WorkHub       @relation(fields: [hubId], references: [id], onDelete: Cascade)
+  nomadName    String
+  nomadEmail   String
+  startDate    DateTime
+  endDate      DateTime
+  notes        String?       @db.Text
+  status       BookingStatus @default(PENDING)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
