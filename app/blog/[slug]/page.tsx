@@ -120,32 +120,47 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     <>
       <ReadingProgressBar />
       <Navbar />
-      <main className="min-h-screen bg-background pt-24 pb-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="min-h-screen bg-background pb-20">
+        {/* Full-width Hero Banner */}
+        <div className="relative w-full h-[55vh] md:h-[70vh] min-h-[460px] flex items-end">
+          {/* Background Cover Image */}
+          <div className="absolute inset-0 z-0">
+            <Image 
+              src={post.coverImage || "https://images.unsplash.com/photo-1544735716-392fe2449fee?auto=format&fit=crop&q=80"}
+              alt={post.title}
+              fill
+              className="object-cover"
+              priority
+            />
+            {/* Multi-layered Premium Dark Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-black/35 z-10" />
+            <div className="absolute inset-0 bg-black/20 z-10" />
+          </div>
           
-          <div className="mb-12">
-            <div className="relative w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden mb-8 border border-border">
-              <Image 
-                src={post.coverImage || "https://images.unsplash.com/photo-1544735716-392fe2449fee?auto=format&fit=crop&q=80"}
-                alt={post.title}
-                fill
-                className="object-cover"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent z-10" />
-            </div>
-            
-            <div className="relative z-20 -mt-24 md:-mt-32 px-4 md:px-8">
-              <div className="inline-block px-3 py-1 bg-primary text-black font-bold text-sm mb-4">
-                {new Date(post.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-              </div>
-              <h1 className="text-4xl md:text-6xl font-black text-foreground mb-6 leading-tight">
+          {/* Content Overlaid on Hero */}
+          <div className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 md:pb-16 pt-28">
+            <div className="max-w-4xl">
+              {/* Category Badge */}
+              <span className="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-black bg-primary text-black uppercase tracking-wider mb-4 shadow-lg shadow-primary/10">
+                {post.category}
+              </span>
+              
+              {/* Title */}
+              <h1 className="text-3xl sm:text-4xl md:text-6xl font-black text-white mb-6 leading-tight drop-shadow-md">
                 {post.title}
               </h1>
-              <div className="flex flex-wrap items-center text-muted-foreground text-sm gap-6">
-                <span className="flex items-center gap-2"><User size={16} /> {post.author}</span>
-                <span className="flex items-center gap-2"><Calendar size={16} /> {new Date(post.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
-                <span className="flex items-center gap-2"><Clock size={16} /> {post.readTime}</span>
+              
+              {/* Meta information */}
+              <div className="flex flex-wrap items-center text-gray-300 text-sm gap-3">
+                <span className="flex items-center gap-2 bg-black/45 backdrop-blur-md px-3.5 py-2 rounded-full border border-white/10">
+                  <User size={14} className="text-primary" /> {post.author}
+                </span>
+                <span className="flex items-center gap-2 bg-black/45 backdrop-blur-md px-3.5 py-2 rounded-full border border-white/10">
+                  <Calendar size={14} className="text-primary" /> {new Date(post.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                </span>
+                <span className="flex items-center gap-2 bg-black/45 backdrop-blur-md px-3.5 py-2 rounded-full border border-white/10">
+                  <Clock size={14} className="text-primary" /> {post.readTime}
+                </span>
               </div>
             </div>
           </div>
@@ -223,8 +238,6 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
           {/* Sidebar */}
           <aside className="w-full lg:w-[30%] space-y-8 relative">
-            <TableOfContents source={post.content} />
-
             {/* Post Navigation */}
             {(prevPost || nextPost) && (
               <div className="bg-[#141414] border border-[#222222] p-6 rounded-xl space-y-4">
@@ -283,6 +296,9 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                 </div>
               </div>
             )}
+
+            {/* Table of Contents - Sticky at the bottom to avoid overlap */}
+            <TableOfContents source={post.content} />
           </aside>
         </div>
       </main>
