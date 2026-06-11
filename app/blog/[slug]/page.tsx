@@ -12,6 +12,20 @@ import { Calendar, Clock, User } from "lucide-react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getFlattenedText(children: any): string {
+  if (!children) return ""
+  if (typeof children === "string") return children
+  if (Array.isArray(children)) {
+    return children.map(getFlattenedText).join("")
+  }
+  if (children.props && children.props.children) {
+    return getFlattenedText(children.props.children)
+  }
+  return ""
+}
+
+
 export async function generateStaticParams() {
   try {
     const posts = await prisma.post.findMany({ select: { slug: true } })
@@ -46,6 +60,61 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     ...p,
     date: p.createdAt.toISOString()
   }))
+
+  // Find next post (created after current post)
+  const nextPost = await prisma.post.findFirst({
+    where: {
+      published: true,
+      createdAt: { gt: post.createdAt }
+    },
+    orderBy: {
+      createdAt: 'asc'
+    },
+    select: {
+      title: true,
+      slug: true,
+      coverImage: true,
+      createdAt: true
+    }
+  })
+
+  // Find previous post (created before current post)
+  const prevPost = await prisma.post.findFirst({
+    where: {
+      published: true,
+      createdAt: { lt: post.createdAt }
+    },
+    orderBy: {
+      createdAt: 'desc'
+    },
+    select: {
+      title: true,
+      slug: true,
+      coverImage: true,
+      createdAt: true
+    }
+  })
+
+  // Fetch recent posts (excluding current post)
+  const recentPosts = await prisma.post.findMany({
+    where: {
+      published: true,
+      id: { not: post.id }
+    },
+    orderBy: {
+      createdAt: 'desc'
+    },
+    take: 5,
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      coverImage: true,
+      createdAt: true,
+      readTime: true
+    }
+  })
+
 
   return (
     <>
@@ -127,6 +196,16 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                         {children}
                       </a>
                     )
+                  },
+                  h2: ({ children, ...props }) => {
+                    const text = getFlattenedText(children)
+                    const id = text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')
+                    return <h2 id={id} {...props}>{children}</h2>
+                  },
+                  h3: ({ children, ...props }) => {
+                    const text = getFlattenedText(children)
+                    const id = text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')
+                    return <h3 id={id} {...props}>{children}</h3>
                   }
                 }}
               >
@@ -143,8 +222,67 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           </article>
 
           {/* Sidebar */}
-          <aside className="w-full lg:w-[30%] relative">
+          <aside className="w-full lg:w-[30%] space-y-8 relative">
             <TableOfContents source={post.content} />
+
+            {/* Post Navigation */}
+            {(prevPost || nextPost) && (
+              <div className="bg-[#141414] border border-[#222222] p-6 rounded-xl space-y-4">
+                <h3 className="text-white font-bold uppercase tracking-wider text-sm border-b border-[#222222] pb-2">Post Navigation</h3>
+                <div className="grid grid-cols-1 gap-4">
+                  {prevPost && (
+                    <a href={`/blog/${prevPost.slug}`} className="group block space-y-1">
+                      <span className="text-xs text-[#A0A0A0] group-hover:text-primary transition-colors flex items-center gap-1 font-semibold uppercase">
+                        ← Previous Post
+                      </span>
+                      <span className="text-sm font-bold text-white group-hover:text-primary transition-colors line-clamp-2">
+                        {prevPost.title}
+                      </span>
+                    </a>
+                  )}
+                  {prevPost && nextPost && <div className="border-t border-[#222222]" />}
+                  {nextPost && (
+                    <a href={`/blog/${nextPost.slug}`} className="group block space-y-1 text-right">
+                      <span className="text-xs text-[#A0A0A0] group-hover:text-primary transition-colors flex items-center justify-end gap-1 font-semibold uppercase">
+                        Next Post →
+                      </span>
+                      <span className="text-sm font-bold text-white group-hover:text-primary transition-colors line-clamp-2">
+                        {nextPost.title}
+                      </span>
+                    </a>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Recent Posts Thumbnail List */}
+            {recentPosts && recentPosts.length > 0 && (
+              <div className="bg-[#141414] border border-[#222222] p-6 rounded-xl space-y-6">
+                <h3 className="text-white font-bold uppercase tracking-wider text-sm border-b border-[#222222] pb-2">Recent Posts</h3>
+                <div className="space-y-4">
+                  {recentPosts.map((rPost) => (
+                    <a key={rPost.id} href={`/blog/${rPost.slug}`} className="flex gap-4 group">
+                      <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 border border-[#222222]">
+                        <Image 
+                          src={rPost.coverImage || "https://images.unsplash.com/photo-1544735716-392fe2449fee?auto=format&fit=crop&q=80"}
+                          alt={rPost.title}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                      <div className="flex flex-col justify-center min-w-0">
+                        <span className="text-xs text-[#A0A0A0] mb-1">
+                          {new Date(rPost.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </span>
+                        <h4 className="text-sm font-bold text-white group-hover:text-primary transition-colors line-clamp-2 leading-snug">
+                          {rPost.title}
+                        </h4>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
           </aside>
         </div>
       </main>
