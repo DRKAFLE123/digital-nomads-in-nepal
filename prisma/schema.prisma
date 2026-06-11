@@ -145,6 +145,7 @@ model WorkHub {
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
   bookings     HubBooking[]
+  checkIns     HubCheckIn[]
 }
 
 model HubBooking {
@@ -160,3 +161,42 @@ model HubBooking {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 }
+
+enum WorkType {
+  DEVELOPER
+  DESIGNER
+  WRITER
+  MARKETER
+  ENTREPRENEUR
+  EDUCATOR
+  OTHER
+}
+
+model NomadProfile {
+  id            String       @id @default(cuid())
+  name          String
+  email         String       @unique
+  country       String       // Country of origin (flag/name)
+  currentCity   String?      // e.g. "Kathmandu"
+  workType      WorkType     @default(OTHER)
+  bio           String?      @db.Text
+  avatarUrl     String?
+  linkedinUrl   String?
+  twitterUrl    String?
+  isPublic      Boolean      @default(true)
+  emailAlerts   Boolean      @default(true) // opts into event/trek email alerts
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  checkIns      HubCheckIn[]
+}
+
+model HubCheckIn {
+  id         String       @id @default(cuid())
+  profileId  String
+  profile    NomadProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  hubId      String
+  hub        WorkHub      @relation(fields: [hubId], references: [id], onDelete: Cascade)
+  checkInAt  DateTime     @default(now())
+  checkOutAt DateTime?    // null = still checked in
+}
+
