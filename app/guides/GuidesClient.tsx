@@ -40,21 +40,43 @@ export default function GuidesClient({ guides }: { guides: Guide[] }) {
 
   return (
     <>
-      {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-10">
+      {/* Search Bar & City Selector */}
+      <div className="flex flex-col sm:flex-row gap-4 mb-6">
         <input
           type="text" value={search} onChange={e => setSearch(e.target.value)}
           placeholder="Search guides by name or expertise..."
-          className="flex-1 bg-card border border-border rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-muted"
+          className="flex-1 bg-card border border-border rounded-xl px-4 py-3.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-muted"
         />
         <select value={city} onChange={e => setCity(e.target.value)}
-          className="bg-card border border-border rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50">
+          className="bg-card border border-border rounded-xl px-4 py-3.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 min-w-[160px] cursor-pointer">
           {LOCATIONS.map(l => <option key={l}>{l}</option>)}
         </select>
-        <select value={specialty} onChange={e => setSpecialty(e.target.value)}
-          className="bg-card border border-border rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50">
-          {ALL_SPECIALTIES.map(s => <option key={s}>{s}</option>)}
-        </select>
+      </div>
+
+      {/* Specialty Filter Chips */}
+      <div className="mb-10">
+        <label className="text-xs font-semibold text-muted uppercase tracking-wider block mb-3">
+          Filter by Specialty
+        </label>
+        <div className="flex flex-wrap gap-2">
+          {ALL_SPECIALTIES.map(s => {
+            const isActive = specialty === s
+            return (
+              <button
+                key={s}
+                onClick={() => setSpecialty(s)}
+                className={[
+                  "px-4 py-2 rounded-full text-xs font-bold border transition-all duration-200 active:scale-95",
+                  isActive
+                    ? "bg-primary text-black border-primary font-bold shadow-md shadow-primary/10"
+                    : "bg-card border-border text-muted hover:border-primary/50 hover:text-primary",
+                ].join(" ")}
+              >
+                {s === "All" ? "All Specialties" : `# ${s}`}
+              </button>
+            )
+          })}
+        </div>
       </div>
 
       {filtered.length === 0 ? (
