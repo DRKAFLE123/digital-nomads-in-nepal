@@ -1,7 +1,56 @@
+"use client"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
+import { Search } from "lucide-react"
+
+const keywords = [
+  "Kathmandu",
+  "Pokhara",
+  "backup generator",
+  "fiber internet",
+  "Lakeside cafes",
+  "meeting rooms",
+  "Jhamsikhel workspaces",
+  "Thamel hubs"
+]
 
 export default function HeroSection() {
+  const [query, setQuery] = useState("")
+  const router = useRouter()
+
+  const [placeholder, setPlaceholder] = useState("")
+  const [wordIdx, setWordIdx] = useState(0)
+  const [subIdx, setSubIdx] = useState(0)
+  const [isDeleting, setIsDeleting] = useState(false)
+
+  useEffect(() => {
+    if (subIdx === keywords[wordIdx].length + 1 && !isDeleting) {
+      const timeout = setTimeout(() => setIsDeleting(true), 1500)
+      return () => clearTimeout(timeout)
+    }
+
+    if (subIdx === 0 && isDeleting) {
+      setIsDeleting(false)
+      setWordIdx(prev => (prev + 1) % keywords.length)
+      return
+    }
+
+    const timeout = setTimeout(() => {
+      setPlaceholder(keywords[wordIdx].substring(0, subIdx + (isDeleting ? -1 : 1)))
+      setSubIdx(prev => prev + (isDeleting ? -1 : 1))
+    }, isDeleting ? 40 : 100)
+
+    return () => clearTimeout(timeout)
+  }, [subIdx, isDeleting, wordIdx])
+
+  function handleSearch(e: React.FormEvent) {
+    e.preventDefault()
+    if (!query.trim()) return
+    router.push(`/resources/coworking?search=${encodeURIComponent(query.trim())}`)
+  }
+
   return (
     <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-[#0B0B0B]">
       {/* Mountain Peak Background */}
@@ -33,26 +82,39 @@ export default function HeroSection() {
         </p>
 
         {/* Extra SEO Line */}
-        <p className="text-xs sm:text-sm text-primary/90 font-medium drop-shadow mb-8 tracking-wide px-2">
+        <p className="text-xs sm:text-sm text-primary/90 font-medium drop-shadow mb-6 tracking-wide px-2">
           Guides for digital nomads in Kathmandu, Pokhara, and across Nepal.
         </p>
 
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-md sm:max-w-none">
-          {/* Primary CTA */}
-          <Link
-            href="/community"
-            className="w-full sm:w-auto bg-primary text-black font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-full transition-all transform hover:scale-105 hover:bg-white hover:shadow-xl text-base sm:text-lg text-center"
-          >
-            Join the Free Nomad Community →
-          </Link>
+        {/* Search Bar for Coworking Spaces / Workplaces */}
+        <form onSubmit={handleSearch} className="w-full max-w-lg mb-8 px-2 relative group z-30">
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-yellow-500 rounded-full blur opacity-30 group-hover:opacity-50 transition duration-300"></div>
+          <div className="relative flex items-center bg-black/80 backdrop-blur border border-white/10 rounded-full p-1.5 focus-within:border-primary transition-colors">
+            <Search className="text-muted w-4 h-4 ml-4 flex-shrink-0" />
+            <input
+              type="text"
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              placeholder={`Search workspaces (e.g. ${placeholder})`}
+              className="w-full bg-transparent border-0 text-white text-xs sm:text-sm pl-3 pr-4 py-2.5 focus:outline-none placeholder:text-gray-500"
+            />
+            <button
+              type="submit"
+              className="bg-primary hover:bg-yellow-500 text-black font-black text-xs px-5 py-2.5 rounded-full uppercase tracking-wider transition-all active:scale-95 whitespace-nowrap"
+            >
+              Search Hubs
+            </button>
+          </div>
+        </form>
 
-          {/* Secondary CTA */}
+        {/* CTA Buttons */}
+        <div className="flex items-center justify-center w-full">
+          {/* Read the Blog CTA */}
           <Link
             href="/blog"
-            className="w-full sm:w-auto text-white font-semibold border-2 border-white px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:border-primary hover:text-primary transition-all text-base sm:text-lg text-center"
+            className="bg-primary text-black font-black px-8 py-3.5 sm:py-4 rounded-full transition-all transform hover:scale-105 hover:bg-white hover:shadow-xl text-base sm:text-lg text-center shadow-[0_0_20px_rgba(255,215,0,0.2)]"
           >
-            Read the Blog →
+            Read the Blog Guides →
           </Link>
         </div>
 
