@@ -5,7 +5,8 @@ import StickyCommunityCTA from "@/components/StickyCommunityCTA"
 import NewsletterSignup from "@/components/NewsletterSignup"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
-import { Wallet, Wifi, MapPin, Mountain, MessageCircle, Camera, Video, MessageSquare } from "lucide-react"
+import Link from "next/link"
+import { Wallet, Wifi, MapPin, Mountain, MessageCircle, Camera, Video, MessageSquare, ArrowRight } from "lucide-react"
 import { prisma } from "@/lib/prisma"
 
 export const dynamic = "force-dynamic"
@@ -87,6 +88,15 @@ export default async function Home() {
               <DestinationCard name="Pokhara" description="Lakeside calm and gateway to the Annapurna circuit." image="/images/destinations/pokhara.png" slug="pokhara" />
               <DestinationCard name="Lalitpur" description="Artisan heritage meets modern expatriate cafes." image="/images/destinations/lalitpur.png" slug="lalitpur" />
               <DestinationCard name="Chitwan" description="Jungle safaris and warmer sub-tropical living." image="/images/destinations/chitwan.png" slug="chitwan" />
+            </div>
+            
+            <div className="text-center mt-12">
+              <Link 
+                href="/destinations" 
+                className="inline-flex items-center gap-2 px-8 py-3.5 bg-primary hover:bg-yellow-400 text-black font-extrabold rounded-full transition-all hover:scale-[1.02] shadow-lg shadow-primary/20 active:scale-95 text-xs uppercase tracking-widest border border-primary"
+              >
+                Explore All Destinations <ArrowRight size={14} />
+              </Link>
             </div>
           </div>
         </section>

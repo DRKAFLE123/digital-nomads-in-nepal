@@ -39,8 +39,13 @@ export default function Navbar() {
       dropdown: [
         { name: "Kathmandu", desc: "Capital hub for digital nomads", href: "/destinations/kathmandu" },
         { name: "Pokhara", desc: "Lakeside remote work paradise", href: "/destinations/pokhara" },
-        { name: "Bandipur", desc: "Quiet mountain retreat", href: "/destinations/bandipur" },
-        { name: "Nomad Map", desc: "Explore all Nepal destinations", href: "/map" },
+        { name: "Lalitpur", desc: "Artisan & cafe-rich workspace", href: "/destinations/lalitpur" },
+        { name: "Chitwan", desc: "Jungle wilderness & warm weather", href: "/destinations/chitwan" },
+        { name: "Manang", desc: "High-altitude Himalayan retreat", href: "/destinations/manang" },
+        { name: "Mustang", desc: "Windswept ancient desert trails", href: "/destinations/mustang" },
+        { name: "Bandipur", desc: "Quiet Newari mountain village", href: "/destinations/bandipur" },
+        { name: "Khaptad", desc: "Spiritual meadows & forest detox", href: "/destinations/khaptad" },
+        { name: "View All Destinations →", desc: "Explore all nomad regions of Nepal", href: "/destinations" },
       ]
     },
     { 
