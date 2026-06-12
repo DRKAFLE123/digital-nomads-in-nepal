@@ -10,6 +10,11 @@ import { prisma } from "@/lib/prisma"
 
 export const dynamic = "force-dynamic"
 
+export const metadata = {
+  title: "Digital Nomads in Nepal | Vetted Remote Work Guides (2026)",
+  description: "The definitive portal for digital nomads in Nepal. Get verified guides on the Nepal Nomad Visa, cost of living, coworking spaces, and trekking guides.",
+}
+
 export default async function Home() {
   const dbPosts = await prisma.post.findMany({
     where: { published: true },
