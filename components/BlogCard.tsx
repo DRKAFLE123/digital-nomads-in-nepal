@@ -17,17 +17,13 @@ export default function BlogCard({ title, slug, excerpt, coverImage, category, r
     <Link href={`/blog/${slug}`} className="group block h-full">
       <article className="bg-[#141414] border border-[#222222] rounded-xl overflow-hidden h-full flex flex-col transition-all duration-300 hover:scale-[1.02] hover:border-[#FFD700] hover:shadow-[0_0_15px_rgba(255,215,0,0.15)]">
         <div className="relative h-48 w-full overflow-hidden bg-[#222222]">
-          {coverImage ? (
-            <Image 
-              src={coverImage} 
-              alt={title} 
-              fill 
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-cover transition-transform duration-500 group-hover:scale-105" 
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-[#A0A0A0]">No Image</div>
-          )}
+          <Image
+            src={coverImage || "https://images.unsplash.com/photo-1544735716-392fe2449fee?auto=format&fit=crop&q=80"}
+            alt={title}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
           <span className="absolute top-3 left-3 bg-[#FFD700] text-black text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
             {category}
           </span>

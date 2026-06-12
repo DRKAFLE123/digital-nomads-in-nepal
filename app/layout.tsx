@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
   },
+  icons: {
+    icon: '/favicon.ico',
+  },
   openGraph: {
     title: 'Digital Nomads in Nepal',
     description: 'The ultimate guide to living and working remotely in the Himalayas.',
