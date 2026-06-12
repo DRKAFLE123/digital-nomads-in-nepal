@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
-import Image from "next/image"
+import Image from "@/components/ImageWithFallback"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import AffiliateDisclaimer from "@/components/AffiliateDisclaimer"
