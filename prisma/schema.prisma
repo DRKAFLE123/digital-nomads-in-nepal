@@ -176,6 +176,7 @@ model NomadProfile {
   id            String       @id @default(cuid())
   name          String
   email         String       @unique
+  passwordHash  String?
   country       String       // Country of origin (flag/name)
   currentCity   String?      // e.g. "Kathmandu"
   workType      WorkType     @default(OTHER)
