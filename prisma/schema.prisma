@@ -189,6 +189,8 @@ model NomadProfile {
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
   checkIns      HubCheckIn[]
+  discussions   CommunityDiscussion[] @relation("NomadDiscussions")
+  replies       CommunityReply[]      @relation("NomadReplies")
 }
 
 model HubCheckIn {
@@ -199,5 +201,29 @@ model HubCheckIn {
   hub        WorkHub      @relation(fields: [hubId], references: [id], onDelete: Cascade)
   checkInAt  DateTime     @default(now())
   checkOutAt DateTime?    // null = still checked in
+}
+
+model CommunityDiscussion {
+  id        String           @id @default(cuid())
+  title     String
+  content   String           @db.Text
+  category  String           @default("General") // General, Meetups, Housing, Visa, Jobs
+  authorId  String
+  author    NomadProfile     @relation("NomadDiscussions", fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  likes     Int              @default(0)
+  replies   CommunityReply[]
+}
+
+model CommunityReply {
+  id             String              @id @default(cuid())
+  content        String              @db.Text
+  discussionId   String
+  discussion     CommunityDiscussion @relation(fields: [discussionId], references: [id], onDelete: Cascade)
+  authorId       String
+  author         NomadProfile        @relation("NomadReplies", fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
 }
 

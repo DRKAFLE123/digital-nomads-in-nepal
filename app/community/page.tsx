@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Users, Globe, MapPin, Briefcase, Search, ArrowRight, ShieldCheck, Mail, Calendar, Building, Sparkles, UserCheck, LogOut } from "lucide-react"
+import { Users, Globe, MapPin, Briefcase, Search, ArrowRight, ShieldCheck, Mail, Calendar, Building, Sparkles, UserCheck, LogOut, MessageCircle, ThumbsUp, Plus, X } from "lucide-react"
 import { useSession, signOut } from "next-auth/react"
 import Link from "next/link"
 
@@ -103,6 +103,181 @@ export default function CommunityPage() {
   const [activeCheckInsList, setActiveCheckInsList] = useState<CheckInListItem[]>([])
   const [loadingCheckIns, setLoadingCheckIns] = useState(true)
 
+  // Discussions states & interfaces
+  interface DiscussionAuthor {
+    id: string
+    name: string
+    country: string
+    avatarUrl: string | null
+    workType: string
+  }
+
+  interface CommunityDiscussion {
+    id: string
+    title: string
+    content: string
+    category: string
+    createdAt: string
+    likes: number
+    author: DiscussionAuthor
+    _count: {
+      replies: number
+    }
+  }
+
+  interface CommunityReply {
+    id: string
+    content: string
+    createdAt: string
+    author: DiscussionAuthor
+  }
+
+  const [discussions, setDiscussions] = useState<CommunityDiscussion[]>([])
+  const [loadingDiscussions, setLoadingDiscussions] = useState(true)
+  const [discussionCategory, setDiscussionCategory] = useState("All")
+  const [discussionPage, setDiscussionPage] = useState(1)
+  const [discussionTotalPages, setDiscussionTotalPages] = useState(1)
+
+  const [activeDiscussion, setActiveDiscussion] = useState<CommunityDiscussion | null>(null)
+  const [replies, setReplies] = useState<CommunityReply[]>([])
+  const [loadingReplies, setLoadingReplies] = useState(false)
+  const [newReplyContent, setNewReplyContent] = useState("")
+  const [submittingReply, setSubmittingReply] = useState(false)
+
+  const [newDiscussion, setNewDiscussion] = useState({ title: "", content: "", category: "General" })
+  const [submittingDiscussion, setSubmittingDiscussion] = useState(false)
+  const [newDiscussionError, setNewDiscussionError] = useState("")
+
+  const [openNewThreadModal, setOpenNewThreadModal] = useState(false)
+  const [openThreadModal, setOpenThreadModal] = useState(false)
+
+  // Fetch discussions
+  const fetchDiscussions = useCallback(async () => {
+    setLoadingDiscussions(true)
+    try {
+      const params = new URLSearchParams({
+        category: discussionCategory,
+        page: discussionPage.toString(),
+        limit: "6"
+      })
+      const res = await fetch(`/api/community/discussions?${params.toString()}`)
+      const data = await res.json()
+      if (data.success && data.discussions) {
+        setDiscussions(data.discussions)
+        setDiscussionTotalPages(data.pagination.totalPages)
+      }
+    } catch (err) {
+      console.error("Failed to load discussions:", err)
+    } finally {
+      setLoadingDiscussions(false)
+    }
+  }, [discussionCategory, discussionPage])
+
+  // Fetch replies
+  const fetchReplies = async (discussionId: string) => {
+    setLoadingReplies(true)
+    try {
+      const res = await fetch(`/api/community/discussions/${discussionId}/replies`)
+      const data = await res.json()
+      if (data.success && data.replies) {
+        setReplies(data.replies)
+      }
+    } catch (err) {
+      console.error("Failed to load replies:", err)
+    } finally {
+      setLoadingReplies(false)
+    }
+  }
+
+  // Create discussion
+  const handleCreateDiscussion = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSubmittingDiscussion(true)
+    setNewDiscussionError("")
+
+    try {
+      const res = await fetch("/api/community/discussions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newDiscussion)
+      })
+      const data = await res.json()
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to create discussion")
+      }
+
+      setNewDiscussion({ title: "", content: "", category: "General" })
+      setOpenNewThreadModal(false)
+      setDiscussionPage(1)
+      fetchDiscussions()
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Something went wrong"
+      setNewDiscussionError(msg)
+    } finally {
+      setSubmittingDiscussion(false)
+    }
+  }
+
+  // Create reply
+  const handleCreateReply = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!activeDiscussion || !newReplyContent.trim()) return
+    setSubmittingReply(true)
+
+    try {
+      const res = await fetch(`/api/community/discussions/${activeDiscussion.id}/replies`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: newReplyContent })
+      })
+      const data = await res.json()
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to post reply")
+      }
+
+      setNewReplyContent("")
+      fetchReplies(activeDiscussion.id)
+      
+      setDiscussions(prev => prev.map(d => {
+        if (d.id === activeDiscussion.id) {
+          return { ...d, _count: { replies: d._count.replies + 1 } }
+        }
+        return d
+      }))
+    } catch (err) {
+      console.error("Error creating reply:", err)
+    } finally {
+      setSubmittingReply(false)
+    }
+  }
+
+  // Like discussion
+  const handleLikeDiscussion = async (discussionId: string, e: React.MouseEvent) => {
+    e.stopPropagation()
+    try {
+      const res = await fetch(`/api/community/discussions/${discussionId}/like`, {
+        method: "POST"
+      })
+      const data = await res.json()
+      if (data.success) {
+        setDiscussions(prev => prev.map(d => {
+          if (d.id === discussionId) {
+            return { ...d, likes: data.likes }
+          }
+          return d
+        }))
+
+        if (activeDiscussion?.id === discussionId) {
+          setActiveDiscussion(prev => prev ? { ...prev, likes: data.likes } : null)
+        }
+      }
+    } catch (err) {
+      console.error("Error liking discussion:", err)
+    }
+  }
+
   // Fetch stats
   const fetchStats = async () => {
     try {
@@ -201,6 +376,10 @@ export default function CommunityPage() {
   useEffect(() => {
     fetchMembers()
   }, [fetchMembers])
+
+  useEffect(() => {
+    fetchDiscussions()
+  }, [fetchDiscussions])
 
   // Handle registration submission
   const handleRegister = async (e: React.FormEvent) => {
@@ -697,6 +876,198 @@ export default function CommunityPage() {
 
       </div>
 
+      {/* Community Discussions Feed */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20 border-t border-border pt-16">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+          <div>
+            <h2 className="text-2xl font-bold flex items-center gap-2">
+              <MessageCircle className="text-primary" size={24} />
+              Community Conversations
+            </h2>
+            <p className="text-muted-foreground text-sm mt-0.5">
+              Ask questions, share recommendations, plan meetups, and connect with other nomads in Nepal.
+            </p>
+          </div>
+          
+          <div>
+            {session ? (
+              <button
+                onClick={() => setOpenNewThreadModal(true)}
+                className="bg-primary hover:bg-yellow-400 transition-colors text-black font-bold rounded-xl px-5 py-2.5 text-sm flex items-center gap-2 shadow-md shadow-primary/10 active:scale-95"
+              >
+                <Plus size={16} />
+                Start Discussion
+              </button>
+            ) : (
+              <Link
+                href="/auth/signin"
+                className="bg-card hover:bg-accent hover:text-accent-foreground border border-border transition-colors text-foreground font-bold rounded-xl px-5 py-2.5 text-sm flex items-center gap-2 shadow-sm"
+              >
+                <Plus size={16} />
+                Sign In to Post
+              </Link>
+            )}
+          </div>
+        </div>
+
+        {/* Category Filter System */}
+        <div className="flex flex-wrap gap-2 mb-6 overflow-x-auto pb-2 border-b border-border/40">
+          {["All", "General", "Meetups", "Housing", "Visa", "Jobs"].map((category) => (
+            <button
+              key={category}
+              onClick={() => {
+                setDiscussionCategory(category)
+                setDiscussionPage(1)
+              }}
+              className={`px-4 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+                discussionCategory === category
+                  ? "bg-primary border-primary text-black"
+                  : "bg-card border-border text-muted-foreground hover:text-foreground hover:bg-accent"
+              }`}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
+
+        {/* Discussions List */}
+        {loadingDiscussions ? (
+          <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-primary border-r-2 mb-3"></div>
+            Loading discussion feed...
+          </div>
+        ) : discussions.length === 0 ? (
+          <div className="text-center py-16 border border-dashed border-border rounded-3xl bg-card/20">
+            <p className="text-muted-foreground text-sm">No discussions found in this category.</p>
+            {session ? (
+              <button
+                onClick={() => setOpenNewThreadModal(true)}
+                className="text-xs text-primary font-bold mt-2 hover:underline"
+              >
+                Be the first to start a conversation!
+              </button>
+            ) : (
+              <Link
+                href="/auth/signin"
+                className="text-xs text-primary font-bold mt-2 hover:underline inline-block"
+              >
+                Sign in to start the conversation!
+              </Link>
+            )}
+          </div>
+        ) : (
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {discussions.map((discussion) => {
+                // Determine color for the category tag
+                let catColor = "bg-zinc-500/10 text-zinc-400 border-zinc-500/20"
+                if (discussion.category === "Meetups") catColor = "bg-purple-500/10 text-purple-400 border-purple-500/20"
+                else if (discussion.category === "Housing") catColor = "bg-green-500/10 text-green-400 border-green-500/20"
+                else if (discussion.category === "Visa") catColor = "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                else if (discussion.category === "Jobs") catColor = "bg-blue-500/10 text-blue-400 border-blue-500/20"
+
+                return (
+                  <div
+                    key={discussion.id}
+                    onClick={() => {
+                      setActiveDiscussion(discussion)
+                      fetchReplies(discussion.id)
+                      setOpenThreadModal(true)
+                    }}
+                    className="bg-card border border-border hover:border-primary/20 transition-all duration-200 rounded-2xl p-5 cursor-pointer flex flex-col justify-between group shadow-sm hover:shadow-md"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between gap-2 mb-3">
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${catColor}`}>
+                          {discussion.category}
+                        </span>
+                        <span className="text-[10px] text-muted-foreground">
+                          {new Date(discussion.createdAt).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "2-digit" })}
+                        </span>
+                      </div>
+
+                      <h3 className="text-foreground font-bold text-base group-hover:text-primary transition-colors line-clamp-1 mb-2">
+                        {discussion.title}
+                      </h3>
+                      
+                      <p className="text-muted-foreground text-xs line-clamp-2 leading-relaxed mb-4">
+                        {discussion.content}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-between border-t border-border/60 pt-3 mt-auto">
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-500 flex items-center justify-center text-[10px] font-bold text-white shadow-sm">
+                          {discussion.author.avatarUrl ? (
+                            /* eslint-disable-next-line @next/next/no-img-element */
+                            <img src={discussion.author.avatarUrl} alt={discussion.author.name} className="w-full h-full object-cover rounded-full" />
+                          ) : (
+                            discussion.author.name[0]
+                          )}
+                        </div>
+                        <div>
+                          <p className="text-[11px] font-semibold text-foreground leading-none">
+                            {formatPrivacyName(discussion.author.name)}
+                          </p>
+                          <p className="text-[9px] text-muted-foreground mt-0.5 leading-none">
+                            {discussion.author.country} • {discussion.author.workType}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-3">
+                        <button
+                          onClick={(e) => {
+                            if (!session) {
+                              alert("Please sign in to like posts.")
+                              e.stopPropagation()
+                              return
+                            }
+                            handleLikeDiscussion(discussion.id, e)
+                          }}
+                          className="flex items-center gap-1 text-[11px] font-medium text-muted-foreground hover:text-red-400 transition-colors"
+                        >
+                          <ThumbsUp size={12} className="group-hover:scale-110 transition-transform" />
+                          <span>{discussion.likes}</span>
+                        </button>
+
+                        <div className="flex items-center gap-1 text-[11px] font-medium text-muted-foreground">
+                          <MessageCircle size={12} />
+                          <span>{discussion._count?.replies || 0}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+
+            {/* Discussions Pagination */}
+            {discussionTotalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 mt-6">
+                <button
+                  disabled={discussionPage === 1}
+                  onClick={() => setDiscussionPage(discussionPage - 1)}
+                  className="px-3 py-1.5 border border-border hover:border-primary disabled:opacity-40 transition-colors rounded-xl text-xs font-bold"
+                >
+                  Previous
+                </button>
+                <span className="text-xs text-muted-foreground font-semibold">
+                  Page {discussionPage} of {discussionTotalPages}
+                </span>
+                <button
+                  disabled={discussionPage === discussionTotalPages}
+                  onClick={() => setDiscussionPage(discussionPage + 1)}
+                  className="px-3 py-1.5 border border-border hover:border-primary disabled:opacity-40 transition-colors rounded-xl text-xs font-bold"
+                >
+                  Next
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
       {/* Directory Filter System */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 border-t border-white/5 pt-12">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -934,6 +1305,254 @@ export default function CommunityPage() {
           </div>
         </div>
       </div>
+
+      {/* Create New Thread Modal */}
+      {openNewThreadModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-card border border-border w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-border">
+              <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
+                <Plus size={18} className="text-primary" />
+                Start a New Discussion
+              </h3>
+              <button
+                onClick={() => setOpenNewThreadModal(false)}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            
+            <form onSubmit={handleCreateDiscussion} className="p-6 space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-muted-foreground mb-1">Title *</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="What would you like to discuss?"
+                  value={newDiscussion.title}
+                  onChange={e => setNewDiscussion({ ...newDiscussion, title: e.target.value })}
+                  className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-muted-foreground mb-1">Category</label>
+                <select
+                  value={newDiscussion.category}
+                  onChange={e => setNewDiscussion({ ...newDiscussion, category: e.target.value })}
+                  className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
+                >
+                  {["General", "Meetups", "Housing", "Visa", "Jobs"].map(cat => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-muted-foreground mb-1">Content / Message *</label>
+                <textarea
+                  required
+                  placeholder="Share details, ask questions, or provide recommendations..."
+                  rows={6}
+                  value={newDiscussion.content}
+                  onChange={e => setNewDiscussion({ ...newDiscussion, content: e.target.value })}
+                  className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
+                />
+              </div>
+
+              {newDiscussionError && (
+                <p className="text-red-400 text-xs font-semibold">{newDiscussionError}</p>
+              )}
+
+              <div className="flex gap-3 justify-end pt-2">
+                <button
+                  type="button"
+                  onClick={() => setOpenNewThreadModal(false)}
+                  className="px-4 py-2 border border-border hover:bg-accent hover:text-accent-foreground text-foreground rounded-xl text-xs font-bold transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={submittingDiscussion || !newDiscussion.title.trim() || !newDiscussion.content.trim()}
+                  className="px-4 py-2 bg-primary hover:bg-yellow-400 disabled:opacity-40 transition-colors text-black font-bold rounded-xl text-xs flex items-center gap-1.5"
+                >
+                  {submittingDiscussion ? "Posting..." : "Post Thread"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Interactive Thread Detail View Modal */}
+      {openThreadModal && activeDiscussion && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-card border border-border w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200 flex flex-col max-h-[85vh]">
+            
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0">
+              <div className="flex items-center gap-2">
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20">
+                  {activeDiscussion.category}
+                </span>
+                <span className="text-[10px] text-muted-foreground">
+                  Posted {new Date(activeDiscussion.createdAt).toLocaleDateString()}
+                </span>
+              </div>
+              <button
+                onClick={() => {
+                  setOpenThreadModal(false)
+                  setActiveDiscussion(null)
+                }}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Modal Scrollable Body */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+              {/* Original Post */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold text-foreground leading-snug">
+                  {activeDiscussion.title}
+                </h3>
+                
+                {/* Author Info */}
+                <div className="flex items-center gap-2.5 bg-accent/40 px-3 py-2 rounded-xl border border-border/40">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-500 flex items-center justify-center text-xs font-bold text-white shadow-sm">
+                    {activeDiscussion.author.avatarUrl ? (
+                      /* eslint-disable-next-line @next/next/no-img-element */
+                      <img src={activeDiscussion.author.avatarUrl} alt={activeDiscussion.author.name} className="w-full h-full object-cover rounded-full" />
+                    ) : (
+                      activeDiscussion.author.name[0]
+                    )}
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-foreground">
+                      {formatPrivacyName(activeDiscussion.author.name)}
+                      <span className="text-[10px] text-muted-foreground font-normal ml-1.5">({activeDiscussion.author.country})</span>
+                    </p>
+                    <p className="text-[9px] text-muted-foreground font-medium uppercase tracking-wider">
+                      {activeDiscussion.author.workType}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="text-foreground text-sm leading-relaxed whitespace-pre-wrap pt-1">
+                  {activeDiscussion.content}
+                </div>
+
+                {/* Like / Share actions on original post */}
+                <div className="flex items-center gap-3 border-t border-b border-border/40 py-2.5">
+                  <button
+                    onClick={(e) => {
+                      if (!session) {
+                        alert("Please sign in to like posts.")
+                        return
+                      }
+                      handleLikeDiscussion(activeDiscussion.id, e)
+                    }}
+                    className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-red-400 transition-colors"
+                  >
+                    <ThumbsUp size={13} />
+                    <span>Like Discussion ({activeDiscussion.likes})</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Replies Timeline Section */}
+              <div className="space-y-4">
+                <h4 className="text-sm font-bold text-foreground flex items-center gap-1.5">
+                  <MessageCircle size={14} className="text-primary" />
+                  Comments ({replies.length})
+                </h4>
+
+                {loadingReplies ? (
+                  <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
+                    <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-primary border-r-2 mb-2"></div>
+                    Loading replies...
+                  </div>
+                ) : replies.length === 0 ? (
+                  <p className="text-xs text-muted-foreground py-4 text-center border border-dashed border-border rounded-xl bg-accent/10">
+                    No comments yet. Start the conversation by replying below!
+                  </p>
+                ) : (
+                  <div className="space-y-3.5 pl-1.5 border-l-2 border-border">
+                    {replies.map((reply) => (
+                      <div key={reply.id} className="bg-accent/20 border border-border/40 rounded-xl p-3.5 space-y-2 relative ml-3">
+                        {/* Timeline node dot */}
+                        <div className="absolute -left-[23px] top-4 w-2 h-2 rounded-full bg-border border border-card" />
+                        
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2">
+                            <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-500 flex items-center justify-center text-[9px] font-bold text-white shadow-sm">
+                              {reply.author.avatarUrl ? (
+                                /* eslint-disable-next-line @next/next/no-img-element */
+                                <img src={reply.author.avatarUrl} alt={reply.author.name} className="w-full h-full object-cover rounded-full" />
+                              ) : (
+                                reply.author.name[0]
+                              )}
+                            </div>
+                            <div>
+                              <p className="text-[11px] font-bold text-foreground">
+                                {formatPrivacyName(reply.author.name)}
+                                <span className="text-[9px] text-muted-foreground font-normal ml-1.5">({reply.author.country})</span>
+                              </p>
+                            </div>
+                          </div>
+                          <span className="text-[9px] text-muted-foreground">
+                            {new Date(reply.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p className="text-foreground text-xs leading-relaxed whitespace-pre-wrap">
+                          {reply.content}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Modal Footer (New Reply Form) */}
+            <div className="px-6 py-4 border-t border-border bg-card shrink-0">
+              {session ? (
+                <form onSubmit={handleCreateReply} className="flex gap-2">
+                  <input
+                    type="text"
+                    required
+                    placeholder="Write a reply..."
+                    value={newReplyContent}
+                    onChange={e => setNewReplyContent(e.target.value)}
+                    className="flex-1 bg-background border border-border rounded-xl px-4 py-2 text-xs focus:outline-none focus:border-primary transition-colors text-foreground"
+                  />
+                  <button
+                    type="submit"
+                    disabled={submittingReply || !newReplyContent.trim()}
+                    className="bg-primary hover:bg-yellow-400 disabled:opacity-40 transition-colors text-black font-bold rounded-xl px-4 py-2 text-xs flex items-center justify-center"
+                  >
+                    {submittingReply ? "Posting..." : "Reply"}
+                  </button>
+                </form>
+              ) : (
+                <div className="bg-accent/40 border border-border rounded-xl p-3 text-center">
+                  <p className="text-xs text-muted-foreground">
+                    Want to join the discussion?{" "}
+                    <Link href="/auth/signin" className="text-primary hover:underline font-bold">
+                      Sign in to post a reply.
+                    </Link>
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   )

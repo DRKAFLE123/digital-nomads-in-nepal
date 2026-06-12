@@ -78,8 +78,8 @@ export default function Footer() {
           <div className="flex flex-col">
             <h3 className="text-sm font-black tracking-widest text-gray-200 uppercase mb-6">Community</h3>
             <ul className="flex flex-col space-y-4">
-              <li><Link href="/forum" className="text-sm text-gray-400 hover:text-[#FFD700] transition-colors inline-block group">Nomad Forum<span className="block h-px w-0 bg-[#FFD700] transition-all group-hover:w-full"></span></Link></li>
-              <li><Link href="/directory" className="text-sm text-gray-400 hover:text-[#FFD700] transition-colors inline-block group">Member Directory<span className="block h-px w-0 bg-[#FFD700] transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/community#forum" className="text-sm text-gray-400 hover:text-[#FFD700] transition-colors inline-block group">Nomad Forum<span className="block h-px w-0 bg-[#FFD700] transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/community#directory" className="text-sm text-gray-400 hover:text-[#FFD700] transition-colors inline-block group">Member Directory<span className="block h-px w-0 bg-[#FFD700] transition-all group-hover:w-full"></span></Link></li>
               <li>
                 <Link href="/guides" className="text-sm text-gray-400 hover:text-[#FFD700] transition-colors flex items-center gap-1.5 group w-fit">
                   <span className="relative">

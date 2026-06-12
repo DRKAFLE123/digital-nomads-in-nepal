@@ -66,8 +66,8 @@ export default function Navbar() {
       name: "Community", 
       href: "/community",
       dropdown: [
-        { name: "Forum", desc: "Ask questions, share tips", href: "/forum" },
-        { name: "Member Directory", desc: "Find nomads in Nepal", href: "/directory" },
+        { name: "Forum", desc: "Ask questions, share tips", href: "/community#forum" },
+        { name: "Member Directory", desc: "Find nomads in Nepal", href: "/community#directory" },
         { name: "Events", desc: "Meetups & workshops", href: "/events" },
       ]
     },
