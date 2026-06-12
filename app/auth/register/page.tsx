@@ -6,7 +6,7 @@ import Image from "next/image"
 
 export default function RegisterPage() {
   const router = useRouter()
-  const [form, setForm] = useState({ name: "", email: "", password: "" })
+  const [form, setForm] = useState({ name: "", email: "", password: "", confirmPassword: "" })
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
@@ -15,10 +15,26 @@ export default function RegisterPage() {
     setLoading(true)
     setError("")
 
+    if (form.password !== form.confirmPassword) {
+      setError("Passwords do not match.")
+      setLoading(false)
+      return
+    }
+
+    if (form.password.length < 6) {
+      setError("Password must be at least 6 characters.")
+      setLoading(false)
+      return
+    }
+
     const res = await fetch("/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
+      body: JSON.stringify({
+        name: form.name,
+        email: form.email,
+        password: form.password
+      }),
     })
 
     const data = await res.json()
@@ -58,6 +74,7 @@ export default function RegisterPage() {
               { label: "Full Name", key: "name", type: "text", placeholder: "Alex Smith" },
               { label: "Email", key: "email", type: "email", placeholder: "you@example.com" },
               { label: "Password", key: "password", type: "password", placeholder: "Min. 6 characters" },
+              { label: "Confirm Password", key: "confirmPassword", type: "password", placeholder: "Confirm password" },
             ].map((field) => (
               <div key={field.key}>
                 <label className="text-sm font-medium text-foreground mb-2 block">{field.label}</label>

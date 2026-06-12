@@ -1,10 +1,11 @@
 "use client"
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Menu, X, ChevronDown, Users, CalendarCheck, ArrowRight } from "lucide-react"
+import { Menu, X, ChevronDown, Users, CalendarCheck, LogOut } from "lucide-react"
 import { ThemeToggle } from "./ThemeToggle"
 import Image from "next/image"
 import TrekkingGuideIcon from "./TrekkingGuideIcon"
+import { useSession, signOut } from "next-auth/react"
 
 interface NavItem {
   name: string
@@ -18,9 +19,9 @@ interface NavItem {
 }
 
 export default function Navbar() {
+  const { data: session } = useSession()
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [communityStats, setCommunityStats] = useState<{ totalMembers: number; totalCountries: number; activeCheckIns: number } | null>(null)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,17 +29,6 @@ export default function Navbar() {
     }
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
-  useEffect(() => {
-    fetch("/api/community/stats")
-      .then(res => res.json())
-      .then(data => {
-        if (data.success && data.stats) {
-          setCommunityStats(data.stats)
-        }
-      })
-      .catch(err => console.error("Error fetching community stats for navbar:", err))
   }, [])
 
   const navItems: NavItem[] = [
@@ -149,80 +139,94 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-2 flex-shrink-0">
             <ThemeToggle />
 
-            {/* Community icon-only button with rich tooltip */}
-            <div className="relative group/community">
-              <Link
-                href="/community"
-                className={`flex items-center justify-center w-9 h-9 rounded-full border-2 transition-all ${
-                  isScrolled
-                    ? "border-white/20 text-gray-300 hover:border-primary hover:text-primary"
-                    : "border-white/30 text-white hover:border-primary hover:text-primary"
-                }`}
-                aria-label="Join Community"
-              >
-                <Users size={16} />
-              </Link>
-              {/* Rich hover tooltip card */}
-              <div className="absolute top-full right-0 mt-3 w-72 opacity-0 invisible group-hover/community:opacity-100 group-hover/community:visible transition-all duration-200 origin-top-right scale-95 group-hover/community:scale-100 pointer-events-none z-50">
-                {/* Arrow */}
-                <div className="absolute -top-1.5 right-3 w-3 h-3 bg-[#1a1a1a] border-l border-t border-white/10 rotate-45" />
-                <div className="bg-[#1a1a1a] border border-white/10 rounded-2xl shadow-2xl shadow-black/60 overflow-hidden text-left">
-                  {/* Header */}
-                  <div className="bg-gradient-to-r from-purple-900/30 to-primary/10 px-4 py-3 border-b border-white/5">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
-                        <Users size={16} className="text-primary" />
+            {/* Community actions button/dropdown */}
+            {session ? (
+              <div className="relative group/community flex items-center gap-2">
+                <Link
+                  href="/community"
+                  className={`text-xs font-bold px-4 py-2 border rounded-full transition-all flex items-center gap-1.5 ${
+                    isScrolled
+                      ? "border-white/20 text-gray-300 hover:border-primary hover:text-primary"
+                      : "border-white/30 text-white hover:border-primary hover:text-primary"
+                  }`}
+                >
+                  <Users size={14} />
+                  Hi, {session.user?.name?.split(" ")[0]}
+                </Link>
+                <button
+                  onClick={() => signOut()}
+                  className="text-xs text-red-400 hover:underline px-2 py-1"
+                >
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <div className="relative group/community">
+                <Link
+                  href="/community"
+                  className={`text-xs font-black uppercase tracking-wider px-5 py-2.5 border rounded-full transition-all block whitespace-nowrap ${
+                    isScrolled
+                      ? "border-primary text-primary hover:bg-primary hover:text-black shadow-lg shadow-primary/10"
+                      : "border-white/45 text-white hover:border-primary hover:text-primary"
+                  }`}
+                >
+                  Join Community
+                </Link>
+                {/* Rich hover tooltip card with Join + Sign In */}
+                <div className="absolute top-full right-0 mt-3 w-72 opacity-0 invisible group-hover/community:opacity-100 group-hover/community:visible transition-all duration-200 origin-top-right scale-95 group-hover/community:scale-100 pointer-events-none z-50">
+                  {/* Arrow */}
+                  <div className="absolute -top-1.5 right-6 w-3 h-3 bg-[#1a1a1a] border-l border-t border-white/10 rotate-45" />
+                  <div className="bg-[#1a1a1a] border border-white/10 rounded-2xl shadow-2xl shadow-black/60 overflow-hidden text-left pointer-events-auto">
+                    {/* Header */}
+                    <div className="bg-gradient-to-r from-purple-900/30 to-primary/10 px-4 py-3 border-b border-white/5">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                          <Users size={16} className="text-primary" />
+                        </div>
+                        <div>
+                          <p className="text-white font-bold text-sm leading-tight">Nomad Community</p>
+                          <p className="text-primary text-xs font-medium">Connect · Explore · Co-work</p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-white font-bold text-sm leading-tight">Nomad Community</p>
-                        <p className="text-primary text-xs font-medium">Connect · Explore · Co-work</p>
+                    </div>
+                    {/* Benefits */}
+                    <div className="px-4 py-3 space-y-2">
+                      {[
+                        { icon: "👥", label: "Nomad Directory", desc: "Connect with digital nomads in Nepal" },
+                        { icon: "🏔️", label: "Trek & Trip Alerts", desc: "Get invites to group mountain treks" },
+                        { icon: "🎉", label: "Local Meetups", desc: "Invites to weekly events & workshops" },
+                      ].map(({ icon, label, desc }) => (
+                        <div key={label} className="flex items-start gap-3">
+                          <span className="text-sm mt-0.5 flex-shrink-0">{icon}</span>
+                          <div>
+                            <p className="text-white text-xs font-semibold leading-tight">{label}</p>
+                            <p className="text-gray-500 text-[10px] leading-tight">{desc}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    {/* Join CTA & Sign In option below */}
+                    <div className="px-4 pb-4 pt-2 border-t border-white/5 space-y-3 bg-black/25">
+                      <Link
+                        href="/community"
+                        className="flex items-center justify-center w-full bg-primary hover:bg-yellow-400 text-black font-extrabold text-xs py-2 rounded-xl transition-all shadow-md shadow-primary/10"
+                      >
+                        Join Free Now
+                      </Link>
+                      <div className="text-center">
+                        <span className="text-[11px] text-gray-500">Already a member? </span>
+                        <Link
+                          href="/auth/signin"
+                          className="text-primary text-[11px] font-bold hover:underline"
+                        >
+                          Sign In
+                        </Link>
                       </div>
                     </div>
                   </div>
-                  {/* Benefits */}
-                  <div className="px-4 py-3 space-y-2">
-                    {[
-                      { icon: "👥", label: "Nomad Directory", desc: "Connect with digital nomads in Nepal" },
-                      { icon: "🏔️", label: "Trek & Trip Alerts", desc: "Get invites to group mountain treks" },
-                      { icon: "🎉", label: "Local Meetups", desc: "Invites to weekly events & workshops" },
-                      { icon: "🏢", label: "Live Hub Check-ins", desc: "See who is co-working in real-time" },
-                    ].map(({ icon, label, desc }) => (
-                      <div key={label} className="flex items-start gap-3">
-                        <span className="text-sm mt-0.5 flex-shrink-0">{icon}</span>
-                        <div>
-                          <p className="text-white text-xs font-semibold leading-tight">{label}</p>
-                          <p className="text-gray-500 text-[10px] leading-tight">{desc}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  {/* Live Stats Summary */}
-                  <div className="px-4 pb-3">
-                    <Link
-                      href="/community"
-                      className="flex items-center justify-between bg-white/5 hover:bg-white/10 transition-colors rounded-xl px-3 py-2 pointer-events-auto"
-                    >
-                      <div className="flex flex-col">
-                        <span className="text-[11px] text-gray-400 font-semibold leading-tight">
-                          {communityStats 
-                            ? `${communityStats.totalMembers} Nomads from ${communityStats.totalCountries} countries`
-                            : "Join 200+ nomads in Nepal"
-                          }
-                        </span>
-                        {communityStats && communityStats.activeCheckIns > 0 && (
-                          <span className="text-[9px] text-green-400 font-medium mt-0.5 animate-pulse">
-                            ● {communityStats.activeCheckIns} co-working now
-                          </span>
-                        )}
-                      </div>
-                      <span className="text-primary text-xs font-bold flex items-center gap-0.5">
-                        Join <ArrowRight size={12} />
-                      </span>
-                    </Link>
-                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* Book Now CTA with rich tooltip */}
             <div className="relative group/booknow">
@@ -329,14 +333,44 @@ export default function Navbar() {
             </div>
           ))}
           <div className="pt-5 px-1 space-y-3">
-            <Link 
-              href="/community" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-center gap-2 w-full text-center px-6 py-3.5 border border-white/20 text-white font-bold rounded-2xl transition-all hover:bg-white/5 active:scale-[0.98]"
-            >
-              <Users size={16} />
-              Join Community
-            </Link>
+            {session ? (
+              <div className="space-y-2">
+                <div className="text-center text-sm font-bold text-gray-300">
+                  Logged in as <span className="text-primary">{session.user?.name}</span>
+                </div>
+                <button
+                  onClick={() => {
+                    signOut()
+                    setMobileMenuOpen(false)
+                  }}
+                  className="flex items-center justify-center gap-2 w-full text-center px-6 py-3 border border-red-500/20 text-red-400 font-bold rounded-2xl transition-all hover:bg-red-500/10 active:scale-[0.98]"
+                >
+                  <LogOut size={16} />
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <Link 
+                  href="/community" 
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-2 w-full text-center px-6 py-3.5 border border-white/20 text-white font-bold rounded-2xl transition-all hover:bg-white/5 active:scale-[0.98]"
+                >
+                  <Users size={16} />
+                  Join Community
+                </Link>
+                <div className="text-center text-xs text-gray-500 mt-1">
+                  Already a member?{" "}
+                  <Link
+                    href="/auth/signin"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-primary hover:underline font-semibold"
+                  >
+                    Sign In
+                  </Link>
+                </div>
+              </div>
+            )}
             <Link 
               href="/resources/coworking" 
               onClick={() => setMobileMenuOpen(false)}

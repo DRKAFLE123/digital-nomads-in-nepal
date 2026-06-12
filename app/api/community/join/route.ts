@@ -18,39 +18,73 @@ export async function POST(req: Request) {
       emailAlerts = true
     } = body
 
-    if (!name || !email || !country) {
+    if (!name || !email || !country || !password) {
       return NextResponse.json(
-        { error: "Name, email, and country of origin are required" },
+        { error: "Name, email, password, and country of origin are required" },
+        { status: 400 }
+      )
+    }
+
+    if (password.length < 6) {
+      return NextResponse.json(
+        { error: "Password must be at least 6 characters" },
         { status: 400 }
       )
     }
 
     // Check if profile already exists
-    const existing = await prisma.nomadProfile.findUnique({
+    const existingProfile = await prisma.nomadProfile.findUnique({
       where: { email }
     })
 
-    if (existing) {
+    if (existingProfile) {
       return NextResponse.json(
         { error: "A community profile with this email already exists" },
         { status: 400 }
       )
     }
 
-    // Create NomadProfile (with optional password hash)
-    const profile = await prisma.nomadProfile.create({
-      data: {
-        name,
-        email,
-        country,
-        currentCity: currentCity || null,
-        workType: workType || "OTHER",
-        bio: bio || null,
-        linkedinUrl: linkedinUrl || null,
-        twitterUrl: twitterUrl || null,
-        emailAlerts: !!emailAlerts,
-        ...(password ? { passwordHash: await bcrypt.hash(password, 10) } : {})
-      }
+    // Check if user account already exists
+    const existingUser = await prisma.user.findUnique({
+      where: { email }
+    })
+
+    if (existingUser) {
+      return NextResponse.json(
+        { error: "A user account with this email already exists" },
+        { status: 400 }
+      )
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 12)
+
+    // Create both User and NomadProfile in a transaction
+    const { profile } = await prisma.$transaction(async (tx) => {
+      const user = await tx.user.create({
+        data: {
+          name,
+          email,
+          password: hashedPassword,
+          role: "NOMAD"
+        }
+      })
+
+      const profile = await tx.nomadProfile.create({
+        data: {
+          name,
+          email,
+          country,
+          currentCity: currentCity || null,
+          workType: workType || "OTHER",
+          bio: bio || null,
+          linkedinUrl: linkedinUrl || null,
+          twitterUrl: twitterUrl || null,
+          emailAlerts: !!emailAlerts,
+          passwordHash: hashedPassword
+        }
+      })
+
+      return { user, profile }
     })
 
     // Auto-subscribe to newsletter if emailAlerts is enabled

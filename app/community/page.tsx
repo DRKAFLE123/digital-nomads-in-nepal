@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { Users, Globe, MapPin, Briefcase, Search, ArrowRight, ShieldCheck, Mail, Calendar, Building, Sparkles, UserCheck, LogOut } from "lucide-react"
+import { useSession, signOut } from "next-auth/react"
+import Link from "next/link"
 
 // Allowed WorkTypes matching schema
 const WORK_TYPES = [
@@ -34,6 +36,8 @@ interface HubOption {
 }
 
 export default function CommunityPage() {
+  const { data: session } = useSession()
+
   // Stats
   const [stats, setStats] = useState({ totalMembers: 0, totalCountries: 0, activeCheckIns: 0 })
   // Members List
@@ -50,6 +54,8 @@ export default function CommunityPage() {
   const [regForm, setRegForm] = useState({
     name: "",
     email: "",
+    password: "",
+    confirmPassword: "",
     country: "",
     currentCity: "",
     workType: "OTHER",
@@ -61,6 +67,13 @@ export default function CommunityPage() {
   const [registerSuccess, setRegisterSuccess] = useState(false)
   const [registerError, setRegisterError] = useState("")
   const [registerLoading, setRegisterLoading] = useState(false)
+
+  // Auto fill check-in email if logged in
+  useEffect(() => {
+    if (session?.user?.email) {
+      setCheckInEmail(session.user.email)
+    }
+  }, [session])
 
   // Check-In Form State
   const [checkInEmail, setCheckInEmail] = useState("")
@@ -195,6 +208,18 @@ export default function CommunityPage() {
     setRegisterLoading(true)
     setRegisterError("")
 
+    if (regForm.password !== regForm.confirmPassword) {
+      setRegisterError("Passwords do not match.")
+      setRegisterLoading(false)
+      return
+    }
+
+    if (regForm.password.length < 6) {
+      setRegisterError("Password must be at least 6 characters.")
+      setRegisterLoading(false)
+      return
+    }
+
     try {
       const res = await fetch("/api/community/join", {
         method: "POST",
@@ -265,7 +290,7 @@ export default function CommunityPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#070707] text-white pt-24 pb-20">
+    <div className="min-h-screen bg-background text-foreground pt-24 pb-20">
       
       {/* Background Gradients */}
       <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-purple-900/10 via-primary/5 to-transparent pointer-events-none -z-10" />
@@ -321,7 +346,7 @@ export default function CommunityPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 mb-20">
         
         {/* Left Column: Register Form */}
-        <div className="lg:col-span-7 bg-[#111] border border-white/5 rounded-3xl p-6 md:p-8 shadow-lg">
+        <div className="lg:col-span-7 bg-card border border-border rounded-3xl p-6 md:p-8 shadow-lg">
           <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 mb-2">
             <UserCheck className="text-primary" size={22} />
             Join the Community
@@ -330,7 +355,29 @@ export default function CommunityPage() {
             Register your profile to access the directory, receive event invites, and check in to workspaces. Completely free.
           </p>
 
-          {registerSuccess ? (
+          {session ? (
+            <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-6 text-center space-y-4">
+              <div className="w-16 h-16 bg-primary/20 text-primary rounded-full flex items-center justify-center mx-auto text-2xl font-black">
+                {session.user?.name?.[0] || "U"}
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-white">Already a Member!</h3>
+                <p className="text-gray-400 text-sm mt-1">
+                  You are logged in as <span className="text-primary font-bold">{session.user?.name}</span> ({session.user?.email}).
+                </p>
+                <p className="text-xs text-gray-500 mt-2">
+                  Use the check-in panel on the right to share your working location, or browse the directory below!
+                </p>
+              </div>
+              <button
+                onClick={() => signOut()}
+                className="inline-flex items-center gap-2 px-6 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 rounded-xl text-xs font-bold transition-all active:scale-95"
+              >
+                <LogOut size={14} />
+                Sign Out
+              </button>
+            </div>
+          ) : registerSuccess ? (
             <div className="bg-primary/10 border border-primary/20 rounded-2xl p-6 text-center space-y-4">
               <div className="w-14 h-14 bg-primary/20 text-primary rounded-full flex items-center justify-center mx-auto text-2xl font-bold">
                 ✓
@@ -347,6 +394,8 @@ export default function CommunityPage() {
                   setRegForm({
                     name: "",
                     email: "",
+                    password: "",
+                    confirmPassword: "",
                     country: "",
                     currentCity: "",
                     workType: "OTHER",
@@ -383,6 +432,31 @@ export default function CommunityPage() {
                     placeholder="e.g. john@nomad.com"
                     value={regForm.email}
                     onChange={e => setRegForm({ ...regForm, email: e.target.value })}
+                    className="w-full bg-[#171717] border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-gray-400 mb-1">Password *</label>
+                  <input
+                    type="password"
+                    required
+                    placeholder="Min. 6 characters"
+                    value={regForm.password}
+                    onChange={e => setRegForm({ ...regForm, password: e.target.value })}
+                    className="w-full bg-[#171717] border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-400 mb-1">Confirm Password *</label>
+                  <input
+                    type="password"
+                    required
+                    placeholder="Confirm password"
+                    value={regForm.confirmPassword}
+                    onChange={e => setRegForm({ ...regForm, confirmPassword: e.target.value })}
                     className="w-full bg-[#171717] border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-white"
                   />
                 </div>
@@ -486,6 +560,13 @@ export default function CommunityPage() {
                 {registerLoading ? "Joining..." : "Join Community Free"}
                 <ArrowRight size={16} />
               </button>
+
+              <p className="text-center text-xs text-gray-400 mt-4">
+                Already have an account?{" "}
+                <Link href="/auth/signin" className="text-primary hover:underline font-semibold">
+                  Sign In
+                </Link>
+              </p>
             </form>
           )}
         </div>
@@ -494,7 +575,7 @@ export default function CommunityPage() {
         <div className="lg:col-span-5 space-y-8">
           
           {/* Check-In Widget */}
-          <div className="bg-[#111] border border-white/5 rounded-3xl p-6 md:p-8 shadow-lg">
+          <div className="bg-card border border-border rounded-3xl p-6 md:p-8 shadow-lg">
             <h2 className="text-xl font-bold flex items-center gap-2 mb-2">
               <MapPin className="text-green-400" size={20} />
               Co-working Check-In
@@ -563,7 +644,7 @@ export default function CommunityPage() {
           </div>
 
           {/* Who is Working Where Right Now (Privacy-safe list) */}
-          <div className="bg-[#111] border border-white/5 rounded-3xl p-6 md:p-8 shadow-lg">
+          <div className="bg-card border border-border rounded-3xl p-6 md:p-8 shadow-lg">
             <h2 className="text-lg font-bold flex items-center gap-2 mb-4">
               <Building className="text-purple-400" size={18} />
               Active Check-Ins Now
@@ -581,7 +662,7 @@ export default function CommunityPage() {
             ) : (
               <div className="space-y-4 max-h-[350px] overflow-y-auto pr-1">
                 {activeCheckInsList.map((checkIn: CheckInListItem) => (
-                  <div key={checkIn.id} className="flex items-center justify-between p-3 bg-white/[0.02] border border-white/5 rounded-2xl">
+                  <div key={checkIn.id} className="flex items-center justify-between p-3 bg-background border border-border rounded-2xl">
                     <div className="flex items-center gap-3">
                       {/* Avatar initials with nice dynamic color */}
                       <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center text-xs font-bold text-white shadow-sm shadow-purple-500/20">
@@ -589,7 +670,7 @@ export default function CommunityPage() {
                       </div>
                       <div>
                         {/* PRIVACY REQUIREMENT: Show flag + first name + work type */}
-                        <p className="text-white text-xs font-bold flex items-center gap-1">
+                        <p className="text-foreground text-xs font-bold flex items-center gap-1">
                           {formatPrivacyName(checkIn.profile.name)}
                           <span className="text-[10px] text-gray-400 font-normal">({checkIn.profile.country})</span>
                         </p>
@@ -638,14 +719,14 @@ export default function CommunityPage() {
                 placeholder="Search name, country..."
                 value={searchQuery}
                 onChange={e => { setSearchQuery(e.target.value); setPage(1) }}
-                className="bg-[#111] border border-white/10 rounded-full pl-10 pr-4 py-2 text-xs focus:outline-none focus:border-primary text-white w-full sm:w-56 transition-colors"
+                className="bg-card border border-border rounded-full pl-10 pr-4 py-2 text-xs focus:outline-none focus:border-primary text-foreground w-full sm:w-56 transition-colors"
               />
             </div>
             
             <select
               value={selectedCity}
               onChange={e => { setSelectedCity(e.target.value); setPage(1) }}
-              className="bg-[#111] border border-white/10 rounded-full px-4 py-2 text-xs focus:outline-none focus:border-primary text-white transition-colors"
+              className="bg-card border border-border rounded-full px-4 py-2 text-xs focus:outline-none focus:border-primary text-foreground transition-colors"
             >
               <option value="">All Locations</option>
               <option value="Kathmandu">Kathmandu</option>
@@ -707,7 +788,7 @@ export default function CommunityPage() {
               {members.map(member => (
                 <div
                   key={member.id}
-                  className="bg-[#111] border border-white/5 hover:border-primary/20 transition-all duration-300 rounded-2xl p-5 flex flex-col justify-between shadow-md group"
+                  className="bg-card border border-border hover:border-primary/20 transition-all duration-300 rounded-2xl p-5 flex flex-col justify-between shadow-md group"
                 >
                   <div>
                     {/* Member header (initials / details) */}
@@ -721,11 +802,11 @@ export default function CommunityPage() {
                         )}
                       </div>
                       <div>
-                        <h3 className="text-white font-bold text-sm leading-snug flex items-center gap-1 group-hover:text-primary transition-colors">
+                        <h3 className="text-foreground font-bold text-sm leading-snug flex items-center gap-1 group-hover:text-primary transition-colors">
                           {member.name}
                         </h3>
-                        <p className="text-gray-500 text-xs flex items-center gap-1 mt-0.5">
-                          <Globe size={11} className="text-gray-600" />
+                        <p className="text-muted text-xs flex items-center gap-1 mt-0.5">
+                          <Globe size={11} className="text-muted" />
                           {member.country}
                         </p>
                       </div>
@@ -734,29 +815,29 @@ export default function CommunityPage() {
                     {/* Member details info */}
                     <div className="space-y-2 mb-4">
                       {member.currentCity && (
-                        <div className="flex items-center gap-1.5 text-xs text-gray-400">
-                          <MapPin size={12} className="text-gray-500" />
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                          <MapPin size={12} className="text-muted" />
                           <span>Currently in: <strong>{member.currentCity}</strong></span>
                         </div>
                       )}
-                      <div className="flex items-center gap-1.5 text-xs text-gray-400">
-                        <Briefcase size={12} className="text-gray-500" />
-                        <span className="bg-white/5 border border-white/10 text-[10px] font-semibold text-gray-300 px-2 py-0.5 rounded uppercase tracking-wider">
+                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <Briefcase size={12} className="text-muted" />
+                        <span className="bg-background border border-border text-[10px] font-semibold text-foreground px-2 py-0.5 rounded uppercase tracking-wider">
                           {member.workType}
                         </span>
                       </div>
                     </div>
 
                     {member.bio && (
-                      <p className="text-gray-400 text-xs line-clamp-3 leading-relaxed mb-4 border-t border-white/5 pt-3">
+                      <p className="text-muted-foreground text-xs line-clamp-3 leading-relaxed mb-4 border-t border-border pt-3">
                         {member.bio}
                       </p>
                     )}
                   </div>
 
                   {/* Social links */}
-                  <div className="flex items-center justify-between border-t border-white/5 pt-3 mt-auto">
-                    <span className="text-[10px] text-gray-600 flex items-center gap-1">
+                  <div className="flex items-center justify-between border-t border-border pt-3 mt-auto">
+                    <span className="text-[10px] text-muted flex items-center gap-1">
                       <Calendar size={10} />
                       Joined {new Date(member.createdAt).toLocaleDateString("en-US", { month: "short", year: "2-digit" })}
                     </span>
@@ -766,7 +847,7 @@ export default function CommunityPage() {
                           href={member.linkedinUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-7 h-7 bg-white/5 hover:bg-[#0077b5] text-gray-400 hover:text-white rounded-full flex items-center justify-center transition-colors"
+                          className="w-7 h-7 bg-background border border-border hover:bg-[#0077b5] text-muted hover:text-white rounded-full flex items-center justify-center transition-colors"
                           title="LinkedIn Profile"
                         >
                           <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
@@ -777,7 +858,7 @@ export default function CommunityPage() {
                           href={member.twitterUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-7 h-7 bg-white/5 hover:bg-[#1da1f2] text-gray-400 hover:text-white rounded-full flex items-center justify-center transition-colors"
+                          className="w-7 h-7 bg-background border border-border hover:bg-[#1da1f2] text-muted hover:text-white rounded-full flex items-center justify-center transition-colors"
                           title="Twitter Profile"
                         >
                           <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
@@ -816,38 +897,38 @@ export default function CommunityPage() {
       </div>
 
       {/* Community Benefits Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 border-t border-white/5 pt-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 border-t border-border pt-16">
         <h2 className="text-2xl font-bold text-center mb-10">
           Why join the Digital Nomads in Nepal community?
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-[#111] border border-white/5 rounded-3xl p-6 hover:translate-y-[-4px] transition-transform duration-300">
+          <div className="bg-card border border-border rounded-3xl p-6 hover:translate-y-[-4px] transition-transform duration-300">
             <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4">
               <Mail size={18} />
             </div>
-            <h3 className="font-bold text-white mb-2">Instant Event & Trek Alerts</h3>
-            <p className="text-gray-400 text-xs leading-relaxed">
+            <h3 className="font-bold text-foreground mb-2">Instant Event & Trek Alerts</h3>
+            <p className="text-muted-foreground text-xs leading-relaxed">
               We send email alerts about spontaneous treks, guided group trips, weekend workshops, and nomad socials directly in Kathmandu and Pokhara.
             </p>
           </div>
 
-          <div className="bg-[#111] border border-white/5 rounded-3xl p-6 hover:translate-y-[-4px] transition-transform duration-300">
+          <div className="bg-card border border-border rounded-3xl p-6 hover:translate-y-[-4px] transition-transform duration-300">
             <div className="w-10 h-10 rounded-xl bg-green-500/10 text-green-400 flex items-center justify-center mb-4">
               <MapPin size={18} />
             </div>
-            <h3 className="font-bold text-white mb-2">Live Workspace Directory</h3>
-            <p className="text-gray-400 text-xs leading-relaxed">
+            <h3 className="font-bold text-foreground mb-2">Live Workspace Directory</h3>
+            <p className="text-muted-foreground text-xs leading-relaxed">
               Check in to coworking spaces with a single click. Find out which workspace has stable power, fast backups, and which nomads are working there today.
             </p>
           </div>
 
-          <div className="bg-[#111] border border-white/5 rounded-3xl p-6 hover:translate-y-[-4px] transition-transform duration-300">
+          <div className="bg-card border border-border rounded-3xl p-6 hover:translate-y-[-4px] transition-transform duration-300">
             <div className="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center mb-4">
               <ShieldCheck size={18} />
             </div>
-            <h3 className="font-bold text-white mb-2">Privacy & Custom Control</h3>
-            <p className="text-gray-400 text-xs leading-relaxed">
+            <h3 className="font-bold text-foreground mb-2">Privacy & Custom Control</h3>
+            <p className="text-muted-foreground text-xs leading-relaxed">
               Decide whether to keep your profile public in the directory or not. Work hub check-ins automatically display only your first name and origin flag.
             </p>
           </div>

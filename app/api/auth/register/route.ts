@@ -13,15 +13,34 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Password must be at least 6 characters." }, { status: 400 })
   }
 
-  const existing = await prisma.user.findUnique({ where: { email } })
-  if (existing) {
+  const existingUser = await prisma.user.findUnique({ where: { email } })
+  if (existingUser) {
     return NextResponse.json({ error: "Email already registered." }, { status: 409 })
   }
 
+  const existingProfile = await prisma.nomadProfile.findUnique({ where: { email } })
+  if (existingProfile) {
+    return NextResponse.json({ error: "Email already registered as a community member." }, { status: 409 })
+  }
+
   const hashedPassword = await bcrypt.hash(password, 12)
-  const user = await prisma.user.create({
-    data: { name, email, password: hashedPassword, role: "NOMAD" },
-    select: { id: true, email: true, name: true, role: true },
+
+  const { user } = await prisma.$transaction(async (tx) => {
+    const user = await tx.user.create({
+      data: { name, email, password: hashedPassword, role: "NOMAD" },
+      select: { id: true, email: true, name: true, role: true },
+    })
+
+    await tx.nomadProfile.create({
+      data: {
+        name,
+        email,
+        country: "Worldwide 🌍",
+        passwordHash: hashedPassword,
+      }
+    })
+
+    return { user }
   })
 
   return NextResponse.json(user, { status: 201 })

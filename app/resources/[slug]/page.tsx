@@ -397,12 +397,12 @@ export default function ResourceSlugPage({ params }: { params: { slug: string } 
           )}
 
           {/* Connect with a local guide bottom banner */}
-          <div className="mt-16 bg-[#111] border border-border rounded-2xl p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg">
+          <div className="mt-16 bg-card border border-border rounded-2xl p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg">
             <div className="text-center md:text-left">
-              <h3 className="text-xl font-black text-white flex items-center justify-center md:justify-start gap-2">
+              <h3 className="text-xl font-black text-foreground flex items-center justify-center md:justify-start gap-2">
                 Need customized expert help? <TrekkingGuideIcon size={18} />
               </h3>
-              <p className="text-gray-400 text-sm mt-1">
+              <p className="text-muted-foreground text-sm mt-1">
                 Book a consultation with our verified local experts for personalized tips.
               </p>
             </div>

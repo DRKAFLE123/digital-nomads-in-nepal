@@ -37,11 +37,11 @@ export default function ResourcesPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#0B0B0B] pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+      <main className="min-h-screen bg-background pt-32 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-black text-white mb-6">Essential Tools for Nepal Nomads</h1>
-            <p className="text-[#A0A0A0] text-lg">Curated resources to make your setup, connectivity, and accommodation seamless.</p>
+            <h1 className="text-4xl md:text-5xl font-black text-foreground mb-6">Essential Tools for Nepal Nomads</h1>
+            <p className="text-muted text-lg">Curated resources to make your setup, connectivity, and accommodation seamless.</p>
           </div>
           
           <AffiliateDisclaimer />
@@ -49,13 +49,13 @@ export default function ResourcesPage() {
           <div className="space-y-16 mt-12">
             {Object.entries(resources).map(([category, items]) => (
               <section key={category}>
-                <h2 className="text-2xl font-bold text-white mb-6 border-b border-[#222222] pb-3 text-[#FFD700]">{category}</h2>
+                <h2 className="text-2xl font-bold mb-6 border-b border-border pb-3 text-primary">{category}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {items.map((item, idx) => (
-                    <div key={idx} className="bg-[#141414] border border-[#222222] p-6 rounded-xl hover:border-[#FFD700] transition-colors flex flex-col">
-                      <h3 className="text-xl font-bold text-white mb-2">{item.name}</h3>
-                      <p className="text-[#A0A0A0] text-sm flex-grow mb-6">{item.desc}</p>
-                      <button className="w-full py-2 bg-[#222222] text-[#A0A0A0] font-medium hover:bg-[#FFD700] hover:text-black transition-colors rounded-md text-sm uppercase tracking-wider">
+                    <div key={idx} className="bg-card border border-border p-6 rounded-xl hover:border-primary transition-colors flex flex-col">
+                      <h3 className="text-xl font-bold text-foreground mb-2">{item.name}</h3>
+                      <p className="text-muted text-sm flex-grow mb-6">{item.desc}</p>
+                      <button className="w-full py-2 bg-background border border-border text-foreground font-medium hover:bg-primary hover:text-black transition-colors rounded-md text-sm uppercase tracking-wider">
                         Get Deal
                       </button>
                     </div>
