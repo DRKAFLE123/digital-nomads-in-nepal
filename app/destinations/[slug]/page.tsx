@@ -60,6 +60,28 @@ const FACTS: Record<string, {
     pros: ["Stunning lakeside living with Annapurna range views", "Fresh clean air and paragliding hotspots", "Perfect basecamp for weekend Himalayan treks", "Laid-back tourist friendly vibe & nightlife"],
     cons: ["Heavy monsoon rains (June - August)", "Fewer formal coworking hubs than Kathmandu"]
   },
+  lalitpur: {
+    score: "4.4",
+    cost: "$680 / month",
+    speed: "100 - 250 Mbps (Fiber)",
+    safety: "Very High (Friendly communities)",
+    power: "Excellent (Power backups standard)",
+    sim: "Ncell & NTC 4G (Very Strong)",
+    coworking: ["Work Around (Lalitpur)", "Impact Hub (Sanepa)", "The Hub Jhamsikhel"],
+    pros: ["Exquisite artisan heritage and Patan Durbar Square", "Walkable, leafy expat neighborhoods (Jhamsikhel & Sanepa)", "Abundant design-forward cafes with stable internet", "Active international community & events"],
+    cons: ["Slightly higher rental cost in hot areas", "Traffic congestion during rush hours"]
+  },
+  chitwan: {
+    score: "3.8",
+    cost: "$550 / month",
+    speed: "30 - 80 Mbps (Fiber)",
+    safety: "High (Peaceful tourist areas)",
+    power: "Good (Resorts have backup generators)",
+    sim: "Ncell & NTC (Decent 4G in Sauraha)",
+    coworking: ["Riverside resorts", "Local cafes in Sauraha"],
+    pros: ["Stunning subtropical jungle environment and river views", "Incredible wildlife safaris (rhinos, elephants, crocodiles)", "Warm and sunny winter climate", "Lower cost of living"],
+    cons: ["Hot and humid summer/monsoon months", "Few dedicated coworking spaces", "Mosquitoes and insects"]
+  },
   bandipur: {
     score: "3.9",
     cost: "$500 / month",
@@ -70,6 +92,39 @@ const FACTS: Record<string, {
     coworking: ["Local cafes (Newa Town Cafe)", "Homestays with dedicated workspaces"],
     pros: ["No vehicle noise (fully pedestrianized stone streets)", "Exquisite traditional Newari architecture", "Tranquil environment for deep focus", "Spectacular mountain panorama vistas"],
     cons: ["No formal coworking spaces", "Limited choice of cafes and restaurants"]
+  },
+  manang: {
+    score: "3.7",
+    cost: "$450 / month",
+    speed: "15 - 50 Mbps (Local Fiber / Satellite / LTE)",
+    safety: "Very High (Kind mountain community)",
+    power: "Fair (Solar power & backup batteries standard)",
+    sim: "NTC (Strong 4G in town), Ncell (Limited)",
+    coworking: ["Local Teahouse workspaces", "ACAP Information Center"],
+    pros: ["Jaw-dropping vistas of Annapurna and Gangapurna peaks", "Perfect acclimatization base for high-altitude hikers", "Tranquil Buddhist monasteries and heritage", "Pure, unpolluted Himalayan alpine air"],
+    cons: ["Risk of altitude sickness (AMS) if ascending too fast", "Cold winter temperatures and occasional snow blockages", "No formal coworking spaces"]
+  },
+  mustang: {
+    score: "4.0",
+    cost: "$520 / month",
+    speed: "30 - 80 Mbps (Fiber)",
+    safety: "Very High (Peaceful, spiritual atmosphere)",
+    power: "Good (Hydropower grid, very reliable)",
+    sim: "Ncell & NTC (Decent 4G in Jomsom and Marpha)",
+    coworking: ["Marpha local workspace cafes", "Jomsom Mountain Lodges"],
+    pros: ["Spectacular desert-like Himalayan landscapes and wind-carved cliffs", "Rich ancient Tibetan culture and walled city of Lo Manthang", "Famed apples, local apple brandy, and traditional stone houses", "Unique mountain biking and hiking trails"],
+    cons: ["High wind speeds in the afternoon", "Strict travel permits required for Upper Mustang area"]
+  },
+  khaptad: {
+    score: "3.5",
+    cost: "$380 / month",
+    speed: "10 - 30 Mbps (Mobile 4G/3G)",
+    safety: "Very High (Extremely peaceful forest sanctuary)",
+    power: "Basic (Solar and portable power banks required)",
+    sim: "NTC (Decent 4G/3G signal in meadows), Ncell (Spotty)",
+    coworking: ["Khaptad Headquarters lodging", "Nature tents with mobile hotspots"],
+    pros: ["Absolute peace, untouched natural beauty, and forest bathing", "Pristine rolling meadows, wildflower blooms, and bird watching", "Rich spiritual heritage and historical temple shrines", "Completely uncrowded and off the beaten track"],
+    cons: ["No fiber internet or formal cafes", "Requires self-sufficiency and camping gear", "Long road travel from major airports"]
   }
 }
 

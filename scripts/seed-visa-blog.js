@@ -77,7 +77,7 @@ async function main() {
     readTime: "8 min read",
     affiliates: false,
     featured: true,
-    author: "Antigravity",
+    author: "DR kafle",
     published: true,
   }
 

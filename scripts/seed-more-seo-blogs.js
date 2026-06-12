@@ -12,7 +12,7 @@ const newSeoPosts = [
     readTime: "8 min read",
     affiliates: false,
     featured: true,
-    author: "Antigravity",
+    author: "DR kafle",
     published: true,
     content: `Nepal is rapidly emerging as a premier destination for location-independent professionals. If you are searching for **digital nomads in Nepal**, you will find a growing, passionate ecosystem of remote workers choosing Kathmandu, Pokhara, and hillside retreats like Bandipur as their workspace. 
 
@@ -76,7 +76,7 @@ To ensure your workday runs without interruption, we recommend:
     readTime: "7 min read",
     affiliates: false,
     featured: false,
-    author: "Antigravity",
+    author: "DR kafle",
     published: true,
     content: `One of the ultimate dreams for **nomads nepal** is the ability to work in the morning and hike through the towering peaks of the Himalayas in the afternoon. But is it realistic to work remotely while trekking in Nepal? 
 
@@ -123,7 +123,7 @@ Working from a remote tea house at 4,000 meters requires some extra preparation:
     readTime: "6 min read",
     affiliates: false,
     featured: false,
-    author: "Antigravity",
+    author: "DR kafle",
     published: true,
     content: `A common worry for remote workers moving to a new country is isolation. Fortunately, finding a community of **digital nomads in Nepal** is easier than ever. The local nomad scene is highly collaborative, welcoming, and centered around coworking spaces, weekly meetups, and local cafes.
 

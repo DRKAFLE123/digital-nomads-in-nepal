@@ -31,7 +31,7 @@ export default async function DestinationsPage() {
       name: "Kathmandu",
       slug: "kathmandu",
       description: "The bustling cultural, historical, and economic capital hub of Nepal. Offering the fastest fiber internet, coworking spaces, and rich heritage sites.",
-      image: "/nepal-blog-hero-banner.png",
+      image: "/images/destinations/kathmandu.png",
       tags: {
         score: "4.2",
         cost: "$700 / month",
@@ -44,7 +44,7 @@ export default async function DestinationsPage() {
       name: "Pokhara",
       slug: "pokhara",
       description: "The lakeside remote work paradise of Nepal. Safe, quiet, and surrounded by the magnificent Annapurna mountain range. Perfect for outdoor-loving remote workers.",
-      image: "/hero-bg.png",
+      image: "/images/destinations/pokhara.png",
       tags: {
         score: "4.6",
         cost: "$650 / month",
@@ -53,15 +53,80 @@ export default async function DestinationsPage() {
       }
     },
     {
+      id: "lalitpur",
+      name: "Lalitpur",
+      slug: "lalitpur",
+      description: "Artisan heritage meets modern expatriate cafes. Famed for historic Patan Durbar Square, walkable neighborhoods like Jhamsikhel, and design-forward coworking spaces.",
+      image: "/images/destinations/lalitpur.png",
+      tags: {
+        score: "4.4",
+        cost: "$680 / month",
+        speed: "100 - 250 Mbps (Fiber)",
+        safety: "Very High"
+      }
+    },
+    {
+      id: "chitwan",
+      name: "Chitwan",
+      slug: "chitwan",
+      description: "Jungle safaris, warm sub-tropical living, and wildlife wonders. The ideal retreat for digital nomads seeking warm weather and outdoor safaris.",
+      image: "/images/destinations/chitwan.png",
+      tags: {
+        score: "3.8",
+        cost: "$550 / month",
+        speed: "30 - 80 Mbps (Fiber)",
+        safety: "High"
+      }
+    },
+    {
       id: "bandipur",
       name: "Bandipur",
       slug: "bandipur",
       description: "A beautifully preserved hilltop town in central Nepal. A vehicle-free Newari mountain retreat offering tranquility, historic architecture, and mountain views.",
-      image: "/logo.png",
+      image: "/images/destinations/bandipur.png",
       tags: {
         score: "3.9",
         cost: "$500 / month",
         speed: "40 - 100 Mbps",
+        safety: "Very High"
+      }
+    },
+    {
+      id: "manang",
+      name: "Manang",
+      slug: "manang",
+      description: "Extreme high-altitude adventure and Buddhist culture. Surrounded by spectacular peaks and alpine glacial lakes, perfect for trekking remote workers.",
+      image: "/images/destinations/manang.png",
+      tags: {
+        score: "3.7",
+        cost: "$450 / month",
+        speed: "15 - 50 Mbps",
+        safety: "Very High"
+      }
+    },
+    {
+      id: "mustang",
+      name: "Mustang",
+      slug: "mustang",
+      description: "Barren landscapes, wind-swept gorges, and ancient caves. Experience remote work at the edge of Tibet in Jomsom, Marpha, or Kagbeni.",
+      image: "/images/destinations/mustang.png",
+      tags: {
+        score: "4.0",
+        cost: "$520 / month",
+        speed: "30 - 80 Mbps",
+        safety: "Very High"
+      }
+    },
+    {
+      id: "khaptad",
+      name: "Khaptad",
+      slug: "khaptad",
+      description: "Solitude, rolling meadows, and spiritual forest trails. An off-grid remote workspace in Far-Western Nepal for deep writing and digital detox work.",
+      image: "/images/destinations/khaptad.png",
+      tags: {
+        score: "3.5",
+        cost: "$380 / month",
+        speed: "10 - 30 Mbps",
         safety: "Very High"
       }
     }

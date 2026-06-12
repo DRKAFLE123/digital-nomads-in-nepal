@@ -12,7 +12,7 @@ const posts = [
     readTime: "6 min read",
     affiliates: false,
     featured: true,
-    author: "Antigravity",
+    author: "DR kafle",
     published: true,
     content: `For sports-loving remote workers, there is nothing quite like the thrill of balancing a productive workday with the excitement of the FIFA World Cup. If you are living as a digital nomad in Nepal during the next tournament, you might be wondering how to catch the matches live without interrupting your client meetings or suffering from slow buffering.
 
@@ -76,7 +76,7 @@ Whether you choose to cheer alongside a lively crowd in Thamel or stream the mat
     readTime: "5 min read",
     affiliates: false,
     featured: false,
-    author: "Antigravity",
+    author: "DR kafle",
     published: true,
     content: `Finding a workspace with stable internet, comfortable seating, and excellent coffee is a top priority for any remote worker. In Kathmandu, the cafe culture is booming, and many establishments have designed their spaces specifically to welcome remote professionals and digital nomads.
 
@@ -139,7 +139,7 @@ Part bookstore, part bakery, and part cafe, Bodhi is a favorite for students, wr
     readTime: "7 min read",
     affiliates: false,
     featured: false,
-    author: "Antigravity",
+    author: "DR kafle",
     published: true,
     content: `For digital nomads looking to maximize their runway or enjoy a high-quality lifestyle at an affordable rate, Nepal is one of the best-kept secrets in South Asia. With a monthly cost of living that is significantly lower than hubs like Bali or Chiang Mai, you can live comfortably while enjoying world-class mountain treks and rich cultural heritage.
 
@@ -204,7 +204,7 @@ Living in Nepal on a budget of **$700 - $900/month** allows a digital nomad to e
     readTime: "6 min read",
     affiliates: false,
     featured: false,
-    author: "Antigravity",
+    author: "DR kafle",
     published: true,
     content: `While Kathmandu offers historical wonders and bustling city life, Pokhara is the crown jewel for digital nomads seeking a slower, more peaceful lifestyle. Situated next to the tranquil Phewa Lake and under the shadow of the spectacular Annapurna mountain range, Pokhara is fast becoming the preferred home base for remote workers in Nepal.
 
@@ -251,7 +251,7 @@ If you want the infrastructure of a modern workspace but the peace and quiet of 
     readTime: "5 min read",
     affiliates: false,
     featured: false,
-    author: "Antigravity",
+    author: "DR kafle",
     published: true,
     content: `Living and working in Nepal is an adventure of a lifetime. However, because of the unique geography, high altitudes, and developing infrastructure, remote workers need to pay close attention to their health and safety. 
 
