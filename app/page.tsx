@@ -83,10 +83,10 @@ export default async function Home() {
           <div className="max-w-7xl mx-auto">
             <h2 className="text-3xl md:text-5xl font-black text-foreground px-2 border-l-4 border-primary mb-12 text-center mx-auto inline-block">Top Nomad Destinations</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <DestinationCard name="Kathmandu" description="The bustling cultural and historical heart of Nepal." image="" slug="kathmandu" />
-              <DestinationCard name="Pokhara" description="Lakeside calm and gateway to the Annapurna circuit." image="" slug="pokhara" />
-              <DestinationCard name="Lalitpur" description="Artisan heritage meets modern expatriate cafes." image="" slug="lalitpur" />
-              <DestinationCard name="Chitwan" description="Jungle safaris and warmer sub-tropical living." image="" slug="chitwan" />
+              <DestinationCard name="Kathmandu" description="The bustling cultural and historical heart of Nepal." image="https://images.unsplash.com/photo-1544735716-392fe2449fee?auto=format&fit=crop&q=80" slug="kathmandu" />
+              <DestinationCard name="Pokhara" description="Lakeside calm and gateway to the Annapurna circuit." image="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80" slug="pokhara" />
+              <DestinationCard name="Lalitpur" description="Artisan heritage meets modern expatriate cafes." image="https://images.unsplash.com/photo-1605649487212-47bdab064df7?auto=format&fit=crop&q=80" slug="lalitpur" />
+              <DestinationCard name="Chitwan" description="Jungle safaris and warmer sub-tropical living." image="https://images.unsplash.com/photo-1534567153574-2b12153a87f0?auto=format&fit=crop&q=80" slug="chitwan" />
             </div>
           </div>
         </section>
