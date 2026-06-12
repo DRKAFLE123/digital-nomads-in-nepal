@@ -22,6 +22,7 @@ export default function Navbar() {
   const { data: session } = useSession()
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [expandedItem, setExpandedItem] = useState<string | null>(null)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -311,85 +312,137 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      <div className={`md:hidden fixed inset-x-0 top-[70px] bg-[#0B0B0B]/98 backdrop-blur-md border-b border-white/10 shadow-2xl transition-all duration-300 transform ${
-        mobileMenuOpen ? "opacity-100 translate-y-0 visible" : "opacity-0 -translate-y-4 invisible"
+      {/* Mobile Menu Backdrop */}
+      {mobileMenuOpen && (
+        <div 
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden" 
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Mobile Menu Drawer */}
+      <div className={`md:hidden fixed inset-y-0 right-0 z-50 w-full sm:max-w-sm bg-background border-l border-border shadow-2xl p-6 flex flex-col transition-transform duration-300 transform ${
+        mobileMenuOpen ? "translate-x-0" : "translate-x-full"
       }`}>
-        <div className="px-4 pt-3 pb-8 space-y-1 overflow-y-auto max-h-[calc(100vh-70px)]">
-          {navItems.map((item) => (
-            <div key={item.name} className="py-0.5">
-              <Link 
-                href={item.href} 
-                onClick={() => setMobileMenuOpen(false)}
-                className="block px-3 py-3 text-base font-bold text-white hover:text-primary transition-colors border-b border-white/5"
-              >
-                {item.name}
-              </Link>
-              {item.dropdown && (
-                <div className="mt-1 pl-4 space-y-0.5 border-l-2 border-white/10 ml-3">
-                  {item.dropdown.map((sub, idx) => (
-                    <Link 
-                      key={idx} 
-                      href={sub.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="block px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors"
-                    >
-                      <div className="text-gray-200 text-sm font-semibold flex items-center gap-1.5">
-                        {sub.name}
-                        {sub.hasIcon && <TrekkingGuideIcon size={14} className="translate-y-[-1px]" />}
-                      </div>
-                      <div className="text-gray-500 text-[11px] leading-tight">{sub.desc}</div>
-                    </Link>
-                  ))}
-                </div>
-              )}
+        {/* Header */}
+        <div className="flex items-center justify-between pb-4 border-b border-border shrink-0">
+          <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2">
+            <div className="relative w-9 h-9">
+              <Image src="/nomadlogo.png" alt="Logo" fill className="object-contain" />
             </div>
-          ))}
-          <div className="pt-5 px-1 space-y-3">
-            {session ? (
-              <div className="space-y-2">
-                <div className="text-center text-sm font-bold text-gray-300">
-                  Logged in as <span className="text-primary">{session.user?.name}</span>
-                </div>
-                <button
-                  onClick={() => {
-                    signOut()
-                    setMobileMenuOpen(false)
-                  }}
-                  className="flex items-center justify-center gap-2 w-full text-center px-6 py-3 border border-red-500/20 text-red-400 font-bold rounded-2xl transition-all hover:bg-red-500/10 active:scale-[0.98] text-xs"
-                >
-                  <LogOut size={16} />
-                  Sign Out
-                </button>
+            <span className="font-extrabold text-base tracking-tight text-foreground">
+              Digital Nomads <span className="text-primary">Nepal</span>
+            </span>
+          </Link>
+          <button 
+            onClick={() => setMobileMenuOpen(false)}
+            className="p-1.5 rounded-lg hover:bg-accent hover:text-accent-foreground text-foreground transition-colors"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        {/* Navigation list (scrollable) */}
+        <div className="flex-1 overflow-y-auto py-6 space-y-3">
+          {navItems.map((item) => {
+            const hasDropdown = !!item.dropdown;
+            const isExpanded = expandedItem === item.name;
+
+            return (
+              <div key={item.name} className="border-b border-border/40 pb-2">
+                {hasDropdown ? (
+                  <button
+                    onClick={() => setExpandedItem(isExpanded ? null : item.name)}
+                    className="flex items-center justify-between w-full text-left py-2 text-sm font-bold text-foreground hover:text-primary transition-colors"
+                  >
+                    <span>{item.name}</span>
+                    <ChevronDown 
+                      size={16} 
+                      className={`text-muted-foreground transition-transform duration-200 ${
+                        isExpanded ? "rotate-180 text-primary" : ""
+                      }`} 
+                    />
+                  </button>
+                ) : (
+                  <Link
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block py-2 text-sm font-bold text-foreground hover:text-primary transition-colors"
+                  >
+                    {item.name}
+                  </Link>
+                )}
+
+                {/* Dropdown items */}
+                {hasDropdown && isExpanded && (
+                  <div className="mt-2 pl-4 space-y-1 border-l-2 border-primary/30 ml-2 animate-in fade-in slide-in-from-top-1 duration-250">
+                    {item.dropdown!.map((sub, idx) => (
+                      <Link 
+                        key={idx} 
+                        href={sub.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block py-2 px-3 rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors"
+                      >
+                        <div className="text-foreground text-xs font-semibold flex items-center gap-1.5">
+                          {sub.name}
+                          {sub.hasIcon && <TrekkingGuideIcon size={14} className="translate-y-[-1px]" />}
+                        </div>
+                        <div className="text-muted-foreground text-[10px] leading-tight mt-0.5">{sub.desc}</div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </div>
-            ) : (
-              <div className="grid grid-cols-2 gap-2">
-                <Link 
-                  href="/auth/signin" 
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center gap-2 text-center px-4 py-3 border border-white/20 text-white font-bold rounded-2xl transition-all hover:bg-white/5 active:scale-[0.98] text-xs whitespace-nowrap"
-                >
-                  Sign In
-                </Link>
-                <Link 
-                  href="/community" 
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center gap-2 text-center px-4 py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-2xl border border-white/10 transition-all active:scale-[0.98] text-xs whitespace-nowrap"
-                >
-                  <Users size={14} />
-                  Join Community
-                </Link>
+            );
+          })}
+        </div>
+
+        {/* Footer actions */}
+        <div className="border-t border-border pt-6 space-y-4 shrink-0 bg-background">
+          {session ? (
+            <div className="space-y-2">
+              <div className="text-center text-xs font-bold text-muted-foreground">
+                Logged in as <span className="text-primary font-bold">{session.user?.name}</span>
               </div>
-            )}
-            <Link 
-              href="/resources/coworking" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-center gap-2 w-full text-center px-6 py-3.5 bg-primary text-black font-black rounded-2xl shadow-xl shadow-primary/20 hover:bg-yellow-400 transition-all active:scale-[0.98] text-sm"
-            >
-              <CalendarCheck size={16} />
-              Book Now
-            </Link>
-          </div>
+              <button
+                onClick={() => {
+                  signOut()
+                  setMobileMenuOpen(false)
+                }}
+                className="flex items-center justify-center gap-2 w-full text-center px-4 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 font-bold rounded-xl text-xs transition-all active:scale-[0.98]"
+              >
+                <LogOut size={14} />
+                Sign Out
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-2">
+              <Link 
+                href="/auth/signin" 
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-center text-center px-3 py-2.5 border border-border text-foreground hover:bg-accent font-bold rounded-xl text-xs transition-all active:scale-[0.98] whitespace-nowrap"
+              >
+                Sign In
+              </Link>
+              <Link 
+                href="/community" 
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-center gap-1 text-center px-3 py-2.5 bg-primary text-black font-bold rounded-xl border border-primary hover:bg-yellow-400 transition-all active:scale-[0.98] text-xs whitespace-nowrap"
+              >
+                <Users size={13} />
+                Join Community
+              </Link>
+            </div>
+          )}
+          
+          <Link 
+            href="/resources/coworking" 
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex items-center justify-center gap-2 w-full text-center px-4 py-3 bg-primary hover:bg-yellow-400 text-black font-extrabold rounded-xl transition-all active:scale-[0.98] text-xs shadow-md shadow-primary/15"
+          >
+            <CalendarCheck size={14} />
+            Book Workspace Now
+          </Link>
         </div>
       </div>
     </nav>
