@@ -44,6 +44,7 @@ export default function ProfileSettingsPage() {
   const [saving, setSaving] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [message, setMessage] = useState({ text: "", type: "" }) // type: success | error
+  const [showPasswordFields, setShowPasswordFields] = useState(false)
 
   // Redirect if unauthenticated
   useEffect(() => {
@@ -182,6 +183,7 @@ export default function ProfileSettingsPage() {
       setMessage({ text: "Profile updated successfully!", type: "success" })
       // Clear password fields
       setForm(prev => ({ ...prev, password: "", confirmPassword: "" }))
+      setShowPasswordFields(false)
 
       // Refresh window session or trigger dynamic navbar updates
       setTimeout(() => {
@@ -420,31 +422,55 @@ export default function ProfileSettingsPage() {
                 Change Password
               </h2>
               <p className="text-muted text-xs leading-relaxed">
-                Leave these fields blank if you do not wish to change your password.
+                Configure a new password for your community account.
               </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-xs font-semibold text-muted mb-1.5">New Password</label>
-                  <input
-                    type="password"
-                    placeholder="Min. 6 characters"
-                    value={form.password}
-                    onChange={e => setForm({ ...form, password: e.target.value })}
-                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
-                  />
+              {showPasswordFields ? (
+                <div className="space-y-4 animate-in fade-in slide-in-from-top-1 duration-200">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-xs font-semibold text-muted mb-1.5">New Password</label>
+                      <input
+                        type="password"
+                        placeholder="Min. 6 characters"
+                        value={form.password}
+                        onChange={e => setForm({ ...form, password: e.target.value })}
+                        className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-muted mb-1.5">Confirm New Password</label>
+                      <input
+                        type="password"
+                        placeholder="Confirm new password"
+                        value={form.confirmPassword}
+                        onChange={e => setForm({ ...form, confirmPassword: e.target.value })}
+                        className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex justify-end">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowPasswordFields(false)
+                        setForm(prev => ({ ...prev, password: "", confirmPassword: "" }))
+                      }}
+                      className="text-xs text-muted hover:text-foreground font-semibold transition-colors"
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-xs font-semibold text-muted mb-1.5">Confirm New Password</label>
-                  <input
-                    type="password"
-                    placeholder="Confirm new password"
-                    value={form.confirmPassword}
-                    onChange={e => setForm({ ...form, confirmPassword: e.target.value })}
-                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
-                  />
-                </div>
-              </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setShowPasswordFields(true)}
+                  className="px-4 py-2 bg-muted hover:bg-muted/80 border border-border text-foreground text-xs font-bold rounded-xl transition-all active:scale-[0.98]"
+                >
+                  Change Account Password
+                </button>
+              )}
             </div>
 
             {/* 5. Notification Preferences */}
