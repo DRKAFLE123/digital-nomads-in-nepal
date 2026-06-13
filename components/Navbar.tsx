@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Menu, X, ChevronDown, Users, CalendarCheck, LogOut } from "lucide-react"
+import { Menu, X, ChevronDown, Users, CalendarCheck, LogOut, User } from "lucide-react"
 import { ThemeToggle } from "./ThemeToggle"
 import Image from "next/image"
 import TrekkingGuideIcon from "./TrekkingGuideIcon"
@@ -143,32 +143,19 @@ export default function Navbar() {
 
           {/* Right side actions */}
           <div className="hidden md:flex items-center gap-2 flex-shrink-0">
-            <ThemeToggle />
-
             {/* Community actions button/dropdown */}
             {session ? (
-              <div className="relative group/community flex items-center gap-3">
-                <span className={`text-xs font-semibold ${isScrolled ? "text-gray-300" : "text-white/80"}`}>
-                  Hi, {session.user?.name?.split(" ")[0]}
-                </span>
-                <Link
-                  href="/community"
-                  className={`text-xs font-black uppercase tracking-wider px-5 py-2.5 border rounded-full transition-all flex items-center justify-center gap-1.5 whitespace-nowrap ${
-                    isScrolled
-                      ? "border-primary text-primary hover:bg-primary hover:text-black shadow-lg shadow-primary/10"
-                      : "border-white/45 text-white hover:border-primary hover:text-primary"
-                  }`}
-                >
-                  <Users size={14} className="translate-y-[-0.5px]" />
-                  <span>Explore Community</span>
-                </Link>
-                <button
-                  onClick={() => signOut()}
-                  className="text-xs text-red-400 hover:underline px-2 py-1"
-                >
-                  Sign Out
-                </button>
-              </div>
+              <Link
+                href="/community"
+                className={`text-xs font-black uppercase tracking-wider px-5 py-2.5 border rounded-full transition-all flex items-center justify-center gap-1.5 whitespace-nowrap ${
+                  isScrolled
+                    ? "border-primary text-primary hover:bg-primary hover:text-black shadow-lg shadow-primary/10"
+                    : "border-white/45 text-white hover:border-primary hover:text-primary"
+                }`}
+              >
+                <Users size={14} className="translate-y-[-0.5px]" />
+                <span>Explore</span>
+              </Link>
             ) : (
               <div className="flex items-center gap-2">
                 <Link
@@ -303,6 +290,48 @@ export default function Navbar() {
                 </div>
               </div>
             </div>
+
+            {/* Profile Avatar Dropdown */}
+            {session && (
+              <div className="relative group/avatar flex items-center ml-1.5">
+                <button className="w-9 h-9 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-primary font-bold text-sm hover:border-primary transition-all relative overflow-hidden group-hover/avatar:border-primary">
+                  {session.user?.name?.[0]?.toUpperCase() || <User size={15} />}
+                </button>
+                
+                {/* Dropdown Card */}
+                <div className="absolute top-full right-0 mt-3.5 w-60 opacity-0 invisible group-hover/avatar:opacity-100 group-hover/avatar:visible transition-all duration-200 origin-top-right scale-95 group-hover/avatar:scale-100 pointer-events-none z-50">
+                  {/* Arrow pointer */}
+                  <div className="absolute -top-1.5 right-3 w-3 h-3 bg-[#1a1a1a] border-l border-t border-white/10 rotate-45" />
+                  
+                  <div className="bg-[#1a1a1a] border border-white/10 rounded-2xl shadow-2xl shadow-black/85 overflow-hidden p-4 text-left pointer-events-auto space-y-3.5">
+                    {/* Header */}
+                    <div className="border-b border-white/5 pb-3">
+                      <p className="text-white font-extrabold text-sm truncate leading-none mb-1">
+                        {session.user?.name}
+                      </p>
+                      <p className="text-gray-500 text-xs truncate leading-none">
+                        {session.user?.email}
+                      </p>
+                    </div>
+                    
+                    {/* Theme Toggle */}
+                    <div className="flex items-center justify-between border-b border-white/5 pb-3">
+                      <span className="text-gray-400 text-xs font-semibold">Theme</span>
+                      <ThemeToggle />
+                    </div>
+                    
+                    {/* Action */}
+                    <button
+                      onClick={() => signOut()}
+                      className="flex items-center justify-center gap-2 w-full bg-red-500/10 hover:bg-red-500/20 text-red-400 font-extrabold py-2.5 rounded-xl text-xs transition-all active:scale-[0.98] border border-red-500/10 hover:border-red-500/20"
+                    >
+                      <LogOut size={13} />
+                      Sign Out
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
 
