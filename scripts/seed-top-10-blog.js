@@ -130,7 +130,7 @@ async function main() {
     slug: "top-10-destinations-nepal-remote-workers",
     excerpt: "From lakeside cafes in Pokhara to ancient temples in Patan and high-altitude alpine teahouses, discover the best places in Nepal to live and work remotely in 2026.",
     content: top10Content,
-    coverImage: "/images/destinations/pokhara.png", // Using Pokhara image as cover image
+    coverImage: "/blog-top-10-destinations.png",
     category: "Destinations",
     tags: ["destinations", "living-in-nepal", "remote-work", "travel"],
     readTime: "10 min read",
