@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { WorkType } from "@prisma/client"
+import bcrypt from "bcryptjs"
 
 // GET /api/community/profile?email=...
 export async function GET(req: Request) {
@@ -34,6 +35,8 @@ export async function PUT(req: Request) {
     const {
       email,
       name,
+      avatarUrl,
+      password,
       country,
       currentCity,
       workType,
@@ -55,18 +58,40 @@ export async function PUT(req: Request) {
       return NextResponse.json({ error: "Profile not found" }, { status: 404 })
     }
 
-    const updated = await prisma.nomadProfile.update({
-      where: { email },
-      data: {
-        name: name !== undefined ? name : undefined,
-        country: country !== undefined ? country : undefined,
-        currentCity: currentCity !== undefined ? currentCity : undefined,
-        workType: workType !== undefined ? (workType as WorkType) : undefined,
-        bio: bio !== undefined ? bio : undefined,
-        linkedinUrl: linkedinUrl !== undefined ? linkedinUrl : undefined,
-        twitterUrl: twitterUrl !== undefined ? twitterUrl : undefined,
-        emailAlerts: emailAlerts !== undefined ? !!emailAlerts : undefined
+    let hashedPassword = undefined
+    if (password) {
+      if (password.length < 6) {
+        return NextResponse.json({ error: "Password must be at least 6 characters" }, { status: 400 })
       }
+      hashedPassword = await bcrypt.hash(password, 12)
+    }
+
+    // Run updates in a transaction to keep User and NomadProfile synced
+    const updated = await prisma.$transaction(async (tx) => {
+      if (hashedPassword) {
+        // Update credentials user password
+        await tx.user.updateMany({
+          where: { email },
+          data: { password: hashedPassword }
+        })
+      }
+
+      const profile = await tx.nomadProfile.update({
+        where: { email },
+        data: {
+          name: name !== undefined ? name : undefined,
+          avatarUrl: avatarUrl !== undefined ? avatarUrl : undefined,
+          passwordHash: hashedPassword !== undefined ? hashedPassword : undefined,
+          country: country !== undefined ? country : undefined,
+          currentCity: currentCity !== undefined ? currentCity : undefined,
+          workType: workType !== undefined ? (workType as WorkType) : undefined,
+          bio: bio !== undefined ? bio : undefined,
+          linkedinUrl: linkedinUrl !== undefined ? linkedinUrl : undefined,
+          twitterUrl: twitterUrl !== undefined ? twitterUrl : undefined,
+          emailAlerts: emailAlerts !== undefined ? !!emailAlerts : undefined
+        }
+      })
+      return profile
     })
 
     // Sync newsletter status in Subscriber model if emailAlerts flag changed

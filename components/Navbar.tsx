@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Menu, X, ChevronDown, Users, CalendarCheck, LogOut, User } from "lucide-react"
+import { Menu, X, ChevronDown, Users, CalendarCheck, LogOut, User, Settings } from "lucide-react"
 import { ThemeToggle } from "./ThemeToggle"
 import Image from "next/image"
 import TrekkingGuideIcon from "./TrekkingGuideIcon"
@@ -23,6 +23,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [expandedItem, setExpandedItem] = useState<string | null>(null)
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,6 +32,21 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  useEffect(() => {
+    if (session?.user?.email) {
+      fetch(`/api/community/profile?email=${encodeURIComponent(session.user.email)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.profile?.avatarUrl) {
+            setAvatarUrl(data.profile.avatarUrl)
+          }
+        })
+        .catch(err => console.error("Error fetching navbar avatar:", err))
+    } else {
+      setAvatarUrl(null)
+    }
+  }, [session])
 
   const navItems: NavItem[] = [
     { 
@@ -295,7 +311,11 @@ export default function Navbar() {
             {session && (
               <div className="relative group/avatar flex items-center ml-1.5">
                 <button className="w-9 h-9 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-primary font-bold text-sm hover:border-primary transition-all relative overflow-hidden group-hover/avatar:border-primary">
-                  {session.user?.name?.[0]?.toUpperCase() || <User size={15} />}
+                  {avatarUrl ? (
+                    <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                  ) : (
+                    session.user?.name?.[0]?.toUpperCase() || <User size={15} />
+                  )}
                 </button>
                 
                 {/* Dropdown Card */}
@@ -312,6 +332,17 @@ export default function Navbar() {
                       <p className="text-gray-500 text-xs truncate leading-none">
                         {session.user?.email}
                       </p>
+                    </div>
+
+                    {/* Settings Link */}
+                    <div className="border-b border-white/5 pb-3">
+                      <Link
+                        href="/community/settings"
+                        className="flex items-center gap-2 w-full hover:bg-white/5 text-gray-300 hover:text-white px-3 py-2 rounded-xl text-xs font-bold transition-all"
+                      >
+                        <Settings size={14} />
+                        Profile Settings
+                      </Link>
                     </div>
                     
                     {/* Theme Toggle */}
