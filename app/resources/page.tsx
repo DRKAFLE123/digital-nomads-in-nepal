@@ -1,8 +1,9 @@
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import AffiliateDisclaimer from "@/components/AffiliateDisclaimer"
+import Link from "next/link"
 
-const resources = {
+const resources: Record<string, { name: string; desc: string; link?: string }[]> = {
   "SIM Cards": [
     { name: "Ncell", desc: "Best overall coverage and 4G speeds for nomads." },
     { name: "NTC", desc: "Government provider, better in deep remote mountain areas." },
@@ -25,6 +26,10 @@ const resources = {
   "Coworking": [
     { name: "Work Around", desc: "Kathmandu's premier modern coworking space." },
     { name: "Bikalpa Art Center", desc: "Community-driven hub in Pulchowk." },
+  ],
+  "Platform Guides": [
+    { name: "List Your Workspace", desc: "Are you a workspace or hub owner? Read our guide on how to register and list your space.", link: "/blog/how-to-list-coworking-space-nepal" },
+    { name: "Register as a Local Guide", desc: "Licensed guides and adventure experts, learn how to build your profile here.", link: "/blog/how-to-register-local-guide-nepal" }
   ]
 }
 
@@ -55,9 +60,18 @@ export default function ResourcesPage() {
                     <div key={idx} className="bg-card border border-border p-6 rounded-xl hover:border-primary transition-colors flex flex-col">
                       <h3 className="text-xl font-bold text-foreground mb-2">{item.name}</h3>
                       <p className="text-muted text-sm flex-grow mb-6">{item.desc}</p>
-                      <button className="w-full py-2 bg-background border border-border text-foreground font-medium hover:bg-primary hover:text-black transition-colors rounded-md text-sm uppercase tracking-wider">
-                        Get Deal
-                      </button>
+                      {item.link ? (
+                        <Link
+                          href={item.link}
+                          className="w-full py-2 bg-background border border-border text-foreground font-medium hover:bg-primary hover:text-black transition-colors rounded-md text-sm uppercase tracking-wider text-center block"
+                        >
+                          Read Guide
+                        </Link>
+                      ) : (
+                        <button className="w-full py-2 bg-background border border-border text-foreground font-medium hover:bg-primary hover:text-black transition-colors rounded-md text-sm uppercase tracking-wider">
+                          Get Deal
+                        </button>
+                      )}
                     </div>
                   ))}
                 </div>
