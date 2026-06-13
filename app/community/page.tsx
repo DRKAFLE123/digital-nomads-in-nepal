@@ -536,229 +536,310 @@ export default function CommunityPage() {
       {/* Grid: Form + Check-in / Active Checkins */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 mb-20">
         
-        {/* Left Column: Register Form */}
+        {/* Left Column: Register Form / Dashboard */}
         <div className="lg:col-span-7 bg-card border border-border rounded-3xl p-6 md:p-8 shadow-lg">
-          <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 mb-2">
-            <UserCheck className="text-primary" size={22} />
-            Join the Community
-          </h2>
-          <p className="text-gray-400 text-xs md:text-sm mb-6">
-            Register your profile to access the directory, receive event invites, and check in to workspaces. Completely free.
-          </p>
-
           {session ? (
-            <div className="bg-muted/30 border border-border rounded-2xl p-6 text-center space-y-4">
-              <div className="w-16 h-16 bg-primary/20 text-primary rounded-full flex items-center justify-center mx-auto text-2xl font-black">
-                {session.user?.name?.[0] || "U"}
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-foreground">Already a Member!</h3>
-                <p className="text-muted text-sm mt-1">
-                  You are logged in as <span className="text-amber-600 dark:text-primary font-bold">{session.user?.name}</span> ({session.user?.email}).
-                </p>
-                <p className="text-xs text-muted/80 mt-2">
-                  Use the check-in panel on the right to share your working location, or browse the directory below!
-                </p>
-              </div>
-              <button
-                onClick={() => signOut()}
-                className="inline-flex items-center gap-2 px-6 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/20 rounded-xl text-xs font-bold transition-all active:scale-95"
-              >
-                <LogOut size={14} />
-                Sign Out
-              </button>
-            </div>
-          ) : registerSuccess ? (
-            <div className="bg-primary/10 border border-primary/20 rounded-2xl p-6 text-center space-y-4">
-              <div className="w-14 h-14 bg-primary/20 text-primary rounded-full flex items-center justify-center mx-auto text-2xl font-bold">
-                ✓
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-white">Welcome to the Community!</h3>
-                <p className="text-gray-400 text-xs mt-1">
-                  You are now registered. You can search for your profile below or check in to a work hub right away.
-                </p>
-              </div>
-              <button
-                onClick={() => {
-                  setRegisterSuccess(false)
-                  setRegForm({
-                    name: "",
-                    email: "",
-                    password: "",
-                    confirmPassword: "",
-                    country: "",
-                    currentCity: "",
-                    workType: "OTHER",
-                    bio: "",
-                    linkedinUrl: "",
-                    twitterUrl: "",
-                    emailAlerts: true
-                  })
-                }}
-                className="text-xs text-primary font-bold hover:underline"
-              >
-                Register another profile
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={handleRegister} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-muted mb-1">Full Name *</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. John Doe"
-                    value={regForm.name}
-                    onChange={e => setRegForm({ ...regForm, name: e.target.value })}
-                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-muted mb-1">Email Address *</label>
-                  <input
-                    type="email"
-                    required
-                    placeholder="e.g. john@nomad.com"
-                    value={regForm.email}
-                    onChange={e => setRegForm({ ...regForm, email: e.target.value })}
-                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-muted mb-1">Password *</label>
-                  <input
-                    type="password"
-                    required
-                    placeholder="Min. 6 characters"
-                    value={regForm.password}
-                    onChange={e => setRegForm({ ...regForm, password: e.target.value })}
-                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-muted mb-1">Confirm Password *</label>
-                  <input
-                    type="password"
-                    required
-                    placeholder="Confirm password"
-                    value={regForm.confirmPassword}
-                    onChange={e => setRegForm({ ...regForm, confirmPassword: e.target.value })}
-                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-muted mb-1">Country of Origin *</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Germany 🇩🇪 or USA"
-                    value={regForm.country}
-                    onChange={e => setRegForm({ ...regForm, country: e.target.value })}
-                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-muted mb-1">Current City (Optional)</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Kathmandu"
-                    value={regForm.currentCity}
-                    onChange={e => setRegForm({ ...regForm, currentCity: e.target.value })}
-                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-muted mb-1">Work Type</label>
-                <select
-                  value={regForm.workType}
-                  onChange={e => setRegForm({ ...regForm, workType: e.target.value })}
-                  className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
-                >
-                  {WORK_TYPES.map(type => (
-                    <option key={type.key} value={type.key} className="bg-card text-foreground">
-                      {type.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-muted mb-1">Bio (Brief Description)</label>
-                <textarea
-                  placeholder="Tell the community what you are working on or planning in Nepal..."
-                  rows={3}
-                  value={regForm.bio}
-                  onChange={e => setRegForm({ ...regForm, bio: e.target.value })}
-                  className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-muted mb-1">LinkedIn Profile Link</label>
-                  <input
-                    type="url"
-                    placeholder="https://linkedin.com/in/username"
-                    value={regForm.linkedinUrl}
-                    onChange={e => setRegForm({ ...regForm, linkedinUrl: e.target.value })}
-                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-muted mb-1">Twitter Profile Link</label>
-                  <input
-                    type="url"
-                    placeholder="https://twitter.com/username"
-                    value={regForm.twitterUrl}
-                    onChange={e => setRegForm({ ...regForm, twitterUrl: e.target.value })}
-                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 pt-2">
-                <input
-                  type="checkbox"
-                  id="emailAlerts"
-                  checked={regForm.emailAlerts}
-                  onChange={e => setRegForm({ ...regForm, emailAlerts: e.target.checked })}
-                  className="w-4.5 h-4.5 rounded border-border bg-muted/30 dark:bg-[#171717] text-primary focus:ring-primary"
-                />
-                <label htmlFor="emailAlerts" className="text-xs text-muted">
-                  Auto-subscribe to email alerts for nomad treks, meetups, and new coworking hubs.
-                </label>
-              </div>
-
-              {registerError && (
-                <p className="text-red-400 text-xs font-semibold">{registerError}</p>
-              )}
-
-              <button
-                type="submit"
-                disabled={registerLoading}
-                className="w-full bg-primary hover:bg-yellow-400 transition-colors text-black font-extrabold rounded-xl py-3 text-sm flex items-center justify-center gap-2 mt-4"
-              >
-                {registerLoading ? "Joining..." : "Join Community Free"}
-                <ArrowRight size={16} />
-              </button>
-
-              <p className="text-center text-xs text-muted mt-4">
-                Already have an account?{" "}
-                <Link href="/auth/signin" className="text-amber-600 dark:text-primary hover:underline font-semibold">
-                  Sign In
-                </Link>
+            <>
+              <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 mb-2">
+                <Sparkles className="text-primary animate-pulse" size={22} />
+                Welcome to the Nomad Community Hub!
+              </h2>
+              <p className="text-muted text-xs md:text-sm mb-6">
+                You are an active member of the Digital Nomads in Nepal community. Connect, collaborate, and explore the Himalayas.
               </p>
-            </form>
+
+              <div className="space-y-6">
+                {/* Personalized Banner */}
+                <div className="bg-gradient-to-r from-primary/10 via-purple-900/5 to-transparent border border-border/80 rounded-2xl p-5 flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-primary text-xl font-black shrink-0 shadow-inner">
+                    {session.user?.name?.[0]?.toUpperCase() || "N"}
+                  </div>
+                  <div>
+                    <h3 className="text-base font-black text-foreground">
+                      Namaste, {session.user?.name || "Nomad"}! 🏔️
+                    </h3>
+                    <p className="text-muted text-xs mt-0.5">
+                      Logged in as <span className="text-foreground font-semibold">{session.user?.email}</span>
+                    </p>
+                  </div>
+                </div>
+
+                {/* Nomad Checklist / Guide */}
+                <div className="space-y-4">
+                  <h4 className="text-xs font-extrabold tracking-wider uppercase text-muted">
+                    How to Participate
+                  </h4>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {[
+                      {
+                        icon: "📍",
+                        title: "Workspace Check-In",
+                        desc: "Select a coworking space in the right panel and check in. Let other nomads know where you're working today."
+                      },
+                      {
+                        icon: "💬",
+                        title: "Forum Discussions",
+                        desc: "Scroll down to browse categories, ask questions about visa extensions, trek meetups, or local setup tips."
+                      },
+                      {
+                        icon: "👥",
+                        title: "Member Directory",
+                        desc: "Browse our registered digital nomad list below to find nearby developers, designers, or entrepreneurs."
+                      },
+                      {
+                        icon: "⚙️",
+                        title: "Profile Customization",
+                        desc: (
+                          <span>
+                            Customize your socials, bio, avatar photo, and alerts inside your{" "}
+                            <Link href="/community/settings" className="text-amber-600 dark:text-primary font-bold hover:underline">
+                              Profile Settings
+                            </Link>
+                            .
+                          </span>
+                        )
+                      }
+                    ].map((item, idx) => (
+                      <div key={idx} className="bg-muted/10 border border-border/50 rounded-2xl p-4 flex gap-3.5 transition-all hover:bg-muted/15">
+                        <span className="text-xl mt-0.5 shrink-0 select-none">{item.icon}</span>
+                        <div className="space-y-1">
+                          <p className="text-foreground font-bold text-xs">{item.title}</p>
+                          <p className="text-muted text-[11px] leading-normal">{item.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Code of Conduct */}
+                <div className="bg-muted/5 border border-border/40 rounded-2xl p-4 space-y-2">
+                  <h4 className="text-[10px] font-black tracking-widest uppercase text-muted">
+                    Community Code of Conduct
+                  </h4>
+                  <ul className="list-disc list-inside space-y-1 text-muted text-[10px] leading-relaxed pl-1">
+                    <li>Be helpful and respectful to other remote workers and local experts.</li>
+                    <li>Verify logistics and safety when arranging group mountain treks.</li>
+                    <li>Strictly no spam or self-promotion in discussion threads.</li>
+                  </ul>
+                </div>
+
+                {/* Quick Actions */}
+                <div className="pt-2 flex items-center justify-between border-t border-border/65">
+                  <span className="text-xs text-muted">Finished editing?</span>
+                  <button
+                    onClick={() => signOut()}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 border border-red-500/20 bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 rounded-xl text-xs font-bold transition-all active:scale-[0.98]"
+                  >
+                    <LogOut size={13} />
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 mb-2">
+                <UserCheck className="text-primary" size={22} />
+                Join the Community
+              </h2>
+              <p className="text-muted text-xs md:text-sm mb-6">
+                Register your profile to access the directory, receive event invites, and check in to workspaces. Completely free.
+              </p>
+
+              {registerSuccess ? (
+                <div className="bg-primary/10 border border-primary/20 rounded-2xl p-6 text-center space-y-4">
+                  <div className="w-14 h-14 bg-primary/20 text-primary rounded-full flex items-center justify-center mx-auto text-2xl font-bold">
+                    ✓
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white">Welcome to the Community!</h3>
+                    <p className="text-gray-400 text-xs mt-1">
+                      You are now registered. You can search for your profile below or check in to a work hub right away.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setRegisterSuccess(false)
+                      setRegForm({
+                        name: "",
+                        email: "",
+                        password: "",
+                        confirmPassword: "",
+                        country: "",
+                        currentCity: "",
+                        workType: "OTHER",
+                        bio: "",
+                        linkedinUrl: "",
+                        twitterUrl: "",
+                        emailAlerts: true
+                      })
+                    }}
+                    className="text-xs text-primary font-bold hover:underline"
+                  >
+                    Register another profile
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleRegister} className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-muted mb-1">Full Name *</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. John Doe"
+                        value={regForm.name}
+                        onChange={e => setRegForm({ ...regForm, name: e.target.value })}
+                        className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-muted mb-1">Email Address *</label>
+                      <input
+                        type="email"
+                        required
+                        placeholder="e.g. john@nomad.com"
+                        value={regForm.email}
+                        onChange={e => setRegForm({ ...regForm, email: e.target.value })}
+                        className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-muted mb-1">Password *</label>
+                      <input
+                        type="password"
+                        required
+                        placeholder="Min. 6 characters"
+                        value={regForm.password}
+                        onChange={e => setRegForm({ ...regForm, password: e.target.value })}
+                        className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-muted mb-1">Confirm Password *</label>
+                      <input
+                        type="password"
+                        required
+                        placeholder="Confirm password"
+                        value={regForm.confirmPassword}
+                        onChange={e => setRegForm({ ...regForm, confirmPassword: e.target.value })}
+                        className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-muted mb-1">Country of Origin *</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Germany 🇩🇪 or USA"
+                        value={regForm.country}
+                        onChange={e => setRegForm({ ...regForm, country: e.target.value })}
+                        className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-muted mb-1">Current City (Optional)</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Kathmandu"
+                        value={regForm.currentCity}
+                        onChange={e => setRegForm({ ...regForm, currentCity: e.target.value })}
+                        className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-muted mb-1">Work Type</label>
+                    <select
+                      value={regForm.workType}
+                      onChange={e => setRegForm({ ...regForm, workType: e.target.value })}
+                      className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
+                    >
+                      {WORK_TYPES.map(type => (
+                        <option key={type.key} value={type.key} className="bg-card text-foreground">
+                          {type.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-muted mb-1">Bio (Brief Description)</label>
+                    <textarea
+                      placeholder="Tell the community what you are working on or planning in Nepal..."
+                      rows={3}
+                      value={regForm.bio}
+                      onChange={e => setRegForm({ ...regForm, bio: e.target.value })}
+                      className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-muted mb-1">LinkedIn Profile Link</label>
+                      <input
+                        type="url"
+                        placeholder="https://linkedin.com/in/username"
+                        value={regForm.linkedinUrl}
+                        onChange={e => setRegForm({ ...regForm, linkedinUrl: e.target.value })}
+                        className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-muted mb-1">Twitter Profile Link</label>
+                      <input
+                        type="url"
+                        placeholder="https://twitter.com/username"
+                        value={regForm.twitterUrl}
+                        onChange={e => setRegForm({ ...regForm, twitterUrl: e.target.value })}
+                        className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 pt-2">
+                    <input
+                      type="checkbox"
+                      id="emailAlerts"
+                      checked={regForm.emailAlerts}
+                      onChange={e => setRegForm({ ...regForm, emailAlerts: e.target.checked })}
+                      className="w-4.5 h-4.5 rounded border-border bg-muted/30 dark:bg-[#171717] text-primary focus:ring-primary"
+                    />
+                    <label htmlFor="emailAlerts" className="text-xs text-muted">
+                      Auto-subscribe to email alerts for nomad treks, meetups, and new coworking hubs.
+                    </label>
+                  </div>
+
+                  {registerError && (
+                    <p className="text-red-400 text-xs font-semibold">{registerError}</p>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={registerLoading}
+                    className="w-full bg-primary hover:bg-yellow-400 transition-colors text-black font-extrabold rounded-xl py-3 text-sm flex items-center justify-center gap-2 mt-4"
+                  >
+                    {registerLoading ? "Joining..." : "Join Community Free"}
+                    <ArrowRight size={16} />
+                  </button>
+
+                  <p className="text-center text-xs text-muted mt-4">
+                    Already have an account?{" "}
+                    <Link href="/auth/signin" className="text-amber-600 dark:text-primary hover:underline font-semibold">
+                      Sign In
+                    </Link>
+                  </p>
+                </form>
+              )}
+            </>
           )}
         </div>
 
