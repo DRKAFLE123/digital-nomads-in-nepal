@@ -4,6 +4,17 @@ import { NextRequest, NextResponse } from "next/server"
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
 
+  // Protect /community routes
+  if (pathname === "/community" || pathname.startsWith("/community/")) {
+    const token = await getToken({ req })
+    if (!token) {
+      const loginUrl = new URL("/auth/signin", req.url)
+      loginUrl.searchParams.set("callbackUrl", pathname)
+      return NextResponse.redirect(loginUrl)
+    }
+    return NextResponse.next()
+  }
+
   // Allow the admin login page through — but redirect already-authed admins to dashboard
   if (pathname === "/admin/login") {
     const token = await getToken({ req })
@@ -30,5 +41,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin/:path*", "/community/:path*", "/community"],
 }

@@ -147,17 +147,20 @@ export default function Navbar() {
 
             {/* Community actions button/dropdown */}
             {session ? (
-              <div className="relative group/community flex items-center gap-2">
+              <div className="relative group/community flex items-center gap-3">
+                <span className={`text-xs font-semibold ${isScrolled ? "text-gray-300" : "text-white/80"}`}>
+                  Hi, {session.user?.name?.split(" ")[0]}
+                </span>
                 <Link
                   href="/community"
-                  className={`text-xs font-bold px-4 py-2 border rounded-full transition-all flex items-center gap-1.5 ${
+                  className={`text-xs font-black uppercase tracking-wider px-5 py-2.5 border rounded-full transition-all flex items-center justify-center gap-1.5 whitespace-nowrap ${
                     isScrolled
-                      ? "border-white/20 text-gray-300 hover:border-primary hover:text-primary"
-                      : "border-white/30 text-white hover:border-primary hover:text-primary"
+                      ? "border-primary text-primary hover:bg-primary hover:text-black shadow-lg shadow-primary/10"
+                      : "border-white/45 text-white hover:border-primary hover:text-primary"
                   }`}
                 >
-                  <Users size={14} />
-                  Hi, {session.user?.name?.split(" ")[0]}
+                  <Users size={14} className="translate-y-[-0.5px]" />
+                  <span>Explore Community</span>
                 </Link>
                 <button
                   onClick={() => signOut()}
@@ -180,7 +183,7 @@ export default function Navbar() {
                 </Link>
                 <div className="relative group/community">
                   <Link
-                    href="/community"
+                    href="/auth/register"
                     className={`text-xs font-black uppercase tracking-wider px-5 py-2.5 border rounded-full transition-all flex items-center justify-center gap-1.5 whitespace-nowrap ${
                       isScrolled
                         ? "border-primary text-primary hover:bg-primary hover:text-black shadow-lg shadow-primary/10"
@@ -188,7 +191,7 @@ export default function Navbar() {
                     }`}
                   >
                     <Users size={14} className="translate-y-[-0.5px]" />
-                    <span>Join Community</span>
+                    <span>Join</span>
                   </Link>
                   {/* Rich hover tooltip card with Join + Sign In */}
                   <div className="absolute top-full right-0 mt-3 w-72 opacity-0 invisible group-hover/community:opacity-100 group-hover/community:visible transition-all duration-200 origin-top-right scale-95 group-hover/community:scale-100 pointer-events-none z-50">
@@ -226,7 +229,7 @@ export default function Navbar() {
                       {/* Join CTA & Sign In option below */}
                       <div className="px-4 pb-4 pt-2 border-t border-white/5 space-y-3 bg-black/25">
                         <Link
-                          href="/community"
+                          href="/auth/register"
                           className="flex items-center justify-center w-full bg-primary hover:bg-yellow-400 text-black font-extrabold text-xs py-2 rounded-xl transition-all shadow-md shadow-primary/10"
                         >
                           Join Free Now
@@ -405,20 +408,30 @@ export default function Navbar() {
         {/* Footer actions */}
         <div className="border-t border-border pt-6 space-y-4 shrink-0 bg-background">
           {session ? (
-            <div className="space-y-2">
+            <div className="space-y-3">
               <div className="text-center text-xs font-bold text-muted-foreground">
                 Logged in as <span className="text-primary font-bold">{session.user?.name}</span>
               </div>
-              <button
-                onClick={() => {
-                  signOut()
-                  setMobileMenuOpen(false)
-                }}
-                className="flex items-center justify-center gap-2 w-full text-center px-4 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 font-bold rounded-xl text-xs transition-all active:scale-[0.98]"
-              >
-                <LogOut size={14} />
-                Sign Out
-              </button>
+              <div className="grid grid-cols-2 gap-2">
+                <Link 
+                  href="/community" 
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-1 text-center px-3 py-2.5 bg-primary text-black font-bold rounded-xl border border-primary hover:bg-yellow-400 transition-all active:scale-[0.98] text-xs whitespace-nowrap"
+                >
+                  <Users size={13} />
+                  Explore
+                </Link>
+                <button
+                  onClick={() => {
+                    signOut()
+                    setMobileMenuOpen(false)
+                  }}
+                  className="flex items-center justify-center gap-2 px-3 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 font-bold rounded-xl text-xs transition-all active:scale-[0.98]"
+                >
+                  <LogOut size={14} />
+                  Sign Out
+                </button>
+              </div>
             </div>
           ) : (
             <div className="grid grid-cols-2 gap-2">
@@ -430,12 +443,12 @@ export default function Navbar() {
                 Sign In
               </Link>
               <Link 
-                href="/community" 
+                href="/auth/register" 
                 onClick={() => setMobileMenuOpen(false)}
                 className="flex items-center justify-center gap-1 text-center px-3 py-2.5 bg-primary text-black font-bold rounded-xl border border-primary hover:bg-yellow-400 transition-all active:scale-[0.98] text-xs whitespace-nowrap"
               >
                 <Users size={13} />
-                Join Community
+                Join
               </Link>
             </div>
           )}

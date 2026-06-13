@@ -1,9 +1,11 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Users, Globe, MapPin, Briefcase, Search, ArrowRight, ShieldCheck, Mail, Calendar, Building, Sparkles, UserCheck, LogOut, MessageCircle, ThumbsUp, Plus, X } from "lucide-react"
+import { Users, Globe, MapPin, Briefcase, Search, ArrowRight, ShieldCheck, Mail, Calendar, Building, Sparkles, UserCheck, LogOut, MessageCircle, ThumbsUp, Plus, X, ArrowLeft } from "lucide-react"
 import { useSession, signOut } from "next-auth/react"
 import Link from "next/link"
+import Navbar from "@/components/Navbar"
+import Footer from "@/components/Footer"
 
 // Allowed WorkTypes matching schema
 const WORK_TYPES = [
@@ -469,10 +471,20 @@ export default function CommunityPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground pt-24 pb-20">
-      
-      {/* Background Gradients */}
-      <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-purple-900/10 via-primary/5 to-transparent pointer-events-none -z-10" />
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-background text-foreground pt-24 pb-20">
+        
+        {/* Background Gradients */}
+        <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-purple-900/10 via-primary/5 to-transparent pointer-events-none -z-10" />
+
+        {/* Back Button */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+          <Link href="/" className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors">
+            <ArrowLeft size={16} />
+            Back to Home
+          </Link>
+        </div>
 
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mt-6 mb-16">
@@ -1555,5 +1567,7 @@ export default function CommunityPage() {
       )}
 
     </div>
+    <Footer />
+    </>
   )
 }

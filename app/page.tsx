@@ -5,6 +5,7 @@ import StickyCommunityCTA from "@/components/StickyCommunityCTA"
 import NewsletterSignup from "@/components/NewsletterSignup"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
+import ServicesSection from "@/components/ServicesSection"
 import Link from "next/link"
 import { Wallet, Wifi, MapPin, Mountain, MessageCircle, Camera, Video, MessageSquare, ArrowRight } from "lucide-react"
 import { prisma } from "@/lib/prisma"
@@ -59,6 +60,9 @@ export default async function Home() {
             </div>
           </div>
         </section>
+
+        {/* Services Section */}
+        <ServicesSection />
 
         {/* Featured Blogs Section */}
         <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-background">
