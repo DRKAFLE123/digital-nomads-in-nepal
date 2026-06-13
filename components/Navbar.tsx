@@ -181,7 +181,7 @@ export default function Navbar() {
                 href="/community"
                 className={`text-xs font-black uppercase tracking-wider px-5 py-2.5 border rounded-full transition-all flex items-center justify-center gap-1.5 whitespace-nowrap ${
                   isSolid
-                    ? "border-foreground/20 text-foreground dark:border-primary dark:text-primary hover:bg-primary hover:border-primary hover:text-black shadow-md dark:shadow-lg dark:shadow-primary/10"
+                    ? "border-foreground/20 text-foreground dark:border-primary dark:text-primary hover:bg-primary hover:border-primary hover:text-black dark:hover:text-black shadow-md dark:shadow-lg dark:shadow-primary/10"
                     : "border-white/45 text-white hover:border-primary hover:text-primary"
                 }`}
               >
@@ -205,7 +205,7 @@ export default function Navbar() {
                     href="/auth/register"
                     className={`text-xs font-black uppercase tracking-wider px-5 py-2.5 border rounded-full transition-all flex items-center justify-center gap-1.5 whitespace-nowrap ${
                       isSolid
-                        ? "border-foreground/20 text-foreground dark:border-primary dark:text-primary hover:bg-primary hover:border-primary hover:text-black shadow-md dark:shadow-lg dark:shadow-primary/10"
+                        ? "border-foreground/20 text-foreground dark:border-primary dark:text-primary hover:bg-primary hover:border-primary hover:text-black dark:hover:text-black shadow-md dark:shadow-lg dark:shadow-primary/10"
                         : "border-white/45 text-white hover:border-primary hover:text-primary"
                     }`}
                   >
