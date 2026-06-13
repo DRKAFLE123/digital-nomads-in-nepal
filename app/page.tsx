@@ -7,7 +7,7 @@ import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import ServicesSection from "@/components/ServicesSection"
 import Link from "next/link"
-import { Wallet, Wifi, MapPin, Mountain, MessageCircle, Camera, Video, MessageSquare, ArrowRight } from "lucide-react"
+import { Wallet, Wifi, MapPin, Mountain, ArrowRight } from "lucide-react"
 import { prisma } from "@/lib/prisma"
 
 export const dynamic = "force-dynamic"
@@ -133,19 +133,29 @@ export default async function Home() {
             <p className="text-[#A0A0A0] text-lg mb-12">Connect with our active community to ask questions, meet up, and share advice.</p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <a href="#" className="flex flex-col items-center justify-center p-6 bg-[#141414] border border-[#222222] rounded-xl hover:bg-[#1877F2]/10 hover:border-[#1877F2] transition-colors group">
-                <MessageCircle size={32} className="text-[#A0A0A0] group-hover:text-[#1877F2] mb-3 transition-colors" />
+                <svg className="w-8 h-8 text-[#A0A0A0] group-hover:text-[#1877F2] mb-3 transition-colors fill-current" viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
                 <span className="text-white font-medium mt-2">Facebook</span>
               </a>
               <a href="#" className="flex flex-col items-center justify-center p-6 bg-[#141414] border border-[#222222] rounded-xl hover:bg-[#E1306C]/10 hover:border-[#E1306C] transition-colors group">
-                <Camera size={32} className="text-[#A0A0A0] group-hover:text-[#E1306C] mb-3 transition-colors" />
+                <svg className="w-8 h-8 text-[#A0A0A0] group-hover:text-[#E1306C] mb-3 transition-colors stroke-current fill-none" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
                 <span className="text-white font-medium mt-2">Instagram</span>
               </a>
               <a href="#" className="flex flex-col items-center justify-center p-6 bg-[#141414] border border-[#222222] rounded-xl hover:bg-[#FF0000]/10 hover:border-[#FF0000] transition-colors group">
-                <Video size={32} className="text-[#A0A0A0] group-hover:text-[#FF0000] mb-3 transition-colors" />
+                <svg className="w-8 h-8 text-[#A0A0A0] group-hover:text-[#FF0000] mb-3 transition-colors fill-current" viewBox="0 0 24 24">
+                  <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.107C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.388.511a3.002 3.002 0 0 0-2.11 2.107C0 8.053 0 12 0 12s0 3.947.502 5.837a3.003 3.003 0 0 0 2.11 2.107c1.883.511 9.388.511 9.388.511s7.505 0 9.388-.511a3.002 3.002 0 0 0 2.11-2.107C24 15.947 24 12 24 12s0-3.947-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
                 <span className="text-white font-medium mt-2">YouTube</span>
               </a>
               <a href="#" className="flex flex-col items-center justify-center p-6 bg-[#141414] border border-[#222222] rounded-xl hover:bg-[#000000]/10 hover:border-white transition-colors group">
-                <MessageSquare size={32} className="text-[#A0A0A0] group-hover:text-white mb-3 transition-colors" />
+                <svg className="w-8 h-8 text-[#A0A0A0] group-hover:text-white mb-3 transition-colors fill-current" viewBox="0 0 24 24">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
                 <span className="text-white font-medium mt-2">X</span>
               </a>
             </div>
