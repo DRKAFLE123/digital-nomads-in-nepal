@@ -480,7 +480,7 @@ export default function CommunityPage() {
 
         {/* Back Button */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
-          <Link href="/" className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors">
+          <Link href="/" className="inline-flex items-center gap-2 text-sm text-muted hover:text-foreground transition-colors">
             <ArrowLeft size={16} />
             Back to Home
           </Link>
@@ -547,22 +547,22 @@ export default function CommunityPage() {
           </p>
 
           {session ? (
-            <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-6 text-center space-y-4">
+            <div className="bg-muted/30 border border-border rounded-2xl p-6 text-center space-y-4">
               <div className="w-16 h-16 bg-primary/20 text-primary rounded-full flex items-center justify-center mx-auto text-2xl font-black">
                 {session.user?.name?.[0] || "U"}
               </div>
               <div>
-                <h3 className="text-xl font-bold text-white">Already a Member!</h3>
-                <p className="text-gray-400 text-sm mt-1">
-                  You are logged in as <span className="text-primary font-bold">{session.user?.name}</span> ({session.user?.email}).
+                <h3 className="text-xl font-bold text-foreground">Already a Member!</h3>
+                <p className="text-muted text-sm mt-1">
+                  You are logged in as <span className="text-amber-600 dark:text-primary font-bold">{session.user?.name}</span> ({session.user?.email}).
                 </p>
-                <p className="text-xs text-gray-500 mt-2">
+                <p className="text-xs text-muted/80 mt-2">
                   Use the check-in panel on the right to share your working location, or browse the directory below!
                 </p>
               </div>
               <button
                 onClick={() => signOut()}
-                className="inline-flex items-center gap-2 px-6 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 rounded-xl text-xs font-bold transition-all active:scale-95"
+                className="inline-flex items-center gap-2 px-6 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/20 rounded-xl text-xs font-bold transition-all active:scale-95"
               >
                 <LogOut size={14} />
                 Sign Out
@@ -605,87 +605,87 @@ export default function CommunityPage() {
             <form onSubmit={handleRegister} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-1">Full Name *</label>
+                  <label className="block text-xs font-semibold text-muted mb-1">Full Name *</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. John Doe"
                     value={regForm.name}
                     onChange={e => setRegForm({ ...regForm, name: e.target.value })}
-                    className="w-full bg-[#171717] border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-1">Email Address *</label>
+                  <label className="block text-xs font-semibold text-muted mb-1">Email Address *</label>
                   <input
                     type="email"
                     required
                     placeholder="e.g. john@nomad.com"
                     value={regForm.email}
                     onChange={e => setRegForm({ ...regForm, email: e.target.value })}
-                    className="w-full bg-[#171717] border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-1">Password *</label>
+                  <label className="block text-xs font-semibold text-muted mb-1">Password *</label>
                   <input
                     type="password"
                     required
                     placeholder="Min. 6 characters"
                     value={regForm.password}
                     onChange={e => setRegForm({ ...regForm, password: e.target.value })}
-                    className="w-full bg-[#171717] border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-1">Confirm Password *</label>
+                  <label className="block text-xs font-semibold text-muted mb-1">Confirm Password *</label>
                   <input
                     type="password"
                     required
                     placeholder="Confirm password"
                     value={regForm.confirmPassword}
                     onChange={e => setRegForm({ ...regForm, confirmPassword: e.target.value })}
-                    className="w-full bg-[#171717] border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-1">Country of Origin *</label>
+                  <label className="block text-xs font-semibold text-muted mb-1">Country of Origin *</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. Germany 🇩🇪 or USA"
                     value={regForm.country}
                     onChange={e => setRegForm({ ...regForm, country: e.target.value })}
-                    className="w-full bg-[#171717] border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-1">Current City (Optional)</label>
+                  <label className="block text-xs font-semibold text-muted mb-1">Current City (Optional)</label>
                   <input
                     type="text"
                     placeholder="e.g. Kathmandu"
                     value={regForm.currentCity}
                     onChange={e => setRegForm({ ...regForm, currentCity: e.target.value })}
-                    className="w-full bg-[#171717] border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-400 mb-1">Work Type</label>
+                <label className="block text-xs font-semibold text-muted mb-1">Work Type</label>
                 <select
                   value={regForm.workType}
                   onChange={e => setRegForm({ ...regForm, workType: e.target.value })}
-                  className="w-full bg-[#171717] border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                  className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
                 >
                   {WORK_TYPES.map(type => (
-                    <option key={type.key} value={type.key} className="bg-[#111]">
+                    <option key={type.key} value={type.key} className="bg-card text-foreground">
                       {type.label}
                     </option>
                   ))}
@@ -693,35 +693,35 @@ export default function CommunityPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-400 mb-1">Bio (Brief Description)</label>
+                <label className="block text-xs font-semibold text-muted mb-1">Bio (Brief Description)</label>
                 <textarea
                   placeholder="Tell the community what you are working on or planning in Nepal..."
                   rows={3}
                   value={regForm.bio}
                   onChange={e => setRegForm({ ...regForm, bio: e.target.value })}
-                  className="w-full bg-[#171717] border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                  className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-1">LinkedIn Profile Link</label>
+                  <label className="block text-xs font-semibold text-muted mb-1">LinkedIn Profile Link</label>
                   <input
                     type="url"
                     placeholder="https://linkedin.com/in/username"
                     value={regForm.linkedinUrl}
                     onChange={e => setRegForm({ ...regForm, linkedinUrl: e.target.value })}
-                    className="w-full bg-[#171717] border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-1">Twitter Profile Link</label>
+                  <label className="block text-xs font-semibold text-muted mb-1">Twitter Profile Link</label>
                   <input
                     type="url"
                     placeholder="https://twitter.com/username"
                     value={regForm.twitterUrl}
                     onChange={e => setRegForm({ ...regForm, twitterUrl: e.target.value })}
-                    className="w-full bg-[#171717] border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
                   />
                 </div>
               </div>
@@ -732,9 +732,9 @@ export default function CommunityPage() {
                   id="emailAlerts"
                   checked={regForm.emailAlerts}
                   onChange={e => setRegForm({ ...regForm, emailAlerts: e.target.checked })}
-                  className="w-4.5 h-4.5 rounded border-gray-600 bg-[#171717] text-primary focus:ring-primary"
+                  className="w-4.5 h-4.5 rounded border-border bg-muted/30 dark:bg-[#171717] text-primary focus:ring-primary"
                 />
-                <label htmlFor="emailAlerts" className="text-xs text-gray-400">
+                <label htmlFor="emailAlerts" className="text-xs text-muted">
                   Auto-subscribe to email alerts for nomad treks, meetups, and new coworking hubs.
                 </label>
               </div>
@@ -752,9 +752,9 @@ export default function CommunityPage() {
                 <ArrowRight size={16} />
               </button>
 
-              <p className="text-center text-xs text-gray-400 mt-4">
+              <p className="text-center text-xs text-muted mt-4">
                 Already have an account?{" "}
-                <Link href="/auth/signin" className="text-primary hover:underline font-semibold">
+                <Link href="/auth/signin" className="text-amber-600 dark:text-primary hover:underline font-semibold">
                   Sign In
                 </Link>
               </p>
@@ -777,26 +777,26 @@ export default function CommunityPage() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-400 mb-1">Registered Email</label>
+                <label className="block text-xs font-semibold text-muted mb-1">Registered Email</label>
                 <input
                   type="email"
                   placeholder="Enter your registered community email"
                   value={checkInEmail}
                   onChange={e => setCheckInEmail(e.target.value)}
-                  className="w-full bg-[#171717] border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-green-400 transition-colors text-white"
+                  className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-green-400 transition-colors text-foreground"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-400 mb-1">Select Work Hub</label>
+                <label className="block text-xs font-semibold text-muted mb-1">Select Work Hub</label>
                 <select
                   value={selectedHubId}
                   onChange={e => setSelectedHubId(e.target.value)}
-                  className="w-full bg-[#171717] border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-green-400 transition-colors text-white"
+                  className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-green-400 transition-colors text-foreground"
                 >
-                  <option value="">-- Choose a coworking space --</option>
+                  <option value="" className="bg-card text-foreground">-- Choose a coworking space --</option>
                   {hubsList.map(hub => (
-                    <option key={hub.id} value={hub.id} className="bg-[#111]">
+                    <option key={hub.id} value={hub.id} className="bg-card text-foreground">
                       {hub.name} ({hub.city})
                     </option>
                   ))}
@@ -806,8 +806,8 @@ export default function CommunityPage() {
               {checkInMessage.text && (
                 <div className={`p-3 rounded-xl text-xs font-semibold ${
                   checkInMessage.type === "success" 
-                    ? "bg-green-500/10 border border-green-500/20 text-green-400" 
-                    : "bg-red-500/10 border border-red-500/20 text-red-400"
+                    ? "bg-green-500/10 border border-green-500/20 text-green-600 dark:text-green-400" 
+                    : "bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400"
                 }`}>
                   {checkInMessage.text}
                 </div>
@@ -825,7 +825,7 @@ export default function CommunityPage() {
                 <button
                   onClick={() => handleCheckInAction("checkout")}
                   disabled={checkInLoading || !checkInEmail}
-                  className="bg-zinc-800 hover:bg-zinc-700 disabled:opacity-40 transition-colors text-gray-300 font-bold rounded-xl py-2.5 text-xs flex items-center justify-center gap-1.5"
+                  className="bg-muted hover:bg-muted/80 disabled:opacity-40 transition-colors text-foreground font-bold rounded-xl py-2.5 text-xs flex items-center justify-center gap-1.5 border border-border"
                 >
                   <LogOut size={13} />
                   Check Out

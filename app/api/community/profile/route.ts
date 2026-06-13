@@ -13,12 +13,27 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "Email parameter is required" }, { status: 400 })
     }
 
-    const profile = await prisma.nomadProfile.findUnique({
+    let profile = await prisma.nomadProfile.findUnique({
       where: { email }
     })
 
     if (!profile) {
-      return NextResponse.json({ error: "Profile not found" }, { status: 404 })
+      const user = await prisma.user.findUnique({
+        where: { email }
+      })
+
+      if (user) {
+        profile = await prisma.nomadProfile.create({
+          data: {
+            email,
+            name: user.name,
+            country: "Nepal",
+            passwordHash: user.password
+          }
+        })
+      } else {
+        return NextResponse.json({ error: "Profile not found" }, { status: 404 })
+      }
     }
 
     return NextResponse.json({ success: true, profile })
@@ -50,12 +65,12 @@ export async function PUT(req: Request) {
       return NextResponse.json({ error: "Email is required to update profile" }, { status: 400 })
     }
 
-    const existing = await prisma.nomadProfile.findUnique({
+    const user = await prisma.user.findUnique({
       where: { email }
     })
 
-    if (!existing) {
-      return NextResponse.json({ error: "Profile not found" }, { status: 404 })
+    if (!user) {
+      return NextResponse.json({ error: "User account not found" }, { status: 404 })
     }
 
     let hashedPassword = undefined
@@ -76,9 +91,22 @@ export async function PUT(req: Request) {
         })
       }
 
-      const profile = await tx.nomadProfile.update({
+      const profile = await tx.nomadProfile.upsert({
         where: { email },
-        data: {
+        create: {
+          email,
+          name: name || user.name || "Nomad User",
+          avatarUrl: avatarUrl || null,
+          passwordHash: hashedPassword || user.password || null,
+          country: country || "Nepal",
+          currentCity: currentCity || null,
+          workType: workType ? (workType as WorkType) : "OTHER",
+          bio: bio || null,
+          linkedinUrl: linkedinUrl || null,
+          twitterUrl: twitterUrl || null,
+          emailAlerts: emailAlerts !== undefined ? !!emailAlerts : true
+        },
+        update: {
           name: name !== undefined ? name : undefined,
           avatarUrl: avatarUrl !== undefined ? avatarUrl : undefined,
           passwordHash: hashedPassword !== undefined ? hashedPassword : undefined,

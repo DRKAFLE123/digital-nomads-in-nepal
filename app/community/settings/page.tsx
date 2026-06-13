@@ -220,17 +220,17 @@ export default function ProfileSettingsPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           
           {/* Back Button */}
-          <Link href="/community" className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors mb-8">
+          <Link href="/community" className="inline-flex items-center gap-2 text-sm text-muted hover:text-foreground transition-colors mb-8">
             <ArrowLeft size={16} />
             Back to Community
           </Link>
 
           {/* Heading */}
           <div className="mb-10 space-y-2">
-            <h1 className="text-3xl md:text-4xl font-black tracking-tight text-white flex items-center gap-2">
+            <h1 className="text-3xl md:text-4xl font-black tracking-tight text-foreground flex items-center gap-2">
               Profile Settings
             </h1>
-            <p className="text-gray-400 text-sm">
+            <p className="text-muted text-sm">
               Customize your public nomad profile, set your work hub check-in information, and configure your security settings.
             </p>
           </div>
@@ -251,7 +251,7 @@ export default function ProfileSettingsPage() {
             
             {/* 1. Profile Photo Upload */}
             <div className="bg-card border border-border rounded-3xl p-6 md:p-8 shadow-md">
-              <h2 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+              <h2 className="text-lg font-bold text-foreground mb-6 flex items-center gap-2">
                 <Camera size={18} className="text-primary" />
                 Profile Photo
               </h2>
@@ -260,14 +260,14 @@ export default function ProfileSettingsPage() {
                 {/* Avatar circle with camera hover */}
                 <div 
                   onClick={handleAvatarClick}
-                  className="relative w-28 h-28 rounded-full border border-border bg-[#171717] flex items-center justify-center overflow-hidden cursor-pointer group/upload"
+                  className="relative w-28 h-28 rounded-full border border-border bg-muted/30 dark:bg-[#171717] flex items-center justify-center overflow-hidden cursor-pointer group/upload"
                 >
                   {uploading ? (
                     <Loader2 className="w-6 h-6 text-primary animate-spin" />
                   ) : form.avatarUrl ? (
                     <img src={form.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
                   ) : (
-                    <span className="text-white text-3xl font-black">{form.name?.[0]?.toUpperCase() || <User size={36} />}</span>
+                    <span className="text-foreground text-3xl font-black">{form.name?.[0]?.toUpperCase() || <User size={36} />}</span>
                   )}
                   
                   {/* Hover Overlay */}
@@ -281,11 +281,11 @@ export default function ProfileSettingsPage() {
                   <button
                     type="button"
                     onClick={handleAvatarClick}
-                    className="px-4 py-2 bg-[#1d1d1d] hover:bg-[#252525] border border-border text-white text-xs font-bold rounded-xl transition-all active:scale-[0.98]"
+                    className="px-4 py-2 bg-muted hover:bg-muted/80 border border-border text-foreground text-xs font-bold rounded-xl transition-all active:scale-[0.98]"
                   >
                     Select Photo
                   </button>
-                  <p className="text-gray-500 text-xs mt-2">
+                  <p className="text-muted text-xs mt-2">
                     JPEG or PNG. Max size 5MB. Your photo is visible to other nomads in the directory.
                   </p>
                   <input
@@ -301,28 +301,28 @@ export default function ProfileSettingsPage() {
 
             {/* 2. Personal Information */}
             <div className="bg-card border border-border rounded-3xl p-6 md:p-8 shadow-md space-y-6">
-              <h2 className="text-lg font-bold text-white flex items-center gap-2">
+              <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
                 <User size={18} className="text-primary" />
                 Personal Information
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-1.5">Full Name *</label>
+                  <label className="block text-xs font-semibold text-muted mb-1.5">Full Name *</label>
                   <input
                     type="text"
                     required
                     value={form.name}
                     onChange={e => setForm({ ...form, name: e.target.value })}
-                    className="w-full bg-[#171717] border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-1.5 flex items-center gap-1.5">
+                  <label className="block text-xs font-semibold text-muted mb-1.5 flex items-center gap-1.5">
                     Email Address 
-                    <span className="text-[10px] text-gray-500">(Read Only)</span>
+                    <span className="text-[10px] text-muted/80">(Read Only)</span>
                   </label>
-                  <div className="w-full bg-white/[0.02] border border-white/5 rounded-xl px-4 py-3 text-sm text-gray-500 flex items-center gap-2 select-none">
+                  <div className="w-full bg-muted/10 border border-border rounded-xl px-4 py-3 text-sm text-muted/80 flex items-center gap-2 select-none">
                     <Mail size={14} />
                     {session?.user?.email}
                   </div>
@@ -331,38 +331,38 @@ export default function ProfileSettingsPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-1.5">Country of Origin *</label>
+                  <label className="block text-xs font-semibold text-muted mb-1.5">Country of Origin *</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. Germany 🇩🇪"
                     value={form.country}
                     onChange={e => setForm({ ...form, country: e.target.value })}
-                    className="w-full bg-[#171717] border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-1.5">Current City (Optional)</label>
+                  <label className="block text-xs font-semibold text-muted mb-1.5">Current City (Optional)</label>
                   <input
                     type="text"
                     placeholder="e.g. Kathmandu"
                     value={form.currentCity}
                     onChange={e => setForm({ ...form, currentCity: e.target.value })}
-                    className="w-full bg-[#171717] border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 gap-6">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-1.5">Work Type</label>
+                  <label className="block text-xs font-semibold text-muted mb-1.5">Work Type</label>
                   <select
                     value={form.workType}
                     onChange={e => setForm({ ...form, workType: e.target.value })}
-                    className="w-full bg-[#171717] border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
                   >
                     {WORK_TYPES.map(type => (
-                      <option key={type.key} value={type.key} className="bg-[#111]">
+                      <option key={type.key} value={type.key} className="bg-card text-foreground">
                         {type.label}
                       </option>
                     ))}
@@ -371,43 +371,43 @@ export default function ProfileSettingsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-400 mb-1.5">Bio (Brief Description)</label>
+                <label className="block text-xs font-semibold text-muted mb-1.5">Bio (Brief Description)</label>
                 <textarea
                   placeholder="Tell other community members what you are working on or planning in Nepal..."
                   rows={4}
                   value={form.bio}
                   onChange={e => setForm({ ...form, bio: e.target.value })}
-                  className="w-full bg-[#171717] border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white resize-y"
+                  className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-foreground resize-y"
                 />
               </div>
             </div>
 
             {/* 3. Social Profiles */}
             <div className="bg-card border border-border rounded-3xl p-6 md:p-8 shadow-md space-y-6">
-              <h2 className="text-lg font-bold text-white flex items-center gap-2">
+              <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
                 <Link2 size={18} className="text-primary" />
                 Social Profiles
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-1.5">LinkedIn URL</label>
+                  <label className="block text-xs font-semibold text-muted mb-1.5">LinkedIn URL</label>
                   <input
                     type="url"
                     placeholder="https://linkedin.com/in/username"
                     value={form.linkedinUrl}
                     onChange={e => setForm({ ...form, linkedinUrl: e.target.value })}
-                    className="w-full bg-[#171717] border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-1.5">Twitter/X URL</label>
+                  <label className="block text-xs font-semibold text-muted mb-1.5">Twitter/X URL</label>
                   <input
                     type="url"
                     placeholder="https://twitter.com/username"
                     value={form.twitterUrl}
                     onChange={e => setForm({ ...form, twitterUrl: e.target.value })}
-                    className="w-full bg-[#171717] border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
                   />
                 </div>
               </div>
@@ -415,33 +415,33 @@ export default function ProfileSettingsPage() {
 
             {/* 4. Security Settings (Change Password) */}
             <div className="bg-card border border-border rounded-3xl p-6 md:p-8 shadow-md space-y-6">
-              <h2 className="text-lg font-bold text-white flex items-center gap-2">
+              <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
                 <Key size={18} className="text-primary" />
                 Change Password
               </h2>
-              <p className="text-gray-400 text-xs leading-relaxed">
+              <p className="text-muted text-xs leading-relaxed">
                 Leave these fields blank if you do not wish to change your password.
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-1.5">New Password</label>
+                  <label className="block text-xs font-semibold text-muted mb-1.5">New Password</label>
                   <input
                     type="password"
                     placeholder="Min. 6 characters"
                     value={form.password}
                     onChange={e => setForm({ ...form, password: e.target.value })}
-                    className="w-full bg-[#171717] border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-1.5">Confirm New Password</label>
+                  <label className="block text-xs font-semibold text-muted mb-1.5">Confirm New Password</label>
                   <input
                     type="password"
                     placeholder="Confirm new password"
                     value={form.confirmPassword}
                     onChange={e => setForm({ ...form, confirmPassword: e.target.value })}
-                    className="w-full bg-[#171717] border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                    className="w-full bg-muted/30 dark:bg-[#171717] border border-border dark:border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
                   />
                 </div>
               </div>
@@ -449,7 +449,7 @@ export default function ProfileSettingsPage() {
 
             {/* 5. Notification Preferences */}
             <div className="bg-card border border-border rounded-3xl p-6 md:p-8 shadow-md space-y-6">
-              <h2 className="text-lg font-bold text-white flex items-center gap-2">
+              <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
                 <ShieldCheck size={18} className="text-primary" />
                 Notification Preferences
               </h2>
@@ -460,9 +460,9 @@ export default function ProfileSettingsPage() {
                   id="emailAlerts"
                   checked={form.emailAlerts}
                   onChange={e => setForm({ ...form, emailAlerts: e.target.checked })}
-                  className="w-4.5 h-4.5 rounded border-gray-600 bg-[#171717] text-primary focus:ring-primary mt-0.5"
+                  className="w-4.5 h-4.5 rounded border-border bg-muted/30 dark:bg-[#171717] text-primary focus:ring-primary mt-0.5"
                 />
-                <label htmlFor="emailAlerts" className="text-xs text-gray-400 leading-normal">
+                <label htmlFor="emailAlerts" className="text-xs text-muted leading-normal">
                   Send me email alerts for community treks, local nomad meetups, workspace reviews, and upcoming events in Nepal.
                 </label>
               </div>
