@@ -7,6 +7,8 @@ import Image from "@/components/ImageWithFallback"
 import type { Metadata } from "next"
 import TrekkingGuideIcon from "@/components/TrekkingGuideIcon"
 import { Shield, Wifi, Wallet, Star, CheckCircle, AlertCircle, ArrowLeft, Building, Sparkles } from "lucide-react"
+import { generateDestinationJsonLd, generateBreadcrumbJsonLd, SITE_URL } from "@/lib/seo"
+
 interface DestinationTags {
   score?: string
   cost?: string
@@ -21,9 +23,40 @@ interface DestinationTags {
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const dest = await prisma.destination.findUnique({ where: { slug: params.slug } })
   if (!dest) return {}
+
+  const destUrl = `${SITE_URL}/destinations/${params.slug}`
+  const imageUrl = dest.image || `${SITE_URL}/hero-bg.png`
+  const title = `${dest.name} Travel & Work Guide for Digital Nomads | Digital Nomads in Nepal`
+  const description = dest.description ? dest.description.slice(0, 155) + "..." : `Complete digital nomad guide for ${dest.name}, Nepal with internet speeds, cost of living, and coworking hubs.`
+
   return {
-    title: `${dest.name} Travel & Work Guide for Digital Nomads | Digital Nomads in Nepal`,
-    description: dest.description ? dest.description.slice(0, 155) + "..." : "",
+    title,
+    description,
+    alternates: {
+      canonical: destUrl,
+    },
+    openGraph: {
+      title,
+      description,
+      url: destUrl,
+      siteName: "Digital Nomads in Nepal",
+      locale: "en_US",
+      type: "website",
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: `${dest.name} Digital Nomad Destination Guide`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [imageUrl],
+    },
   }
 }
 
@@ -188,8 +221,23 @@ export default async function DestinationPage({ params }: { params: { slug: stri
     date: p.createdAt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
   }))
 
+  const destinationJsonLd = generateDestinationJsonLd(dest)
+  const breadcrumbJsonLd = generateBreadcrumbJsonLd([
+    { name: "Home", item: "/" },
+    { name: "Destinations", item: "/destinations" },
+    { name: dest.name, item: `/destinations/${dest.slug}` },
+  ])
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(destinationJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <Navbar />
       <main className="min-h-screen bg-background pb-24">
         {/* Banner with 45% overlay and glassmorphic blurred text background */}

@@ -11,6 +11,8 @@ import RelatedPosts from "@/components/RelatedPosts"
 import { Calendar, Clock, User } from "lucide-react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
+import type { Metadata } from "next"
+import { generateArticleJsonLd, generateBreadcrumbJsonLd, SITE_URL } from "@/lib/seo"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getFlattenedText(children: any): string {
@@ -35,10 +37,44 @@ export async function generateStaticParams() {
   }
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const post = await prisma.post.findUnique({ where: { slug: params.slug } })
   if (!post) return {}
-  return { title: post.title, description: post.excerpt }
+  
+  const postUrl = `${SITE_URL}/blog/${params.slug}`
+  const imageUrl = post.coverImage || `${SITE_URL}/hero-bg.png`
+
+  return {
+    title: `${post.title} | Digital Nomads in Nepal`,
+    description: post.excerpt,
+    alternates: {
+      canonical: postUrl,
+    },
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      url: postUrl,
+      siteName: "Digital Nomads in Nepal",
+      locale: "en_US",
+      type: "article",
+      publishedTime: post.createdAt.toISOString(),
+      authors: [post.author || "Digital Nomads in Nepal"],
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+      images: [imageUrl],
+    },
+  }
 }
 
 export const dynamic = "force-dynamic"
@@ -116,8 +152,23 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   })
 
 
+  const articleJsonLd = generateArticleJsonLd(post)
+  const breadcrumbJsonLd = generateBreadcrumbJsonLd([
+    { name: "Home", item: "/" },
+    { name: "Blog", item: "/blog" },
+    { name: post.title, item: `/blog/${post.slug}` },
+  ])
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <ReadingProgressBar />
       <Navbar />
       <main className="min-h-screen bg-background pb-20">

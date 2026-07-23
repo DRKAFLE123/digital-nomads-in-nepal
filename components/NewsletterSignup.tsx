@@ -1,6 +1,7 @@
 "use client"
 import { useState } from "react"
 import { Send, CheckCircle, AlertCircle } from "lucide-react"
+import { trackLeadGeneration } from "@/lib/gtm"
 
 export default function NewsletterSignup() {
   const [email, setEmail] = useState("")
@@ -19,6 +20,7 @@ export default function NewsletterSignup() {
       if (res.ok) {
         setStatus("success")
         setEmail("")
+        trackLeadGeneration("newsletter_signup")
       } else {
         setStatus("error")
       }

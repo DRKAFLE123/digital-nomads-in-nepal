@@ -18,12 +18,14 @@ import {
   Settings,
   Building,
   Globe,
+  Link as LinkIcon,
 } from "lucide-react"
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/guides", label: "Guides", icon: BookOpen },
   { href: "/admin/posts", label: "Blog Posts", icon: FileText },
+  { href: "/admin/utm-builder", label: "UTM Builder", icon: LinkIcon },
   { href: "/admin/media", label: "Media Library", icon: ImageIcon },
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/community", label: "Community", icon: Globe },

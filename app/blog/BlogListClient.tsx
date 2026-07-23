@@ -19,7 +19,12 @@ export default function BlogListClient({ posts }: { posts: BlogPost[] }) {
   const [query, setQuery] = useState("")
   const [category, setCategory] = useState("All")
 
-  const categories = ["All", "Cost of Living", "Destinations", "Work Setup", "Lifestyle", "Visa"]
+  // Extract unique categories from posts and combine with defaults (including Coworking Spaces)
+  const categories = useMemo(() => {
+    const defaultCats = ["All", "Coworking Spaces", "Cost of Living", "Destinations", "Work Setup", "Lifestyle", "Visa"]
+    const postCats = Array.from(new Set(posts.map(p => p.category).filter(Boolean)))
+    return Array.from(new Set([...defaultCats, ...postCats]))
+  }, [posts])
 
   // Initialize Fuse.js
   const fuse = useMemo(() => new Fuse(posts, {
@@ -37,7 +42,15 @@ export default function BlogListClient({ posts }: { posts: BlogPost[] }) {
     }
 
     if (category !== "All") {
-      result = result.filter(post => post.category === category)
+      result = result.filter(post => {
+        if (!post.category) return false
+        const pCat = post.category.toLowerCase()
+        const target = category.toLowerCase()
+        if (target.includes("coworking")) {
+          return pCat.includes("coworking") || (post.tags && post.tags.some(t => t.toLowerCase().includes("coworking")))
+        }
+        return pCat === target
+      })
     }
 
     return result

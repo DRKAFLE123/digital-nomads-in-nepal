@@ -44,3 +44,5 @@ lint_output.txt
 lint_utf8.txt
 scratch-check-admins.ts
 scratch-seed-admin.js
+gtm_snippet.txt
+gtm_container_import.json

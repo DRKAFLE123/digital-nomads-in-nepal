@@ -145,9 +145,33 @@ export default function Footer() {
                 {data.newsletterDesc}
               </p>
             </div>
-            <form className="flex flex-col sm:flex-row w-full lg:w-auto gap-0 shadow-2xl relative">
+            <form 
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const form = e.currentTarget;
+                const emailInput = form.querySelector('input[type="email"]') as HTMLInputElement;
+                if (!emailInput || !emailInput.value) return;
+                try {
+                  const res = await fetch("/api/newsletter", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: emailInput.value }),
+                  });
+                  if (res.ok) {
+                    emailInput.value = "";
+                    const { trackLeadGeneration } = await import("@/lib/gtm");
+                    trackLeadGeneration("footer_newsletter");
+                    alert("Thank you for subscribing!");
+                  }
+                } catch (err) {
+                  console.error("Newsletter submission error:", err);
+                }
+              }} 
+              className="flex flex-col sm:flex-row w-full lg:w-auto gap-0 shadow-2xl relative"
+            >
               <input 
                 type="email" 
+                required
                 placeholder="Enter your email" 
                 className="bg-black border border-gray-800 py-4 px-6 rounded-t-xl sm:rounded-l-xl sm:rounded-tr-none text-white text-base focus:outline-none focus:border-[#FFD700] w-full lg:w-80 transition-all placeholder:text-gray-600" 
               />
