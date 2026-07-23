@@ -1,13 +1,13 @@
 declare global {
   interface Window {
-    dataLayer?: Record<string, any>[];
+    dataLayer?: Record<string, unknown>[];
   }
 }
 
 /**
   Pushes a custom event object into the Google Tag Manager dataLayer.
  */
-export const sendGTMEvent = (data: Record<string, any>): void => {
+export const sendGTMEvent = (data: Record<string, unknown>): void => {
   if (typeof window !== "undefined") {
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push(data);
