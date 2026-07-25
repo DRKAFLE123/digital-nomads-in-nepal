@@ -23,7 +23,27 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json()
-    const { name, city, description, address, facilities, priceDaily, priceMonthly, contactEmail, website, photoUrl, isVerified, isPartner } = body
+    const { 
+      name, 
+      city, 
+      description, 
+      address, 
+      facilities, 
+      priceDaily, 
+      priceMonthly, 
+      contactEmail, 
+      website, 
+      photoUrl, 
+      isVerified, 
+      isPartner,
+      ownerEmail,
+      ownerName,
+      spaceType,
+      units,
+      openingHours,
+      rating,
+      totalReviews
+    } = body
 
     if (!name || !city || !description || !address || !contactEmail) {
       return NextResponse.json({ error: "Missing required fields." }, { status: 400 })
@@ -50,8 +70,15 @@ export async function POST(req: NextRequest) {
         contactEmail,
         website: website || null,
         photoUrl: photoUrl || null,
+        ownerEmail: ownerEmail || contactEmail,
+        ownerName: ownerName || null,
+        spaceType: spaceType || "Coworking Hub",
+        units: units ?? [],
+        openingHours: openingHours || "24/7 Access",
         isVerified: !!isVerified,
         isPartner: !!isPartner,
+        rating: rating !== undefined ? parseFloat(rating) : 4.5,
+        totalReviews: totalReviews !== undefined ? parseInt(totalReviews) : 0,
         facilities: facilities ?? [],
         priceDaily: priceDaily ? parseFloat(priceDaily) : null,
         priceMonthly: priceMonthly ? parseFloat(priceMonthly) : null,

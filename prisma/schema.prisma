@@ -132,6 +132,11 @@ model WorkHub {
   city         String       
   description  String       @db.Text
   address      String
+  ownerEmail   String?
+  ownerName    String?
+  spaceType    String?      @default("Coworking Hub")
+  units        Json?        
+  openingHours String?      @default("24/7 Access")
   rating       Float        @default(0)
   totalReviews Int          @default(0)
   isVerified   Boolean      @default(false) 

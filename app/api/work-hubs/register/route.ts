@@ -4,7 +4,23 @@ import { prisma } from "@/lib/prisma"
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { name, city, description, address, facilities, priceDaily, priceMonthly, contactEmail, website, photoUrl } = body
+    const { 
+      name, 
+      city, 
+      description, 
+      address, 
+      facilities, 
+      priceDaily, 
+      priceMonthly, 
+      contactEmail, 
+      website, 
+      photoUrl,
+      ownerEmail,
+      ownerName,
+      spaceType,
+      units,
+      openingHours
+    } = body
 
     if (!name || !city || !description || !address || !contactEmail) {
       return NextResponse.json({ error: "Missing required fields." }, { status: 400 })
@@ -33,6 +49,11 @@ export async function POST(req: NextRequest) {
         contactEmail,
         website: website || null,
         photoUrl: photoUrl || null,
+        ownerEmail: ownerEmail || contactEmail,
+        ownerName: ownerName || null,
+        spaceType: spaceType || "Coworking Hub",
+        units: units ?? [],
+        openingHours: openingHours || "24/7 Access",
         isVerified: false, // Must be verified by admin
         isPartner: false,  // Must be partnered by admin
         facilities: facilities ?? [],
