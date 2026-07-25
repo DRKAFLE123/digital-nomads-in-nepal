@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
     const maxPrice = searchParams.get("maxPrice") ? parseFloat(searchParams.get("maxPrice")!) : null
 
     // Fetch all hubs
-    let hubs = await prisma.workHub.findMany({
+    const hubs = await prisma.workHub.findMany({
       orderBy: { rating: "desc" }
     })
 

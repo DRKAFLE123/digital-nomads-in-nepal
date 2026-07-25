@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import {
   Building,
   Calendar,
-  Star,
   CheckCircle,
   Sparkles,
   Plus,
@@ -15,7 +14,6 @@ import {
   Save,
   X,
   User,
-  Clock,
   Layers,
 } from "lucide-react";
 

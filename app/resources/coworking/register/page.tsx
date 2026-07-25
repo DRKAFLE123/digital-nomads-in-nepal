@@ -9,12 +9,9 @@ import {
   ArrowLeft,
   Building,
   Mail,
-  MapPin,
   Loader2,
   CheckCircle,
   User,
-  Clock,
-  LayoutGrid,
   Layers,
   Sparkles,
 } from "lucide-react";
