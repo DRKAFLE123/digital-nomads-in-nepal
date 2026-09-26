@@ -1,10 +1,13 @@
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
-import { ShieldCheck, Heart, Sparkles, Compass } from "lucide-react"
+import { ShieldCheck, Heart, Mountain, Compass } from "lucide-react"
 
 export const metadata = {
   title: "About Us | Digital Nomads in Nepal",
   description: "Learn about the mission, values, and community volunteers behind the definitive digital nomad portal in Nepal.",
+  alternates: {
+    canonical: "https://digitalnomadsinnepal.com/about",
+  },
 }
 
 export default function AboutPage() {
@@ -62,7 +65,7 @@ export default function AboutPage() {
                 </p>
               </div>
               <div className="p-6 bg-card border border-border rounded-2xl space-y-3">
-                <Sparkles className="text-purple-400" size={24} />
+                <Mountain className="text-purple-400" size={24} />
                 <h3 className="font-bold text-foreground">High-Altitude Trek Safely</h3>
                 <p className="text-xs">
                   We provide expert checklists for high-altitude acclimatization, flight bookings, and travel insurance coverage requirements.

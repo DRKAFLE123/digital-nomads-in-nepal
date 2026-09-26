@@ -6,7 +6,7 @@ import Link from "next/link"
 import Image from "@/components/ImageWithFallback"
 import type { Metadata } from "next"
 import TrekkingGuideIcon from "@/components/TrekkingGuideIcon"
-import { Shield, Wifi, Wallet, Star, CheckCircle, AlertCircle, ArrowLeft, Building, Sparkles } from "lucide-react"
+import { Shield, Wifi, Wallet, Star, CheckCircle, AlertCircle, ArrowLeft, Building, Award } from "lucide-react"
 import { generateDestinationJsonLd, generateBreadcrumbJsonLd, SITE_URL } from "@/lib/seo"
 
 interface DestinationTags {
@@ -342,7 +342,7 @@ export default async function DestinationPage({ params }: { params: { slug: stri
                                 {hub.city}
                               </span>
                               <div className="flex gap-1">
-                                {hub.isPartner && <Sparkles size={14} className="text-[#FFD700]" />}
+                                {hub.isPartner && <Award size={14} className="text-[#FFD700]" />}
                                 {hub.isVerified && <CheckCircle size={14} className="text-green-500" />}
                               </div>
                             </div>

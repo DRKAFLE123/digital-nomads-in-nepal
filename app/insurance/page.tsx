@@ -1,10 +1,13 @@
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
-import { Check, Heart, ShieldAlert, Sparkles } from "lucide-react"
+import { Check, Heart, ShieldAlert, ShieldCheck } from "lucide-react"
 
 export const metadata = {
   title: "Nomad Travel Insurance for Nepal | High-Altitude Rescue Coverage",
   description: "Get the best travel and health insurance recommendations for digital nomads in Nepal, with high-altitude helicopter rescue coverage.",
+  alternates: {
+    canonical: "https://digitalnomadsinnepal.com/insurance",
+  },
 }
 
 export default function InsurancePage() {
@@ -50,7 +53,7 @@ export default function InsurancePage() {
                 <div className="p-6 bg-card border border-border rounded-2xl space-y-4 flex flex-col justify-between">
                   <div>
                     <h3 className="font-bold text-foreground text-lg flex items-center gap-2">
-                      SafetyWing <Sparkles className="text-primary" size={16} />
+                      SafetyWing <ShieldCheck className="text-primary" size={16} />
                     </h3>
                     <p className="text-xs text-muted-foreground leading-relaxed mt-2">
                       Affordable subscription-style travel medical insurance. Highly flexible; you can purchase it even if you have already left your home country.

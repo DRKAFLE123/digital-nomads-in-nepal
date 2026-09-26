@@ -15,7 +15,8 @@ const config: Config = {
         accent: "var(--accent)",
         card: "var(--card)",
         border: "var(--border)",
-        muted: "var(--muted)"
+        muted: "var(--muted)",
+        "muted-foreground": "var(--muted-foreground)"
       },
     },
   },

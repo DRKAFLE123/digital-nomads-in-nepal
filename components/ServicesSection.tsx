@@ -54,13 +54,13 @@ export default function ServicesSection() {
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/25 text-primary text-xs font-semibold uppercase tracking-wider">
             Our Services
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
+          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-foreground leading-tight">
             Tailored Services for <br className="hidden sm:block" />
             <span className="bg-gradient-to-r from-primary via-yellow-400 to-amber-500 bg-clip-text text-transparent">
               Digital Nomads in Nepal
             </span>
           </h2>
-          <p className="text-gray-400 text-base md:text-lg">
+          <p className="text-muted-foreground text-base md:text-lg">
             We provide the essential infrastructure, local expert connections, and community networks to help you transition, work, and thrive smoothly in the Himalayas.
           </p>
         </div>
@@ -72,7 +72,7 @@ export default function ServicesSection() {
             return (
               <div 
                 key={idx}
-                className={`group relative flex flex-col justify-between bg-white/[0.02] hover:bg-white/[0.04] border border-white/5 rounded-2xl p-6 transition-all duration-300 ${service.hoverGlow}`}
+                className={`group relative flex flex-col justify-between bg-card border border-border rounded-2xl p-6 transition-all duration-300 shadow-sm hover:shadow-md ${service.hoverGlow}`}
               >
                 <div className="space-y-4">
                   {/* Icon Container */}
@@ -82,20 +82,20 @@ export default function ServicesSection() {
                   
                   {/* Title & Description */}
                   <div className="space-y-2">
-                    <h3 className="text-xl font-bold text-white group-hover:text-primary transition-colors">
+                    <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
                       {service.title}
                     </h3>
-                    <p className="text-gray-400 text-sm leading-relaxed">
+                    <p className="text-muted-foreground text-sm leading-relaxed">
                       {service.description}
                     </p>
                   </div>
                 </div>
 
                 {/* CTA Link */}
-                <div className="pt-6 mt-4 border-t border-white/5">
+                <div className="pt-6 mt-4 border-t border-border">
                   <Link 
                     href={service.href}
-                    className="inline-flex items-center gap-2 text-xs font-bold text-gray-300 group-hover:text-primary transition-colors"
+                    className="inline-flex items-center gap-2 text-xs font-bold text-foreground/80 group-hover:text-primary transition-colors"
                   >
                     {service.linkText}
                     <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />

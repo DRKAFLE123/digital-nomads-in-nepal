@@ -6,7 +6,7 @@ import {
   Building,
   Calendar,
   CheckCircle,
-  Sparkles,
+  Award,
   Plus,
   Edit2,
   Trash2,
@@ -493,7 +493,7 @@ export default function AdminWorkHubsPage() {
                           <div className="flex flex-wrap gap-1">
                             {hub.isPartner && (
                               <span className="flex items-center gap-0.5 bg-yellow-400/10 text-yellow-400 border border-yellow-400/20 px-2 py-0.5 rounded text-[9px] font-bold">
-                                <Sparkles size={8} /> Partner
+                                <Award size={8} /> Partner
                               </span>
                             )}
                             {hub.isVerified && (

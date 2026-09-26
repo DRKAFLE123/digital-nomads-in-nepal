@@ -30,21 +30,21 @@ export default function NewsletterSignup() {
   }
 
   return (
-    <div className="bg-[#141414] border border-[#222222] p-8 md:p-12 text-center rounded-2xl relative overflow-hidden">
-      <div className="absolute top-0 right-0 -m-8 text-[#FFD700] opacity-5">
+    <div className="bg-card border border-border p-8 md:p-12 text-center rounded-2xl relative overflow-hidden shadow-sm">
+      <div className="absolute top-0 right-0 -m-8 text-primary opacity-5">
         <Send size={120} />
       </div>
       <div className="relative z-10">
-        <h2 className="text-3xl font-bold text-white mb-3">Get the Free Nepal Nomad Starter Kit</h2>
-        <p className="text-[#A0A0A0] text-lg mb-8 max-w-xl mx-auto">
+        <h2 className="text-3xl font-bold text-foreground mb-3">Get the Free Nepal Nomad Starter Kit</h2>
+        <p className="text-muted-foreground text-lg mb-8 max-w-xl mx-auto">
           Weekly tips + free PDF guide describing cost of living, visa hacks, and the best coworking spots.
         </p>
         
         {status === "success" ? (
-          <div className="flex flex-col items-center justify-center text-[#FFD700] bg-[#0B0B0B] border border-[#FFD700] p-6 rounded-lg max-w-md mx-auto">
-            <CheckCircle size={40} className="mb-3" />
-            <h3 className="text-xl font-bold mb-1">Awesome! You&apos;re in.</h3>
-            <p className="text-[#A0A0A0] text-sm">Check your inbox for the starter kit.</p>
+          <div className="flex flex-col items-center justify-center text-primary bg-background border border-primary p-6 rounded-xl max-w-md mx-auto shadow-sm">
+            <CheckCircle size={40} className="mb-3 text-primary" />
+            <h3 className="text-xl font-bold mb-1 text-foreground">Awesome! You&apos;re in.</h3>
+            <p className="text-muted-foreground text-sm">Check your inbox for the starter kit.</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row max-w-lg mx-auto gap-3">
@@ -54,12 +54,12 @@ export default function NewsletterSignup() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email address" 
-              className="flex-grow bg-[#0B0B0B] border border-[#222222] text-white px-5 py-4 focus:outline-none focus:border-[#FFD700] focus:ring-1 focus:ring-[#FFD700] rounded-none transition-colors"
+              className="flex-grow bg-background border border-border text-foreground px-5 py-3.5 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary rounded-xl transition-colors placeholder:text-muted shadow-sm"
             />
             <button 
               type="submit" 
               disabled={status === "loading"}
-              className="bg-[#FFD700] text-black font-bold px-8 py-4 hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap rounded-none"
+              className="bg-primary hover:bg-yellow-400 text-black font-bold px-8 py-3.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap rounded-xl shadow-sm hover:scale-[1.02] active:scale-95"
             >
               {status === "loading" ? "Subscribing..." : "Subscribe"}
             </button>

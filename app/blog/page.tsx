@@ -7,6 +7,9 @@ import Image from "next/image"
 export const metadata = {
   title: 'Digital Nomad Blog: Guides, Tips & Stories | Digital Nomads in Nepal',
   description: 'Read the latest guides, tips, cost breakdowns, and visa tutorials for digital nomads living and working remotely in Nepal.',
+  alternates: {
+    canonical: 'https://digitalnomadsinnepal.com/blog',
+  },
 }
 
 export const dynamic = "force-dynamic"

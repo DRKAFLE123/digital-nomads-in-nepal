@@ -4,6 +4,9 @@ import Footer from "@/components/Footer"
 export const metadata = {
   title: "Terms of Service | Digital Nomads in Nepal",
   description: "Read the rules of engagement, discussion forum policies, and workspace booking terms for our community.",
+  alternates: {
+    canonical: "https://digitalnomadsinnepal.com/terms",
+  },
 }
 
 export default function TermsPage() {

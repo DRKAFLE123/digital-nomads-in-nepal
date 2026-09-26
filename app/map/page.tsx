@@ -1,10 +1,13 @@
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
-import { MapPin, Compass, Wifi, Sparkles } from "lucide-react"
+import { MapPin, Compass, Wifi } from "lucide-react"
 
 export const metadata = {
   title: "Nepal Digital Nomad Map | Kathmandu, Pokhara, & Himalayan Hubs",
   description: "Browse the interactive guide map of remote working hubs, trekking spots, and connectivity locations across Nepal.",
+  alternates: {
+    canonical: "https://digitalnomadsinnepal.com/map",
+  },
 }
 
 const pins = [
@@ -51,7 +54,7 @@ export default function MapPage() {
                 Visualizing pins for Kathmandu valley, Pokhara lake, and Himalayan trails. Drag and zoom functionality requires active maps account integration.
               </p>
               <div className="inline-flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10 text-[10px] text-gray-300 font-bold uppercase tracking-wider">
-                <Sparkles size={11} className="text-primary" />
+                <MapPin size={11} className="text-primary" />
                 Vetted Pins Loaded Below
               </div>
             </div>

@@ -6,6 +6,9 @@ import { AlertTriangle, ShieldCheck } from "lucide-react"
 export const metadata = {
   title: "Legal Disclaimer | Digital Nomads in Nepal",
   description: "Read the legal information and affiliate disclosure guidelines for the Digital Nomads in Nepal portal.",
+  alternates: {
+    canonical: "https://digitalnomadsinnepal.com/disclaimer",
+  },
 }
 
 export default function DisclaimerPage() {

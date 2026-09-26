@@ -5,7 +5,20 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/admin/', '/api/'],
+      disallow: [
+        '/admin',
+        '/admin/*',
+        '/api/*',
+        '/dashboard',
+        '/dashboard/*',
+        '/auth/*',
+        '/owner/*',
+        '/nomad/*',
+        '/guides/dashboard',
+        '/guides/dashboard/*',
+        '/community',
+        '/community/*',
+      ],
     },
     sitemap: 'https://digitalnomadsinnepal.com/sitemap.xml',
   }

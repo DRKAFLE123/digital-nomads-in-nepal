@@ -3,10 +3,13 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
+import { Eye, EyeOff } from "lucide-react"
 
 export default function RegisterPage() {
   const router = useRouter()
   const [form, setForm] = useState({ name: "", email: "", password: "", confirmPassword: "" })
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
@@ -52,16 +55,16 @@ export default function RegisterPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-10">
           <Link href="/" className="inline-flex items-center gap-3">
-            <div className="relative w-12 h-12 overflow-hidden">
-              <Image src="/nomadlogo.png" alt="Logo" fill className="object-contain" />
+            <div className="relative w-20 h-10 overflow-hidden">
+              <Image src="/webistepnglogo.png" alt="Logo" fill className="object-contain" unoptimized />
             </div>
             <span className="font-extrabold text-xl text-foreground">Digital Nomads <span className="text-primary">in Nepal</span></span>
           </Link>
         </div>
 
         <div className="bg-card border border-border rounded-2xl p-8 shadow-sm">
-          <h1 className="text-2xl font-bold text-foreground mb-2">Create your Nomad account</h1>
-          <p className="text-muted text-sm mb-8">Free to join. Leave reviews, connect with local guides.</p>
+          <h1 className="text-2xl font-bold text-foreground mb-2">Create Your Account</h1>
+          <p className="text-muted text-sm mb-8">Free to join. Access workspaces, connect with local experts & join the community.</p>
 
           {error && (
             <div className="mb-6 px-4 py-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">
@@ -70,24 +73,74 @@ export default function RegisterPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            {[
-              { label: "Full Name", key: "name", type: "text", placeholder: "Alex Smith" },
-              { label: "Email", key: "email", type: "email", placeholder: "you@example.com" },
-              { label: "Password", key: "password", type: "password", placeholder: "Min. 6 characters" },
-              { label: "Confirm Password", key: "confirmPassword", type: "password", placeholder: "Confirm password" },
-            ].map((field) => (
-              <div key={field.key}>
-                <label className="text-sm font-medium text-foreground mb-2 block">{field.label}</label>
+            <div>
+              <label className="text-sm font-medium text-foreground mb-2 block">Full Name</label>
+              <input
+                type="text"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                required
+                placeholder="Alex Smith"
+                className="w-full bg-background border border-border rounded-lg px-4 py-3 text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-muted transition-all"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-foreground mb-2 block">Email</label>
+              <input
+                type="email"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                required
+                placeholder="you@example.com"
+                className="w-full bg-background border border-border rounded-lg px-4 py-3 text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-muted transition-all"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-foreground mb-2 block">Password</label>
+              <div className="relative">
                 <input
-                  type={field.type}
-                  value={form[field.key as keyof typeof form]}
-                  onChange={(e) => setForm({ ...form, [field.key]: e.target.value })}
+                  type={showPassword ? "text" : "password"}
+                  value={form.password}
+                  onChange={(e) => setForm({ ...form, password: e.target.value })}
                   required
-                  placeholder={field.placeholder}
-                  className="w-full bg-background border border-border rounded-lg px-4 py-3 text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-muted transition-all"
+                  placeholder="Min. 6 characters"
+                  className="w-full bg-background border border-border rounded-lg pl-4 pr-11 py-3 text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-muted transition-all"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-foreground transition-colors p-1"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
               </div>
-            ))}
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-foreground mb-2 block">Confirm Password</label>
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  value={form.confirmPassword}
+                  onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
+                  required
+                  placeholder="Confirm password"
+                  className="w-full bg-background border border-border rounded-lg pl-4 pr-11 py-3 text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-muted transition-all"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-foreground transition-colors p-1"
+                >
+                  {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+            </div>
+
             <button
               type="submit"
               disabled={loading}
@@ -108,3 +161,4 @@ export default function RegisterPage() {
     </div>
   )
 }
+

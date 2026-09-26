@@ -15,6 +15,9 @@ export const dynamic = "force-dynamic"
 export const metadata = {
   title: "Digital Nomads in Nepal | Vetted Remote Work Guides (2026)",
   description: "The definitive portal for digital nomads in Nepal. Get verified guides on the Nepal Nomad Visa, cost of living, coworking spaces, and trekking guides.",
+  alternates: {
+    canonical: "https://digitalnomadsinnepal.com",
+  },
 }
 
 export default async function Home() {
@@ -76,7 +79,7 @@ export default async function Home() {
         </section>
 
         {/* Email Signup Section */}
-        <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-[#111111]">
+        <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-card border-y border-border">
           <div className="max-w-4xl mx-auto">
             <NewsletterSignup />
           </div>
@@ -110,15 +113,15 @@ export default async function Home() {
           <div className="max-w-7xl mx-auto">
             <h2 className="text-3xl md:text-5xl font-black text-foreground text-center mb-16">Why Choose Nepal?</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-              <div className="p-8 border border-border border-t-4 border-t-primary bg-background rounded-xl hover:-translate-y-2 transition-transform duration-300">
+              <div className="p-8 border border-border border-t-4 border-t-primary bg-background rounded-xl hover:-translate-y-2 transition-transform duration-300 shadow-sm">
                 <h3 className="text-2xl font-bold text-foreground mb-4">Unbeatable Cost</h3>
                 <p className="text-muted-foreground leading-relaxed">Nepal remains one of the most affordable countries in the world. You can find comfortable apartments, eat out daily, and enjoy a vibrant lifestyle for a fraction of the cost of Western cities.</p>
               </div>
-              <div className="p-8 border border-border border-t-4 border-t-primary bg-background rounded-xl hover:-translate-y-2 transition-transform duration-300">
+              <div className="p-8 border border-border border-t-4 border-t-primary bg-background rounded-xl hover:-translate-y-2 transition-transform duration-300 shadow-sm">
                 <h3 className="text-2xl font-bold text-foreground mb-4">Nature & Mountains</h3>
                 <p className="text-muted-foreground leading-relaxed">Escape the screen and step into the Himalayas. Weekends can be spent hiking, trekking, and exploring eight of the world&apos;s highest peaks just a short trip from your desk.</p>
               </div>
-              <div className="p-8 border border-border border-t-4 border-t-primary bg-background rounded-xl hover:-translate-y-2 transition-transform duration-300">
+              <div className="p-8 border border-border border-t-4 border-t-primary bg-background rounded-xl hover:-translate-y-2 transition-transform duration-300 shadow-sm">
                 <h3 className="text-2xl font-bold text-foreground mb-4">Growing Remote Culture</h3>
                 <p className="text-muted-foreground leading-relaxed">With fiber optic internet expanding and new dedicated coworking spaces opening up, Nepal is rapidly adjusting to accommodate the global remote workforce.</p>
               </div>
@@ -127,36 +130,36 @@ export default async function Home() {
         </section>
 
         {/* Community Section */}
-        <section className="w-full py-24 px-4 sm:px-6 lg:px-8 bg-[#0B0B0B]">
+        <section className="w-full py-24 px-4 sm:px-6 lg:px-8 bg-background border-t border-border">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl md:text-5xl font-black text-white mb-6">Join 2,000+ Nomads</h2>
-            <p className="text-[#A0A0A0] text-lg mb-12">Connect with our active community to ask questions, meet up, and share advice.</p>
+            <h2 className="text-4xl md:text-5xl font-black text-foreground mb-6">Join 2,000+ Nomads</h2>
+            <p className="text-muted-foreground text-lg mb-12">Connect with our active community to ask questions, meet up, and share advice.</p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <a href="#" className="flex flex-col items-center justify-center p-6 bg-[#141414] border border-[#222222] rounded-xl hover:bg-[#1877F2]/10 hover:border-[#1877F2] transition-colors group">
-                <svg className="w-8 h-8 text-[#A0A0A0] group-hover:text-[#1877F2] mb-3 transition-colors fill-current" viewBox="0 0 24 24">
+              <a href="#" className="flex flex-col items-center justify-center p-6 bg-card border border-border rounded-xl hover:bg-[#1877F2]/10 hover:border-[#1877F2] transition-colors group shadow-sm">
+                <svg className="w-8 h-8 text-muted-foreground group-hover:text-[#1877F2] mb-3 transition-colors fill-current" viewBox="0 0 24 24">
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                 </svg>
-                <span className="text-white font-medium mt-2">Facebook</span>
+                <span className="text-foreground font-medium mt-2">Facebook</span>
               </a>
-              <a href="#" className="flex flex-col items-center justify-center p-6 bg-[#141414] border border-[#222222] rounded-xl hover:bg-[#E1306C]/10 hover:border-[#E1306C] transition-colors group">
-                <svg className="w-8 h-8 text-[#A0A0A0] group-hover:text-[#E1306C] mb-3 transition-colors stroke-current fill-none" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <a href="#" className="flex flex-col items-center justify-center p-6 bg-card border border-border rounded-xl hover:bg-[#E1306C]/10 hover:border-[#E1306C] transition-colors group shadow-sm">
+                <svg className="w-8 h-8 text-muted-foreground group-hover:text-[#E1306C] mb-3 transition-colors stroke-current fill-none" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                   <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                   <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
                 </svg>
-                <span className="text-white font-medium mt-2">Instagram</span>
+                <span className="text-foreground font-medium mt-2">Instagram</span>
               </a>
-              <a href="#" className="flex flex-col items-center justify-center p-6 bg-[#141414] border border-[#222222] rounded-xl hover:bg-[#FF0000]/10 hover:border-[#FF0000] transition-colors group">
-                <svg className="w-8 h-8 text-[#A0A0A0] group-hover:text-[#FF0000] mb-3 transition-colors fill-current" viewBox="0 0 24 24">
+              <a href="#" className="flex flex-col items-center justify-center p-6 bg-card border border-border rounded-xl hover:bg-[#FF0000]/10 hover:border-[#FF0000] transition-colors group shadow-sm">
+                <svg className="w-8 h-8 text-muted-foreground group-hover:text-[#FF0000] mb-3 transition-colors fill-current" viewBox="0 0 24 24">
                   <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.107C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.388.511a3.002 3.002 0 0 0-2.11 2.107C0 8.053 0 12 0 12s0 3.947.502 5.837a3.003 3.003 0 0 0 2.11 2.107c1.883.511 9.388.511 9.388.511s7.505 0 9.388-.511a3.002 3.002 0 0 0 2.11-2.107C24 15.947 24 12 24 12s0-3.947-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                 </svg>
-                <span className="text-white font-medium mt-2">YouTube</span>
+                <span className="text-foreground font-medium mt-2">YouTube</span>
               </a>
-              <a href="#" className="flex flex-col items-center justify-center p-6 bg-[#141414] border border-[#222222] rounded-xl hover:bg-[#000000]/10 hover:border-white transition-colors group">
-                <svg className="w-8 h-8 text-[#A0A0A0] group-hover:text-white mb-3 transition-colors fill-current" viewBox="0 0 24 24">
+              <a href="#" className="flex flex-col items-center justify-center p-6 bg-card border border-border rounded-xl hover:bg-black/5 dark:hover:bg-white/10 hover:border-foreground transition-colors group shadow-sm">
+                <svg className="w-8 h-8 text-muted-foreground group-hover:text-foreground mb-3 transition-colors fill-current" viewBox="0 0 24 24">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                 </svg>
-                <span className="text-white font-medium mt-2">X</span>
+                <span className="text-foreground font-medium mt-2">X</span>
               </a>
             </div>
           </div>

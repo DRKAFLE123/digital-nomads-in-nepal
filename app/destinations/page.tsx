@@ -8,6 +8,9 @@ import { MapPin, Wifi, Wallet, Shield, Star, ArrowRight } from "lucide-react"
 export const metadata = {
   title: "Digital Nomad Destinations in Nepal | Kathmandu, Pokhara, Bandipur",
   description: "Explore the best hubs for remote work in Nepal. Vetted details on internet speed, cost of living, safety, and coworking spaces.",
+  alternates: {
+    canonical: "https://digitalnomadsinnepal.com/destinations",
+  },
 }
 
 interface DestinationTags {

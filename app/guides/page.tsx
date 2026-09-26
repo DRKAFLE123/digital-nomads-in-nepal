@@ -9,6 +9,9 @@ import TrekkingGuideIcon from "@/components/TrekkingGuideIcon"
 export const metadata: Metadata = {
   title: "Find Local Guides in Nepal | Digital Nomads in Nepal",
   description: "Discover and connect with verified local Nepalese guides — trekking, culture, food, and more. Leave reviews and ratings.",
+  alternates: {
+    canonical: "https://digitalnomadsinnepal.com/guides",
+  },
 }
 
 export const dynamic = "force-dynamic"

@@ -2,6 +2,9 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import AdminSidebar from "./AdminSidebar"
+import AdminNotificationBell from "@/components/admin/AdminNotificationBell"
+
+export const dynamic = "force-dynamic"
 
 export default async function AdminPanelLayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions)
@@ -24,9 +27,12 @@ export default async function AdminPanelLayout({ children }: { children: React.R
           <div className="text-sm text-gray-500 font-medium ml-10 lg:ml-0">
             Admin Dashboard
           </div>
-          <div className="flex items-center gap-2 text-xs text-gray-600">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" />
-            Live
+          <div className="flex items-center gap-4 text-xs text-gray-600">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" />
+              Live
+            </div>
+            <AdminNotificationBell />
           </div>
         </header>
 

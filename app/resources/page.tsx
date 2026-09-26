@@ -2,6 +2,15 @@ import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import AffiliateDisclaimer from "@/components/AffiliateDisclaimer"
 import Link from "next/link"
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Remote Work & Travel Resources for Nepal | Digital Nomads in Nepal",
+  description: "Curated tools, banking apps, SIM card providers, VPNs, and survival resources for digital nomads and remote workers in Nepal.",
+  alternates: {
+    canonical: "https://digitalnomadsinnepal.com/resources",
+  },
+}
 
 const resources: Record<string, { name: string; desc: string; link?: string }[]> = {
   "SIM Cards": [
@@ -31,11 +40,6 @@ const resources: Record<string, { name: string; desc: string; link?: string }[]>
     { name: "List Your Workspace", desc: "Are you a workspace or hub owner? Read our guide on how to register and list your space.", link: "/blog/how-to-list-coworking-space-nepal" },
     { name: "Register as a Local Guide", desc: "Licensed guides and adventure experts, learn how to build your profile here.", link: "/blog/how-to-register-local-guide-nepal" }
   ]
-}
-
-export const metadata = {
-  title: 'Resources & Tools | Digital Nomads in Nepal',
-  description: 'Essential tools, VPNs, banking apps, and coworking spaces for living in Nepal.',
 }
 
 export default function ResourcesPage() {

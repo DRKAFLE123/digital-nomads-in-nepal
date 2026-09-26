@@ -13,6 +13,9 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   return {
     title: `${guide.name} — Local Guide in ${guide.location} | Digital Nomads in Nepal`,
     description: `${guide.bio.slice(0, 150)}...`,
+    alternates: {
+      canonical: `https://digitalnomadsinnepal.com/guides/${params.id}`,
+    },
   }
 }
 

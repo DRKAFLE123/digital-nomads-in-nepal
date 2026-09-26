@@ -6,6 +6,9 @@ import PartnersClient, { Partner } from "./PartnersClient"
 export const metadata: Metadata = {
   title: "Partners | Digital Nomads in Nepal",
   description: "Trusted partners for digital nomads in Nepal — from remote job boards to adventure specialists and destination hubs.",
+  alternates: {
+    canonical: "https://digitalnomadsinnepal.com/partners",
+  },
 }
 
 const partnerData: Partner[] = [

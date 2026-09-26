@@ -1,11 +1,14 @@
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import NewsletterSignup from "@/components/NewsletterSignup"
-import { Send, Sparkles, ShieldCheck, Mail } from "lucide-react"
+import { Send, Check, ShieldCheck, Mail } from "lucide-react"
 
 export const metadata = {
   title: "Join the Newsletter | Digital Nomads in Nepal",
   description: "Subscribe to the Nepal Digital Nomad Starter Kit and receive weekly cost breakdowns, visa guides, and meetup invites.",
+  alternates: {
+    canonical: "https://digitalnomadsinnepal.com/newsletter",
+  },
 }
 
 export default function NewsletterPage() {
@@ -48,7 +51,7 @@ export default function NewsletterPage() {
                   <span>Cost of Living changes, coworking discounts, and SIM data promotions in Kathmandu and Pokhara.</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <Sparkles className="text-primary shrink-0 mt-0.5" size={14} />
+                  <Check className="text-primary shrink-0 mt-0.5" size={14} />
                   <span>Direct email alerts for weekend trekking invitations, social meetups, and local workshops.</span>
                 </li>
                 <li className="flex items-start gap-2">

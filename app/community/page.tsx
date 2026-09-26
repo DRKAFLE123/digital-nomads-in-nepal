@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Users, Globe, MapPin, Briefcase, Search, ArrowRight, ShieldCheck, Mail, Calendar, Building, Sparkles, UserCheck, LogOut, MessageCircle, ThumbsUp, Plus, X, ArrowLeft } from "lucide-react"
+import { Users, Globe, MapPin, Briefcase, Search, ArrowRight, ShieldCheck, Mail, Calendar, Building, Compass, UserCheck, LogOut, MessageCircle, ThumbsUp, Plus, X, ArrowLeft } from "lucide-react"
 import { useSession, signOut } from "next-auth/react"
 import Link from "next/link"
 import Navbar from "@/components/Navbar"
@@ -489,7 +489,7 @@ export default function CommunityPage() {
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mt-6 mb-16">
         <div className="inline-flex items-center gap-2 bg-purple-500/10 border border-purple-500/20 text-purple-300 px-3 py-1 rounded-full text-xs font-semibold mb-6">
-          <Sparkles size={14} className="text-purple-400" />
+          <Compass size={14} className="text-purple-400" />
           The Nomad Hub of the Himalayas
         </div>
         <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-tight">
@@ -498,35 +498,35 @@ export default function CommunityPage() {
             Community in Nepal
           </span>
         </h1>
-        <p className="mt-4 text-gray-400 max-w-2xl mx-auto text-base md:text-lg">
+        <p className="mt-4 text-muted-foreground max-w-2xl mx-auto text-base md:text-lg">
           Connect with remote workers, find active trekking groups, check in to local work hubs, and receive community alerts about upcoming meetups.
         </p>
 
         {/* Live Stats Bar */}
-        <div className="max-w-4xl mx-auto mt-12 bg-white/[0.02] border border-white/5 backdrop-blur-md rounded-2xl p-6 md:p-8 shadow-xl shadow-black/40">
-          <div className="grid grid-cols-3 gap-4 divide-x divide-white/5">
+        <div className="max-w-4xl mx-auto mt-12 bg-card border border-border backdrop-blur-md rounded-2xl p-6 md:p-8 shadow-md">
+          <div className="grid grid-cols-3 gap-4 divide-x divide-border">
             <div className="text-center px-2">
               <p className="text-3xl md:text-4xl font-extrabold text-primary">
                 {stats.totalMembers || "200"}+
               </p>
-              <p className="text-gray-500 text-xs md:text-sm mt-1 flex items-center justify-center gap-1.5 font-medium">
-                <Users size={14} className="text-gray-400" /> Nomads Joined
+              <p className="text-muted-foreground text-xs md:text-sm mt-1 flex items-center justify-center gap-1.5 font-medium">
+                <Users size={14} className="text-muted-foreground" /> Nomads Joined
               </p>
             </div>
             <div className="text-center px-2">
-              <p className="text-3xl md:text-4xl font-extrabold text-purple-400">
+              <p className="text-3xl md:text-4xl font-extrabold text-purple-500 dark:text-purple-400">
                 {stats.totalCountries || "25"}+
               </p>
-              <p className="text-gray-500 text-xs md:text-sm mt-1 flex items-center justify-center gap-1.5 font-medium">
-                <Globe size={14} className="text-gray-400" /> Countries
+              <p className="text-muted-foreground text-xs md:text-sm mt-1 flex items-center justify-center gap-1.5 font-medium">
+                <Globe size={14} className="text-muted-foreground" /> Countries
               </p>
             </div>
             <div className="text-center px-2">
-              <p className="text-3xl md:text-4xl font-extrabold text-green-400">
+              <p className="text-3xl md:text-4xl font-extrabold text-emerald-500 dark:text-green-400">
                 {stats.activeCheckIns || "0"}
               </p>
-              <p className="text-gray-500 text-xs md:text-sm mt-1 flex items-center justify-center gap-1.5 font-medium">
-                <Building size={14} className="text-gray-400" /> Nomads Co-working
+              <p className="text-muted-foreground text-xs md:text-sm mt-1 flex items-center justify-center gap-1.5 font-medium">
+                <Building size={14} className="text-muted-foreground" /> Nomads Co-working
               </p>
             </div>
           </div>
@@ -541,7 +541,7 @@ export default function CommunityPage() {
           {session ? (
             <>
               <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 mb-2">
-                <Sparkles className="text-primary animate-pulse" size={22} />
+                <Compass className="text-primary" size={22} />
                 Welcome to the Nomad Community Hub!
               </h2>
               <p className="text-muted text-xs md:text-sm mb-6">
@@ -1208,7 +1208,7 @@ export default function CommunityPage() {
             className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
               selectedWorkType === ""
                 ? "bg-primary border-primary text-black"
-                : "bg-white/5 border-white/10 text-gray-400 hover:text-white hover:bg-white/10"
+                : "bg-card border-border text-muted-foreground hover:text-foreground hover:border-primary/40"
             }`}
           >
             All Skills 🌟
@@ -1220,7 +1220,7 @@ export default function CommunityPage() {
               className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
                 selectedWorkType === type.key
                   ? "bg-primary border-primary text-black"
-                  : "bg-white/5 border-white/10 text-gray-400 hover:text-white hover:bg-white/10"
+                  : "bg-card border-border text-muted-foreground hover:text-foreground hover:border-primary/40"
               }`}
             >
               {type.label}
@@ -1232,13 +1232,13 @@ export default function CommunityPage() {
       {/* Nomad Member Directory Cards */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
         {loadingMembers ? (
-          <div className="flex flex-col items-center justify-center py-20 text-gray-400">
+          <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
             <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-primary border-r-2 mb-3"></div>
             Loading member directory...
           </div>
         ) : members.length === 0 ? (
-          <div className="text-center py-20 border border-dashed border-white/5 rounded-3xl bg-white/[0.01]">
-            <p className="text-gray-500 text-sm">No digital nomads found matching filters.</p>
+          <div className="text-center py-20 border border-dashed border-border rounded-3xl bg-card">
+            <p className="text-muted-foreground text-sm">No digital nomads found matching filters.</p>
             <button
               onClick={() => { setSearchQuery(""); setSelectedCity(""); setSelectedWorkType(""); setPage(1) }}
               className="text-xs text-primary font-bold mt-2 hover:underline"

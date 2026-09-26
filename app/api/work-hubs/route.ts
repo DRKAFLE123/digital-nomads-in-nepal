@@ -48,6 +48,11 @@ export async function GET(req: NextRequest) {
           const hasMeet = u.some(unit => (unit.type || unit.name || "").toLowerCase().includes("meeting") || (unit.type || unit.name || "").toLowerCase().includes("hall"))
           const hasMeetFac = facs.some(f => f.toLowerCase().includes("meeting") || f.toLowerCase().includes("hall") || f.toLowerCase().includes("booth"))
           if (!hasMeet && !hasMeetFac) return false
+        } else if (catLower.includes("coliving") || catLower.includes("stay") || catLower.includes("hotel") || catLower.includes("hostel") || catLower.includes("suite")) {
+          const hasColiving = u.some(unit => (unit.type || unit.name || "").toLowerCase().includes("coliving") || (unit.type || unit.name || "").toLowerCase().includes("suite") || (unit.type || unit.name || "").toLowerCase().includes("stay") || (unit.type || unit.name || "").toLowerCase().includes("room"))
+          const hasColivingFac = facs.some(f => f.toLowerCase().includes("coliving") || f.toLowerCase().includes("accommodation") || f.toLowerCase().includes("stay") || f.toLowerCase().includes("room"))
+          const isColivingType = h.name.toLowerCase().includes("coliving") || h.name.toLowerCase().includes("resort") || h.name.toLowerCase().includes("stay") || h.name.toLowerCase().includes("hostel") || h.name.toLowerCase().includes("hotel")
+          if (!hasColiving && !hasColivingFac && !isColivingType) return false
         } else if (catLower.includes("24/7") || catLower.includes("night")) {
           const is247 = (h.openingHours || "").includes("24/7") || facs.some(f => f.includes("24/7"))
           if (!is247) return false

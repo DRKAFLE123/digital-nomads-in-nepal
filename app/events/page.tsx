@@ -6,6 +6,9 @@ import type { Metadata } from "next"
 export const metadata: Metadata = {
   title: "Events | Digital Nomads in Nepal",
   description: "Community events, meetups, workshops, and day trips for digital nomads in Nepal. Join fellow remote workers in Kathmandu and Pokhara.",
+  alternates: {
+    canonical: "https://digitalnomadsinnepal.com/events",
+  },
 }
 
 type Event = {

@@ -52,7 +52,7 @@ export default function HeroSection() {
   }
 
   return (
-    <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-[#0B0B0B]">
+    <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-background">
       {/* Mountain Peak Background */}
       <div className="absolute inset-0 z-0">
         <Image 
@@ -64,8 +64,8 @@ export default function HeroSection() {
         />
       </div>
 
-      {/* Dark Overlay for text readability (matches the image's deep navy/black overlay design seamlessly) */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#0B0B0B] via-black/50 to-black/20" />
+      {/* Adaptive Gradient Overlay for text readability and smooth transition into page */}
+      <div className="absolute inset-0 z-10 bg-gradient-to-t from-background via-black/55 to-black/30 dark:from-[#0B0B0B] dark:via-black/60 dark:to-black/30" />
 
       {/* Content */}
       <div className="relative z-20 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center py-16 md:py-24">
@@ -82,27 +82,32 @@ export default function HeroSection() {
         </p>
 
         {/* Extra SEO Line */}
-        <p className="text-xs sm:text-sm text-primary/90 font-medium drop-shadow mb-6 tracking-wide px-2">
+        <p className="text-xs sm:text-sm text-primary font-medium drop-shadow mb-6 tracking-wide px-2">
           Guides for digital nomads in Kathmandu, Pokhara, and across Nepal.
         </p>
 
         {/* Search Bar for Coworking Spaces / Workplaces */}
         <form onSubmit={handleSearch} className="w-full max-w-lg mb-8 px-2 relative group z-30">
           <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-yellow-500 rounded-full blur opacity-30 group-hover:opacity-50 transition duration-300"></div>
-          <div className="relative flex items-center bg-black/80 backdrop-blur border border-white/10 rounded-full p-1.5 focus-within:border-primary transition-colors">
-            <Search className="text-muted w-4 h-4 ml-4 flex-shrink-0" />
+          <div className="relative flex items-center bg-white/95 dark:bg-black/80 backdrop-blur border border-gray-200 dark:border-white/10 rounded-full p-1.5 focus-within:border-primary shadow-lg transition-colors">
+            <Search className="text-gray-400 dark:text-muted w-4 h-4 ml-4 flex-shrink-0" />
             <input
               type="text"
               value={query}
               onChange={e => setQuery(e.target.value)}
-              placeholder={`Search workspaces (e.g. ${placeholder})`}
-              className="w-full bg-transparent border-0 text-white text-xs sm:text-sm pl-3 pr-4 py-2.5 focus:outline-none placeholder:text-gray-500"
+              onClick={() => {
+                if (typeof window !== "undefined") {
+                  window.dispatchEvent(new CustomEvent("open-search-modal"))
+                }
+              }}
+              placeholder={`Search workspaces, guides, destinations (e.g. ${placeholder})`}
+              className="w-full bg-transparent border-0 text-gray-900 dark:text-white text-xs sm:text-sm pl-3 pr-4 py-2.5 focus:outline-none placeholder:text-gray-500 cursor-pointer"
             />
             <button
               type="submit"
-              className="bg-primary hover:bg-yellow-500 text-black font-black text-xs px-5 py-2.5 rounded-full uppercase tracking-wider transition-all active:scale-95 whitespace-nowrap"
+              className="bg-primary hover:bg-yellow-500 text-black font-black text-xs px-5 py-2.5 rounded-full uppercase tracking-wider transition-all active:scale-95 whitespace-nowrap shadow-sm"
             >
-              Search Hubs
+              Search
             </button>
           </div>
         </form>

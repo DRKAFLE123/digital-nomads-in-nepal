@@ -7,7 +7,6 @@ import {
   Check,
   Trash2,
   ExternalLink,
-  Sparkles,
   Share2,
   Zap,
 } from "lucide-react";
@@ -140,7 +139,7 @@ export default function UTMBuilderPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#1e1e1e] pb-6">
         <div>
           <div className="flex items-center gap-2 text-[#FFD700] text-xs font-black uppercase tracking-widest mb-1">
-            <Sparkles className="w-4 h-4" /> Marketing & Analytics Suite
+            <Zap className="w-4 h-4" /> Marketing & Analytics Suite
           </div>
           <h1 className="text-3xl font-extrabold text-white tracking-tight">
             UTM Campaign URL Builder

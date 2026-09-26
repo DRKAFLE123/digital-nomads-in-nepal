@@ -4,6 +4,9 @@ import Footer from "@/components/Footer"
 export const metadata = {
   title: "Privacy Policy | Digital Nomads in Nepal",
   description: "Learn how we handle your registration details, community forum profile, and workspace check-in privacy.",
+  alternates: {
+    canonical: "https://digitalnomadsinnepal.com/privacy",
+  },
 }
 
 export default function PrivacyPage() {

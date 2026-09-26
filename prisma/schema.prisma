@@ -45,6 +45,7 @@ model ResourceItem {
 enum Role {
   NOMAD
   GUIDE
+  OWNER
   ADMIN
 }
 

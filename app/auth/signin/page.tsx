@@ -4,6 +4,7 @@ import { signIn } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
+import { Eye, EyeOff } from "lucide-react"
 
 function SignInForm() {
   const router = useRouter()
@@ -12,6 +13,7 @@ function SignInForm() {
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
@@ -41,8 +43,8 @@ function SignInForm() {
         {/* Logo */}
         <div className="text-center mb-10">
           <Link href="/" className="inline-flex items-center gap-3">
-            <div className="relative w-12 h-12 overflow-hidden">
-              <Image src="/nomadlogo.png" alt="Logo" fill className="object-contain" />
+            <div className="relative w-20 h-10 overflow-hidden">
+              <Image src="/webistepnglogo.png" alt="Logo" fill className="object-contain" unoptimized />
             </div>
             <span className="font-extrabold text-xl text-foreground">Digital Nomads <span className="text-primary">in Nepal</span></span>
           </Link>
@@ -50,7 +52,7 @@ function SignInForm() {
 
         <div className="bg-card border border-border rounded-2xl p-8 shadow-sm">
           <h1 className="text-2xl font-bold text-foreground mb-2">Sign in to your account</h1>
-          <p className="text-muted text-sm mb-8">Sign in to leave reviews and connect with guides.</p>
+          <p className="text-muted text-sm mb-8">Access your workspaces, guide profile & community account.</p>
 
           {error && (
             <div className="mb-6 px-4 py-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">
@@ -72,14 +74,24 @@ function SignInForm() {
             </div>
             <div>
               <label className="text-sm font-medium text-foreground mb-2 block">Password</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                placeholder="••••••••"
-                className="w-full bg-background border border-border rounded-lg px-4 py-3 text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-muted transition-all"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  placeholder="••••••••"
+                  className="w-full bg-background border border-border rounded-lg pl-4 pr-11 py-3 text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-muted transition-all"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-foreground transition-colors p-1"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
             <button
               type="submit"

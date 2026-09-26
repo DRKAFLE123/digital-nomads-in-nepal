@@ -21,11 +21,15 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 
   const slug = params.slug.toLowerCase()
+  const canonicalSlug = slug === "connectivity" ? "sim-cards" : slug
   const title = titles[slug] || "Nomad Resources Guide"
 
   return {
     title: `${title} | Digital Nomads in Nepal`,
     description: `Expert guide and survival checklist for digital nomads setting up in Nepal in 2026.`,
+    alternates: {
+      canonical: `https://digitalnomadsinnepal.com/resources/${canonicalSlug}`,
+    },
   }
 }
 

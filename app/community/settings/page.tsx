@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowLeft, Camera, ShieldCheck, User, Mail, Link2, Key, Loader2, CheckCircle, AlertCircle } from "lucide-react"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
@@ -267,7 +268,7 @@ export default function ProfileSettingsPage() {
                   {uploading ? (
                     <Loader2 className="w-6 h-6 text-primary animate-spin" />
                   ) : form.avatarUrl ? (
-                    <img src={form.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                    <Image src={form.avatarUrl} alt="Avatar" width={112} height={112} className="w-full h-full object-cover" unoptimized />
                   ) : (
                     <span className="text-foreground text-3xl font-black">{form.name?.[0]?.toUpperCase() || <User size={36} />}</span>
                   )}

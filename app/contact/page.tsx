@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
-import { Mail, MapPin, CheckCircle, Sparkles, Send } from "lucide-react"
+import { Mail, MapPin, CheckCircle, Building, Send } from "lucide-react"
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -77,7 +77,7 @@ export default function ContactPage() {
             </div>
 
             <div className="p-6 bg-card border border-border rounded-2xl flex items-center gap-3">
-              <Sparkles className="text-primary shrink-0 animate-pulse" size={24} />
+              <Building className="text-primary shrink-0" size={24} />
               <p className="text-xs text-muted-foreground leading-relaxed">
                 <strong>Looking to partner?</strong> We offer vetted registrations for coworking spaces, boutique hotels, and tour guides. Reach out directly with the Partnerships subject!
               </p>

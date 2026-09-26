@@ -5,6 +5,9 @@ import { Wifi, BatteryCharging, Shield, CheckCircle } from "lucide-react"
 export const metadata = {
   title: "Internet & Remote Work Setup in Nepal | Digital Nomads",
   description: "Practical guide to setting up high-speed fiber internet, power backups, and working setups for digital nomads in Kathmandu & Pokhara.",
+  alternates: {
+    canonical: "https://digitalnomadsinnepal.com/setup",
+  },
 }
 
 export default function SetupPage() {
