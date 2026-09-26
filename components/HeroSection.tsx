@@ -73,7 +73,7 @@ export default function HeroSection() {
         {/* H1 */}
         <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-xl mb-4">
           Digital Nomads in Nepal<br className="hidden sm:block" />{" "}
-          <span className="text-primary">— Live, Work &amp; Explore</span>
+          <span className="text-primary">Live, Work &amp; Explore</span>
         </h1>
 
         {/* Supporting text */}
