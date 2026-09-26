@@ -391,11 +391,18 @@ export default function Navbar() {
                 }`}>
                   DIGITAL NOMADS
                 </span>
-                <span className={`font-black text-[9px] sm:text-[10px] tracking-[0.26em] text-[#FFD400] uppercase leading-none mt-1 transition-all lg:group-hover/name:tracking-[0.28em] ${
-                  !isScrolled ? "inline-block" : "hidden sm:inline-block"
+                <div className={`w-full flex justify-between font-black text-[9px] sm:text-[10px] text-[#FFD400] uppercase leading-none mt-1 select-none ${
+                  !isScrolled ? "flex" : "hidden sm:flex"
                 }`}>
-                  IN NEPAL
-                </span>
+                  <span>I</span>
+                  <span>N</span>
+                  <span className="w-1.5 sm:w-2" />
+                  <span>N</span>
+                  <span>E</span>
+                  <span>P</span>
+                  <span>A</span>
+                  <span>L</span>
+                </div>
               </Link>
 
               {/* Platform Intro Popover on Hover (Desktop ONLY: completely hidden on mobile/touch screens) */}
@@ -1093,9 +1100,16 @@ export default function Navbar() {
                   <span className="font-black text-xs sm:text-sm tracking-tight uppercase text-gray-900 dark:text-white leading-tight">
                     DIGITAL NOMADS
                   </span>
-                  <span className="font-black text-[9px] tracking-[0.26em] text-[#FFD400] uppercase leading-none mt-0.5">
-                    IN NEPAL
-                  </span>
+                  <div className="w-full flex justify-between font-black text-[9px] text-[#FFD400] uppercase leading-none mt-1 select-none">
+                    <span>I</span>
+                    <span>N</span>
+                    <span className="w-1.5" />
+                    <span>N</span>
+                    <span>E</span>
+                    <span>P</span>
+                    <span>A</span>
+                    <span>L</span>
+                  </div>
                 </div>
               </Link>
               <button
