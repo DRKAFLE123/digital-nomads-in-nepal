@@ -380,9 +380,9 @@ export default function Navbar() {
             <div className={`relative group/name items-center h-full ${session ? "hidden md:flex" : "flex"}`}>
               <Link
                 href="/"
-                className="flex flex-col justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD400] rounded-xl py-1 text-left select-none"
+                className="flex flex-col items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD400] rounded-xl py-1 text-center select-none"
               >
-                <span className={`font-black text-sm sm:text-[15px] md:text-[17px] tracking-normal leading-tight uppercase transition-colors ${
+                <span className={`font-black text-sm sm:text-[15px] md:text-[17px] tracking-normal leading-tight uppercase transition-colors text-center ${
                   isSolid
                     ? "text-gray-900 dark:text-[#F5F5F5] lg:group-hover/name:text-primary"
                     : "text-white lg:group-hover/name:text-[#FFD400]"
@@ -391,10 +391,12 @@ export default function Navbar() {
                 }`}>
                   DIGITAL NOMADS
                 </span>
-                <div className={`font-extrabold text-[9px] sm:text-[10px] text-[#FFD400] tracking-[0.22em] uppercase leading-none mt-1 select-none ${
-                  !isScrolled ? "block" : "hidden sm:block"
+                <div className={`w-full flex items-center justify-center gap-1.5 font-extrabold text-[9px] sm:text-[10px] text-[#FFD400] tracking-[0.16em] uppercase leading-none mt-1 select-none text-center ${
+                  !isScrolled ? "flex" : "hidden sm:flex"
                 }`}>
-                  IN NEPAL
+                  <span className="text-[#FFD400]/60 font-medium select-none">—</span>
+                  <span>IN NEPAL</span>
+                  <span className="text-[#FFD400]/60 font-medium select-none">—</span>
                 </div>
               </Link>
 
@@ -1089,12 +1091,14 @@ export default function Navbar() {
                 <div className="relative h-8 w-20 overflow-hidden">
                   <Image src="/webistepnglogo.png" alt="Logo" fill className="object-contain object-left" unoptimized />
                 </div>
-                <div className="flex flex-col text-left">
+                <div className="flex flex-col items-center text-center">
                   <span className="font-black text-sm tracking-normal uppercase text-gray-900 dark:text-white leading-tight">
                     DIGITAL NOMADS
                   </span>
-                  <div className="font-extrabold text-[9px] text-[#FFD400] tracking-[0.22em] uppercase leading-none mt-1 select-none">
-                    IN NEPAL
+                  <div className="w-full flex items-center justify-center gap-1.5 font-extrabold text-[9px] text-[#FFD400] tracking-[0.16em] uppercase leading-none mt-1 select-none">
+                    <span className="text-[#FFD400]/60 font-medium select-none">—</span>
+                    <span>IN NEPAL</span>
+                    <span className="text-[#FFD400]/60 font-medium select-none">—</span>
                   </div>
                 </div>
               </Link>
