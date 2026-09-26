@@ -2,6 +2,7 @@
 
 /* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect, useRef } from "react"
+import { createPortal } from "react-dom"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Menu, X, ChevronDown, CalendarCheck, LogOut, User, Settings, Compass, Building, Home, Users, BookOpen, ArrowRight, Bell, Award, Repeat, Search, CheckCircle2, TrendingUp } from "lucide-react"
@@ -87,11 +88,33 @@ export default function Navbar() {
   const isHome = pathname === "/"
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const [expandedMobileItem, setExpandedMobileItem] = useState<string | null>(null)
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
   const [popularPosts, setPopularPosts] = useState<PopularPost[]>(DEFAULT_POPULAR_POSTS)
   const [hoveredBlogIndex, setHoveredBlogIndex] = useState(0)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Auto-close mobile drawer on route change
+  useEffect(() => {
+    setMobileMenuOpen(false)
+  }, [pathname])
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = ""
+    }
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [mobileMenuOpen])
 
   useEffect(() => {
     async function loadPopularPosts() {
@@ -1034,159 +1057,170 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
-      {mobileMenuOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
-          onClick={() => setMobileMenuOpen(false)}
-        />
-      )}
-
-      <div
-        className={`lg:hidden fixed inset-y-0 right-0 z-50 w-full sm:max-w-sm bg-white dark:bg-[#080808] border-l border-gray-200 dark:border-[#242424] shadow-2xl p-6 flex flex-col transition-transform duration-300 ${
-          mobileMenuOpen ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
-        {/* Mobile Header */}
-        <div className="flex items-center justify-between pb-5 border-b border-gray-200 dark:border-[#242424] shrink-0">
-          <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2">
-            <div className="relative h-8 w-16 overflow-hidden">
-              <Image src="/webistepnglogo.png" alt="Logo" fill className="object-contain" unoptimized />
-            </div>
-            <span className="font-extrabold text-base tracking-tight text-gray-900 dark:text-white">
-              Digital Nomads <span className="text-[#FFD400]">Nepal</span>
-            </span>
-          </Link>
-          <button
+      {/* Mobile Drawer Menu Portaled to document.body */}
+      {mounted && createPortal(
+        <>
+          {/* Backdrop */}
+          <div
+            className={`fixed inset-0 z-[9998] bg-black/70 backdrop-blur-sm lg:hidden transition-opacity duration-300 ${
+              mobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+            }`}
             onClick={() => setMobileMenuOpen(false)}
-            className="p-2 rounded-xl text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#141414]"
-            aria-label="Close menu"
+            aria-hidden="true"
+          />
+
+          {/* Slide-out Drawer */}
+          <div
+            className={`lg:hidden fixed inset-y-0 right-0 z-[9999] w-full sm:max-w-sm h-[100dvh] bg-white dark:bg-[#080808] border-l border-gray-200 dark:border-[#242424] shadow-2xl p-6 flex flex-col justify-between overflow-hidden transition-transform duration-300 ease-in-out ${
+              mobileMenuOpen ? "translate-x-0" : "translate-x-full pointer-events-none"
+            }`}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation Menu"
           >
-            <X size={20} />
-          </button>
-        </div>
-
-        {/* Mobile Search Trigger in Drawer */}
-        <div className="py-3 border-b border-gray-200 dark:border-[#242424]">
-          <button
-            type="button"
-            onClick={() => {
-              setMobileMenuOpen(false)
-              setIsSearchOpen(true)
-            }}
-            className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-gray-100 dark:bg-[#161616] border border-gray-200 dark:border-[#282828] text-gray-700 dark:text-gray-300 hover:border-primary transition-all text-xs font-medium"
-          >
-            <span className="flex items-center gap-2">
-              <Search size={15} className="text-[#FFD400]" />
-              <span>Search workspaces, guides, visa...</span>
-            </span>
-            <span className="text-[10px] text-primary font-bold">Open</span>
-          </button>
-        </div>
-
-        {/* Mobile Navigation List */}
-        <div className="flex-1 overflow-y-auto py-5 space-y-2">
-          {navCategories.map((cat) => {
-            const hasDropdown = !!cat.dropdown
-            const isExpanded = expandedMobileItem === cat.name
-
-            return (
-              <div key={cat.name} className="border-b border-gray-100 dark:border-[#1c1c1c] pb-2">
-                {hasDropdown ? (
-                  <button
-                    onClick={() => setExpandedMobileItem(isExpanded ? null : cat.name)}
-                    className="flex items-center justify-between w-full text-left py-2.5 text-sm font-semibold text-gray-900 dark:text-white hover:text-[#FFD400] transition-colors"
-                  >
-                    <span>{cat.name}</span>
-                    <ChevronDown
-                      size={16}
-                      className={`text-[#A1A1AA] transition-transform duration-200 ${isExpanded ? "rotate-180 text-[#FFD400]" : ""}`}
-                    />
-                  </button>
-                ) : (
-                  <Link
-                    href={cat.href || "#"}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block py-2.5 text-sm font-semibold text-gray-900 dark:text-white hover:text-[#FFD400] transition-colors"
-                  >
-                    {cat.name}
-                  </Link>
-                )}
-
-                {hasDropdown && isExpanded && (
-                  <div className="mt-1 pl-3 border-l-2 border-[#FFD400]/40 ml-1 space-y-2 py-1">
-                    {cat.dropdown!.map((sub, idx) => (
-                      <Link
-                        key={idx}
-                        href={sub.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="block p-2 rounded-xl hover:bg-gray-50 dark:hover:bg-[#141414] transition-colors"
-                      >
-                        <div className="text-xs font-bold text-gray-900 dark:text-white flex items-center gap-1">
-                          {sub.name}
-                          {sub.hasIcon && <TrekkingGuideIcon size={13} />}
-                        </div>
-                        <p className="text-[10px] text-gray-500 dark:text-[#A1A1AA] mt-0.5">{sub.desc}</p>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )
-          })}
-        </div>
-
-        {/* Mobile Actions Footer */}
-        <div className="border-t border-gray-200 dark:border-[#242424] pt-5 space-y-3 shrink-0 bg-white dark:bg-[#080808]">
-          {!session ? (
-            <div className="grid grid-cols-2 gap-2.5">
-              <Link
-                href="/auth/signin"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-center text-center px-4 py-2.5 border border-gray-200 dark:border-[#242424] text-gray-900 dark:text-white hover:border-[#FFD400] font-semibold rounded-xl text-xs transition-all"
-              >
-                Sign In
+            {/* Mobile Header */}
+            <div className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-[#242424] shrink-0">
+              <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2">
+                <div className="relative h-8 w-16 overflow-hidden">
+                  <Image src="/webistepnglogo.png" alt="Logo" fill className="object-contain" unoptimized />
+                </div>
+                <span className="font-extrabold text-base tracking-tight text-gray-900 dark:text-white">
+                  Digital Nomads <span className="text-[#FFD400]">Nepal</span>
+                </span>
               </Link>
-              <Link
-                href="/auth/register"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-center gap-1.5 text-center px-4 py-2.5 border border-[#FFD400] text-[#FFD400] hover:bg-[#FFD400] hover:text-black font-bold rounded-xl text-xs transition-all"
-              >
-                <Users size={13} />
-                <span>Join Free</span>
-              </Link>
-            </div>
-          ) : (
-            <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-[#121212] border border-gray-200 dark:border-[#242424] rounded-2xl">
-              <span className="text-xs text-gray-900 dark:text-white font-bold">{session.user?.name}</span>
               <button
-                onClick={() => {
-                  signOut()
-                  setMobileMenuOpen(false)
-                }}
-                className="text-xs text-red-500 dark:text-red-400 font-bold hover:underline"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2 rounded-xl text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#141414] transition-colors"
+                aria-label="Close menu"
               >
-                Sign Out
+                <X size={20} />
               </button>
             </div>
-          )}
 
-          {/* Mobile Theme Row */}
-          <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-[#121212] border border-gray-200 dark:border-[#242424] rounded-2xl">
-            <span className="text-xs text-gray-700 dark:text-gray-300 font-semibold">Theme</span>
-            <ThemeToggle variant="ghost" />
+            {/* Mobile Search Trigger in Drawer */}
+            <div className="py-3 border-b border-gray-200 dark:border-[#242424] shrink-0">
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false)
+                  setIsSearchOpen(true)
+                }}
+                className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-gray-100 dark:bg-[#161616] border border-gray-200 dark:border-[#282828] text-gray-700 dark:text-gray-300 hover:border-primary transition-all text-xs font-medium cursor-pointer"
+              >
+                <span className="flex items-center gap-2">
+                  <Search size={15} className="text-[#FFD400]" />
+                  <span>Search workspaces, guides, visa...</span>
+                </span>
+                <span className="text-[10px] text-primary font-bold">Open</span>
+              </button>
+            </div>
+
+            {/* Mobile Navigation List (Scrollable middle container) */}
+            <div className="flex-1 overflow-y-auto py-4 space-y-1.5 overscroll-contain">
+              {navCategories.map((cat) => {
+                const hasDropdown = !!cat.dropdown
+                const isExpanded = expandedMobileItem === cat.name
+
+                return (
+                  <div key={cat.name} className="border-b border-gray-100 dark:border-[#1c1c1c] pb-2">
+                    {hasDropdown ? (
+                      <button
+                        onClick={() => setExpandedMobileItem(isExpanded ? null : cat.name)}
+                        className="flex items-center justify-between w-full text-left py-2.5 text-sm font-semibold text-gray-900 dark:text-white hover:text-[#FFD400] transition-colors cursor-pointer"
+                      >
+                        <span>{cat.name}</span>
+                        <ChevronDown
+                          size={16}
+                          className={`text-[#A1A1AA] transition-transform duration-200 ${isExpanded ? "rotate-180 text-[#FFD400]" : ""}`}
+                        />
+                      </button>
+                    ) : (
+                      <Link
+                        href={cat.href || "#"}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block py-2.5 text-sm font-semibold text-gray-900 dark:text-white hover:text-[#FFD400] transition-colors"
+                      >
+                        {cat.name}
+                      </Link>
+                    )}
+
+                    {hasDropdown && isExpanded && (
+                      <div className="mt-1 pl-3 border-l-2 border-[#FFD400]/40 ml-1 space-y-1.5 py-1">
+                        {cat.dropdown!.map((sub, idx) => (
+                          <Link
+                            key={idx}
+                            href={sub.href}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="block p-2 rounded-xl hover:bg-gray-50 dark:hover:bg-[#141414] transition-colors"
+                          >
+                            <div className="text-xs font-bold text-gray-900 dark:text-white flex items-center gap-1">
+                              {sub.name}
+                              {sub.hasIcon && <TrekkingGuideIcon size={13} />}
+                            </div>
+                            <p className="text-[10px] text-gray-500 dark:text-[#A1A1AA] mt-0.5">{sub.desc}</p>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+
+            {/* Mobile Actions Footer (Pinned to bottom of drawer) */}
+            <div className="border-t border-gray-200 dark:border-[#242424] pt-4 space-y-2.5 shrink-0 bg-white dark:bg-[#080808]">
+              {!session ? (
+                <div className="grid grid-cols-2 gap-2">
+                  <Link
+                    href="/auth/signin"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-center text-center px-4 py-2.5 border border-gray-200 dark:border-[#242424] text-gray-900 dark:text-white hover:border-[#FFD400] font-semibold rounded-xl text-xs transition-all"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/auth/register"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-center gap-1.5 text-center px-4 py-2.5 border border-[#FFD400] text-[#FFD400] hover:bg-[#FFD400] hover:text-black font-bold rounded-xl text-xs transition-all"
+                  >
+                    <Users size={13} />
+                    <span>Join Free</span>
+                  </Link>
+                </div>
+              ) : (
+                <div className="flex justify-between items-center p-2.5 bg-gray-50 dark:bg-[#121212] border border-gray-200 dark:border-[#242424] rounded-xl">
+                  <span className="text-xs text-gray-900 dark:text-white font-bold">{session.user?.name}</span>
+                  <button
+                    onClick={() => {
+                      signOut()
+                      setMobileMenuOpen(false)
+                    }}
+                    className="text-xs text-red-500 dark:text-red-400 font-bold hover:underline"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              )}
+
+              {/* Mobile Theme Row */}
+              <div className="flex items-center justify-between p-2.5 bg-gray-50 dark:bg-[#121212] border border-gray-200 dark:border-[#242424] rounded-xl">
+                <span className="text-xs text-gray-700 dark:text-gray-300 font-semibold">Theme</span>
+                <ThemeToggle variant="ghost" />
+              </div>
+
+              <Link
+                href="/resources/coworking#book"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-center gap-2 w-full text-center px-4 py-3 bg-[#FFD400] hover:bg-[#FFE033] text-black font-bold rounded-xl transition-all text-xs shadow-md shadow-[#FFD400]/20 active:scale-95"
+              >
+                <CalendarCheck size={14} />
+                <span>Book Workspace Now</span>
+              </Link>
+            </div>
           </div>
-
-          <Link
-            href="/resources/coworking#book"
-            onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center justify-center gap-2 w-full text-center px-4 py-3 bg-[#FFD400] hover:bg-[#FFE033] text-black font-bold rounded-xl transition-all text-xs shadow-md shadow-[#FFD400]/20"
-          >
-            <CalendarCheck size={14} />
-            <span>Book Workspace Now</span>
-          </Link>
-        </div>
-      </div>
+        </>,
+        document.body
+      )}
 
       {/* Google-Style Search Overlay Modal */}
       <GoogleSearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />

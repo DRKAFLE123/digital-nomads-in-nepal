@@ -21,11 +21,17 @@ export const metadata = {
 }
 
 export default async function Home() {
-  const dbPosts = await prisma.post.findMany({
-    where: { published: true },
-    orderBy: { createdAt: "desc" },
-    take: 3
-  })
+  const [dbPosts, totalWorkspaces, ktmWorkspaces, pokharaWorkspaces, totalDestinations] = await Promise.all([
+    prisma.post.findMany({
+      where: { published: true },
+      orderBy: { createdAt: "desc" },
+      take: 3
+    }),
+    prisma.workHub.count(),
+    prisma.workHub.count({ where: { city: "Kathmandu" } }),
+    prisma.workHub.count({ where: { city: "Pokhara" } }),
+    prisma.destination.count(),
+  ])
   
   const posts = dbPosts.map(p => ({
     ...p,
@@ -38,29 +44,56 @@ export default async function Home() {
       <main className="flex min-h-screen flex-col items-center justify-between bg-background">
         <HeroSection />
 
-        {/* Value Section */}
+        {/* Value Section — Dynamic & Clickable Topic Cards */}
         <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-background border-t border-border">
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-card p-8 border border-border text-center rounded-xl hover:border-primary transition-colors">
-              <Wallet className="mx-auto text-primary mb-4" size={40} />
-              <h3 className="text-xl font-bold text-foreground mb-2">Cost of Living</h3>
-              <p className="text-muted-foreground">From $500/month</p>
-            </div>
-            <div className="bg-card p-8 border border-border text-center rounded-xl hover:border-primary transition-colors">
-              <Wifi className="mx-auto text-primary mb-4" size={40} />
-              <h3 className="text-xl font-bold text-foreground mb-2">Internet</h3>
-              <p className="text-muted-foreground">Fast fiber in cities</p>
-            </div>
-            <div className="bg-card p-8 border border-border text-center rounded-xl hover:border-primary transition-colors">
-              <MapPin className="mx-auto text-primary mb-4" size={40} />
-              <h3 className="text-xl font-bold text-foreground mb-2">Coworking</h3>
-              <p className="text-muted-foreground">10+ spaces in Kathmandu</p>
-            </div>
-            <div className="bg-card p-8 border border-border text-center rounded-xl hover:border-primary transition-colors">
-              <Mountain className="mx-auto text-primary mb-4" size={40} />
-              <h3 className="text-xl font-bold text-foreground mb-2">Lifestyle</h3>
-              <p className="text-muted-foreground">Mountains + culture</p>
-            </div>
+            <Link
+              href="/blog/cost-of-living-nepal-2026-nomad-budget"
+              className="group bg-card p-8 border border-border text-center rounded-xl hover:border-primary hover:shadow-lg hover:shadow-primary/5 transition-all block cursor-pointer"
+            >
+              <Wallet className="mx-auto text-primary mb-4 group-hover:scale-110 transition-transform" size={40} />
+              <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">Cost of Living</h3>
+              <p className="text-muted-foreground font-semibold">From $500/month</p>
+              <span className="inline-block mt-2 text-xs font-bold text-primary group-hover:translate-x-1 transition-transform">
+                2026 Nomad Budget Guide →
+              </span>
+            </Link>
+
+            <Link
+              href="/blog/internet-in-nepal-speed-reliability-guide"
+              className="group bg-card p-8 border border-border text-center rounded-xl hover:border-primary hover:shadow-lg hover:shadow-primary/5 transition-all block cursor-pointer"
+            >
+              <Wifi className="mx-auto text-primary mb-4 group-hover:scale-110 transition-transform" size={40} />
+              <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">Internet & Wi-Fi</h3>
+              <p className="text-muted-foreground font-semibold">Fast fiber in cities</p>
+              <span className="inline-block mt-2 text-xs font-bold text-primary group-hover:translate-x-1 transition-transform">
+                Speed Tests & Backup Guide →
+              </span>
+            </Link>
+
+            <Link
+              href="/resources/coworking"
+              className="group bg-card p-8 border border-border text-center rounded-xl hover:border-primary hover:shadow-lg hover:shadow-primary/5 transition-all block cursor-pointer"
+            >
+              <MapPin className="mx-auto text-primary mb-4 group-hover:scale-110 transition-transform" size={40} />
+              <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">Coworking</h3>
+              <p className="text-muted-foreground font-semibold">{totalWorkspaces || 52}+ spaces in Nepal</p>
+              <span className="inline-block mt-2 text-xs font-bold text-primary group-hover:translate-x-1 transition-transform">
+                {ktmWorkspaces || 21} in KTM, {pokharaWorkspaces || 9} in Pokhara →
+              </span>
+            </Link>
+
+            <Link
+              href="/destinations"
+              className="group bg-card p-8 border border-border text-center rounded-xl hover:border-primary hover:shadow-lg hover:shadow-primary/5 transition-all block cursor-pointer"
+            >
+              <Mountain className="mx-auto text-primary mb-4 group-hover:scale-110 transition-transform" size={40} />
+              <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">Lifestyle</h3>
+              <p className="text-muted-foreground font-semibold">{totalDestinations || 10}+ Nomad Hubs & Mountains</p>
+              <span className="inline-block mt-2 text-xs font-bold text-primary group-hover:translate-x-1 transition-transform">
+                Explore Destinations →
+              </span>
+            </Link>
           </div>
         </section>
 
@@ -108,23 +141,43 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Why Nepal Section */}
+        {/* Why Nepal Section — Clickable Cards */}
         <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-card border-y border-border">
           <div className="max-w-7xl mx-auto">
             <h2 className="text-3xl md:text-5xl font-black text-foreground text-center mb-16">Why Choose Nepal?</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-              <div className="p-8 border border-border border-t-4 border-t-primary bg-background rounded-xl hover:-translate-y-2 transition-transform duration-300 shadow-sm">
-                <h3 className="text-2xl font-bold text-foreground mb-4">Unbeatable Cost</h3>
-                <p className="text-muted-foreground leading-relaxed">Nepal remains one of the most affordable countries in the world. You can find comfortable apartments, eat out daily, and enjoy a vibrant lifestyle for a fraction of the cost of Western cities.</p>
-              </div>
-              <div className="p-8 border border-border border-t-4 border-t-primary bg-background rounded-xl hover:-translate-y-2 transition-transform duration-300 shadow-sm">
-                <h3 className="text-2xl font-bold text-foreground mb-4">Nature & Mountains</h3>
-                <p className="text-muted-foreground leading-relaxed">Escape the screen and step into the Himalayas. Weekends can be spent hiking, trekking, and exploring eight of the world&apos;s highest peaks just a short trip from your desk.</p>
-              </div>
-              <div className="p-8 border border-border border-t-4 border-t-primary bg-background rounded-xl hover:-translate-y-2 transition-transform duration-300 shadow-sm">
-                <h3 className="text-2xl font-bold text-foreground mb-4">Growing Remote Culture</h3>
-                <p className="text-muted-foreground leading-relaxed">With fiber optic internet expanding and new dedicated coworking spaces opening up, Nepal is rapidly adjusting to accommodate the global remote workforce.</p>
-              </div>
+              <Link
+                href="/blog/cost-of-living-nepal-2026-nomad-budget"
+                className="p-8 border border-border border-t-4 border-t-primary bg-background rounded-xl hover:-translate-y-2 transition-all duration-300 shadow-sm block group hover:border-primary"
+              >
+                <h3 className="text-2xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors">Unbeatable Cost</h3>
+                <p className="text-muted-foreground leading-relaxed mb-4">Nepal remains one of the most affordable countries in the world. You can find comfortable apartments, eat out daily, and enjoy a vibrant lifestyle for a fraction of the cost of Western cities.</p>
+                <span className="text-xs font-bold text-primary group-hover:translate-x-1 inline-flex items-center gap-1 transition-transform">
+                  Explore nomad living costs <ArrowRight size={12} />
+                </span>
+              </Link>
+
+              <Link
+                href="/guides"
+                className="p-8 border border-border border-t-4 border-t-primary bg-background rounded-xl hover:-translate-y-2 transition-all duration-300 shadow-sm block group hover:border-primary"
+              >
+                <h3 className="text-2xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors">Nature & Mountains</h3>
+                <p className="text-muted-foreground leading-relaxed mb-4">Escape the screen and step into the Himalayas. Weekends can be spent hiking, trekking, and exploring eight of the world&apos;s highest peaks just a short trip from your desk.</p>
+                <span className="text-xs font-bold text-primary group-hover:translate-x-1 inline-flex items-center gap-1 transition-transform">
+                  Find licensed local guides <ArrowRight size={12} />
+                </span>
+              </Link>
+
+              <Link
+                href="/resources/coworking"
+                className="p-8 border border-border border-t-4 border-t-primary bg-background rounded-xl hover:-translate-y-2 transition-all duration-300 shadow-sm block group hover:border-primary"
+              >
+                <h3 className="text-2xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors">Growing Remote Culture</h3>
+                <p className="text-muted-foreground leading-relaxed mb-4">With fiber optic internet expanding and new dedicated coworking spaces opening up, Nepal is rapidly adjusting to accommodate the global remote workforce.</p>
+                <span className="text-xs font-bold text-primary group-hover:translate-x-1 inline-flex items-center gap-1 transition-transform">
+                  Browse {totalWorkspaces || 52}+ workspaces <ArrowRight size={12} />
+                </span>
+              </Link>
             </div>
           </div>
         </section>
