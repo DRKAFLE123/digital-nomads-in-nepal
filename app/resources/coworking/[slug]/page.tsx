@@ -28,6 +28,7 @@ type Hub = {
   priceMonthly: number | null
   contactEmail: string
   website: string | null
+  updatedAt?: string
 }
 
 function parsePhotos(photoUrl: string | null): string[] {
@@ -122,13 +123,13 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
             <Link href="/resources/coworking" className="inline-flex items-center gap-2 text-[#FFD400] hover:text-white transition-colors text-xs font-bold uppercase tracking-wider bg-[#121212] px-3.5 py-2 rounded-xl border border-[#242424]">
               <ArrowLeft size={14} /> Back to Workspaces Directory
             </Link>
-            <div className="flex items-center gap-2 text-xs text-[#A1A1AA]">
-              <span>Nepal Workspaces</span>
+            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-[#A1A1AA]">
+              <Link href="/resources/coworking" className="hover:text-white transition-colors">Nepal Workspaces</Link>
               <span>/</span>
               <span className="text-[#FFD400] font-semibold">{hub.city}</span>
               <span>/</span>
               <span className="text-white font-bold">{hub.name}</span>
-            </div>
+            </nav>
           </div>
 
           {/* Hero Banner Grid */}
@@ -141,7 +142,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
               <div className="space-y-3">
                 <div className="h-96 md:h-[440px] bg-[#121212] border border-[#242424] rounded-3xl overflow-hidden relative shadow-2xl flex items-center justify-center group">
                   {activePhoto ? (
-                    <img src={activePhoto} alt={`${hub.name} photo`} className="w-full h-full object-cover transition-all duration-300" />
+                    <img src={activePhoto} alt={`${hub.name} Coworking Space in ${hub.city}, Nepal`} className="w-full h-full object-cover transition-all duration-300" />
                   ) : (
                     <Building className="w-24 h-24 text-[#333]" />
                   )}
@@ -236,6 +237,12 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                   <div className="flex items-center gap-2 text-xs font-semibold text-[#22C55E] bg-[#22C55E]/10 px-3 py-1 rounded-full border border-[#22C55E]/20">
                     <ShieldCheck size={14} /> Vetted Remote Work Ready
                   </div>
+                  {hub.updatedAt && (
+                    <div className="text-xs text-[#A1A1AA] flex items-center gap-1 font-medium">
+                      <span>•</span>
+                      <span>Verified {new Date(hub.updatedAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+                    </div>
+                  )}
                 </div>
               </div>
 

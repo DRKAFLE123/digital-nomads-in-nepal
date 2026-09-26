@@ -13,8 +13,8 @@ import { prisma } from "@/lib/prisma"
 export const dynamic = "force-dynamic"
 
 export const metadata = {
-  title: "Digital Nomads in Nepal | Vetted Remote Work Guides (2026)",
-  description: "The definitive portal for digital nomads in Nepal. Get verified guides on the Nepal Nomad Visa, cost of living, coworking spaces, and trekking guides.",
+  title: "Digital Nomads in Nepal | Workspaces, Stays & Remote Work Guides",
+  description: "The definitive platform for remote workers and digital nomads in Nepal. Find verified coworking spaces, work-friendly stays, local guides, cost of living guides, and community hubs.",
   alternates: {
     canonical: "https://digitalnomadsinnepal.com",
   },

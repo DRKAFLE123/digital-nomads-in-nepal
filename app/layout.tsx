@@ -10,10 +10,10 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    default: "Digital Nomads in Nepal | Vetted Remote Work Guides",
+    default: "Digital Nomads in Nepal | Workspaces, Stays & Remote Work Guides",
     template: "%s | Digital Nomads in Nepal",
   },
-  description: "The ultimate guide to living and working remotely in the Himalayas. Vetted information on visas, internet, coworking, cost of living, and nomad hubs.",
+  description: "The complete platform for remote workers in Nepal. Vetted workspaces, work-friendly stays, local guides, cost of living breakdowns, and digital nomad hubs.",
   metadataBase: new URL('https://digitalnomadsinnepal.com'),
   icons: {
     icon: [
@@ -29,8 +29,8 @@ export const metadata: Metadata = {
   },
   manifest: '/manifest.webmanifest',
   openGraph: {
-    title: 'Digital Nomads in Nepal | Vetted Remote Work Guides',
-    description: 'The ultimate guide to living and working remotely in the Himalayas. Visas, internet, coworking, and community.',
+    title: 'Digital Nomads in Nepal | Workspaces, Stays & Remote Work Guides',
+    description: 'Find vetted workspaces, work-friendly stays, local guides, practical resources and places to live and work across Nepal.',
     url: 'https://digitalnomadsinnepal.com',
     siteName: 'Digital Nomads in Nepal',
     images: [
@@ -46,8 +46,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Digital Nomads in Nepal',
-    description: 'The ultimate guide to living and working remotely in the Himalayas.',
+    title: 'Digital Nomads in Nepal | Workspaces, Stays & Remote Work Guides',
+    description: 'Find vetted workspaces, work-friendly stays, local guides, practical resources and places to live and work across Nepal.',
     images: ['/webistepnglogo.png'],
   },
 };
@@ -68,7 +68,7 @@ const jsonLd = {
       '@id': 'https://digitalnomadsinnepal.com/#website',
       url: 'https://digitalnomadsinnepal.com',
       name: 'Digital Nomads in Nepal',
-      description: 'Vetted remote work guides, visa updates, cost of living, and coworking hubs in Nepal.',
+      description: 'Vetted remote work guides, verified coworking spaces, work-friendly stays, and cost of living in Nepal.',
       publisher: {
         '@id': 'https://digitalnomadsinnepal.com/#organization',
       },

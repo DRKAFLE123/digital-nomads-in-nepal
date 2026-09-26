@@ -258,9 +258,10 @@ export default function Navbar() {
       dropdown: [
         { name: "Destinations", desc: "Explore cities and destinations across Nepal.", href: "/destinations" },
         { name: "Neighborhoods", desc: "Discover the best areas for digital nomads to stay and work.", href: "/destinations#neighborhoods" },
-        { name: "Things to Do", desc: "Activities, attractions and experiences around Nepal.", href: "/resources#things-to-do" },
-        { name: "Travel Resources", desc: "Practical guides, transportation, internet, SIM cards & money.", href: "/resources" },
-        { name: "Digital Nomad Guide", desc: "Essential information for living and working remotely in Nepal.", href: "/resources/visa" },
+        { name: "Practical Guides", desc: "Comprehensive guides for SIM cards, transport, visas & money.", href: "/resources" },
+        { name: "SIM Cards & Data Guide", desc: "Ncell vs NTC 4G/5G, eSIMs and airport kiosk setup.", href: "/resources/sim-cards" },
+        { name: "Transportation Guide", desc: "Pathao, InDrive ride-hailing, taxis & domestic flights.", href: "/resources/transportation" },
+        { name: "Nomad Visa Guide", desc: "150-day tourist visa rules, entry & immigration extensions.", href: "/resources/visa" },
       ]
     },
     {
@@ -294,11 +295,11 @@ export default function Navbar() {
       name: "Local Experts",
       icon: Users,
       dropdown: [
-        { name: "Find a Local Guide", desc: "Connect with knowledgeable local guides.", href: "/guides", hasIcon: true },
+        { name: "Find a Local Guide", desc: "Connect with verified human trekking, cultural & city guides.", href: "/guides", hasIcon: true },
         { name: "Experiences", desc: "Discover authentic local activities and experiences.", href: "/guides#experiences" },
         { name: "Tours", desc: "Find private and group tours.", href: "/guides#tours" },
-        { name: "Local Services", desc: "Useful services for digital nomads.", href: "/guides#services" },
-        { name: "Become a Local Expert", desc: "Register and offer your local expertise.", href: "/guides/register" },
+        { name: "Local Services", desc: "Useful local fixer services for digital nomads.", href: "/guides#services" },
+        { name: "Become a Local Expert", desc: "Register as a licensed local guide or expert.", href: "/guides/register" },
       ]
     },
     {

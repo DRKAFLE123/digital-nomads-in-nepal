@@ -1,15 +1,26 @@
 import { NextResponse } from "next/server"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 
 // GET /api/community/bookings?email=...
 export async function GET(req: Request) {
   try {
-    const { searchParams } = new URL(req.url)
-    const email = searchParams.get("email")
-
-    if (!email) {
-      return NextResponse.json({ error: "Email parameter is required" }, { status: 400 })
+    const session = await getServerSession(authOptions)
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "Unauthorized. Please sign in." }, { status: 401 })
     }
+
+    const { searchParams } = new URL(req.url)
+    const reqEmail = searchParams.get("email") || session.user.email
+
+    const sessionRole = (session.user as { role?: string }).role
+    if (reqEmail.toLowerCase() !== session.user.email.toLowerCase() && sessionRole !== "ADMIN") {
+      return NextResponse.json({ error: "Forbidden: Cannot view another user's bookings." }, { status: 403 })
+    }
+
+    const email = reqEmail.toLowerCase()
+
 
     const bookings = await prisma.hubBooking.findMany({
       where: { nomadEmail: email },

@@ -1,15 +1,16 @@
 import Link from "next/link"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
-import { Compass, Home, MapPin, BookOpen, Building, ArrowLeft } from "lucide-react"
+import { Compass, Home, MapPin, BookOpen, Building, ArrowLeft, BedDouble } from "lucide-react"
 
 export default function NotFound() {
   const quickLinks = [
-    { title: "Home Base", href: "/", icon: Home },
-    { title: "Nomad Destinations", href: "/destinations", icon: MapPin },
-    { title: "Nepal Visa Guide", href: "/resources/visa", icon: BookOpen },
-    { title: "Vetted Coworking Spaces", href: "/resources/coworking", icon: Building },
-    { title: "Browse Sitemap", href: "/sitemap", icon: Compass },
+    { title: "Home", href: "/", icon: Home },
+    { title: "Workspaces", href: "/resources/coworking", icon: Building },
+    { title: "Stay & Work", href: "/stay", icon: BedDouble },
+    { title: "Destinations", href: "/destinations", icon: MapPin },
+    { title: "Blog & Guides", href: "/blog", icon: BookOpen },
+    { title: "Sitemap", href: "/sitemap", icon: Compass },
   ]
 
   return (

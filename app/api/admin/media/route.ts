@@ -43,10 +43,34 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData()
     const file = formData.get("file") as File | null
     const alt = formData.get("alt") as string | null
+
     if (!file) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 })
     }
 
+    const ALLOWED_MIME_TYPES: Record<string, string> = {
+      "image/jpeg": ".jpg",
+      "image/png": ".png",
+      "image/webp": ".webp",
+      "image/avif": ".avif"
+    }
+
+    if (!ALLOWED_MIME_TYPES[file.type]) {
+      return NextResponse.json(
+        { error: "Invalid file type. Only JPEG, PNG, WebP, and AVIF images are allowed." },
+        { status: 400 }
+      )
+    }
+
+    const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
+    if (file.size > MAX_FILE_SIZE) {
+      return NextResponse.json(
+        { error: "File exceeds 10MB size limit." },
+        { status: 400 }
+      )
+    }
+
+    const safeExt = ALLOWED_MIME_TYPES[file.type]
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
 
@@ -93,9 +117,8 @@ export async function POST(req: NextRequest) {
         fs.mkdirSync(UPLOAD_DIR, { recursive: true })
       }
       
-      const ext = path.extname(file.name)
-      const baseName = path.basename(file.name, ext).replace(/[^a-zA-Z0-9]/g, "-")
-      const uniqueFilename = `${Date.now()}-${baseName}${ext}`
+      const baseName = path.basename(file.name, path.extname(file.name)).replace(/[^a-zA-Z0-9]/g, "-").slice(0, 50)
+      const uniqueFilename = `${Date.now()}-${baseName}${safeExt}`
       const filepath = path.join(UPLOAD_DIR, uniqueFilename)
 
       fs.writeFileSync(filepath, buffer)

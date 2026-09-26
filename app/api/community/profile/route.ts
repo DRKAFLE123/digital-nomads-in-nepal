@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { WorkType } from "@prisma/client"
 import bcrypt from "bcryptjs"
@@ -6,15 +8,38 @@ import bcrypt from "bcryptjs"
 // GET /api/community/profile?email=...
 export async function GET(req: Request) {
   try {
-    const { searchParams } = new URL(req.url)
-    const email = searchParams.get("email")
-
-    if (!email) {
-      return NextResponse.json({ error: "Email parameter is required" }, { status: 400 })
+    const session = await getServerSession(authOptions)
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "Unauthorized. Please sign in." }, { status: 401 })
     }
 
+    const { searchParams } = new URL(req.url)
+    const reqEmail = searchParams.get("email") || session.user.email
+
+    const sessionRole = (session.user as { role?: string }).role
+    if (reqEmail.toLowerCase() !== session.user.email.toLowerCase() && sessionRole !== "ADMIN") {
+      return NextResponse.json({ error: "Forbidden: Cannot view another user's private profile settings." }, { status: 403 })
+    }
+
+    const email = reqEmail.toLowerCase()
+
     let profile = await prisma.nomadProfile.findUnique({
-      where: { email }
+      where: { email },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        avatarUrl: true,
+        country: true,
+        currentCity: true,
+        workType: true,
+        bio: true,
+        linkedinUrl: true,
+        twitterUrl: true,
+        emailAlerts: true,
+        createdAt: true,
+        updatedAt: true,
+      }
     })
 
     if (!profile) {
@@ -29,6 +54,21 @@ export async function GET(req: Request) {
             name: user.name,
             country: "Nepal",
             passwordHash: user.password
+          },
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            avatarUrl: true,
+            country: true,
+            currentCity: true,
+            workType: true,
+            bio: true,
+            linkedinUrl: true,
+            twitterUrl: true,
+            emailAlerts: true,
+            createdAt: true,
+            updatedAt: true,
           }
         })
       } else {
@@ -46,9 +86,14 @@ export async function GET(req: Request) {
 // PUT /api/community/profile
 export async function PUT(req: Request) {
   try {
+    const session = await getServerSession(authOptions)
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "Unauthorized. Please sign in." }, { status: 401 })
+    }
+
     const body = await req.json()
     const {
-      email,
+      email: reqEmail,
       name,
       avatarUrl,
       password,
@@ -61,9 +106,15 @@ export async function PUT(req: Request) {
       emailAlerts
     } = body
 
-    if (!email) {
-      return NextResponse.json({ error: "Email is required to update profile" }, { status: 400 })
+    const targetEmail = reqEmail || session.user.email
+    const sessionRole = (session.user as { role?: string }).role
+
+    if (targetEmail.toLowerCase() !== session.user.email.toLowerCase() && sessionRole !== "ADMIN") {
+      return NextResponse.json({ error: "Forbidden: Cannot modify another user's profile." }, { status: 403 })
     }
+
+    const email = targetEmail.toLowerCase()
+
 
     const user = await prisma.user.findUnique({
       where: { email }

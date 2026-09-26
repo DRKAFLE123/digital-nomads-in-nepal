@@ -26,8 +26,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
   const destUrl = `${SITE_URL}/destinations/${params.slug}`
   const imageUrl = dest.image || `${SITE_URL}/hero-bg.png`
-  const title = `${dest.name} Travel & Work Guide for Digital Nomads | Digital Nomads in Nepal`
-  const description = dest.description ? dest.description.slice(0, 155) + "..." : `Complete digital nomad guide for ${dest.name}, Nepal with internet speeds, cost of living, and coworking hubs.`
+  const title = `${dest.name} Digital Nomad Guide | Work, Stay & Explore Nepal`
+  const description = `Explore ${dest.name} as a digital nomad: verified coworking spaces, work-friendly stays, fiber internet, cost of living, and practical local tips.`
 
   return {
     title,
@@ -47,7 +47,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
           url: imageUrl,
           width: 1200,
           height: 630,
-          alt: `${dest.name} Digital Nomad Destination Guide`,
+          alt: `${dest.name} Digital Nomad Guide | Work, Stay & Explore Nepal`,
         },
       ],
     },
@@ -448,10 +448,12 @@ export default async function DestinationPage({ params }: { params: { slug: stri
               <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
                 <h4 className="font-bold text-foreground mb-4">Required Resource Guides</h4>
                 <ul className="space-y-3 text-sm">
-                  <li><Link href="/resources/visa" className="text-primary hover:underline font-medium">→ Nepal Nomad Visa Guide (2026)</Link></li>
-                  <li><Link href="/resources/cost-of-living" className="text-primary hover:underline font-medium">→ Detailed Cost of Living Table</Link></li>
-                  <li><Link href="/resources/connectivity" className="text-primary hover:underline font-medium">→ SIM Cards & Internet Setup</Link></li>
-                  <li><Link href="/resources/transportation" className="text-primary hover:underline font-medium">→ Transport, pathao & domestic flights</Link></li>
+                  <li><Link href="/resources/coworking" className="text-primary hover:underline font-medium">→ Vetted Coworking Spaces &amp; Hubs</Link></li>
+                  <li><Link href="/stay" className="text-primary hover:underline font-medium">→ Work-Friendly Stays &amp; Coliving</Link></li>
+                  <li><Link href="/resources/visa" className="text-primary hover:underline font-medium">→ Nepal Nomad Visa &amp; Legal Info</Link></li>
+                  <li><Link href="/resources/cost-of-living" className="text-primary hover:underline font-medium">→ Detailed Cost of Living Breakdown</Link></li>
+                  <li><Link href="/resources/sim-cards" className="text-primary hover:underline font-medium">→ SIM Cards &amp; Internet Setup</Link></li>
+                  <li><Link href="/resources/transportation" className="text-primary hover:underline font-medium">→ Local Transport, Pathao &amp; Flights</Link></li>
                 </ul>
               </div>
             </div>

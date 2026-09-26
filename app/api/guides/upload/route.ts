@@ -1,10 +1,19 @@
 import { NextRequest, NextResponse } from "next/server"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
 import fs from "fs"
 import path from "path"
 import crypto from "crypto"
 
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads")
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+
+const ALLOWED_MIME_TYPES: Record<string, string> = {
+  "image/jpeg": ".jpg",
+  "image/png": ".png",
+  "image/webp": ".webp",
+  "image/avif": ".avif"
+}
 
 function generateSignature(params: Record<string, string>, apiSecret: string) {
   const sortedKeys = Object.keys(params).sort()
@@ -20,15 +29,20 @@ function generateSignature(params: Record<string, string>, apiSecret: string) {
 
 export async function POST(req: NextRequest) {
   try {
+    const session = await getServerSession(authOptions)
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized. Please sign in to upload images." }, { status: 401 })
+    }
+
     const formData = await req.formData()
     const file = formData.get("file") as File | null
     if (!file) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 })
     }
 
-    // Validate type (must be an image)
-    if (!file.type.startsWith("image/")) {
-      return NextResponse.json({ error: "Uploaded file must be an image." }, { status: 400 })
+    // Validate type strictly
+    if (!ALLOWED_MIME_TYPES[file.type]) {
+      return NextResponse.json({ error: "Invalid file type. Only JPEG, PNG, WebP, and AVIF images are allowed." }, { status: 400 })
     }
 
     // Validate size (max 5MB)
@@ -36,6 +50,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "File size exceeds the 5MB limit." }, { status: 400 })
     }
 
+    const safeExt = ALLOWED_MIME_TYPES[file.type]
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
 
@@ -81,9 +96,8 @@ export async function POST(req: NextRequest) {
         fs.mkdirSync(UPLOAD_DIR, { recursive: true })
       }
       
-      const ext = path.extname(file.name)
-      const baseName = path.basename(file.name, ext).replace(/[^a-zA-Z0-9]/g, "-")
-      const uniqueFilename = `guide-${Date.now()}-${baseName}${ext}`
+      const baseName = path.basename(file.name, path.extname(file.name)).replace(/[^a-zA-Z0-9]/g, "-").slice(0, 50)
+      const uniqueFilename = `guide-${Date.now()}-${baseName}${safeExt}`
       const filepath = path.join(UPLOAD_DIR, uniqueFilename)
 
       fs.writeFileSync(filepath, buffer)

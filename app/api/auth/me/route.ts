@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from "next/server"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 
 export const dynamic = "force-dynamic"
 
 export async function GET(req: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url)
-    const email = searchParams.get("email")
+    const session = await getServerSession(authOptions)
 
-    if (!email) {
+    if (!session?.user?.email) {
       return NextResponse.json({
         isLoggedIn: false,
         role: "NOMAD",
@@ -20,6 +21,18 @@ export async function GET(req: NextRequest) {
         pendingGuideInquiries: 0
       })
     }
+
+    const { searchParams } = new URL(req.url)
+    const queryEmail = searchParams.get("email")
+
+    // Security Guard: Reject snooping on other users' profiles
+    const sessionRole = (session.user as { role?: string }).role
+    if (queryEmail && queryEmail.toLowerCase() !== session.user.email.toLowerCase() && sessionRole !== "ADMIN") {
+      return NextResponse.json({ error: "Forbidden: Cannot query status of another account." }, { status: 403 })
+    }
+
+    const email = queryEmail?.toLowerCase() || session.user.email.toLowerCase()
+
 
     // 1. Check User table
     const user = await prisma.user.findUnique({

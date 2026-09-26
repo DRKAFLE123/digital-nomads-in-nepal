@@ -18,6 +18,8 @@ export default function robots(): MetadataRoute.Robots {
         '/guides/dashboard/*',
         '/community',
         '/community/*',
+        '/search',
+        '/search/*',
       ],
     },
     sitemap: 'https://digitalnomadsinnepal.com/sitemap.xml',

@@ -6,73 +6,7 @@ import Link from "next/link"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import { ArrowRight, ShieldCheck, MapPin, Building } from "lucide-react"
-
-const ACCOMMODATIONS = [
-  {
-    id: "stay-1",
-    name: "Kathmandu Nomad Coliving Hub",
-    type: "Coliving",
-    city: "Kathmandu",
-    area: "Jhamsikhel, Lalitpur",
-    price: "$28 / night",
-    monthlyPrice: "$450 / month",
-    rating: 4.9,
-    reviews: 38,
-    speed: "200 Mbps Fiber",
-    power: "24/7 Generator",
-    photoUrl: "/blog-lakeside-pokhara.png",
-    description: "Modern coliving space with dedicated hot desks, high-speed fiber internet, and weekly community dinners in Jhamsikhel.",
-    amenities: ["Dedicated Desk", "High-Speed WiFi", "Community Dinners", "Daily Housekeeping", "24/7 Access"]
-  },
-  {
-    id: "stay-2",
-    name: "Lakeside Nomad Suites",
-    type: "Hotels",
-    city: "Pokhara",
-    area: "Lakeside Street 6",
-    price: "$35 / night",
-    monthlyPrice: "$600 / month",
-    rating: 4.8,
-    reviews: 52,
-    speed: "150 Mbps Fiber",
-    power: "Automatic UPS + Solar",
-    photoUrl: "/blog-cost-of-living.png",
-    description: "Quiet lakefront hotel with ergonomic desk setups, private balconies overlooking Fewa Lake, and rooftop coworking.",
-    amenities: ["Balcony View", "Ergonomic Chair", "Rooftop Workspace", "Breakfast Included", "Power Backup"]
-  },
-  {
-    id: "stay-3",
-    name: "Thamel Backpackers & Work Hostel",
-    type: "Hostels",
-    city: "Kathmandu",
-    area: "Thamel, Kathmandu",
-    price: "$12 / night",
-    monthlyPrice: "$220 / month",
-    rating: 4.7,
-    reviews: 64,
-    speed: "100 Mbps",
-    power: "UPS Backup",
-    photoUrl: "/hero-bg.png",
-    description: "Vibrant community hostel designed for remote workers on a budget. Includes quiet call booths and social events.",
-    amenities: ["Dorm & Private Rooms", "Call Booths", "Bar & Cafe", "Organized Treks", "Free Coffee"]
-  },
-  {
-    id: "stay-4",
-    name: "Pokhara Long-Term Nomad Residency",
-    type: "Long-Term Stays",
-    city: "Pokhara",
-    area: "Sedibag, Lakeside",
-    price: "$22 / night",
-    monthlyPrice: "$400 / month",
-    rating: 4.9,
-    reviews: 29,
-    speed: "200 Mbps Fiber",
-    power: "Full Generator Backup",
-    photoUrl: "/blog-top-10-destinations.png",
-    description: "Fully furnished apartments designed for 1–6 month stays with fully equipped kitchens, laundry, and private fiber WiFi.",
-    amenities: ["Full Kitchen", "Private Fiber Line", "Washing Machine", "Mountain Views", "Weekly Cleaning"]
-  }
-]
+import { ACCOMMODATIONS } from "@/lib/accommodations"
 
 export default function StayPage() {
   const [selectedType, setSelectedType] = useState<string>("All")
@@ -88,17 +22,24 @@ export default function StayPage() {
       <main className="min-h-screen bg-background text-foreground pt-28 pb-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto space-y-10">
           
+          {/* Top Breadcrumb */}
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-muted-foreground">
+            <Link href="/" className="hover:text-primary transition-colors">Home</Link>
+            <span>/</span>
+            <span className="text-foreground font-semibold">Stay &amp; Work</span>
+          </nav>
+
           {/* Hero Section */}
           <div className="bg-card border border-border rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden shadow-xl">
             <div className="max-w-3xl mx-auto space-y-4">
               <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-black uppercase tracking-widest">
-                <Building size={13} /> Nomad Accommodations & Stays
+                <Building size={13} /> Stay &amp; Work • Nomad Accommodations
               </span>
               <h1 className="text-4xl sm:text-5xl font-black text-foreground tracking-tight">
-                Live & Work Comfortably in Nepal
+                Stay &amp; Work in Nepal — Vetted Nomad Stays
               </h1>
               <p className="text-muted-foreground text-base leading-relaxed">
-                Vetted hotels, coliving spaces, digital nomad hostels, and long-term apartments equipped with high-speed fiber internet and power backup.
+                Work-friendly hotels, coliving spaces, hostels, and serviced apartments across Nepal equipped with high-speed fiber internet, dedicated desks, and power backup.
               </p>
               <div className="pt-2 flex items-center justify-center">
                 <Link
@@ -106,7 +47,7 @@ export default function StayPage() {
                   className="px-5 py-2.5 bg-primary/10 hover:bg-primary text-primary hover:text-black border border-primary/40 font-extrabold text-xs rounded-xl transition-all shadow-md flex items-center gap-2 active:scale-95"
                 >
                   <Building size={14} />
-                  Looking for Coworking Desks & Workspaces? Explore Marketplace ➔
+                  Looking for Coworking Desks &amp; Workspaces? Explore Marketplace ➔
                 </Link>
               </div>
             </div>

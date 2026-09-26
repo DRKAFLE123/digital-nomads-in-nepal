@@ -7,14 +7,32 @@ import type { Metadata } from "next"
 import ReviewSection from "./ReviewSection"
 import Link from "next/link"
 
+import { generateGuideJsonLd, generateBreadcrumbJsonLd } from "@/lib/seo"
+
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const guide = await prisma.guide.findUnique({ where: { id: params.id } })
   if (!guide) return {}
   return {
-    title: `${guide.name} — Local Guide in ${guide.location} | Digital Nomads in Nepal`,
+    title: `${guide.name} | Verified Local Guide in ${guide.location}, Nepal`,
     description: `${guide.bio.slice(0, 150)}...`,
     alternates: {
       canonical: `https://digitalnomadsinnepal.com/guides/${params.id}`,
+    },
+    openGraph: {
+      title: `${guide.name} | Local Guide in ${guide.location}, Nepal`,
+      description: `${guide.bio.slice(0, 150)}...`,
+      url: `https://digitalnomadsinnepal.com/guides/${params.id}`,
+      siteName: "Digital Nomads in Nepal",
+      locale: "en_US",
+      type: "profile",
+      images: [
+        {
+          url: guide.photoUrl || "https://digitalnomadsinnepal.com/hero-bg.png",
+          width: 800,
+          height: 800,
+          alt: `${guide.name} Himalayan Guide in ${guide.location}`,
+        },
+      ],
     },
   }
 }
@@ -32,15 +50,46 @@ export default async function GuideProfilePage({ params }: { params: { id: strin
 
   if (!guide) notFound()
 
+  const specialtiesArray = Array.isArray(guide.specialties) ? (guide.specialties as string[]) : []
+
+  const guideJsonLd = generateGuideJsonLd({
+    id: guide.id,
+    name: guide.name,
+    bio: guide.bio,
+    location: guide.location,
+    specialties: specialtiesArray,
+    photoUrl: guide.photoUrl,
+    contactEmail: guide.contactEmail,
+    avgRating: guide.avgRating,
+    totalReviews: guide.totalReviews,
+    isVerified: guide.isVerified,
+  })
+
+  const breadcrumbJsonLd = generateBreadcrumbJsonLd([
+    { name: "Home", item: "/" },
+    { name: "Local Experts", item: "/guides" },
+    { name: guide.name, item: `/guides/${guide.id}` },
+  ])
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(guideJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <Navbar />
       <main className="min-h-screen bg-background pt-28 pb-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
 
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm text-muted mb-10">
-            <Link href="/guides" className="hover:text-primary transition-colors">Guides</Link>
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-muted mb-10">
+            <Link href="/" className="hover:text-primary transition-colors">Home</Link>
+            <span>›</span>
+            <Link href="/guides" className="hover:text-primary transition-colors">Local Experts</Link>
             <span>›</span>
             <span className="text-foreground">{guide.name}</span>
           </nav>

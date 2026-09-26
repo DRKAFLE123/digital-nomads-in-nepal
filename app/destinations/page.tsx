@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import Image from "@/components/ImageWithFallback"
 import { MapPin, Wifi, Wallet, Shield, Star, ArrowRight } from "lucide-react"
+import { generateItemListJsonLd, generateBreadcrumbJsonLd } from "@/lib/seo"
 
 export const metadata = {
   title: "Digital Nomad Destinations in Nepal | Kathmandu, Pokhara, Bandipur",
@@ -137,8 +138,29 @@ export default async function DestinationsPage() {
 
   const list = destinations.length > 0 ? destinations : defaultDestinations
 
+  const itemListJsonLd = generateItemListJsonLd(
+    "Top Digital Nomad Destinations in Nepal",
+    list.map((dest) => ({
+      name: dest.name,
+      url: `/destinations/${dest.slug}`,
+    }))
+  )
+
+  const breadcrumbJsonLd = generateBreadcrumbJsonLd([
+    { name: "Home", item: "/" },
+    { name: "Destinations", item: "/destinations" },
+  ])
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <Navbar />
       <main className="min-h-screen bg-background text-foreground pt-32 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

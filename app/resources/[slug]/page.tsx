@@ -9,26 +9,47 @@ import {
   ArrowLeft, HelpCircle, Check, AlertTriangle, Car 
 } from "lucide-react"
 
+import { generateBreadcrumbJsonLd } from "@/lib/seo"
+
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const titles: Record<string, string> = {
-    "visa": "Nepal Digital Nomad Visa & Extensions Guide (2026)",
-    "cost-of-living": "Cost of Living in Nepal for Remote Workers (2026 Budget)",
-    "coworking": "Best Coworking Spaces in Kathmandu & Pokhara (Vetted)",
-    "connectivity": "SIM Cards, Internet & Connectivity in Nepal for Nomads",
-    "sim-cards": "SIM Cards, Internet & Connectivity in Nepal for Nomads",
-    "transportation": "Transportation Guide: Pathao, InDrive & Flights in Nepal",
-    "banking": "Banking, Money, ATMs & Payments in Nepal Guide",
+    "visa": "Nepal Digital Nomad Visa & Extensions Guide | Legal & Practical Info",
+    "cost-of-living": "Cost of Living in Nepal for Remote Workers | Detailed Nomad Budget",
+    "coworking": "Coworking Spaces & Work Hubs in Nepal | Vetted Workspaces Directory",
+    "connectivity": "SIM Cards, Internet & Connectivity in Nepal for Digital Nomads",
+    "sim-cards": "SIM Cards, Internet & Connectivity in Nepal for Digital Nomads",
+    "transportation": "Transportation in Nepal for Nomads: Pathao, InDrive & Flights",
+    "banking": "Banking, Money, ATMs & Payments in Nepal | Remote Worker Guide",
+  }
+
+  const descriptions: Record<string, string> = {
+    "visa": "Complete guide to Nepal tourist visas, 150-day extensions, entry requirements, and legal remote work regulations for digital nomads.",
+    "cost-of-living": "Comprehensive cost of living breakdown in Nepal for digital nomads: rent, food, coworking memberships, transport, and monthly budgets.",
+    "coworking": "Find verified coworking spaces and work hubs in Kathmandu, Pokhara, and Lalitpur with fiber Wi-Fi, desks, and backup generators.",
+    "connectivity": "Complete Nepal connectivity guide: Ncell vs NTC 4G/5G, fiber optic internet speeds, eSIMs, and data packages for remote workers.",
+    "sim-cards": "Complete Nepal connectivity guide: Ncell vs NTC 4G/5G, fiber optic internet speeds, eSIMs, and data packages for remote workers.",
+    "transportation": "How to get around Nepal: Pathao & inDrive ride-hailing apps, local taxis, intercity buses, and domestic mountain flights.",
+    "banking": "Managing money in Nepal: ATM withdrawal limits, international credit cards, cash exchange, and mobile digital payment apps.",
   }
 
   const slug = params.slug.toLowerCase()
   const canonicalSlug = slug === "connectivity" ? "sim-cards" : slug
   const title = titles[slug] || "Nomad Resources Guide"
+  const description = descriptions[slug] || "Expert guide and practical checklist for digital nomads living and working across Nepal."
 
   return {
     title: `${title} | Digital Nomads in Nepal`,
-    description: `Expert guide and survival checklist for digital nomads setting up in Nepal in 2026.`,
+    description,
     alternates: {
       canonical: `https://digitalnomadsinnepal.com/resources/${canonicalSlug}`,
+    },
+    openGraph: {
+      title: `${title} | Digital Nomads in Nepal`,
+      description,
+      url: `https://digitalnomadsinnepal.com/resources/${canonicalSlug}`,
+      siteName: "Digital Nomads in Nepal",
+      locale: "en_US",
+      type: "article",
     },
   }
 }
@@ -44,8 +65,18 @@ export default function ResourceSlugPage({ params }: { params: { slug: string } 
     notFound()
   }
 
+  const breadcrumbJsonLd = generateBreadcrumbJsonLd([
+    { name: "Home", item: "/" },
+    { name: "Resources", item: "/resources" },
+    { name: slug.replace(/-/g, " ").toUpperCase(), item: `/resources/${slug}` },
+  ])
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <Navbar />
       <main className="min-h-screen bg-background pt-32 pb-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">

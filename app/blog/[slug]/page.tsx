@@ -58,6 +58,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       locale: "en_US",
       type: "article",
       publishedTime: post.createdAt.toISOString(),
+      modifiedTime: post.updatedAt.toISOString(),
       authors: [post.author || "Digital Nomads in Nepal"],
       images: [
         {

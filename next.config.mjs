@@ -3,7 +3,39 @@ const nextConfig = {
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: '**' },
-      { protocol: 'http', hostname: '**' }
+    ]
+  },
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()',
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload',
+          },
+        ],
+      },
     ]
   },
   async redirects() {
@@ -38,8 +70,54 @@ const nextConfig = {
         destination: '/resources/sim-cards',
         permanent: true,
       },
+      {
+        source: '/workspaces',
+        destination: '/resources/coworking',
+        permanent: true,
+      },
+      {
+        source: '/coworking',
+        destination: '/resources/coworking',
+        permanent: true,
+      },
+      {
+        source: '/stay-and-work',
+        destination: '/stay',
+        permanent: true,
+      },
+      {
+        source: '/work-friendly-stays',
+        destination: '/stay',
+        permanent: true,
+      },
+      {
+        source: '/accommodations',
+        destination: '/stay',
+        permanent: true,
+      },
+      {
+        source: '/nomad-guides',
+        destination: '/guides',
+        permanent: true,
+      },
+      {
+        source: '/local-guides',
+        destination: '/guides',
+        permanent: true,
+      },
+      {
+        source: '/local-experts',
+        destination: '/guides',
+        permanent: true,
+      },
+      {
+        source: '/local-experts/:path*',
+        destination: '/guides/:path*',
+        permanent: true,
+      },
     ]
   },
 }
 
 export default nextConfig
+

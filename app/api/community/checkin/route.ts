@@ -1,13 +1,25 @@
 import { NextResponse } from "next/server"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 
 export async function POST(req: Request) {
   try {
-    const { email, hubId, action = "checkin" } = await req.json()
-
-    if (!email) {
-      return NextResponse.json({ error: "Email is required" }, { status: 400 })
+    const session = await getServerSession(authOptions)
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "Unauthorized. Please sign in to check in." }, { status: 401 })
     }
+
+    const { email: reqEmail, hubId, action = "checkin" } = await req.json()
+    const targetEmail = reqEmail || session.user.email
+
+    const sessionRole = (session.user as { role?: string }).role
+    if (targetEmail.toLowerCase() !== session.user.email.toLowerCase() && sessionRole !== "ADMIN") {
+      return NextResponse.json({ error: "Forbidden: Cannot check-in for another user." }, { status: 403 })
+    }
+
+    const email = targetEmail.toLowerCase()
+
 
     const profile = await prisma.nomadProfile.findUnique({
       where: { email }
