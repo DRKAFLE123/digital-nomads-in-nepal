@@ -10,6 +10,7 @@ import { ArrowLeft, MapPin, CheckCircle, Star, Loader2, Calendar, Info, Building
 
 import BookingModalCard from "@/components/coworking/BookingModalCard"
 import EnquiryModalCard from "@/components/coworking/EnquiryModalCard"
+import InternalLinkingEngine from "@/components/InternalLinkingEngine"
 
 type Hub = {
   id: string
@@ -553,6 +554,13 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
             </div>
 
           </div>
+
+          {/* Automated Internal Linking Engine */}
+          <InternalLinkingEngine 
+            type="workspace" 
+            city={hub.city} 
+            entityName={hub.name} 
+          />
         </div>
       </main>
 

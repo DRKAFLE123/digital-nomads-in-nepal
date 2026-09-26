@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import { ArrowRight, ShieldCheck, MapPin, Building } from "lucide-react"
 import { ACCOMMODATIONS } from "@/lib/accommodations"
+import InternalLinkingEngine from "@/components/InternalLinkingEngine"
 
 export default function StayPage() {
   const [selectedType, setSelectedType] = useState<string>("All")
@@ -123,6 +124,13 @@ export default function StayPage() {
               </div>
             ))}
           </div>
+
+          {/* Automated Internal Linking Engine */}
+          <InternalLinkingEngine 
+            type="stay" 
+            city="Pokhara" 
+            className="mt-12" 
+          />
 
         </div>
       </main>

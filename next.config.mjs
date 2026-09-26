@@ -115,6 +115,61 @@ const nextConfig = {
         destination: '/guides/:path*',
         permanent: true,
       },
+      {
+        source: '/guides/cost-of-living-nepal',
+        destination: '/blog/cost-of-living-nepal-2026-nomad-budget',
+        permanent: true,
+      },
+      {
+        source: '/guides/cost-of-living-kathmandu',
+        destination: '/blog/cost-of-living-kathmandu-nomad-guide',
+        permanent: true,
+      },
+      {
+        source: '/guides/cost-of-living-pokhara',
+        destination: '/blog/cost-of-living-pokhara-nomad-guide',
+        permanent: true,
+      },
+      {
+        source: '/guides/nepal-food-cost',
+        destination: '/blog/nepal-food-grocery-costs-nomads',
+        permanent: true,
+      },
+      {
+        source: '/guides/nepal-rent',
+        destination: '/blog/nepal-rent-apartments-coliving-guide',
+        permanent: true,
+      },
+      {
+        source: '/guides/digital-nomad-kathmandu',
+        destination: '/blog/digital-nomad-kathmandu-city-guide',
+        permanent: true,
+      },
+      {
+        source: '/guides/digital-nomad-pokhara',
+        destination: '/blog/digital-nomad-pokhara-city-guide',
+        permanent: true,
+      },
+      {
+        source: '/guides/kathmandu-vs-pokhara',
+        destination: '/blog/kathmandu-vs-pokhara-digital-nomads',
+        permanent: true,
+      },
+      {
+        source: '/guides/internet-in-nepal',
+        destination: '/blog/internet-speed-fiber-wifi-nepal',
+        permanent: true,
+      },
+      {
+        source: '/guides/sim-cards-nepal',
+        destination: '/blog/sim-cards-mobile-data-nepal-guide',
+        permanent: true,
+      },
+      {
+        source: '/guides/workation-nepal',
+        destination: '/blog/workation-nepal-remote-work-guide',
+        permanent: true,
+      },
     ]
   },
 }

@@ -8,6 +8,7 @@ import ReadingProgressBar from "@/components/ReadingProgressBar"
 import TableOfContents from "@/components/TableOfContents"
 import NewsletterSignup from "@/components/NewsletterSignup"
 import RelatedPosts from "@/components/RelatedPosts"
+import InternalLinkingEngine from "@/components/InternalLinkingEngine"
 import { Calendar, Clock, User } from "lucide-react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
@@ -281,6 +282,14 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                 {post.content}
               </ReactMarkdown>
             </div>
+
+            {/* Semantic Cross-Linking Engine */}
+            <InternalLinkingEngine
+              type="article"
+              title={post.title}
+              tags={Array.isArray(post.tags) ? (post.tags as string[]) : []}
+              content={post.content}
+            />
 
             <RelatedPosts posts={related} />
 
