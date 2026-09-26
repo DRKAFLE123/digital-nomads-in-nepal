@@ -380,16 +380,21 @@ export default function Navbar() {
             <div className={`relative group/name items-center h-full ${session ? "hidden md:flex" : "flex"}`}>
               <Link
                 href="/"
-                className="flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD400] rounded-xl p-1"
+                className="flex flex-col justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD400] rounded-xl p-1 text-left select-none"
               >
-                <span className={`font-black text-base sm:text-lg tracking-tight transition-colors ${
+                <span className={`font-black text-xs sm:text-sm md:text-base tracking-tight uppercase leading-none transition-colors ${
                   isSolid
                     ? "text-gray-900 dark:text-[#F5F5F5] lg:group-hover/name:text-primary"
                     : "text-white lg:group-hover/name:text-[#FFD400]"
                 } ${
                   !isScrolled ? "inline-block" : "hidden sm:inline-block"
                 }`}>
-                  Digital Nomads <span className="text-[#FFD400]">Nepal</span>
+                  DIGITAL NOMADS
+                </span>
+                <span className={`font-black text-[9px] sm:text-[10px] tracking-[0.26em] text-[#FFD400] uppercase leading-none mt-1 transition-all lg:group-hover/name:tracking-[0.28em] ${
+                  !isScrolled ? "inline-block" : "hidden sm:inline-block"
+                }`}>
+                  IN NEPAL
                 </span>
               </Link>
 
@@ -1080,13 +1085,18 @@ export default function Navbar() {
           >
             {/* Mobile Header */}
             <div className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-[#242424] shrink-0">
-              <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2">
-                <div className="relative h-8 w-16 overflow-hidden">
+              <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 select-none">
+                <div className="relative h-8 w-14 overflow-hidden">
                   <Image src="/webistepnglogo.png" alt="Logo" fill className="object-contain" unoptimized />
                 </div>
-                <span className="font-extrabold text-base tracking-tight text-gray-900 dark:text-white">
-                  Digital Nomads <span className="text-[#FFD400]">Nepal</span>
-                </span>
+                <div className="flex flex-col text-left">
+                  <span className="font-black text-xs sm:text-sm tracking-tight uppercase text-gray-900 dark:text-white leading-tight">
+                    DIGITAL NOMADS
+                  </span>
+                  <span className="font-black text-[9px] tracking-[0.26em] text-[#FFD400] uppercase leading-none mt-0.5">
+                    IN NEPAL
+                  </span>
+                </div>
               </Link>
               <button
                 onClick={() => setMobileMenuOpen(false)}
