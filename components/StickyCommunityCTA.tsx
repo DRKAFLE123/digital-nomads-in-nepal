@@ -3,9 +3,11 @@
 import { useState, useEffect } from "react"
 import { createPortal } from "react-dom"
 import Link from "next/link"
-import { Users, Building, X } from "lucide-react"
+import { Users, Building, X, MessageSquare } from "lucide-react"
+import { useSession } from "next-auth/react"
 
 export default function StickyCommunityCTA() {
+  const { data: session } = useSession()
   const [isVisible, setIsVisible] = useState(false)
   const [isDismissed, setIsDismissed] = useState(false)
   const [mounted, setMounted] = useState(false)
@@ -44,13 +46,22 @@ export default function StickyCommunityCTA() {
           <span>Book Space</span>
         </Link>
 
-        {/* Join Community Secondary Action Button */}
+        {/* Secondary Action Button: "Community" if already signed in, "Join Nomads" if anonymous visitor */}
         <Link
           href="/community"
           className="flex-1 flex items-center justify-center gap-1.5 bg-white/10 hover:bg-white/15 text-white font-bold py-2.5 px-3 rounded-full text-xs border border-white/15 active:scale-95 transition-all whitespace-nowrap"
         >
-          <Users size={14} className="text-[#FFD400] shrink-0" />
-          <span>Join Nomads</span>
+          {session ? (
+            <>
+              <MessageSquare size={14} className="text-[#FFD400] shrink-0" />
+              <span>Community</span>
+            </>
+          ) : (
+            <>
+              <Users size={14} className="text-[#FFD400] shrink-0" />
+              <span>Join Nomads</span>
+            </>
+          )}
         </Link>
 
         {/* Discreet Dismiss Button */}
