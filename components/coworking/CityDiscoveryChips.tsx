@@ -4,16 +4,19 @@ import React from "react"
 import { MapPin, ChevronDown } from "lucide-react"
 
 export const NEPAL_CITIES = [
-  { id: "All Cities", name: "All Nepal Cities", count: 78, popular: true },
-  { id: "Kathmandu", name: "Kathmandu", count: 32, popular: true, desc: "Capital hub & coworking epicenter" },
-  { id: "Pokhara", name: "Pokhara", count: 24, popular: true, desc: "Lakeside remote work paradise" },
-  { id: "Mustang", name: "Mustang", count: 5, popular: true, desc: "High Himalayan Starlink coliving & mountain hub" },
-  { id: "Lalitpur", name: "Lalitpur", count: 12, popular: true, desc: "Jhamsikhel cafe & artisan hubs" },
-  { id: "Bhaktapur", name: "Bhaktapur", count: 4, popular: false, desc: "Heritage Newari town" },
-  { id: "Chitwan", name: "Chitwan", count: 3, popular: false, desc: "Jungle wilderness & warm weather" },
-  { id: "Lumbini", name: "Lumbini", count: 2, popular: false, desc: "Peaceful spiritual retreat" },
-  { id: "Nagarkot", name: "Nagarkot", count: 2, popular: false, desc: "Sunrise mountain ridge" },
-  { id: "Dharan", name: "Dharan", count: 2, popular: false, desc: "Eastern foothills gateway" },
+  { id: "All Cities", name: "All Nepal Cities", count: 52, popular: true },
+  { id: "Kathmandu", name: "Kathmandu", count: 21, popular: true, desc: "Capital hub & coworking epicenter" },
+  { id: "Pokhara", name: "Pokhara", count: 9, popular: true, desc: "Lakeside remote work paradise" },
+  { id: "Lalitpur", name: "Lalitpur", count: 7, popular: true, desc: "Jhamsikhel cafe & artisan hubs" },
+  { id: "Bhaktapur", name: "Bhaktapur", count: 4, popular: true, desc: "Heritage Newari town" },
+  { id: "Butwal", name: "Butwal", count: 2, popular: false, desc: "Lumbini province commercial & transit hub" },
+  { id: "Nepalgunj", name: "Nepalgunj", count: 2, popular: false, desc: "Western regional gateway hub" },
+  { id: "Mustang", name: "Mustang", count: 2, popular: false, desc: "High Himalayan Starlink mountain coliving" },
+  { id: "Chitwan", name: "Chitwan", count: 1, popular: false, desc: "Jungle sanctuary & warm climate hub" },
+  { id: "Birtamod", name: "Birtamod", count: 1, popular: false, desc: "Eastern Koshi Province commercial hub" },
+  { id: "Dhangadhi", name: "Dhangadhi", count: 1, popular: false, desc: "Far-western regional tech center" },
+  { id: "Janakpur", name: "Janakpur", count: 1, popular: false, desc: "Madhesh cultural center & work hub" },
+  { id: "Mahendranagar", name: "Mahendranagar", count: 1, popular: false, desc: "Far-western border gateway hub" },
 ]
 
 interface CityDiscoveryChipsProps {
