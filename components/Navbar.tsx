@@ -376,16 +376,16 @@ export default function Navbar() {
               <Image src="/webistepnglogo.png" alt="Digital Nomads Nepal Logo" fill className="object-contain" priority unoptimized />
             </Link>
 
-            {/* Brand Name with Info Popover ONLY on Name Hover */}
-            <div className="relative group/name flex items-center h-full">
+            {/* Brand Name (Hidden on mobile when user is signed in to avoid pushing hamburger off screen) */}
+            <div className={`relative group/name items-center h-full ${session ? "hidden md:flex" : "flex"}`}>
               <Link
                 href="/"
                 className="flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD400] rounded-xl p-1"
               >
                 <span className={`font-black text-base sm:text-lg tracking-tight transition-colors ${
                   isSolid
-                    ? "text-gray-900 dark:text-[#F5F5F5] group-hover/name:text-primary"
-                    : "text-white group-hover/name:text-[#FFD400]"
+                    ? "text-gray-900 dark:text-[#F5F5F5] lg:group-hover/name:text-primary"
+                    : "text-white lg:group-hover/name:text-[#FFD400]"
                 } ${
                   !isScrolled ? "inline-block" : "hidden sm:inline-block"
                 }`}>
@@ -393,8 +393,8 @@ export default function Navbar() {
                 </span>
               </Link>
 
-              {/* Platform Intro Popover on Hover (ONLY opens when hovering the brand name) */}
-              <div className="absolute top-[66px] -left-2 sm:left-0 w-[360px] sm:w-[410px] max-w-[94vw] opacity-0 invisible group-hover/name:opacity-100 group-hover/name:visible transition-all duration-200 origin-top-left scale-95 group-hover/name:scale-100 pointer-events-none group-hover/name:pointer-events-auto z-50 pt-2 before:absolute before:-top-3 before:left-0 before:w-full before:h-4 before:content-['']">
+              {/* Platform Intro Popover on Hover (Desktop ONLY: completely hidden on mobile/touch screens) */}
+              <div className="hidden lg:block absolute top-[66px] -left-2 sm:left-0 w-[360px] sm:w-[410px] max-w-[94vw] opacity-0 invisible group-hover/name:opacity-100 group-hover/name:visible transition-all duration-200 origin-top-left scale-95 group-hover/name:scale-100 pointer-events-none group-hover/name:pointer-events-auto z-50 pt-2 before:absolute before:-top-3 before:left-0 before:w-full before:h-4 before:content-['']">
               <div className="relative bg-white dark:bg-[#121212] border border-gray-200 dark:border-[#262626] rounded-2xl shadow-2xl p-4 sm:p-5 space-y-3.5 text-left">
                 {/* Pointer Arrow */}
                 <div className="absolute -top-1.5 left-6 w-3 h-3 bg-white dark:bg-[#121212] border-l border-t border-gray-200 dark:border-[#262626] rotate-45" />
@@ -1165,6 +1165,17 @@ export default function Navbar() {
                   </div>
                 )
               })}
+
+              {/* Mobile-only About Us link positioned directly below Blog */}
+              <div className="border-b border-gray-100 dark:border-[#1c1c1c] pb-2">
+                <Link
+                  href="/about"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block py-2.5 text-sm font-semibold text-gray-900 dark:text-white hover:text-[#FFD400] transition-colors"
+                >
+                  About Us
+                </Link>
+              </div>
             </div>
 
             {/* Mobile Actions Footer (Pinned to bottom of drawer) */}
