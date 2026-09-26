@@ -11,6 +11,7 @@ import Image from "next/image"
 import TrekkingGuideIcon from "./TrekkingGuideIcon"
 import { useSession, signOut } from "next-auth/react"
 import GoogleSearchModal from "./search/GoogleSearchModal"
+import ProfileSlider from "./profile/ProfileSlider"
 
 interface NavDropdownItem {
   name: string
@@ -150,6 +151,7 @@ export default function Navbar() {
   const [userMode, setUserMode] = useState<"DASHBOARD" | "NOMAD">("DASHBOARD")
   const [notificationsOpen, setNotificationsOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [isProfileSliderOpen, setIsProfileSliderOpen] = useState(false)
 
   const navRef = useRef<HTMLDivElement>(null)
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
@@ -191,7 +193,7 @@ export default function Navbar() {
     }
   }, [])
 
-  // Keyboard shortcut (Cmd/Ctrl + K) & custom event listener to open search
+  // Keyboard shortcut (Cmd/Ctrl + K) & custom event listener to open search & profile
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
@@ -200,11 +202,14 @@ export default function Navbar() {
       }
     }
     const handleOpenModal = () => setIsSearchOpen(true)
+    const handleOpenProfile = () => setIsProfileSliderOpen(true)
     window.addEventListener("keydown", handleKeyDown)
     window.addEventListener("open-search-modal", handleOpenModal)
+    window.addEventListener("open-profile-slider", handleOpenProfile)
     return () => {
       window.removeEventListener("keydown", handleKeyDown)
       window.removeEventListener("open-search-modal", handleOpenModal)
+      window.removeEventListener("open-profile-slider", handleOpenProfile)
     }
   }, [])
 
@@ -821,15 +826,16 @@ export default function Navbar() {
             )}
 
             {session ? (
-              /* Signed in profile avatar dropdown */
-              <div className="relative group/avatar flex items-center">
+              /* Signed in profile avatar with Facebook-style right slide drawer */
+              <div className="flex items-center">
                 <button
                   type="button"
-                  className="p-1 rounded-full bg-gray-100 dark:bg-[#121212] border border-gray-200 dark:border-[#242424] hover:border-[#FFD400] transition-all focus:outline-none focus:ring-2 focus:ring-[#FFD400]/40"
-                  aria-label="User Profile Menu"
-                  title={session.user?.name || "User Profile"}
+                  onClick={() => setIsProfileSliderOpen(true)}
+                  className="p-1 rounded-full bg-gray-100 dark:bg-[#121212] border border-gray-200 dark:border-[#242424] hover:border-[#FFD400] transition-all focus:outline-none focus:ring-2 focus:ring-[#FFD400]/40 cursor-pointer active:scale-95 group/avatar"
+                  aria-label="Open User Profile Drawer"
+                  title={`${session.user?.name || "User Profile"} (Click to open profile)`}
                 >
-                  <div className="w-8 h-8 rounded-full bg-[#FFD400] text-black font-black text-xs flex items-center justify-center overflow-hidden shadow-xs">
+                  <div className="w-8 h-8 rounded-full bg-[#FFD400] text-black font-black text-xs flex items-center justify-center overflow-hidden shadow-xs ring-2 ring-[#FFD400]/20 group-hover/avatar:ring-[#FFD400]/50 transition-all">
                     {avatarUrl ? (
                       <img src={avatarUrl} alt="User Avatar" className="w-full h-full object-cover" />
                     ) : (
@@ -837,85 +843,6 @@ export default function Navbar() {
                     )}
                   </div>
                 </button>
-
-                <div className="absolute top-full right-0 mt-2 w-56 opacity-0 invisible group-hover/avatar:opacity-100 group-hover/avatar:visible transition-all duration-200 origin-top-right scale-95 group-hover/avatar:scale-100 z-50">
-                  <div className="bg-white dark:bg-[#121212] border border-gray-200 dark:border-[#242424] rounded-2xl shadow-2xl overflow-hidden p-3 space-y-2">
-                    <div className="border-b border-gray-200 dark:border-[#242424] pb-2 px-1">
-                      <div className="text-gray-900 dark:text-white font-bold text-xs truncate flex items-center justify-between">
-                        <span>{session?.user?.name}</span>
-                        {roleInfo.isOwner && (
-                          <span className="px-1.5 py-0.5 text-[9px] bg-yellow-500/10 text-[#FFD400] font-extrabold rounded border border-yellow-500/20">
-                            OWNER
-                          </span>
-                        )}
-                        {roleInfo.isGuide && !roleInfo.isOwner && (
-                          <span className="px-1.5 py-0.5 text-[9px] bg-indigo-500/10 text-indigo-400 font-extrabold rounded border border-indigo-500/20">
-                            EXPERT
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-[#A1A1AA] text-[11px] truncate">{session?.user?.email}</p>
-                    </div>
-
-                    {/* Role-Specific Options in Profile Dropdown */}
-                    {roleInfo.isOwner ? (
-                      <Link
-                        href="/owner/dashboard"
-                        className="flex items-center justify-between px-3 py-2 rounded-xl text-xs bg-gray-100 dark:bg-[#1A1A1A] hover:bg-gray-200 dark:hover:bg-[#222] text-[#FFD400] font-bold border border-yellow-500/30 transition-all"
-                      >
-                        <span className="flex items-center gap-2">
-                          <Building size={14} /> My Dashboard
-                        </span>
-                        {roleInfo.pendingOwnerBookings > 0 && (
-                          <span className="px-1.5 py-0.5 rounded-full bg-red-500 text-white text-[10px] font-black">
-                            {roleInfo.pendingOwnerBookings}
-                          </span>
-                        )}
-                      </Link>
-                    ) : roleInfo.isGuide ? (
-                      <Link
-                        href="/guides/dashboard"
-                        className="flex items-center justify-between px-3 py-2 rounded-xl text-xs bg-gray-100 dark:bg-[#1A1A1A] hover:bg-gray-200 dark:hover:bg-[#222] text-indigo-400 font-bold border border-indigo-500/30 transition-all"
-                      >
-                        <span className="flex items-center gap-2">
-                          <Award size={14} /> My Dashboard
-                        </span>
-                        {roleInfo.pendingGuideInquiries > 0 && (
-                          <span className="px-1.5 py-0.5 rounded-full bg-indigo-500 text-white text-[10px] font-black">
-                            {roleInfo.pendingGuideInquiries}
-                          </span>
-                        )}
-                      </Link>
-                    ) : (
-                      <Link
-                        href="/nomad/bookings"
-                        className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs text-gray-700 dark:text-gray-200 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#1a1a1a] transition-all font-semibold"
-                      >
-                        <CalendarCheck size={13} className="text-[#FFD400]" /> My Bookings
-                      </Link>
-                    )}
-
-                    <Link
-                      href="/community/settings"
-                      className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs text-gray-600 dark:text-[#A1A1AA] hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#1a1a1a] transition-all font-semibold"
-                    >
-                      <Settings size={13} /> Profile Settings
-                    </Link>
-
-                    {/* Theme in Profile Dropdown */}
-                    <div className="flex items-center justify-between px-3 py-1.5 border-t border-gray-200 dark:border-[#242424] pt-2">
-                      <span className="text-xs text-gray-600 dark:text-[#A1A1AA] font-semibold">Theme</span>
-                      <ThemeToggle variant="ghost" />
-                    </div>
-
-                    <button
-                      onClick={() => signOut()}
-                      className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-red-500/10 text-red-500 dark:text-red-400 hover:bg-red-500/20 text-xs font-bold transition-all border border-red-500/20 mt-1"
-                    >
-                      <LogOut size={13} /> Sign Out
-                    </button>
-                  </div>
-                </div>
               </div>
             ) : (
               /* Signed out actions */
@@ -1035,17 +962,19 @@ export default function Navbar() {
 
             {/* Profile Avatar on Mobile (ONLY when signed in) */}
             {session && (
-              <Link
-                href="/community/settings"
-                className="w-8 h-8 rounded-full overflow-hidden border border-gray-200 dark:border-[#242424] flex items-center justify-center bg-[#FFD400]/20 text-[#B45309] dark:text-[#FFD400] font-bold text-xs"
+              <button
+                type="button"
+                onClick={() => setIsProfileSliderOpen(true)}
+                className="w-8 h-8 rounded-full overflow-hidden border border-gray-200 dark:border-[#242424] flex items-center justify-center bg-[#FFD400]/20 text-[#B45309] dark:text-[#FFD400] font-bold text-xs active:scale-95 cursor-pointer ring-1 ring-[#FFD400]/40"
                 title={session.user?.name || "Profile"}
+                aria-label="Open Profile Slider"
               >
                 {avatarUrl ? (
                   <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
                 ) : (
                   session.user?.name?.[0]?.toUpperCase() || "U"
                 )}
-              </Link>
+              </button>
             )}
 
             <button
@@ -1213,17 +1142,24 @@ export default function Navbar() {
                   </Link>
                 </div>
               ) : (
-                <div className="flex justify-between items-center p-2.5 bg-gray-50 dark:bg-[#121212] border border-gray-200 dark:border-[#242424] rounded-xl">
-                  <span className="text-xs text-gray-900 dark:text-white font-bold">{session.user?.name}</span>
-                  <button
-                    onClick={() => {
-                      signOut()
-                      setMobileMenuOpen(false)
-                    }}
-                    className="text-xs text-red-500 dark:text-red-400 font-bold hover:underline"
-                  >
-                    Sign Out
-                  </button>
+                <div
+                  onClick={() => {
+                    setMobileMenuOpen(false)
+                    setIsProfileSliderOpen(true)
+                  }}
+                  className="flex justify-between items-center p-2.5 bg-gray-50 dark:bg-[#121212] border border-gray-200 dark:border-[#242424] rounded-xl cursor-pointer hover:border-[#FFD400]/50 transition-colors"
+                >
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-full bg-[#FFD400] text-black font-bold text-[10px] flex items-center justify-center overflow-hidden">
+                      {avatarUrl ? (
+                        <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                      ) : (
+                        session.user?.name?.[0]?.toUpperCase() || "U"
+                      )}
+                    </div>
+                    <span className="text-xs text-gray-900 dark:text-white font-bold">{session.user?.name}</span>
+                  </div>
+                  <span className="text-[11px] text-[#FFD400] font-bold">View Profile &rarr;</span>
                 </div>
               )}
 
@@ -1249,6 +1185,17 @@ export default function Navbar() {
 
       {/* Google-Style Search Overlay Modal */}
       <GoogleSearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+
+      {/* Facebook-Style Profile Slider Drawer (0ms instant transition, zero page reload) */}
+      <ProfileSlider
+        isOpen={isProfileSliderOpen}
+        onClose={() => setIsProfileSliderOpen(false)}
+        session={session}
+        avatarUrl={avatarUrl}
+        roleInfo={roleInfo}
+        userMode={userMode}
+        setUserMode={setUserMode}
+      />
     </nav>
   )
 }
