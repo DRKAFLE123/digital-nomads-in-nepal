@@ -6,14 +6,14 @@ import Image from "next/image"
 import { Search } from "lucide-react"
 
 const keywords = [
-  "Kathmandu",
-  "Pokhara",
-  "backup generator",
-  "fiber internet",
-  "Lakeside cafes",
-  "meeting rooms",
-  "Jhamsikhel workspaces",
-  "Thamel hubs"
+  "workspaces in Kathmandu",
+  "stays in Pokhara",
+  "coliving in Mustang",
+  "high-speed fiber cafes",
+  "licensed mountain guides",
+  "Jhamsikhel hubs",
+  "Lakeside nomad villas",
+  "24/7 power backup hubs"
 ]
 
 export default function HeroSection() {
@@ -73,20 +73,15 @@ export default function HeroSection() {
         {/* H1 */}
         <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-xl mb-4">
           Digital Nomads in Nepal<br className="hidden sm:block" />{" "}
-          <span className="text-primary">Live, Work & Explore the Himalayas</span>
+          <span className="text-primary">— Live, Work &amp; Explore</span>
         </h1>
 
-        {/* Subheadline */}
-        <p className="text-base sm:text-lg md:text-xl text-gray-200 font-medium drop-shadow-md max-w-2xl mb-2 px-2">
-          Cost of living, visa, internet, and the best cities to live and work remotely in Nepal.
+        {/* Supporting text */}
+        <p className="text-base sm:text-lg md:text-xl text-gray-200 font-medium drop-shadow-md max-w-2xl mb-8 px-2 leading-relaxed">
+          Find workspaces, work-friendly stays, local guides, practical resources and places to live and work across Nepal.
         </p>
 
-        {/* Extra SEO Line */}
-        <p className="text-xs sm:text-sm text-primary font-medium drop-shadow mb-6 tracking-wide px-2">
-          Guides for digital nomads in Kathmandu, Pokhara, and across Nepal.
-        </p>
-
-        {/* Search Bar for Coworking Spaces / Workplaces */}
+        {/* Search Bar for Workspaces, Stays, Destinations */}
         <form onSubmit={handleSearch} className="w-full max-w-lg mb-8 px-2 relative group z-30">
           <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-yellow-500 rounded-full blur opacity-30 group-hover:opacity-50 transition duration-300"></div>
           <div className="relative flex items-center bg-white/95 dark:bg-black/80 backdrop-blur border border-gray-200 dark:border-white/10 rounded-full p-1.5 focus-within:border-primary shadow-lg transition-colors">
@@ -100,7 +95,7 @@ export default function HeroSection() {
                   window.dispatchEvent(new CustomEvent("open-search-modal"))
                 }
               }}
-              placeholder={`Search workspaces, guides, destinations (e.g. ${placeholder})`}
+              placeholder={`Search workspaces, stays, destinations (e.g. ${placeholder})`}
               className="w-full bg-transparent border-0 text-gray-900 dark:text-white text-xs sm:text-sm pl-3 pr-4 py-2.5 focus:outline-none placeholder:text-gray-500 cursor-pointer"
             />
             <button
