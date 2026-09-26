@@ -366,23 +366,23 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-[72px]">
 
           {/* Left: Brand Logo & Interactive Platform Intro Popover */}
-          <div className="flex-shrink-0 flex items-center h-[72px] gap-2">
-            {/* Logo Image (no popover on hover) */}
+          <div className="flex-shrink-0 flex items-center h-[72px] gap-2.5">
+            {/* Logo Image (no popover on hover) - Wider horizontal presence for mountain mark */}
             <Link
               href="/"
-              className="relative h-8 sm:h-9 w-16 sm:w-20 overflow-hidden flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD400] rounded-xl flex items-center p-1"
+              className="relative h-8 sm:h-9 md:h-10 w-20 sm:w-24 md:w-26 overflow-hidden flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD400] rounded-xl flex items-center py-0.5"
               aria-label="Digital Nomads Nepal Home"
             >
-              <Image src="/webistepnglogo.png" alt="Digital Nomads Nepal Logo" fill className="object-contain" priority unoptimized />
+              <Image src="/webistepnglogo.png" alt="Digital Nomads Nepal Logo" fill className="object-contain object-left" priority unoptimized />
             </Link>
 
             {/* Brand Name (Hidden on mobile when user is signed in to avoid pushing hamburger off screen) */}
             <div className={`relative group/name items-center h-full ${session ? "hidden md:flex" : "flex"}`}>
               <Link
                 href="/"
-                className="flex flex-col justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD400] rounded-xl p-1 text-left select-none"
+                className="flex flex-col justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD400] rounded-xl py-1 text-left select-none"
               >
-                <span className={`font-black text-xs sm:text-sm md:text-base tracking-tight uppercase leading-none transition-colors ${
+                <span className={`font-black text-sm sm:text-[15px] md:text-[17px] tracking-normal leading-tight uppercase transition-colors ${
                   isSolid
                     ? "text-gray-900 dark:text-[#F5F5F5] lg:group-hover/name:text-primary"
                     : "text-white lg:group-hover/name:text-[#FFD400]"
@@ -391,17 +391,10 @@ export default function Navbar() {
                 }`}>
                   DIGITAL NOMADS
                 </span>
-                <div className={`w-full flex justify-between font-black text-[9px] sm:text-[10px] text-[#FFD400] uppercase leading-none mt-1 select-none ${
-                  !isScrolled ? "flex" : "hidden sm:flex"
+                <div className={`font-extrabold text-[9px] sm:text-[10px] text-[#FFD400] tracking-[0.22em] uppercase leading-none mt-1 select-none ${
+                  !isScrolled ? "block" : "hidden sm:block"
                 }`}>
-                  <span>I</span>
-                  <span>N</span>
-                  <span className="w-1.5 sm:w-2" />
-                  <span>N</span>
-                  <span>E</span>
-                  <span>P</span>
-                  <span>A</span>
-                  <span>L</span>
+                  IN NEPAL
                 </div>
               </Link>
 
@@ -1093,22 +1086,15 @@ export default function Navbar() {
             {/* Mobile Header */}
             <div className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-[#242424] shrink-0">
               <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 select-none">
-                <div className="relative h-8 w-14 overflow-hidden">
-                  <Image src="/webistepnglogo.png" alt="Logo" fill className="object-contain" unoptimized />
+                <div className="relative h-8 w-20 overflow-hidden">
+                  <Image src="/webistepnglogo.png" alt="Logo" fill className="object-contain object-left" unoptimized />
                 </div>
                 <div className="flex flex-col text-left">
-                  <span className="font-black text-xs sm:text-sm tracking-tight uppercase text-gray-900 dark:text-white leading-tight">
+                  <span className="font-black text-sm tracking-normal uppercase text-gray-900 dark:text-white leading-tight">
                     DIGITAL NOMADS
                   </span>
-                  <div className="w-full flex justify-between font-black text-[9px] text-[#FFD400] uppercase leading-none mt-1 select-none">
-                    <span>I</span>
-                    <span>N</span>
-                    <span className="w-1.5" />
-                    <span>N</span>
-                    <span>E</span>
-                    <span>P</span>
-                    <span>A</span>
-                    <span>L</span>
+                  <div className="font-extrabold text-[9px] text-[#FFD400] tracking-[0.22em] uppercase leading-none mt-1 select-none">
+                    IN NEPAL
                   </div>
                 </div>
               </Link>
