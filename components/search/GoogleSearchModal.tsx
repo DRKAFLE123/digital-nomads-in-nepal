@@ -732,7 +732,7 @@ export default function GoogleSearchModal({ isOpen, onClose }: GoogleSearchModal
               <span>select</span>
             </span>
           </div>
-          <span className="font-medium text-gray-400 dark:text-gray-500">Digital Nomads Nepal Search</span>
+          <span className="font-medium text-gray-400 dark:text-gray-500">Digital Nomads in Nepal Search</span>
         </div>
       </div>
     </div>,

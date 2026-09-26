@@ -371,9 +371,9 @@ export default function Navbar() {
             <Link
               href="/"
               className="relative h-8 sm:h-9 md:h-10 w-20 sm:w-24 md:w-26 overflow-hidden flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD400] rounded-xl flex items-center py-0.5"
-              aria-label="Digital Nomads Nepal Home"
+              aria-label="Digital Nomads in Nepal Home"
             >
-              <Image src="/webistepnglogo.png" alt="Digital Nomads Nepal Logo" fill className="object-contain object-left" priority unoptimized />
+              <Image src="/webistepnglogo.png" alt="Digital Nomads in Nepal Logo" fill className="object-contain object-left" priority unoptimized />
             </Link>
 
             {/* Brand Name (Hidden on mobile when user is signed in to avoid pushing hamburger off screen) */}
@@ -412,7 +412,7 @@ export default function Navbar() {
                     </span>
                   </div>
                   <h4 className="text-sm font-black text-gray-900 dark:text-white">
-                    Digital Nomads Nepal
+                    Digital Nomads in Nepal
                   </h4>
                   <p className="text-xs text-gray-600 dark:text-gray-300 mt-1 leading-relaxed">
                     The verified digital nomad & remote work ecosystem built to help you live, work, and explore the Himalayas seamlessly.

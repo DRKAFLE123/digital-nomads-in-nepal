@@ -63,7 +63,7 @@ export async function sendAdminNotificationEmail({
       })
 
       await transporter.sendMail({
-        from: `"Digital Nomads Nepal" <${user}>`,
+        from: `"Digital Nomads in Nepal" <${user}>`,
         to: adminEmail,
         subject: `[Admin Alert] ${subject}`,
         html: htmlContent,

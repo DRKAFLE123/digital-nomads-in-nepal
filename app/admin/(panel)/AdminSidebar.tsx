@@ -81,7 +81,7 @@ export default function AdminSidebar({ user }: Props) {
             </div>
             <div className="min-w-0">
               <div className="font-bold text-sm text-white truncate">Admin Panel</div>
-              <div className="text-xs text-gray-500 truncate">Digital Nomads Nepal</div>
+              <div className="text-xs text-gray-500 truncate">Digital Nomads in Nepal</div>
             </div>
           </div>
         </div>

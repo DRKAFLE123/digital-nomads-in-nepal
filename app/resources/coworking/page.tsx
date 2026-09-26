@@ -313,7 +313,7 @@ export default function CoworkingMarketplacePage() {
                 <ShieldCheck size={28} />
               </div>
               <div>
-                <h3 className="text-lg font-black text-white">Digital Nomads Nepal Verified Standard</h3>
+                <h3 className="text-lg font-black text-white">Digital Nomads in Nepal Verified Standard</h3>
                 <p className="text-xs text-[#A1A1AA] mt-1 max-w-xl">
                   Every workspace with the <strong className="text-emerald-400">✓ Himalayan Verified</strong> badge undergo speed tests, generator load tests, and physical address checks.
                 </p>
