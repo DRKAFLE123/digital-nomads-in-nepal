@@ -72,8 +72,8 @@ export default function HeroSection() {
         
         {/* H1 */}
         <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-xl mb-4">
-          Live and Work in Nepal<br className="hidden sm:block" />{" "}
-          <span className="text-primary">on a Nomad Visa</span>
+          Digital Nomads in Nepal<br className="hidden sm:block" />{" "}
+          <span className="text-primary">Live, Work & Explore the Himalayas</span>
         </h1>
 
         {/* Subheadline */}
