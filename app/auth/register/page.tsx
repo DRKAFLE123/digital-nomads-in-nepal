@@ -55,8 +55,8 @@ export default function RegisterPage() {
       <div className="w-full max-w-md">
         {/* Logo & Brand Name */}
         <div className="text-center mb-8 sm:mb-10">
-          <Link href="/" className="inline-flex items-center justify-center gap-2.5 sm:gap-3.5 group focus-visible:outline-none">
-            <div className="relative w-20 sm:w-[96px] h-8 sm:h-10 overflow-hidden shrink-0 transition-transform duration-200 group-hover:scale-105">
+          <Link href="/" className="inline-flex items-center justify-center gap-3 sm:gap-3.5 group focus-visible:outline-none">
+            <div className="relative w-[76px] sm:w-[88px] md:w-[96px] h-8 sm:h-9 md:h-10 overflow-hidden shrink-0 transition-transform duration-200 group-hover:scale-105">
               <Image
                 src="/webisteofficiallogo-removebg-preview.png"
                 alt="Digital Nomads in Nepal Logo"
@@ -66,9 +66,16 @@ export default function RegisterPage() {
                 unoptimized
               />
             </div>
-            <span className="font-extrabold text-lg sm:text-xl md:text-2xl text-foreground tracking-tight whitespace-nowrap">
-              Digital Nomads <span className="text-primary">in Nepal</span>
-            </span>
+            <div className="flex flex-col items-center justify-center text-center select-none">
+              <span className="font-black text-sm sm:text-base md:text-lg tracking-normal uppercase text-foreground leading-tight group-hover:text-primary transition-colors">
+                DIGITAL NOMADS
+              </span>
+              <div className="w-full flex items-center justify-center gap-1.5 font-extrabold text-[9px] sm:text-[10px] text-primary tracking-[0.16em] uppercase leading-none mt-1 select-none text-center">
+                <span className="text-primary/60 font-medium select-none">—</span>
+                <span>IN NEPAL</span>
+                <span className="text-primary/60 font-medium select-none">—</span>
+              </div>
+            </div>
           </Link>
         </div>
 
