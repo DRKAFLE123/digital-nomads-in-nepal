@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: 'The ultimate guide to living and working remotely in the Himalayas.',
     start_url: '/',
     display: 'standalone',
-    background_color: '#090d16',
-    theme_color: '#2563eb',
+    background_color: '#000000',
+    theme_color: '#000000',
     icons: [
       {
         src: '/icon-192.png',
