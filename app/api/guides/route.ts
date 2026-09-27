@@ -27,14 +27,14 @@ import { sendAdminNotificationEmail } from "@/lib/email"
 // POST /api/guides — register a new guide
 export async function POST(req: NextRequest) {
   const body = await req.json()
-  const { name, bio, location, specialties, photoUrl, contactEmail } = body
+  const { name, bio, location, specialties, photoUrl, contactEmail, website } = body
 
   if (!name || !bio || !location || !contactEmail) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
   }
 
   const guide = await prisma.guide.create({
-    data: { name, bio, location, specialties: specialties ?? [], photoUrl, contactEmail },
+    data: { name, bio, location, specialties: specialties ?? [], photoUrl, contactEmail, website: website || null },
   })
 
   // Auto-promote registering user role to GUIDE

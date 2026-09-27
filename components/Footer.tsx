@@ -81,7 +81,7 @@ export default function Footer() {
               <li><Link href="/community#forum" className="text-sm text-muted-foreground hover:text-primary transition-colors inline-block group">Nomad Forum<span className="block h-px w-0 bg-primary transition-all group-hover:w-full"></span></Link></li>
               <li><Link href="/community#directory" className="text-sm text-muted-foreground hover:text-primary transition-colors inline-block group">Member Directory<span className="block h-px w-0 bg-primary transition-all group-hover:w-full"></span></Link></li>
               <li>
-                <Link href="/guides" className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-1.5 group w-fit">
+                <Link href="/local-guides" className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-1.5 group w-fit">
                   <span className="relative">
                     Find a Local Guide
                     <span className="block absolute bottom-[-2px] left-0 h-px w-0 bg-primary transition-all group-hover:w-full"></span>
@@ -96,15 +96,15 @@ export default function Footer() {
 
           {/* Column 3: RESOURCES */}
           <div className="flex flex-col">
-            <h3 className="text-sm font-black tracking-widest text-foreground uppercase mb-6">Resources</h3>
+            <h3 className="text-sm font-black tracking-widest text-foreground uppercase mb-6">Practical Guides</h3>
             <ul className="flex flex-col space-y-4">
-              <li><Link href="/resources/visa" className="text-sm text-muted-foreground hover:text-primary transition-colors inline-block group">Nepal Digital Nomad Visa Guide (2026)<span className="block h-px w-0 bg-primary transition-all group-hover:w-full"></span></Link></li>
-              <li><Link href="/resources/cost-of-living" className="text-sm text-muted-foreground hover:text-primary transition-colors inline-block group">Cost of Living in Nepal for Remote Workers<span className="block h-px w-0 bg-primary transition-all group-hover:w-full"></span></Link></li>
-              <li><Link href="/resources/transportation" className="text-sm text-muted-foreground hover:text-primary transition-colors inline-block group">Transport & Apps<span className="block h-px w-0 bg-primary transition-all group-hover:w-full"></span></Link></li>
-              <li><Link href="/resources/sim-cards" className="text-sm text-muted-foreground hover:text-primary transition-colors inline-block group">SIM Cards, Internet & Remote Setup<span className="block h-px w-0 bg-primary transition-all group-hover:w-full"></span></Link></li>
-              <li><Link href="/setup" className="text-sm text-muted-foreground hover:text-primary transition-colors inline-block group">Internet & Remote Setup<span className="block h-px w-0 bg-primary transition-all group-hover:w-full"></span></Link></li>
-              <li><Link href="/resources/coworking" className="text-sm text-muted-foreground hover:text-primary transition-colors inline-block group">Best Coworking Spaces in Nepal ⭐<span className="block h-px w-0 bg-primary transition-all group-hover:w-full"></span></Link></li>
-              <li><Link href="/resources/banking" className="text-sm text-muted-foreground hover:text-primary transition-colors inline-block group">Banking & Payments in Nepal<span className="block h-px w-0 bg-primary transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/nomad-visa-guide" className="text-sm text-muted-foreground hover:text-primary transition-colors inline-block group">Nepal Digital Nomad Visa Guide (2026)<span className="block h-px w-0 bg-primary transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/nepal-cost-of-living-guide" className="text-sm text-muted-foreground hover:text-primary transition-colors inline-block group">Cost of Living in Nepal for Remote Workers<span className="block h-px w-0 bg-primary transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/nepal-transportation-guide" className="text-sm text-muted-foreground hover:text-primary transition-colors inline-block group">Transport & Apps<span className="block h-px w-0 bg-primary transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/nepal-sim-cards-guide" className="text-sm text-muted-foreground hover:text-primary transition-colors inline-block group">SIM Cards, Internet & Connectivity<span className="block h-px w-0 bg-primary transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/workspaces" className="text-sm text-muted-foreground hover:text-primary transition-colors inline-block group">Best Coworking Spaces in Nepal ⭐<span className="block h-px w-0 bg-primary transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/nepal-banking-atm-guide" className="text-sm text-muted-foreground hover:text-primary transition-colors inline-block group">Banking & Payments in Nepal<span className="block h-px w-0 bg-primary transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/practical-guides" className="text-sm text-muted-foreground hover:text-primary transition-colors inline-block group">All Practical Guides →<span className="block h-px w-0 bg-primary transition-all group-hover:w-full"></span></Link></li>
             </ul>
           </div>
 

@@ -35,7 +35,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     const body = await req.json()
-    const { name, bio, location, specialties, photoUrl, contactEmail } = body
+    const { name, bio, location, specialties, photoUrl, contactEmail, website } = body
 
     const existing = await prisma.guide.findUnique({ where: { id: params.id } })
     if (!existing) {
@@ -50,7 +50,8 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
         ...(location ? { location } : {}),
         ...(specialties ? { specialties } : {}),
         ...(photoUrl !== undefined ? { photoUrl } : {}),
-        ...(contactEmail ? { contactEmail } : {})
+        ...(contactEmail ? { contactEmail } : {}),
+        ...(website !== undefined ? { website: website || null } : {})
       }
     })
 

@@ -13,6 +13,7 @@ const ALL_SPECIALTIES = ["Trekking", "Foodie", "History", "Photography", "Cultur
 type FormData = {
   name: string; email: string; location: string
   specialties: string[]; bio: string; photoUrl: string
+  website: string
 }
 
 export default function GuideRegisterPage() {
@@ -24,6 +25,7 @@ export default function GuideRegisterPage() {
   const [form, setForm] = useState<FormData>({
     name: "", email: "", location: "",
     specialties: [], bio: "", photoUrl: "",
+    website: "",
   })
 
   async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -72,7 +74,7 @@ export default function GuideRegisterPage() {
     const res = await fetch("/api/guides", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...form, contactEmail: form.email }),
+      body: JSON.stringify({ ...form, contactEmail: form.email, website: form.website || null }),
     })
     setLoading(false)
     if (res.ok) {
@@ -132,6 +134,20 @@ export default function GuideRegisterPage() {
                       className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-muted" />
                   </div>
                 ))}
+
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-2 block">
+                    Website or Agency / Portfolio Link <span className="text-muted text-xs">(Optional)</span>
+                  </label>
+                  <input
+                    type="url"
+                    value={form.website}
+                    onChange={e => setForm(p => ({ ...p, website: e.target.value }))}
+                    placeholder="https://youragency.com or https://instagram.com/yourhandle"
+                    className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-muted"
+                  />
+                </div>
+
                 <div>
                   <label className="text-sm font-medium text-foreground mb-2 block">Location</label>
                   <select value={form.location} onChange={e => setForm(p => ({ ...p, location: e.target.value }))}
@@ -298,6 +314,7 @@ export default function GuideRegisterPage() {
                     { label: "Name", value: form.name },
                     { label: "Email", value: form.email },
                     { label: "Location", value: form.location },
+                    { label: "Website", value: form.website || "None provided" },
                     { label: "Specialties", value: form.specialties.map(s => `#${s}`).join("  ") || "None selected" },
                   ].map(({ label, value }) => (
                     <div key={label} className="flex gap-3 border-b border-border/50 pb-3">
@@ -333,7 +350,7 @@ export default function GuideRegisterPage() {
                 <p className="text-muted mb-8 max-w-sm mx-auto">
                   Thank you, <strong>{form.name}</strong>! Your guide profile has been submitted for verification. Our team will review it within 2–3 days.
                 </p>
-                <Link href="/guides" className="inline-block bg-primary text-black font-bold px-8 py-3 rounded-full hover:bg-white hover:text-black transition-all">
+                <Link href="/local-guides" className="inline-block bg-primary text-black font-bold px-8 py-3 rounded-full hover:bg-white hover:text-black transition-all">
                   Browse Guides →
                 </Link>
               </div>

@@ -23,9 +23,10 @@ export async function GET(req: NextRequest) {
 
     const hubs = await prisma.workHub.findMany({
       where: {
-        ownerEmail: {
-          equals: ownerEmail,
-        }
+        OR: [
+          { ownerEmail: { equals: ownerEmail } },
+          { contactEmail: { equals: ownerEmail } }
+        ]
       },
       include: {
         bookings: {

@@ -18,7 +18,10 @@ import {
   User, 
   MapPin, 
   PlusCircle, 
-  RefreshCw 
+  RefreshCw,
+  ArrowRight,
+  Sparkles,
+  Home
 } from "lucide-react"
 
 interface HubData {
@@ -54,8 +57,6 @@ export default function OwnerDashboardPage() {
     } else if (session?.user?.email) {
       setOwnerEmail(session.user.email)
       fetchOwnerData(session.user.email)
-    } else {
-      fetchOwnerData("pema.mustang@nomadnepal.com")
     }
   }, [session, status, router])
   
@@ -70,57 +71,32 @@ export default function OwnerDashboardPage() {
 
   // Fetch owner hubs and bookings
   const fetchOwnerData = async (email: string) => {
+    if (!email) return
     setLoading(true)
     try {
       const res = await fetch(`/api/owner/hubs?email=${encodeURIComponent(email)}`)
       if (res.ok) {
         const data = await res.json()
-        if (Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data)) {
           setHubs(data)
         } else {
-          // If no custom owned hub found for typed email, attempt fallback fetch for demo hubs
-          const fallbackRes = await fetch("/api/work-hubs")
-          if (fallbackRes.ok) {
-            const allHubs = await fallbackRes.json()
-            const formatted = allHubs.slice(0, 3).map((h: any) => ({
-              ...h,
-              facilities: Array.isArray(h.facilities) ? h.facilities : ["Starlink Wi-Fi", "Solar Backup"],
-              bookings: [
-                {
-                  id: `bk_${h.id}_101`,
-                  nomadName: "Alex Rivera",
-                  nomadEmail: "alex@nomadtech.io",
-                  startDate: "2026-09-15T00:00:00.000Z",
-                  endDate: "2026-10-15T00:00:00.000Z",
-                  notes: "Starlink speed test requested for remote daily standups.",
-                  status: "CONFIRMED",
-                  createdAt: new Date().toISOString()
-                },
-                {
-                  id: `bk_${h.id}_102`,
-                  nomadName: "Sophie Martin",
-                  nomadEmail: "sophie.m@designnomad.fr",
-                  startDate: "2026-10-01T00:00:00.000Z",
-                  endDate: "2026-10-20T00:00:00.000Z",
-                  notes: "Coliving private room with mountain view.",
-                  status: "PENDING",
-                  createdAt: new Date().toISOString()
-                }
-              ]
-            }))
-            setHubs(formatted)
-          }
+          setHubs([])
         }
+      } else {
+        setHubs([])
       }
     } catch (err) {
       console.error("Owner data load error:", err)
+      setHubs([])
     } finally {
       setLoading(false)
     }
   }
 
   useEffect(() => {
-    fetchOwnerData(ownerEmail)
+    if (ownerEmail) {
+      fetchOwnerData(ownerEmail)
+    }
   }, [ownerEmail])
 
   const handleOwnerSearch = (e: React.FormEvent) => {
@@ -301,40 +277,96 @@ export default function OwnerDashboardPage() {
 
       {/* Main Console Section */}
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full">
-        {/* Navigation Tabs */}
-        <div className="flex items-center gap-3 border-b border-gray-800 pb-3 mb-6 overflow-x-auto">
-          <button
-            onClick={() => setActiveTab("BOOKINGS")}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border ${
-              activeTab === "BOOKINGS"
-                ? "bg-[#FFD400] text-black border-[#FFD400] shadow-md shadow-yellow-500/10"
-                : "bg-[#141414] text-gray-400 border-gray-800 hover:text-white"
-            }`}
-          >
-            <Calendar className="w-4 h-4" />
-            Incoming Nomad Reservations ({allBookings.length})
-          </button>
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-24 text-center">
+            <RefreshCw className="w-8 h-8 text-[#FFD400] animate-spin mb-4" />
+            <p className="text-gray-400 text-sm font-medium">Loading your property portfolio...</p>
+          </div>
+        ) : hubs.length === 0 ? (
+          <div className="bg-[#121212] rounded-3xl border border-gray-800 p-8 sm:p-12 text-center max-w-2xl mx-auto my-6 shadow-2xl">
+            <div className="w-16 h-16 rounded-2xl bg-[#FFD400]/10 border border-[#FFD400]/20 flex items-center justify-center mx-auto mb-6 text-[#FFD400]">
+              <Building2 className="w-8 h-8" />
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-black text-white mb-3">
+              No Properties Registered Yet
+            </h2>
+            <p className="text-gray-400 text-sm sm:text-base leading-relaxed mb-3">
+              You are signed in as <span className="text-[#FFD400] font-medium">{ownerEmail || session?.user?.email}</span>. We could not find any active workspaces, coworking desks, or stays registered under this email.
+            </p>
+            <p className="text-gray-500 text-xs sm:text-sm mb-8 max-w-lg mx-auto leading-relaxed">
+              List your property on Digital Nomads in Nepal to receive direct reservation inquiries, manage pricing, and connect with remote workers from across the world.
+            </p>
 
-          <button
-            onClick={() => setActiveTab("LISTINGS")}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border ${
-              activeTab === "LISTINGS"
-                ? "bg-[#FFD400] text-black border-[#FFD400] shadow-md shadow-yellow-500/10"
-                : "bg-[#141414] text-gray-400 border-gray-800 hover:text-white"
-            }`}
-          >
-            <Building2 className="w-4 h-4" />
-            Edit Listings & Pricing ({hubs.length})
-          </button>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Link
+                href="/workspaces/register"
+                className="p-5 rounded-2xl bg-gradient-to-b from-[#1c1c1c] to-[#141414] border border-gray-800 hover:border-[#FFD400]/60 transition-all text-left group"
+              >
+                <div className="w-10 h-10 rounded-xl bg-[#FFD400]/15 flex items-center justify-center text-[#FFD400] mb-3 group-hover:scale-105 transition-transform">
+                  <Building2 className="w-5 h-5" />
+                </div>
+                <h3 className="text-base font-bold text-white group-hover:text-[#FFD400] transition-colors flex items-center justify-between">
+                  List a Workspace
+                  <ArrowRight className="w-4 h-4 text-gray-500 group-hover:translate-x-1 transition-transform" />
+                </h3>
+                <p className="text-xs text-gray-400 mt-1.5 leading-relaxed">
+                  Coworking spaces, dedicated desks, meeting rooms, and work cafés.
+                </p>
+              </Link>
 
-          <Link
-            href="/stay/register"
-            className="px-4 py-2 rounded-xl text-xs font-bold bg-[#1A1A1A] text-gray-300 border border-gray-700 hover:border-gray-500 hover:text-white transition-colors flex items-center gap-1.5 ml-auto"
-          >
-            <PlusCircle className="w-4 h-4 text-[#FFD400]" />
-            Register New Property
-          </Link>
-        </div>
+              <Link
+                href="/stay/register"
+                className="p-5 rounded-2xl bg-gradient-to-b from-[#1c1c1c] to-[#141414] border border-gray-800 hover:border-emerald-500/60 transition-all text-left group"
+              >
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/15 flex items-center justify-center text-emerald-400 mb-3 group-hover:scale-105 transition-transform">
+                  <Home className="w-5 h-5" />
+                </div>
+                <h3 className="text-base font-bold text-white group-hover:text-emerald-400 transition-colors flex items-center justify-between">
+                  List a Nomad Stay
+                  <ArrowRight className="w-4 h-4 text-gray-500 group-hover:translate-x-1 transition-transform" />
+                </h3>
+                <p className="text-xs text-gray-400 mt-1.5 leading-relaxed">
+                  Coliving spaces, boutique hotels, hostels, and serviced apartments.
+                </p>
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Navigation Tabs */}
+            <div className="flex items-center gap-3 border-b border-gray-800 pb-3 mb-6 overflow-x-auto">
+              <button
+                onClick={() => setActiveTab("BOOKINGS")}
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border ${
+                  activeTab === "BOOKINGS"
+                    ? "bg-[#FFD400] text-black border-[#FFD400] shadow-md shadow-yellow-500/10"
+                    : "bg-[#141414] text-gray-400 border-gray-800 hover:text-white"
+                }`}
+              >
+                <Calendar className="w-4 h-4" />
+                Incoming Nomad Reservations ({allBookings.length})
+              </button>
+
+              <button
+                onClick={() => setActiveTab("LISTINGS")}
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border ${
+                  activeTab === "LISTINGS"
+                    ? "bg-[#FFD400] text-black border-[#FFD400] shadow-md shadow-yellow-500/10"
+                    : "bg-[#141414] text-gray-400 border-gray-800 hover:text-white"
+                }`}
+              >
+                <Building2 className="w-4 h-4" />
+                Edit Listings & Pricing ({hubs.length})
+              </button>
+
+              <Link
+                href="/stay/register"
+                className="px-4 py-2 rounded-xl text-xs font-bold bg-[#1A1A1A] text-gray-300 border border-gray-700 hover:border-gray-500 hover:text-white transition-colors flex items-center gap-1.5 ml-auto"
+              >
+                <PlusCircle className="w-4 h-4 text-[#FFD400]" />
+                Register New Property
+              </Link>
+            </div>
 
         {/* TAB 1: INCOMING NOMAD BOOKINGS */}
         {activeTab === "BOOKINGS" && (
@@ -590,6 +622,8 @@ export default function OwnerDashboardPage() {
               )
             })}
           </div>
+        )}
+          </>
         )}
       </main>
 

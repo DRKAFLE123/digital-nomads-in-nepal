@@ -47,12 +47,62 @@ const nextConfig = {
       },
       {
         source: '/living-in-nepal',
-        destination: '/resources',
+        destination: '/practical-guides',
+        permanent: true,
+      },
+      {
+        source: '/resources',
+        destination: '/practical-guides',
+        permanent: true,
+      },
+      {
+        source: '/resources/visa',
+        destination: '/nomad-visa-guide',
+        permanent: true,
+      },
+      {
+        source: '/resources/transportation',
+        destination: '/nepal-transportation-guide',
+        permanent: true,
+      },
+      {
+        source: '/resources/sim-cards',
+        destination: '/nepal-sim-cards-guide',
         permanent: true,
       },
       {
         source: '/resources/connectivity',
-        destination: '/resources/sim-cards',
+        destination: '/nepal-sim-cards-guide',
+        permanent: true,
+      },
+      {
+        source: '/resources/banking',
+        destination: '/nepal-banking-atm-guide',
+        permanent: true,
+      },
+      {
+        source: '/resources/cost-of-living',
+        destination: '/nepal-cost-of-living-guide',
+        permanent: true,
+      },
+      {
+        source: '/resources/coworking',
+        destination: '/workspaces',
+        permanent: true,
+      },
+      {
+        source: '/resources/coworking/register',
+        destination: '/workspaces/register',
+        permanent: true,
+      },
+      {
+        source: '/resources/coworking/:slug',
+        destination: '/workspaces/:slug',
+        permanent: true,
+      },
+      {
+        source: '/coworking',
+        destination: '/workspaces',
         permanent: true,
       },
       {
@@ -67,17 +117,7 @@ const nextConfig = {
       },
       {
         source: '/blog/internet-speed-nepal-guide',
-        destination: '/resources/sim-cards',
-        permanent: true,
-      },
-      {
-        source: '/workspaces',
-        destination: '/resources/coworking',
-        permanent: true,
-      },
-      {
-        source: '/coworking',
-        destination: '/resources/coworking',
+        destination: '/nepal-sim-cards-guide',
         permanent: true,
       },
       {
@@ -96,23 +136,38 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/nomad-guides',
-        destination: '/guides',
+        source: '/guides/register',
+        destination: '/local-guides/register',
         permanent: true,
       },
       {
-        source: '/local-guides',
-        destination: '/guides',
+        source: '/guides/dashboard',
+        destination: '/local-guides/dashboard',
+        permanent: true,
+      },
+      {
+        source: '/nomad-guides',
+        destination: '/local-guides',
         permanent: true,
       },
       {
         source: '/local-experts',
-        destination: '/guides',
+        destination: '/local-guides',
         permanent: true,
       },
       {
         source: '/local-experts/:path*',
-        destination: '/guides/:path*',
+        destination: '/local-guides/:path*',
+        permanent: true,
+      },
+      {
+        source: '/guides',
+        destination: '/local-guides',
+        permanent: true,
+      },
+      {
+        source: '/guides/:id',
+        destination: '/local-guides/:id',
         permanent: true,
       },
       {

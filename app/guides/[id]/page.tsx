@@ -6,6 +6,7 @@ import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 import ReviewSection from "./ReviewSection"
 import Link from "next/link"
+import { Globe } from "lucide-react"
 
 import { generateGuideJsonLd, generateBreadcrumbJsonLd } from "@/lib/seo"
 
@@ -140,6 +141,21 @@ export default async function GuideProfilePage({ params }: { params: { id: strin
                   <span key={s} className="px-3 py-1 bg-primary/10 text-primary text-sm font-semibold rounded-full">#{s}</span>
                 ))}
               </div>
+
+              {/* Website / Portfolio Link */}
+              {guide.website && (
+                <div className="mt-4">
+                  <a
+                    href={guide.website.startsWith("http") ? guide.website : `https://${guide.website}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-[#FFD400]/10 text-[#FFD400] border border-[#FFD400]/30 hover:bg-[#FFD400] hover:text-black transition-all shadow-sm"
+                  >
+                    <Globe className="w-3.5 h-3.5" />
+                    Visit Official Website / Portfolio ↗
+                  </a>
+                </div>
+              )}
             </div>
           </div>
 

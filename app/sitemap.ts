@@ -7,14 +7,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${baseUrl}`, lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },
     { url: `${baseUrl}/destinations`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
-    { url: `${baseUrl}/resources`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
-    { url: `${baseUrl}/resources/coworking`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
-    { url: `${baseUrl}/resources/visa`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${baseUrl}/resources/cost-of-living`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${baseUrl}/resources/sim-cards`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${baseUrl}/resources/transportation`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${baseUrl}/resources/banking`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${baseUrl}/guides`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
+    { url: `${baseUrl}/practical-guides`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
+    { url: `${baseUrl}/workspaces`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
+    { url: `${baseUrl}/nomad-visa-guide`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${baseUrl}/nepal-cost-of-living-guide`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${baseUrl}/nepal-sim-cards-guide`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${baseUrl}/nepal-transportation-guide`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${baseUrl}/nepal-banking-atm-guide`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${baseUrl}/local-guides`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
     { url: `${baseUrl}/blog`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.8 },
     { url: `${baseUrl}/stay`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
     { url: `${baseUrl}/insurance`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
@@ -64,14 +64,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
 
     const hubs: MetadataRoute.Sitemap = allHubs.map((hub) => ({
-      url: `${baseUrl}/resources/coworking/${hub.slug}`,
+      url: `${baseUrl}/workspaces/${hub.slug}`,
       lastModified: new Date(hub.updatedAt),
       changeFrequency: 'weekly',
       priority: 0.8,
     }))
 
     const guides: MetadataRoute.Sitemap = allGuides.map((guide) => ({
-      url: `${baseUrl}/guides/${guide.id}`,
+      url: `${baseUrl}/local-guides/${guide.id}`,
       lastModified: new Date(guide.createdAt),
       changeFrequency: 'weekly',
       priority: 0.7,

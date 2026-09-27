@@ -67,6 +67,7 @@ model Guide {
   specialties  Json
   photoUrl     String?
   contactEmail String
+  website      String?
   isVerified   Boolean  @default(false)
   avgRating    Float    @default(0)
   totalReviews Int      @default(0)
