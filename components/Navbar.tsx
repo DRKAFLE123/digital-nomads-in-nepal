@@ -371,14 +371,14 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-[72px]">
 
           {/* Left: Brand Logo & Interactive Platform Intro Popover */}
-          <div className="flex-shrink-0 flex items-center h-[72px] gap-2.5">
-            {/* Logo Image (no popover on hover) - Wider horizontal presence for mountain mark */}
+          <div className="flex-shrink-0 flex items-center h-[72px] gap-2.5 sm:gap-3">
+            {/* Logo Image (no popover on hover) - Proportional size & seamless spacing */}
             <Link
               href="/"
-              className="relative h-8 sm:h-9 md:h-10 w-20 sm:w-24 md:w-26 overflow-hidden flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD400] rounded-xl flex items-center py-0.5"
+              className="relative h-9 sm:h-10 md:h-11 w-[86px] sm:w-[96px] md:w-[105px] overflow-hidden flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD400] rounded-xl flex items-center transition-transform hover:scale-105 active:scale-95 duration-200"
               aria-label="Digital Nomads in Nepal Home"
             >
-              <Image src="/webistepnglogo.png" alt="Digital Nomads in Nepal Logo" fill className="object-contain object-left" priority unoptimized />
+              <Image src="/webisteofficiallogo-removebg-preview.png" alt="Digital Nomads in Nepal Logo" fill className="object-contain object-center" priority unoptimized />
             </Link>
 
             {/* Brand Name (Hidden on mobile when user is signed in to avoid pushing hamburger off screen) */}
@@ -590,7 +590,7 @@ export default function Navbar() {
                       <div
                         onMouseEnter={() => handleMouseEnterNav(cat.name)}
                         onMouseLeave={() => handleMouseLeaveNav()}
-                        className={`absolute top-[68px] pt-2 right-0 xl:left-1/2 xl:-translate-x-1/2 transition-all duration-200 origin-top-right xl:origin-top z-50 w-[720px] max-w-[92vw] before:absolute before:-top-3 before:left-0 before:w-full before:h-4 before:content-[''] ${
+                        className={`absolute top-[72px] pt-1.5 right-0 xl:left-1/2 xl:-translate-x-1/2 transition-all duration-150 origin-top-right xl:origin-top z-50 w-[720px] max-w-[92vw] ${
                           isOpen
                             ? "opacity-100 visible scale-100 pointer-events-auto"
                             : "opacity-0 invisible scale-95 pointer-events-none"
@@ -710,7 +710,7 @@ export default function Navbar() {
                       <div
                         onMouseEnter={() => handleMouseEnterNav(cat.name)}
                         onMouseLeave={() => handleMouseLeaveNav()}
-                        className={`absolute top-[68px] pt-2 left-1/2 -translate-x-1/2 transition-all duration-200 origin-top z-50 before:absolute before:-top-3 before:left-0 before:w-full before:h-4 before:content-[''] ${
+                        className={`absolute top-[72px] pt-1.5 left-1/2 -translate-x-1/2 transition-all duration-150 origin-top z-50 ${
                           cat.wide ? "w-[440px]" : "w-80"
                         } ${
                           isOpen
@@ -826,22 +826,29 @@ export default function Navbar() {
             )}
 
             {session ? (
-              /* Signed in profile avatar with Facebook-style right slide drawer */
+              /* Signed in profile avatar with interactive hover pill and drawer trigger */
               <div className="flex items-center">
                 <button
                   type="button"
                   onClick={() => setIsProfileSliderOpen(true)}
-                  className="p-1 rounded-full bg-gray-100 dark:bg-[#121212] border border-gray-200 dark:border-[#242424] hover:border-[#FFD400] transition-all focus:outline-none focus:ring-2 focus:ring-[#FFD400]/40 cursor-pointer active:scale-95 group/avatar"
+                  className="flex items-center gap-2 pl-1.5 pr-2.5 py-1 rounded-full bg-gray-100/90 dark:bg-[#141416] border border-gray-200 dark:border-[#26262B] hover:border-[#FFD400] dark:hover:border-[#FFD400] hover:bg-gray-200/50 dark:hover:bg-[#1C1C20] hover:shadow-md hover:shadow-[#FFD400]/10 transition-all duration-200 cursor-pointer active:scale-95 group/avatar"
                   aria-label="Open User Profile Drawer"
                   title={`${session.user?.name || "User Profile"} (Click to open profile)`}
                 >
-                  <div className="w-8 h-8 rounded-full bg-[#FFD400] text-black font-black text-xs flex items-center justify-center overflow-hidden shadow-xs ring-2 ring-[#FFD400]/20 group-hover/avatar:ring-[#FFD400]/50 transition-all">
-                    {avatarUrl ? (
-                      <img src={avatarUrl} alt="User Avatar" className="w-full h-full object-cover" />
-                    ) : (
-                      session.user?.name?.[0]?.toUpperCase() || <User size={14} />
-                    )}
+                  <div className="relative shrink-0 w-8 h-8 min-w-[32px] min-h-[32px] max-w-[32px] max-h-[32px]">
+                    <div className="w-8 h-8 min-w-[32px] min-h-[32px] max-w-[32px] max-h-[32px] rounded-full bg-[#FFD400] text-black font-black text-xs flex items-center justify-center overflow-hidden shadow-xs ring-2 ring-[#FFD400]/30 group-hover/avatar:ring-[#FFD400] group-hover/avatar:scale-105 transition-all">
+                      {avatarUrl ? (
+                        <img src={avatarUrl} alt="User Avatar" className="w-8 h-8 min-w-[32px] min-h-[32px] max-w-[32px] max-h-[32px] rounded-full object-cover" />
+                      ) : (
+                        session.user?.name?.[0]?.toUpperCase() || <User size={14} />
+                      )}
+                    </div>
+                    <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-[#141416]" title="Online" />
                   </div>
+                  <span className="text-xs font-bold text-gray-800 dark:text-gray-200 group-hover/avatar:text-[#FFD400] max-w-[85px] truncate hidden sm:inline-block transition-colors">
+                    {session.user?.name?.split(" ")[0] || "Account"}
+                  </span>
+                  <ChevronDown size={13} className="text-gray-400 group-hover/avatar:text-[#FFD400] transition-transform duration-200 group-hover/avatar:rotate-180" />
                 </button>
               </div>
             ) : (
@@ -1017,8 +1024,8 @@ export default function Navbar() {
             {/* Mobile Header */}
             <div className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-[#242424] shrink-0">
               <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 select-none">
-                <div className="relative h-8 w-20 overflow-hidden">
-                  <Image src="/webistepnglogo.png" alt="Logo" fill className="object-contain object-left" unoptimized />
+                <div className="relative h-9 w-[86px] overflow-hidden shrink-0">
+                  <Image src="/webisteofficiallogo-removebg-preview.png" alt="Logo" fill className="object-contain object-center" unoptimized />
                 </div>
                 <div className="flex flex-col items-center text-center">
                   <span className="font-black text-sm tracking-normal uppercase text-gray-900 dark:text-white leading-tight">

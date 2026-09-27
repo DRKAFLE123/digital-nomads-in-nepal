@@ -43,8 +43,8 @@ export default function Footer() {
           {/* Column 1: Brand/Bio */}
           <div className="flex flex-col lg:pr-8">
             <Link href="/" className="inline-block mb-6 transition-transform hover:scale-105 active:scale-95 duration-300">
-              <div className="relative w-28 h-12 overflow-hidden">
-                <Image src="/webistepnglogo.png" alt="Digital Nomads in Nepal Logo" fill className="object-contain" unoptimized />
+              <div className="relative w-[115px] h-12 overflow-hidden">
+                <Image src="/webisteofficiallogo-removebg-preview.png" alt="Digital Nomads in Nepal Logo" fill className="object-contain object-left" unoptimized />
               </div>
             </Link>
             <p className="text-sm leading-relaxed text-muted-foreground mb-6 whitespace-pre-line">

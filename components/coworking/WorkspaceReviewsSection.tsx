@@ -205,7 +205,7 @@ export default function WorkspaceReviewsSection({
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {(activePhotoTab === "nomad"
             ? ["/blog-cost-of-living.png", "/blog-lakeside-pokhara.png", "/blog-top-10-destinations.png", "/hero-bg.png"]
-            : ["/nepal-blog-hero-banner.png", "/blog-safety-health.png", "/blog-list-workspace.png", "/webistepnglogo.png"]
+            : ["/nepal-blog-hero-banner.png", "/blog-safety-health.png", "/blog-list-workspace.png", "/webisteofficiallogo-removebg-preview.png"]
           ).map((src, idx) => (
             <div key={idx} className="h-32 bg-[#181818] rounded-xl overflow-hidden border border-[#242424] group relative">
               <img src={src} alt="Workspace gallery" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />

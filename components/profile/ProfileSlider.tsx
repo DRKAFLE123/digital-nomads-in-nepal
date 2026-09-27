@@ -152,17 +152,17 @@ export default function ProfileSlider({
         </div>
 
         {/* Scrollable Content Body */}
-        <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4 overscroll-contain">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden px-5 py-4 space-y-4 overscroll-contain">
           {session ? (
             <>
               {/* Facebook-Style Main Profile Card */}
-              <div className="p-4 rounded-2xl bg-gray-50 dark:bg-[#141416] border border-gray-200/80 dark:border-[#222226] shadow-xs space-y-3.5">
+              <div className="p-4 rounded-2xl bg-gray-50 dark:bg-[#141416] border border-gray-200/80 dark:border-[#222226] shadow-xs space-y-3.5 overflow-hidden">
                 <div className="flex items-center gap-3.5">
-                  {/* Large Avatar with Gold Glow Ring */}
-                  <div className="relative shrink-0">
-                    <div className="w-13 h-13 rounded-full bg-[#FFD400] text-black font-black text-lg flex items-center justify-center overflow-hidden ring-2 ring-[#FFD400] shadow-sm">
+                  {/* Avatar with Gold Glow Ring (strictly sized to 56px) */}
+                  <div className="relative shrink-0 w-14 h-14">
+                    <div className="w-14 h-14 min-w-[56px] min-h-[56px] max-w-[56px] max-h-[56px] rounded-full bg-[#FFD400] text-black font-black text-lg flex items-center justify-center overflow-hidden ring-2 ring-[#FFD400] shadow-sm">
                       {avatarUrl ? (
-                        <img src={avatarUrl} alt={session.user?.name || "User"} className="w-full h-full object-cover" />
+                        <img src={avatarUrl} alt={session.user?.name || "User"} className="w-14 h-14 min-w-[56px] min-h-[56px] max-w-[56px] max-h-[56px] rounded-full object-cover" />
                       ) : (
                         session.user?.name?.[0]?.toUpperCase() || <User size={22} />
                       )}

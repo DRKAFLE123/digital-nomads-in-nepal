@@ -53,18 +53,28 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4 py-20">
       <div className="w-full max-w-md">
-        <div className="text-center mb-10">
-          <Link href="/" className="inline-flex items-center gap-3">
-            <div className="relative w-20 h-10 overflow-hidden">
-              <Image src="/webistepnglogo.png" alt="Logo" fill className="object-contain" unoptimized />
+        {/* Logo & Brand Name */}
+        <div className="text-center mb-8 sm:mb-10">
+          <Link href="/" className="inline-flex items-center justify-center gap-2.5 sm:gap-3.5 group focus-visible:outline-none">
+            <div className="relative w-20 sm:w-[96px] h-8 sm:h-10 overflow-hidden shrink-0 transition-transform duration-200 group-hover:scale-105">
+              <Image
+                src="/webisteofficiallogo-removebg-preview.png"
+                alt="Digital Nomads in Nepal Logo"
+                fill
+                className="object-contain"
+                priority
+                unoptimized
+              />
             </div>
-            <span className="font-extrabold text-xl text-foreground">Digital Nomads <span className="text-primary">in Nepal</span></span>
+            <span className="font-extrabold text-lg sm:text-xl md:text-2xl text-foreground tracking-tight whitespace-nowrap">
+              Digital Nomads <span className="text-primary">in Nepal</span>
+            </span>
           </Link>
         </div>
 
-        <div className="bg-card border border-border rounded-2xl p-8 shadow-sm">
-          <h1 className="text-2xl font-bold text-foreground mb-2">Create Your Account</h1>
-          <p className="text-muted text-sm mb-8">Free to join. Access workspaces, connect with local experts & join the community.</p>
+        <div className="bg-card border border-border rounded-2xl p-6 sm:p-8 shadow-sm">
+          <h1 className="text-xl sm:text-2xl font-bold text-foreground mb-1.5 sm:mb-2">Create Your Account</h1>
+          <p className="text-muted text-xs sm:text-sm mb-6 sm:mb-8">Free to join. Access workspaces, connect with local experts &amp; join the community.</p>
 
           {error && (
             <div className="mb-6 px-4 py-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">

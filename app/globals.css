@@ -31,3 +31,4 @@
     @apply bg-background text-foreground antialiased selection:bg-primary selection:text-black transition-colors duration-200;
   }
 }
+

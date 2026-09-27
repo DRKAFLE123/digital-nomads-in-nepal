@@ -71,9 +71,13 @@ export default function HeroSection() {
       <div className="relative z-20 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center py-16 md:py-24">
         
         {/* H1 */}
-        <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-xl mb-4">
-          Digital Nomads in Nepal<br className="hidden sm:block" />{" "}
-          <span className="text-primary">Live, Work &amp; Explore</span>
+        <h1 className="tracking-tight drop-shadow-xl mb-4 sm:mb-6 text-center max-w-4xl mx-auto">
+          <span className="block font-bold text-3xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-tight">
+            Digital Nomads in Nepal
+          </span>
+          <span className="block font-extrabold text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-primary mt-2 sm:mt-3 leading-tight">
+            Live, Work &amp; Explore
+          </span>
         </h1>
 
         {/* Supporting text */}

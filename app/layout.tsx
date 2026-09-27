@@ -23,7 +23,6 @@ export const metadata: Metadata = {
     ],
     shortcut: ['/faviconlogo.png', '/favicon.ico'],
     apple: [
-      { url: '/faviconlogo.png', sizes: '180x180', type: 'image/png' },
       { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
     ],
   },
@@ -35,9 +34,9 @@ export const metadata: Metadata = {
     siteName: 'Digital Nomads in Nepal',
     images: [
       {
-        url: '/webistepnglogo.png',
-        width: 1024,
-        height: 1024,
+        url: '/webisteofficiallogo-removebg-preview.png',
+        width: 654,
+        height: 274,
         alt: 'Digital Nomads in Nepal Logo',
       },
     ],
@@ -48,7 +47,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Digital Nomads in Nepal | Workspaces, Stays & Remote Work Guides',
     description: 'Find vetted workspaces, work-friendly stays, local guides, practical resources and places to live and work across Nepal.',
-    images: ['/webistepnglogo.png'],
+    images: ['/webisteofficiallogo-removebg-preview.png'],
   },
 };
 
@@ -60,7 +59,7 @@ const jsonLd = {
       '@id': 'https://digitalnomadsinnepal.com/#organization',
       name: 'Digital Nomads in Nepal',
       url: 'https://digitalnomadsinnepal.com',
-      logo: 'https://digitalnomadsinnepal.com/webistepnglogo.png',
+      logo: 'https://digitalnomadsinnepal.com/webisteofficiallogo-removebg-preview.png',
       description: 'Community and resource hub for remote workers, freelancers, and digital nomads in Nepal.',
     },
     {
