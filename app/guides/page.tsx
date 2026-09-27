@@ -64,45 +64,49 @@ export default async function GuidesPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <Navbar />
-      <main className="min-h-screen bg-background pt-28 pb-24 px-4 sm:px-6 lg:px-8">
+      <main className="min-h-screen bg-background pt-24 sm:pt-28 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
 
           {/* Header */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
             <div>
-              <span className="text-primary text-xs font-bold uppercase tracking-widest mb-3 block">Guide Marketplace</span>
-              <h1 className="text-4xl sm:text-5xl font-black text-foreground leading-tight mb-4 flex items-center gap-3 flex-wrap">
-                Find a Local Guide in Nepal
-                <TrekkingGuideIcon size={40} className="translate-y-[-2px]" />
+              <div className="inline-flex items-center gap-1.5 bg-primary/10 border border-primary/20 text-primary text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full mb-2">
+                <span>Verified Local Experts</span>
+              </div>
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-foreground leading-tight flex items-center gap-2 sm:gap-3 flex-wrap">
+                <span>Find a Local Guide</span>
+                <TrekkingGuideIcon size={30} className="inline-block translate-y-[-1px]" />
               </h1>
-              <p className="text-muted text-lg max-w-xl">
+              <p className="text-muted text-xs sm:text-sm md:text-base max-w-xl mt-1 sm:mt-1.5 leading-relaxed">
                 Connect with verified Nepalese locals for trekking, cultural tours, food walks, and more.
               </p>
             </div>
             <Link
               href="/guides/register"
-              className="flex-shrink-0 inline-block px-6 py-3 border-2 border-primary text-primary font-bold rounded-full hover:bg-primary hover:text-black transition-all"
+              className="self-start sm:self-center shrink-0 inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-5 sm:py-2.5 border border-primary text-primary font-bold text-xs sm:text-sm rounded-full hover:bg-primary hover:text-black transition-all shadow-xs"
             >
-              Register as a Guide →
+              <span>Register as a Guide</span>
+              <span>→</span>
             </Link>
           </div>
 
-          {/* Disambiguation Helper: Informational Guides vs Local Human Guides */}
-          <div className="mb-10 p-5 rounded-2xl bg-card border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <span className="text-primary text-xs font-bold uppercase tracking-wider block mb-1">Looking for Informational How-To Guides?</span>
-              <p className="text-sm text-muted">
-                Need tutorials on mobile data, transit, or legal rules? Read our{" "}
-                <Link href="/resources/sim-cards" className="text-primary font-medium hover:underline">SIM Cards Guide</Link>,{" "}
-                <Link href="/resources/transportation" className="text-primary font-medium hover:underline">Transportation Guide</Link>, and{" "}
-                <Link href="/resources/visa" className="text-primary font-medium hover:underline">Nomad Visa Guide</Link>.
+          {/* Compact Helper: Informational Guides vs Local Human Guides */}
+          <div className="mb-6 p-3 sm:p-4 rounded-2xl bg-card border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
+            <div className="flex items-start sm:items-center gap-2 text-muted">
+              <span className="text-sm shrink-0 mt-0.5 sm:mt-0">💡</span>
+              <p className="text-[11px] sm:text-xs leading-normal">
+                Looking for tutorials on data, transit, or visas? Read our{" "}
+                <Link href="/resources/sim-cards" className="text-primary font-semibold hover:underline">SIM Cards Guide</Link>,{" "}
+                <Link href="/resources/transportation" className="text-primary font-semibold hover:underline">Transportation</Link>, or{" "}
+                <Link href="/resources/visa" className="text-primary font-semibold hover:underline">Nomad Visa Guide</Link>.
               </p>
             </div>
             <Link
               href="/resources"
-              className="px-4 py-2 border border-border rounded-lg text-xs font-bold text-foreground hover:bg-card hover:border-primary transition-colors flex-shrink-0 text-center"
+              className="self-start sm:self-center shrink-0 text-primary font-bold text-[11px] sm:text-xs inline-flex items-center gap-1 hover:underline"
             >
-              View Practical Guides →
+              <span>View Practical Guides</span>
+              <span>→</span>
             </Link>
           </div>
 
