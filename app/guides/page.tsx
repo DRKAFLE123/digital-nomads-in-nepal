@@ -71,11 +71,11 @@ export default async function GuidesPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
             <div>
               <div className="inline-flex items-center gap-1.5 bg-primary/10 border border-primary/20 text-primary text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full mb-2">
+                <TrekkingGuideIcon size={13} className="shrink-0" />
                 <span>Verified Local Experts</span>
               </div>
-              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-foreground leading-tight flex items-center gap-2 sm:gap-3 flex-wrap">
-                <span>Find a Local Guide</span>
-                <TrekkingGuideIcon size={30} className="inline-block translate-y-[-1px]" />
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-foreground leading-tight">
+                Find a Local Guide in Nepal
               </h1>
               <p className="text-muted text-xs sm:text-sm md:text-base max-w-xl mt-1 sm:mt-1.5 leading-relaxed">
                 Connect with verified Nepalese locals for trekking, cultural tours, food walks, and more.
