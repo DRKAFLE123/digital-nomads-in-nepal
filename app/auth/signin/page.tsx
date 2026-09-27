@@ -9,7 +9,7 @@ import { Eye, EyeOff } from "lucide-react"
 function SignInForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const callbackUrl = searchParams.get("callbackUrl") ?? "/guides"
+  const callbackUrl = searchParams.get("callbackUrl") ?? "/"
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
