@@ -488,19 +488,91 @@ export default function CommunityPage() {
 
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mt-6 mb-16">
-        <div className="inline-flex items-center gap-2 bg-purple-500/10 border border-purple-500/20 text-purple-300 px-3 py-1 rounded-full text-xs font-semibold mb-6">
-          <Compass size={14} className="text-purple-400" />
-          The Nomad Hub of the Himalayas
-        </div>
-        <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-tight">
-          Join the Digital Nomad <br/>
-          <span className="bg-gradient-to-r from-primary via-yellow-400 to-amber-500 bg-clip-text text-transparent">
-            Community in Nepal
-          </span>
-        </h1>
-        <p className="mt-4 text-muted-foreground max-w-2xl mx-auto text-base md:text-lg">
-          Connect with remote workers, find active trekking groups, check in to local work hubs, and receive community alerts about upcoming meetups.
-        </p>
+        {session ? (
+          <>
+            <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-3.5 py-1.5 rounded-full text-xs font-semibold mb-6">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span>Nomad Community Hub • Connected</span>
+            </div>
+            <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-tight">
+              Welcome Back, <br/>
+              <span className="bg-gradient-to-r from-primary via-yellow-400 to-amber-500 bg-clip-text text-transparent">
+                {session.user?.name?.split(" ")[0] || "Nomad"}
+              </span>
+            </h1>
+            <p className="mt-4 text-muted-foreground max-w-2xl mx-auto text-base md:text-lg">
+              Check in to your workspace today, engage in discussions, and connect with fellow remote workers across Nepal.
+            </p>
+
+            {/* Signed In Quick Action Buttons */}
+            <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
+              <button
+                type="button"
+                onClick={() => {
+                  document.getElementById("coworking-checkin-widget")?.scrollIntoView({ behavior: "smooth" })
+                }}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-black font-extrabold text-xs hover:bg-white transition-all shadow-md active:scale-95 cursor-pointer"
+              >
+                <MapPin size={15} />
+                <span>Workspace Check-In</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setOpenNewThreadModal(true)}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-card border border-border hover:border-primary text-foreground font-bold text-xs transition-all shadow-sm active:scale-95 cursor-pointer"
+              >
+                <Plus size={15} />
+                <span>Start Discussion</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  document.getElementById("nomad-directory-section")?.scrollIntoView({ behavior: "smooth" })
+                }}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-card border border-border hover:border-primary text-foreground font-bold text-xs transition-all shadow-sm active:scale-95 cursor-pointer"
+              >
+                <Users size={15} />
+                <span>Explore Directory</span>
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="inline-flex items-center gap-2 bg-purple-500/10 border border-purple-500/20 text-purple-300 px-3 py-1 rounded-full text-xs font-semibold mb-6">
+              <Compass size={14} className="text-purple-400" />
+              The Nomad Hub of the Himalayas
+            </div>
+            <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-tight">
+              Join the Digital Nomad <br/>
+              <span className="bg-gradient-to-r from-primary via-yellow-400 to-amber-500 bg-clip-text text-transparent">
+                Community in Nepal
+              </span>
+            </h1>
+            <p className="mt-4 text-muted-foreground max-w-2xl mx-auto text-base md:text-lg">
+              Connect with remote workers, find active trekking groups, check in to local work hubs, and receive community alerts about upcoming meetups.
+            </p>
+
+            {/* Guest Quick Action Buttons */}
+            <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
+              <button
+                type="button"
+                onClick={() => {
+                  document.getElementById("community-register-form")?.scrollIntoView({ behavior: "smooth" })
+                }}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-black font-extrabold text-xs hover:bg-white transition-all shadow-md active:scale-95 cursor-pointer"
+              >
+                <UserCheck size={15} />
+                <span>Join Community Free</span>
+              </button>
+              <Link
+                href="/auth/signin?callbackUrl=/community"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-card border border-border hover:border-primary text-foreground font-bold text-xs transition-all shadow-sm active:scale-95"
+              >
+                <span>Sign In to Account</span>
+              </Link>
+            </div>
+          </>
+        )}
 
         {/* Live Stats Bar */}
         <div className="max-w-4xl mx-auto mt-12 bg-card border border-border backdrop-blur-md rounded-2xl p-6 md:p-8 shadow-md">
@@ -537,7 +609,7 @@ export default function CommunityPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 mb-20">
         
         {/* Left Column: Register Form / Dashboard */}
-        <div className="lg:col-span-7 bg-card border border-border rounded-3xl p-6 md:p-8 shadow-lg">
+        <div id="community-register-form" className="lg:col-span-7 bg-card border border-border rounded-3xl p-6 md:p-8 shadow-lg">
           {session ? (
             <>
               <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 mb-2">
@@ -628,7 +700,7 @@ export default function CommunityPage() {
                 <div className="pt-2 flex items-center justify-between border-t border-border/65">
                   <span className="text-xs text-muted">Finished editing?</span>
                   <button
-                    onClick={() => signOut()}
+                    onClick={() => signOut({ callbackUrl: "/" })}
                     className="inline-flex items-center gap-1.5 px-4 py-2 border border-red-500/20 bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 rounded-xl text-xs font-bold transition-all active:scale-[0.98]"
                   >
                     <LogOut size={13} />
@@ -847,7 +919,7 @@ export default function CommunityPage() {
         <div className="lg:col-span-5 space-y-8">
           
           {/* Check-In Widget */}
-          <div className="bg-card border border-border rounded-3xl p-6 md:p-8 shadow-lg">
+          <div id="coworking-checkin-widget" className="bg-card border border-border rounded-3xl p-6 md:p-8 shadow-lg">
             <h2 className="text-xl font-bold flex items-center gap-2 mb-2">
               <MapPin className="text-green-400" size={20} />
               Co-working Check-In
@@ -1162,7 +1234,7 @@ export default function CommunityPage() {
       </div>
 
       {/* Directory Filter System */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 border-t border-white/5 pt-12">
+      <div id="nomad-directory-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 border-t border-white/5 pt-12">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h2 className="text-2xl font-bold flex items-center gap-2">

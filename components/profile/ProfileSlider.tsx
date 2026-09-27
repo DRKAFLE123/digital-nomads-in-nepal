@@ -139,7 +139,7 @@ export default function ProfileSlider({
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <h2 className="text-sm font-black tracking-tight text-gray-900 dark:text-white uppercase">
-              {session ? "Nomad Account" : "Welcome"}
+              {session ? "My Account" : "Welcome"}
             </h2>
           </div>
           <button
@@ -199,7 +199,7 @@ export default function ProfileSlider({
                           </>
                         ) : (
                           <>
-                            <CheckCircle2 size={10} /> Verified Nomad
+                            <CheckCircle2 size={10} /> Verified Member
                           </>
                         )}
                       </span>
