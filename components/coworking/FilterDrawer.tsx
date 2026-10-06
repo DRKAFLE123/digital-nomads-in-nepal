@@ -94,14 +94,16 @@ export default function FilterDrawer({
       <div className="block lg:hidden">
         <button
           onClick={() => setMobileOpen(true)}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-[#141414] border border-[#262626] rounded-xl text-sm font-bold text-white hover:border-amber-400/50 transition-all"
+          className="w-full flex items-center justify-center gap-2 px-3.5 py-2 bg-[#141414] border border-[#262626] rounded-xl text-xs font-bold text-white hover:border-[#FFD400]/50 transition-all cursor-pointer"
         >
-          <Filter size={16} className="text-amber-400" />
-          <span>Work-Friendly Amenities</span>
-          {activeCount > 0 && (
-            <span className="bg-amber-400 text-black text-xs font-black px-2 py-0.5 rounded-full">
-              {activeCount}
+          <Filter size={13} className="text-[#FFD400]" />
+          <span>Filter Amenities</span>
+          {activeCount > 0 ? (
+            <span className="bg-[#FFD400] text-black text-[10px] font-black px-1.5 py-0.2 rounded-full">
+              {activeCount} active
             </span>
+          ) : (
+            <span className="text-[10px] text-[#71717A]">(All)</span>
           )}
         </button>
       </div>

@@ -28,14 +28,11 @@ export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
           `,
         }}
       />
-      <noscript>
-        <iframe
-          src={`https://www.googletagmanager.com/ns.html?id=${containerId}`}
-          height="0"
-          width="0"
-          style={{ display: "none", visibility: "hidden" }}
-        />
-      </noscript>
+      <noscript
+        dangerouslySetInnerHTML={{
+          __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=${containerId}" height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
+        }}
+      />
     </>
   );
 }

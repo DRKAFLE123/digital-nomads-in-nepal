@@ -17,12 +17,13 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://digitalnomadsinnepal.com'),
   icons: {
     icon: [
-      { url: '/faviconlogo.png', type: 'image/png' },
+      { url: '/faviconnew.png', type: 'image/png' },
       { url: '/favicon.ico' },
-      { url: '/icon-512.png', type: 'image/png', sizes: '512x512' },
+      { url: '/webapp-installed-icon.png', type: 'image/png', sizes: '512x512' },
     ],
-    shortcut: ['/faviconlogo.png', '/favicon.ico'],
+    shortcut: ['/faviconnew.png', '/favicon.ico'],
     apple: [
+      { url: '/webapp-installed-icon.png', sizes: '180x180', type: 'image/png' },
       { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
     ],
   },
@@ -88,7 +89,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className={inter.className}>
+      <body className={inter.className} suppressHydrationWarning>
         <GoogleTagManager />
         <AnalyticsTracker />
         <Providers>

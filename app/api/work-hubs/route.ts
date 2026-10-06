@@ -84,12 +84,24 @@ export async function GET(req: NextRequest) {
     })
 
     // Sorting
-    if (sort === "price_asc") {
+    if (sort === "price_asc" || sort === "lowest_price") {
       filtered = filtered.sort((a, b) => (a.priceMonthly || a.priceDaily || 0) - (b.priceMonthly || b.priceDaily || 0))
-    } else if (sort === "price_desc") {
+    } else if (sort === "price_desc" || sort === "highest_price") {
       filtered = filtered.sort((a, b) => (b.priceMonthly || b.priceDaily || 0) - (a.priceMonthly || a.priceDaily || 0))
-    } else if (sort === "reviews") {
-      filtered = filtered.sort((a, b) => b.totalReviews - a.totalReviews)
+    } else if (sort === "reviews" || sort === "most_reviewed") {
+      filtered = filtered.sort((a, b) => (b.totalReviews || 0) - (a.totalReviews || 0))
+    } else if (sort === "highest_speed") {
+      const getSpeed = (h: (typeof filtered)[0]) => {
+        const facs = Array.isArray(h.facilities) ? (h.facilities as string[]) : []
+        for (const f of facs) {
+          const match = f.match(/(\d+)\+?\s*Mbps/i)
+          if (match) return parseInt(match[1], 10)
+        }
+        return 0
+      }
+      filtered = filtered.sort((a, b) => getSpeed(b) - getSpeed(a))
+    } else if (sort === "highest_rated") {
+      filtered = filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0))
     }
 
     return NextResponse.json(filtered)

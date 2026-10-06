@@ -400,7 +400,7 @@ export default function Navbar() {
             </Link>
 
             {/* Brand Name (Hidden on mobile when user is signed in to avoid pushing hamburger off screen) */}
-            <div className={`relative group/name items-center h-full ${session ? "hidden md:flex" : "flex"}`}>
+            <div className={`relative group/name items-center h-full ${mounted && session ? "hidden md:flex" : "flex"}`}>
               <Link
                 href="/"
                 className="flex flex-col items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD400] rounded-xl py-1 text-center select-none"
@@ -882,7 +882,7 @@ export default function Navbar() {
             )}
 
             {/* Mode Switcher Toggle Pill for Owners / Guides */}
-            {(roleInfo.isOwner || roleInfo.isGuide) && (
+            {mounted && (roleInfo.isOwner || roleInfo.isGuide) && (
               <button
                 type="button"
                 onClick={() => setUserMode(prev => (prev === "DASHBOARD" ? "NOMAD" : "DASHBOARD"))}
@@ -893,7 +893,7 @@ export default function Navbar() {
               </button>
             )}
 
-            {session ? (
+            {mounted && session ? (
               /* Signed in profile avatar with interactive hover pill and drawer trigger */
               <div className="flex items-center">
                 <button
@@ -1006,10 +1006,26 @@ export default function Navbar() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between">
-                            <span className="text-xs font-bold text-gray-900 dark:text-white group-hover/opt:text-[#FFD400] transition-colors">Nomad Stays & Coliving</span>
+                            <span className="text-xs font-bold text-gray-900 dark:text-white group-hover/opt:text-[#FFD400] transition-colors">Nomad Stays &amp; Coliving</span>
                             <ArrowRight size={12} className="text-[#A1A1AA] group-hover/opt:translate-x-1 transition-transform" />
                           </div>
-                          <p className="text-[11px] text-gray-500 dark:text-[#A1A1AA] truncate">Hotels, hostels & long-term apartments</p>
+                          <p className="text-[11px] text-gray-500 dark:text-[#A1A1AA] truncate">Hotels, hostels &amp; long-term apartments</p>
+                        </div>
+                      </Link>
+
+                      <Link
+                        href="/guides"
+                        className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-[#1a1a1a] transition-all group/opt border border-transparent hover:border-gray-200 dark:hover:border-[#282828]"
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-[#FFD400]/10 border border-[#FFD400]/20 flex items-center justify-center text-[#FFD400] flex-shrink-0 group-hover/opt:bg-[#FFD400] group-hover/opt:text-black transition-colors">
+                          <TrekkingGuideIcon size={15} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold text-gray-900 dark:text-white group-hover/opt:text-[#FFD400] transition-colors">Book a Local Guide</span>
+                            <ArrowRight size={12} className="text-[#A1A1AA] group-hover/opt:translate-x-1 transition-transform" />
+                          </div>
+                          <p className="text-[11px] text-gray-500 dark:text-[#A1A1AA] truncate">Himalayan trekking, Sherpas &amp; cultural fixers</p>
                         </div>
                       </Link>
                     </div>
@@ -1036,7 +1052,7 @@ export default function Navbar() {
             )}
 
             {/* Profile Avatar on Mobile (ONLY when signed in) */}
-            {session && (
+            {mounted && session && (
               <button
                 type="button"
                 onClick={() => setIsProfileSliderOpen(true)}
@@ -1280,14 +1296,24 @@ export default function Navbar() {
                 <ThemeToggle variant="ghost" />
               </div>
 
-              <Link
-                href="/resources/coworking#book"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-center gap-2 w-full text-center px-4 py-3 bg-[#FFD400] hover:bg-[#FFE033] text-black font-bold rounded-xl transition-all text-xs shadow-md shadow-[#FFD400]/20 active:scale-95"
-              >
-                <CalendarCheck size={14} />
-                <span>Book Workspace Now</span>
-              </Link>
+              <div className="grid grid-cols-2 gap-2">
+                <Link
+                  href="/resources/coworking#book"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-1.5 text-center px-3 py-2.5 bg-[#FFD400] hover:bg-[#FFE033] text-black font-bold rounded-xl transition-all text-xs shadow-md shadow-[#FFD400]/20 active:scale-95"
+                >
+                  <CalendarCheck size={14} />
+                  <span>Book Space</span>
+                </Link>
+                <Link
+                  href="/guides"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-1.5 text-center px-3 py-2.5 bg-gray-100 dark:bg-[#181818] border border-gray-200 dark:border-[#282828] hover:border-[#FFD400] text-gray-900 dark:text-white font-bold rounded-xl transition-all text-xs shadow-xs active:scale-95"
+                >
+                  <TrekkingGuideIcon size={14} />
+                  <span>Book Guide</span>
+                </Link>
+              </div>
             </div>
           </div>
         </>,
