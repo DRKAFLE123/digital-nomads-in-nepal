@@ -128,28 +128,28 @@ export default function HeroSection() {
       <div className="absolute inset-0 z-10 bg-gradient-to-t from-background via-black/55 to-black/35 dark:from-[#0B0B0B] dark:via-black/60 dark:to-black/35" />
 
       {/* Content */}
-      <div className="relative z-20 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center py-16 md:py-24">
+      <div className="relative z-20 w-full max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 text-center flex flex-col items-center py-8 sm:py-16 md:py-24">
         
         {/* H1 */}
-        <h1 className="tracking-tight drop-shadow-xl mb-3 sm:mb-4 text-center max-w-4xl mx-auto">
-          <span className="block font-bold text-3xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-tight">
+        <h1 className="tracking-tight drop-shadow-xl mb-2.5 sm:mb-4 text-center max-w-4xl mx-auto">
+          <span className="block font-bold text-2xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-tight">
             Digital Nomads in Nepal
           </span>
-          <span className="block font-extrabold text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-primary mt-1.5 sm:mt-2 leading-tight">
+          <span className="block font-extrabold text-xl sm:text-4xl md:text-5xl lg:text-6xl text-primary mt-1 sm:mt-2 leading-tight">
             Live, Work &amp; Explore
           </span>
         </h1>
 
         {/* Supporting text */}
-        <p className="text-sm sm:text-base md:text-lg text-gray-200 font-medium drop-shadow-md max-w-2xl mb-6 px-2 leading-relaxed">
+        <p className="text-xs sm:text-base md:text-lg text-gray-200 font-medium drop-shadow-md max-w-2xl mb-4 sm:mb-6 px-1 sm:px-2 leading-relaxed">
           The definitive guide &amp; verified directory for remote workers, freelancers, and adventurers across Nepal.
         </p>
 
         {/* Search Bar for Workspaces, Stays, Guides */}
-        <form onSubmit={handleSearch} className="w-full max-w-lg mb-6 px-2 relative group z-30">
+        <form onSubmit={handleSearch} className="w-full max-w-lg mb-4 sm:mb-6 px-1 sm:px-2 relative group z-30">
           <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-yellow-500 rounded-full blur opacity-30 group-hover:opacity-50 transition duration-300"></div>
-          <div className="relative flex items-center bg-white/95 dark:bg-black/85 backdrop-blur border border-gray-200 dark:border-white/10 rounded-full p-1.5 focus-within:border-primary shadow-lg transition-colors">
-            <Search className="text-gray-400 dark:text-muted w-4 h-4 ml-4 flex-shrink-0" />
+          <div className="relative flex items-center bg-white/95 dark:bg-black/85 backdrop-blur border border-gray-200 dark:border-white/10 rounded-full p-1 sm:p-1.5 focus-within:border-primary shadow-lg transition-colors">
+            <Search className="text-gray-400 dark:text-muted w-4 h-4 ml-3 sm:ml-4 flex-shrink-0" />
             <input
               type="text"
               value={query}
@@ -159,81 +159,83 @@ export default function HeroSection() {
                   window.dispatchEvent(new CustomEvent("open-search-modal"))
                 }
               }}
-              placeholder={`Search workspaces, stays, guides... (${placeholder || 'e.g. Pokhara'})`}
-              className="w-full bg-transparent border-0 text-gray-900 dark:text-white text-xs sm:text-sm pl-3 pr-4 py-2.5 focus:outline-none placeholder:text-gray-500 cursor-pointer"
+              placeholder={placeholder ? `Search ${placeholder}...` : "Search workspaces, stays, guides..."}
+              className="w-full bg-transparent border-0 text-gray-900 dark:text-white text-xs sm:text-sm pl-2 sm:pl-3 pr-2 sm:pr-4 py-2 sm:py-2.5 focus:outline-none placeholder:text-gray-500 cursor-pointer"
             />
             <button
               type="submit"
-              className="bg-primary hover:bg-yellow-500 text-black font-black text-xs px-5 py-2.5 rounded-full uppercase tracking-wider transition-all active:scale-95 whitespace-nowrap shadow-sm"
+              className="bg-primary hover:bg-yellow-500 text-black font-black text-[11px] sm:text-xs px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full uppercase tracking-wider transition-all active:scale-95 whitespace-nowrap shadow-sm"
             >
               Search
             </button>
           </div>
         </form>
 
-        {/* Quick Access (Two distinct intent cards: WORK & EXPLORE) */}
-        <div className="w-full max-w-xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4 mb-6 px-2">
+        {/* Quick Access (Two distinct intent cards: WORK & EXPLORE - 2 columns on mobile & desktop) */}
+        <div className="w-full max-w-xl mx-auto grid grid-cols-2 gap-2.5 sm:gap-4 mb-4 sm:mb-6 px-1 sm:px-2">
           {/* Card 1: WORK INTENT */}
           <Link
             href="/workspaces"
-            className="group relative flex flex-col justify-between text-left p-4 sm:p-5 rounded-2xl bg-black/60 hover:bg-black/80 backdrop-blur-xl border border-white/15 hover:border-[#FFD400]/80 transition-all duration-300 shadow-xl hover:shadow-[0_12px_32px_rgba(255,212,0,0.18)] hover:-translate-y-1 overflow-hidden"
+            className="group relative flex flex-col justify-between text-left p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-black/60 hover:bg-black/80 backdrop-blur-xl border border-white/15 hover:border-[#FFD400]/80 transition-all duration-300 shadow-xl hover:shadow-[0_12px_32px_rgba(255,212,0,0.18)] hover:-translate-y-1 overflow-hidden"
           >
             {/* Ambient hover light */}
             <div className="absolute -top-12 -right-12 w-28 h-28 bg-[#FFD400]/10 rounded-full blur-2xl group-hover:bg-[#FFD400]/25 transition-all pointer-events-none" />
 
             <div>
               <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/15 text-[#FFD400] flex items-center justify-center group-hover:scale-110 group-hover:bg-[#FFD400] group-hover:text-black transition-all duration-300 shadow-xs">
-                  <Laptop size={18} />
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-white/10 border border-white/15 text-[#FFD400] flex items-center justify-center group-hover:scale-110 group-hover:bg-[#FFD400] group-hover:text-black transition-all duration-300 shadow-xs">
+                  <Laptop className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
                 </div>
-                <span className="text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-[#FFD400]/15 text-[#FFD400] border border-[#FFD400]/30 shadow-xs">
+                <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest px-2 sm:px-2.5 py-0.5 rounded-full bg-[#FFD400]/15 text-[#FFD400] border border-[#FFD400]/30 shadow-xs">
                   Work
                 </span>
               </div>
 
-              <h2 className="text-sm sm:text-base font-extrabold text-white group-hover:text-[#FFD400] transition-colors mt-3">
+              <h2 className="text-xs sm:text-base font-extrabold text-white group-hover:text-[#FFD400] transition-colors mt-2 sm:mt-3 leading-snug">
                 Find Workspaces
               </h2>
-              <p className="text-xs text-gray-300/90 mt-1 leading-snug line-clamp-2">
+              <p className="hidden sm:block text-xs text-gray-300/90 mt-1 leading-snug line-clamp-2">
                 Verified fiber Wi-Fi, ergonomic desks &amp; 24/7 power backup.
               </p>
             </div>
 
-            <div className="flex items-center gap-1.5 text-xs font-bold text-[#FFD400] mt-3.5 pt-2.5 border-t border-white/10 group-hover:border-[#FFD400]/30 transition-colors">
-              <span>Explore 50+ Hubs</span>
-              <ArrowRight size={13} className="group-hover:translate-x-1.5 transition-transform duration-200" />
+            <div className="flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs font-bold text-[#FFD400] mt-2.5 sm:mt-3.5 pt-2 sm:pt-2.5 border-t border-white/10 group-hover:border-[#FFD400]/30 transition-colors">
+              <span className="hidden sm:inline">Explore 50+ Hubs</span>
+              <span className="sm:hidden">50+ Hubs</span>
+              <ArrowRight size={12} className="group-hover:translate-x-1.5 transition-transform duration-200" />
             </div>
           </Link>
 
           {/* Card 2: EXPLORE INTENT */}
           <Link
             href="/guides"
-            className="group relative flex flex-col justify-between text-left p-4 sm:p-5 rounded-2xl bg-black/60 hover:bg-black/80 backdrop-blur-xl border border-white/15 hover:border-emerald-400/80 transition-all duration-300 shadow-xl hover:shadow-[0_12px_32px_rgba(52,211,153,0.18)] hover:-translate-y-1 overflow-hidden"
+            className="group relative flex flex-col justify-between text-left p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-black/60 hover:bg-black/80 backdrop-blur-xl border border-white/15 hover:border-emerald-400/80 transition-all duration-300 shadow-xl hover:shadow-[0_12px_32px_rgba(52,211,153,0.18)] hover:-translate-y-1 overflow-hidden"
           >
             {/* Ambient hover light */}
             <div className="absolute -top-12 -right-12 w-28 h-28 bg-emerald-400/10 rounded-full blur-2xl group-hover:bg-emerald-400/25 transition-all pointer-events-none" />
 
             <div>
               <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/15 text-emerald-400 flex items-center justify-center group-hover:scale-110 group-hover:bg-emerald-400 group-hover:text-black transition-all duration-300 shadow-xs">
-                  <TrekkingGuideIcon size={18} />
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-white/10 border border-white/15 text-emerald-400 flex items-center justify-center group-hover:scale-110 group-hover:bg-emerald-400 group-hover:text-black transition-all duration-300 shadow-xs">
+                  <TrekkingGuideIcon size={16} className="sm:w-[18px] sm:h-[18px]" />
                 </div>
-                <span className="text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-emerald-400/15 text-emerald-300 border border-emerald-400/30 shadow-xs">
+                <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest px-2 sm:px-2.5 py-0.5 rounded-full bg-emerald-400/15 text-emerald-300 border border-emerald-400/30 shadow-xs">
                   Explore
                 </span>
               </div>
 
-              <h2 className="text-sm sm:text-base font-extrabold text-white group-hover:text-emerald-300 transition-colors mt-3">
+              <h2 className="text-xs sm:text-base font-extrabold text-white group-hover:text-emerald-300 transition-colors mt-2 sm:mt-3 leading-snug">
                 Find Local Guides
               </h2>
-              <p className="text-xs text-gray-300/90 mt-1 leading-snug line-clamp-2">
+              <p className="hidden sm:block text-xs text-gray-300/90 mt-1 leading-snug line-clamp-2">
                 Trekking, hiking &amp; Himalayan experiences.
               </p>
             </div>
 
-            <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-300 mt-3.5 pt-2.5 border-t border-white/10 group-hover:border-emerald-400/30 transition-colors">
-              <span>Meet Local Guides</span>
-              <ArrowRight size={13} className="group-hover:translate-x-1.5 transition-transform duration-200" />
+            <div className="flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs font-bold text-emerald-300 mt-2.5 sm:mt-3.5 pt-2 sm:pt-2.5 border-t border-white/10 group-hover:border-emerald-400/30 transition-colors">
+              <span className="hidden sm:inline">Meet Local Guides</span>
+              <span className="sm:hidden">Local Guides</span>
+              <ArrowRight size={12} className="group-hover:translate-x-1.5 transition-transform duration-200" />
             </div>
           </Link>
         </div>
@@ -242,21 +244,21 @@ export default function HeroSection() {
         <div className="flex items-center justify-center w-full">
           <Link
             href="/blog"
-            className="group inline-flex items-center gap-2.5 px-6 sm:px-8 py-3 rounded-full bg-gradient-to-r from-[#FFD400] via-[#FFE033] to-[#FFC700] hover:from-[#FFE033] hover:to-[#FFD400] text-black font-black text-xs sm:text-sm tracking-wide shadow-lg shadow-[#FFD400]/25 hover:shadow-[#FFD400]/45 hover:scale-105 active:scale-95 transition-all border border-amber-300/60"
+            className="group inline-flex items-center gap-2 px-5 py-2.5 sm:px-8 sm:py-3 rounded-full bg-gradient-to-r from-[#FFD400] via-[#FFE033] to-[#FFC700] hover:from-[#FFE033] hover:to-[#FFD400] text-black font-black text-xs sm:text-sm tracking-wide shadow-lg shadow-[#FFD400]/25 hover:shadow-[#FFD400]/45 hover:scale-105 active:scale-95 transition-all border border-amber-300/60"
           >
-            <BookOpen size={16} className="text-black" />
+            <BookOpen size={15} className="text-black" />
             <span>Read the Blog Guides</span>
-            <ArrowRight size={14} className="text-black group-hover:translate-x-1 transition-transform" />
+            <ArrowRight size={13} className="text-black group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
 
         {/* Trust Line */}
-        <p className="mt-6 text-gray-400 text-xs sm:text-sm font-medium tracking-wide">
+        <p className="mt-3.5 sm:mt-6 text-gray-300/90 text-[11px] sm:text-sm font-medium tracking-wide">
           ✨ Built for digital nomads working and exploring Nepal.
         </p>
 
         {/* Slider Indicator Dots */}
-        <div className="flex items-center gap-2 mt-4 z-20">
+        <div className="flex items-center gap-2 mt-3 sm:mt-4 z-20">
           {HERO_SLIDES.map((slide, idx) => (
             <button
               key={idx}

@@ -393,7 +393,7 @@ export default function Navbar() {
             {/* Logo Image (no popover on hover) - Proportional size & seamless spacing */}
             <Link
               href="/"
-              className="relative h-9 sm:h-10 md:h-11 w-[86px] sm:w-[96px] md:w-[105px] overflow-hidden flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD400] rounded-xl flex items-center transition-transform hover:scale-105 active:scale-95 duration-200"
+              className="relative h-[29px] sm:h-10 md:h-11 w-[70px] sm:w-[96px] md:w-[105px] overflow-hidden flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD400] rounded-xl flex items-center transition-transform hover:scale-105 active:scale-95 duration-200"
               aria-label="Digital Nomads in Nepal Home"
             >
               <Image src="/webisteofficiallogo-removebg-preview.png" alt="Digital Nomads in Nepal Logo" fill className="object-contain object-center" priority unoptimized />
@@ -405,7 +405,7 @@ export default function Navbar() {
                 href="/"
                 className="flex flex-col items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD400] rounded-xl py-1 text-center select-none"
               >
-                <span className={`font-black text-sm sm:text-[15px] md:text-[17px] tracking-normal leading-tight uppercase transition-colors text-center ${
+                <span className={`font-black text-xs sm:text-[15px] md:text-[17px] tracking-normal leading-tight uppercase transition-colors text-center ${
                   isSolid
                     ? "text-gray-900 dark:text-[#F5F5F5] lg:group-hover/name:text-primary"
                     : "text-white lg:group-hover/name:text-[#FFD400]"
@@ -414,7 +414,7 @@ export default function Navbar() {
                 }`}>
                   DIGITAL NOMADS
                 </span>
-                <span className={`w-full flex items-center justify-center gap-1.5 font-extrabold text-[9px] sm:text-[10px] text-[#FFD400] tracking-[0.16em] uppercase leading-none mt-1 select-none text-center ${
+                <span className={`w-full flex items-center justify-center gap-1 font-extrabold text-[8px] sm:text-[10px] text-[#FFD400] tracking-[0.16em] uppercase leading-none mt-0.5 select-none text-center ${
                   !isScrolled ? "flex" : "hidden sm:flex"
                 }`}>
                   <span className="text-[#FFD400]/60 font-medium select-none">—</span>
@@ -1108,14 +1108,14 @@ export default function Navbar() {
             {/* Mobile Header */}
             <div className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-[#242424] shrink-0">
               <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 select-none">
-                <div className="relative h-9 w-[86px] overflow-hidden shrink-0">
+                <div className="relative h-[29px] w-[70px] overflow-hidden shrink-0">
                   <Image src="/webisteofficiallogo-removebg-preview.png" alt="Logo" fill className="object-contain object-center" unoptimized />
                 </div>
                 <div className="flex flex-col items-center text-center">
-                  <span className="font-black text-sm tracking-normal uppercase text-gray-900 dark:text-white leading-tight">
+                  <span className="font-black text-xs tracking-normal uppercase text-gray-900 dark:text-white leading-tight">
                     DIGITAL NOMADS
                   </span>
-                  <div className="w-full flex items-center justify-center gap-1.5 font-extrabold text-[9px] text-[#FFD400] tracking-[0.16em] uppercase leading-none mt-1 select-none">
+                  <div className="w-full flex items-center justify-center gap-1 font-extrabold text-[8px] text-[#FFD400] tracking-[0.16em] uppercase leading-none mt-0.5 select-none">
                     <span className="text-[#FFD400]/60 font-medium select-none">—</span>
                     <span>IN NEPAL</span>
                     <span className="text-[#FFD400]/60 font-medium select-none">—</span>
