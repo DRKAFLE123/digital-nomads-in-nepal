@@ -99,7 +99,7 @@ export default function RootLayout({
             enableSystem={false}
             disableTransitionOnChange
           >
-            <div className="flex min-h-screen flex-col">
+            <div className="flex min-h-screen flex-col" suppressHydrationWarning>
               {children}
             </div>
           </ThemeProvider>

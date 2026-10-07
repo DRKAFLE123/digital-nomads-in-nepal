@@ -32,6 +32,18 @@ export default function GuideRegisterPage() {
     const file = e.target.files?.[0]
     if (!file) return
 
+    // Client-side validation
+    if (file.size > 5 * 1024 * 1024) {
+      setUploadError("File size exceeds 5MB limit. Please choose a smaller image.")
+      return
+    }
+
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/avif"]
+    if (!allowedTypes.includes(file.type)) {
+      setUploadError("Invalid file type. Please upload a PNG, JPG, WebP, or AVIF image.")
+      return
+    }
+
     setUploading(true)
     setUploadError("")
 
@@ -48,12 +60,12 @@ export default function GuideRegisterPage() {
         const data = await res.json()
         setForm(p => ({ ...p, photoUrl: data.url }))
       } else {
-        const errData = await res.json()
-        setUploadError(errData.error || "Failed to upload image.")
+        const errData = await res.json().catch(() => ({}))
+        setUploadError(errData.error || `Upload failed (Status ${res.status}). Please try again or paste an image link below.`)
       }
-    } catch (err) {
-      console.error(err)
-      setUploadError("An error occurred during upload.")
+    } catch (err: any) {
+      console.error("Guide upload error:", err)
+      setUploadError(err?.message || "An error occurred during upload. Please try again or paste an image link below.")
     } finally {
       setUploading(false)
     }

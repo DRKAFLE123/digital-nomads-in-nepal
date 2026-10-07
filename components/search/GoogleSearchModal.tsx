@@ -623,11 +623,11 @@ export default function GoogleSearchModal({ isOpen, onClose }: GoogleSearchModal
                       <Compass size={18} />
                     </div>
                     <h5 className="text-xs font-bold text-gray-900 dark:text-white flex items-center justify-between">
-                      <span>Find Trekking Guides</span>
+                      <span>Find Local Guides</span>
                       <ArrowRight size={13} className="text-gray-400 group-hover:translate-x-1 transition-transform" />
                     </h5>
                     <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">
-                      Licensed Sherpa & local experts for Annapurna, Everest & cultural tours.
+                      Trekking, hiking &amp; Himalayan experiences with licensed local experts.
                     </p>
                   </Link>
 

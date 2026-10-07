@@ -457,23 +457,40 @@ export default async function Home() {
         </section>
 
         {/* 6. Things to Do in Nepal */}
-        <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-background">
-          <div className="max-w-7xl mx-auto">
+        <section className="relative w-full py-24 sm:py-28 px-4 sm:px-6 lg:px-8 overflow-hidden bg-background border-t border-border">
+          {/* Ambient Panoramic Background from public/things to do in nepal.png */}
+          <div className="absolute inset-0 z-0 pointer-events-none select-none">
+            <Image 
+              src="/things to do in nepal.png" 
+              alt="Things to do in Nepal scenic landscape" 
+              fill 
+              sizes="100vw"
+              className="object-cover object-center opacity-35 dark:opacity-30" 
+            />
+            {/* Top feathered dissolve for smooth transition from previous section */}
+            <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-background via-background/80 to-transparent" />
+            {/* Ambient tint overlay to maintain sharp text contrast in both light and dark mode */}
+            <div className="absolute inset-0 bg-background/55 dark:bg-background/70 backdrop-blur-[1px]" />
+            {/* Bottom feathered dissolve into next section */}
+            <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-background via-background/80 to-transparent" />
+          </div>
+
+          <div className="relative z-10 max-w-7xl mx-auto">
             <div className="text-center max-w-3xl mx-auto mb-16">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/25 text-primary text-xs font-semibold uppercase tracking-wider mb-3">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/15 backdrop-blur-md border border-primary/30 text-primary text-xs font-semibold uppercase tracking-wider mb-3 shadow-sm">
                 <Sparkles size={13} /> Nomad Life &amp; Adventure
               </div>
-              <h2 className="text-3xl md:text-5xl font-black text-foreground">
+              <h2 className="text-3xl md:text-5xl font-black text-foreground drop-shadow-sm">
                 Things to Do in Nepal
               </h2>
-              <p className="text-muted-foreground text-sm md:text-base mt-2">
+              <p className="text-muted-foreground text-sm md:text-base mt-2 max-w-2xl mx-auto font-medium">
                 Balance deep remote work sprints with legendary Himalayan outdoors, historic cafe culture, and restorative escapes.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* Activity 1 */}
-              <div className="p-6 bg-card border border-border rounded-2xl hover:border-primary/60 transition-all hover:-translate-y-1 group">
+              <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-primary/60 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
                 <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
                   🏔️
                 </div>
@@ -489,7 +506,7 @@ export default async function Home() {
               </div>
 
               {/* Activity 2 */}
-              <div className="p-6 bg-card border border-border rounded-2xl hover:border-primary/60 transition-all hover:-translate-y-1 group">
+              <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-primary/60 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
                 <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
                   ☕
                 </div>
@@ -505,7 +522,7 @@ export default async function Home() {
               </div>
 
               {/* Activity 3 */}
-              <div className="p-6 bg-card border border-border rounded-2xl hover:border-primary/60 transition-all hover:-translate-y-1 group">
+              <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-primary/60 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
                 <div className="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
                   🪂
                 </div>
@@ -521,7 +538,7 @@ export default async function Home() {
               </div>
 
               {/* Activity 4 */}
-              <div className="p-6 bg-card border border-border rounded-2xl hover:border-primary/60 transition-all hover:-translate-y-1 group">
+              <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-primary/60 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
                 <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
                   🧘
                 </div>
@@ -693,7 +710,7 @@ export default async function Home() {
                 🌐 Connected Community
               </div>
               <h2 className="text-3xl md:text-5xl font-black text-foreground mb-4">
-                Join 2,000+ Nomads
+                Join the Nomad Community
               </h2>
               <p className="text-muted-foreground text-sm md:text-base mb-10 max-w-xl mx-auto">
                 Connect with our active digital nomad community across our verified social channels for meetup announcements, trek invites, and insider advice.

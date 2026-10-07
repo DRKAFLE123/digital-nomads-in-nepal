@@ -414,13 +414,13 @@ export default function Navbar() {
                 }`}>
                   DIGITAL NOMADS
                 </span>
-                <div className={`w-full flex items-center justify-center gap-1.5 font-extrabold text-[9px] sm:text-[10px] text-[#FFD400] tracking-[0.16em] uppercase leading-none mt-1 select-none text-center ${
+                <span className={`w-full flex items-center justify-center gap-1.5 font-extrabold text-[9px] sm:text-[10px] text-[#FFD400] tracking-[0.16em] uppercase leading-none mt-1 select-none text-center ${
                   !isScrolled ? "flex" : "hidden sm:flex"
                 }`}>
                   <span className="text-[#FFD400]/60 font-medium select-none">—</span>
                   <span>IN NEPAL</span>
                   <span className="text-[#FFD400]/60 font-medium select-none">—</span>
-                </div>
+                </span>
               </Link>
 
               {/* Platform Intro Popover on Hover (Desktop ONLY: completely hidden on mobile/touch screens) */}
@@ -510,7 +510,7 @@ export default function Navbar() {
                     <CheckCircle2 size={13} className="text-[#22C55E]" /> Why nomads use this site:
                   </p>
                   <p className="text-[10px] text-gray-600 dark:text-gray-400 leading-relaxed">
-                    Zero broker markups, verified speed tests, power backup guarantees, and an active community of 2,000+ remote workers in Nepal.
+                    Zero broker markups, verified speed tests, power backup guarantees, and an active community of digital nomads and remote workers in Nepal.
                   </p>
                 </div>
 

@@ -224,10 +224,10 @@ export default function HeroSection() {
               </div>
 
               <h2 className="text-sm sm:text-base font-extrabold text-white group-hover:text-emerald-300 transition-colors mt-3">
-                Find Trekking Guides
+                Find Local Guides
               </h2>
               <p className="text-xs text-gray-300/90 mt-1 leading-snug line-clamp-2">
-                Licensed Himalayan mountain leaders, Sherpas &amp; local fixers.
+                Trekking, hiking &amp; Himalayan experiences.
               </p>
             </div>
 
@@ -252,7 +252,7 @@ export default function HeroSection() {
 
         {/* Trust Line */}
         <p className="mt-6 text-gray-400 text-xs sm:text-sm font-medium tracking-wide">
-          ✨ Trusted by 2,000+ digital nomads living and working in Nepal.
+          ✨ Built for digital nomads working and exploring Nepal.
         </p>
 
         {/* Slider Indicator Dots */}

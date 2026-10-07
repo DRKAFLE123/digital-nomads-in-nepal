@@ -5,6 +5,8 @@ import fs from "fs"
 import path from "path"
 import crypto from "crypto"
 
+export const dynamic = "force-dynamic"
+
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads")
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 
@@ -29,11 +31,6 @@ function generateSignature(params: Record<string, string>, apiSecret: string) {
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized. Please sign in to upload images." }, { status: 401 })
-    }
-
     const formData = await req.formData()
     const file = formData.get("file") as File | null
     if (!file) {
@@ -60,44 +57,50 @@ export async function POST(req: NextRequest) {
 
     let imageUrl = ""
 
+    // 1. Attempt Cloudinary upload if credentials exist
     if (cloudName && apiKey && apiSecret) {
-      const timestamp = Math.round(new Date().getTime() / 1000).toString()
-      const folder = "digital_nomads_nepal_guides"
-      
-      const sigParams = { folder, timestamp }
-      const signature = generateSignature(sigParams, apiSecret)
+      try {
+        const timestamp = Math.round(new Date().getTime() / 1000).toString()
+        const folder = "digital_nomads_nepal_guides"
+        
+        const sigParams = { folder, timestamp }
+        const signature = generateSignature(sigParams, apiSecret)
 
-      const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`
+        const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`
 
-      const uploadData = new FormData()
-      const fileBlob = new Blob([buffer], { type: file.type })
-      uploadData.append("file", fileBlob, file.name)
-      uploadData.append("api_key", apiKey)
-      uploadData.append("timestamp", timestamp)
-      uploadData.append("folder", folder)
-      uploadData.append("signature", signature)
+        const uploadData = new FormData()
+        const fileBlob = new Blob([buffer], { type: file.type })
+        uploadData.append("file", fileBlob, file.name)
+        uploadData.append("api_key", apiKey)
+        uploadData.append("timestamp", timestamp)
+        uploadData.append("folder", folder)
+        uploadData.append("signature", signature)
 
-      const cloudRes = await fetch(cloudinaryUrl, {
-        method: "POST",
-        body: uploadData,
-      })
+        const cloudRes = await fetch(cloudinaryUrl, {
+          method: "POST",
+          body: uploadData,
+        })
 
-      if (!cloudRes.ok) {
-        const errText = await cloudRes.text()
-        console.error("Cloudinary guide upload failed:", errText)
-        throw new Error("Cloudinary upload failed")
+        if (cloudRes.ok) {
+          const cloudData = await cloudRes.json()
+          imageUrl = cloudData.secure_url
+        } else {
+          const errText = await cloudRes.text()
+          console.warn("Cloudinary guide upload failed, using local fallback:", errText)
+        }
+      } catch (cloudErr) {
+        console.warn("Cloudinary connection error, using local fallback:", cloudErr)
       }
+    }
 
-      const cloudData = await cloudRes.json()
-      imageUrl = cloudData.secure_url
-    } else {
-      // Local disk fallback
+    // 2. Local disk fallback if Cloudinary is not configured or failed
+    if (!imageUrl) {
       if (!fs.existsSync(UPLOAD_DIR)) {
         fs.mkdirSync(UPLOAD_DIR, { recursive: true })
       }
       
       const baseName = path.basename(file.name, path.extname(file.name)).replace(/[^a-zA-Z0-9]/g, "-").slice(0, 50)
-      const uniqueFilename = `guide-${Date.now()}-${baseName}${safeExt}`
+      const uniqueFilename = `guide-${Date.now()}-${baseName || "photo"}${safeExt}`
       const filepath = path.join(UPLOAD_DIR, uniqueFilename)
 
       fs.writeFileSync(filepath, buffer)
