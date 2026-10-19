@@ -8,15 +8,15 @@ import { FacebookIcon, TikTokIcon, YouTubeIcon, InstagramIcon, TwitterIcon } fro
 const DEFAULTS = {
   bio: "The definitive guide for digital nomads in Nepal. Get up-to-date info on the Nepal Nomad Visa, Pokhara remote work hubs, and the cost of living for 2026.\n\nBuilt for remote workers, freelancers, and location-independent entrepreneurs exploring Nepal.",
   basecamp: "Basecamp: Kathmandu, Nepal",
-  facebook: "https://facebook.com",
+  facebook: "https://www.facebook.com/share/1C1VKK5CTk/",
   showFacebook: true,
   instagram: "https://instagram.com",
   showInstagram: true,
   twitter: "https://twitter.com",
   showTwitter: false,
-  tiktok: "https://tiktok.com",
+  tiktok: "https://www.tiktok.com/@digitalnomadsinnepal",
   showTiktok: true,
-  youtube: "https://youtube.com",
+  youtube: "https://youtube.com/@digitalnomadsinnepal?si=fPjO8sPkEvfJ73zu",
   showYoutube: true,
   newsletterTitle: "Get the Nepal Digital Nomad Starter Kit",
   newsletterDesc: "Weekly tips, cost breakdowns, and remote work guides for Nepal's growing ecosystem."

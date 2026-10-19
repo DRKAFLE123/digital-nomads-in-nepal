@@ -8,21 +8,25 @@ import TrekkingGuideIcon from "./TrekkingGuideIcon"
 
 const HERO_SLIDES = [
   {
-    src: "/heroslider1.png",
+    desktopSrc: "/images/hero/hero-work-desktop.jpg",
+    mobileSrc: "/images/hero/hero-work-mobile.jpg",
     alt: "Digital nomad working remotely at a scenic cafe balcony overlooking the Himalayas in Nepal",
     label: "Work & Connect",
   },
   {
-    src: "/heroslider2.png",
+    desktopSrc: "/images/hero/hero-trek-desktop.jpg",
+    mobileSrc: "/images/hero/hero-trek-mobile.jpg",
     alt: "Trekkers hiking on a mountain trail under snow-capped peaks in Nepal",
     label: "Explore & Trek",
   },
   {
-    src: "/heroslider3.png",
-    alt: "Sunrise meditation and yoga overlooking Himalayan peaks and prayer flags",
+    desktopSrc: "/images/hero/hero-relax-desktop.jpg",
+    mobileSrc: "/images/hero/hero-relax-mobile.jpg",
+    alt: "Sunrise over Phewa Lake in Pokhara with colorful boats and Fishtail mountain reflection",
     label: "Live & Restore",
   },
 ]
+
 
 const keywords = [
   "workspaces in Kathmandu",
@@ -84,7 +88,7 @@ export default function HeroSection() {
 
   return (
     <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-background">
-      {/* Dynamic Background Slider (heroslider 1, 2, 3) */}
+      {/* Dynamic Background Slider with Art-Directed HD Images */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none">
         {HERO_SLIDES.map((slide, idx) => (
           <div
@@ -93,15 +97,31 @@ export default function HeroSection() {
               currentSlide === idx ? "opacity-100 scale-100" : "opacity-0 scale-105"
             }`}
           >
-            <Image 
-              src={slide.src} 
-              alt={slide.alt} 
-              fill 
-              sizes="100vw"
-              className="object-cover object-center transform transition-transform duration-[6000ms] ease-out"
-              priority={idx === 0}
-              quality={90}
-            />
+            {/* Desktop 2K Ultra-HD 16:9 Image */}
+            <div className="hidden md:block absolute inset-0">
+              <Image 
+                src={slide.desktopSrc} 
+                alt={slide.alt} 
+                fill 
+                sizes="100vw"
+                className="object-cover object-center transform transition-transform duration-[6000ms] ease-out"
+                priority={idx === 0}
+                quality={95}
+              />
+            </div>
+
+            {/* Mobile Portrait HD 9:16 Image */}
+            <div className="block md:hidden absolute inset-0">
+              <Image 
+                src={slide.mobileSrc} 
+                alt={slide.alt} 
+                fill 
+                sizes="100vw"
+                className="object-cover object-center transform transition-transform duration-[6000ms] ease-out"
+                priority={idx === 0}
+                quality={95}
+              />
+            </div>
           </div>
         ))}
       </div>
@@ -125,7 +145,7 @@ export default function HeroSection() {
       </button>
 
       {/* Adaptive Gradient Overlay for text readability and smooth transition into page */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-t from-background via-black/55 to-black/35 dark:from-[#0B0B0B] dark:via-black/60 dark:to-black/35" />
+      <div className="absolute inset-0 z-10 bg-gradient-to-t from-background via-black/45 to-black/30 dark:from-[#0B0B0B] dark:via-black/50 dark:to-black/30" />
 
       {/* Content */}
       <div className="relative z-20 w-full max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 text-center flex flex-col items-center py-8 sm:py-16 md:py-24">

@@ -47,3 +47,6 @@ scratch-seed-admin.js
 gtm_snippet.txt
 gtm_container_import.json
 *.mkv
+gsc_data/
+performance.zip
+

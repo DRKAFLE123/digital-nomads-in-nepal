@@ -54,7 +54,7 @@ async function main() {
     readTime: "4 min read",
     affiliates: false,
     featured: true,
-    author: "DR Kafle",
+    author: "Damodar Kafle",
     published: true,
   }
 

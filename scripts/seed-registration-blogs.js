@@ -110,7 +110,7 @@ async function main() {
       readTime: "4 min read",
       affiliates: false,
       featured: false,
-      author: "DR kafle",
+      author: "Damodar Kafle",
       published: true,
     },
     {
@@ -124,7 +124,7 @@ async function main() {
       readTime: "5 min read",
       affiliates: false,
       featured: false,
-      author: "DR kafle",
+      author: "Damodar Kafle",
       published: true,
     }
   ]

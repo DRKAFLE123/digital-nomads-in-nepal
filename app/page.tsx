@@ -110,11 +110,11 @@ export default async function Home() {
 
   // Parse social settings for community section
   let socialConfig = {
-    facebook: "https://facebook.com",
+    facebook: "https://www.facebook.com/share/1C1VKK5CTk/",
     showFacebook: true,
-    tiktok: "https://tiktok.com",
+    tiktok: "https://www.tiktok.com/@digitalnomadsinnepal",
     showTiktok: true,
-    youtube: "https://youtube.com",
+    youtube: "https://youtube.com/@digitalnomadsinnepal?si=fPjO8sPkEvfJ73zu",
     showYoutube: true,
     instagram: "https://instagram.com",
     showInstagram: true,
@@ -458,19 +458,34 @@ export default async function Home() {
 
         {/* 6. Things to Do in Nepal */}
         <section className="relative w-full py-24 sm:py-28 px-4 sm:px-6 lg:px-8 overflow-hidden bg-background border-t border-border">
-          {/* Ambient Panoramic Background from public/things to do in nepal.png */}
+          {/* Ambient Panoramic Background: Desktop 16:9 4K & Mobile 9:16 Portrait */}
           <div className="absolute inset-0 z-0 pointer-events-none select-none">
-            <Image 
-              src="/things to do in nepal.png" 
-              alt="Things to do in Nepal scenic landscape" 
-              fill 
-              sizes="100vw"
-              className="object-cover object-center opacity-35 dark:opacity-30" 
-            />
+            {/* Desktop Panoramic HD */}
+            <div className="hidden md:block absolute inset-0">
+              <Image 
+                src="/images/home/things-to-do-desktop.jpg" 
+                alt="Things to do in Nepal outdoor adventures" 
+                fill 
+                sizes="100vw"
+                className="object-cover object-center opacity-45 dark:opacity-40" 
+                quality={95}
+              />
+            </div>
+            {/* Mobile Portrait HD */}
+            <div className="block md:hidden absolute inset-0">
+              <Image 
+                src="/images/home/things-to-do-mobile.jpg" 
+                alt="Things to do in Nepal alpine trails and paragliding" 
+                fill 
+                sizes="100vw"
+                className="object-cover object-center opacity-45 dark:opacity-40" 
+                quality={95}
+              />
+            </div>
             {/* Top feathered dissolve for smooth transition from previous section */}
             <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-background via-background/80 to-transparent" />
             {/* Ambient tint overlay to maintain sharp text contrast in both light and dark mode */}
-            <div className="absolute inset-0 bg-background/55 dark:bg-background/70 backdrop-blur-[1px]" />
+            <div className="absolute inset-0 bg-background/50 dark:bg-background/65" />
             {/* Bottom feathered dissolve into next section */}
             <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-background via-background/80 to-transparent" />
           </div>
@@ -583,16 +598,17 @@ export default async function Home() {
               
               {/* LEFT COLUMN: Visual Image Frame */}
               <div className="lg:col-span-5 relative group">
-                <div className="relative w-full h-[400px] sm:h-[480px] lg:h-full min-h-[500px] rounded-3xl overflow-hidden border border-border shadow-2xl bg-card">
+                <div className="relative w-full h-[450px] sm:h-[520px] lg:h-full min-h-[520px] rounded-3xl overflow-hidden border border-border shadow-2xl bg-card">
                   <Image 
-                    src="/whychooseus.png" 
-                    alt="Himalayan Mountain Panorama with Yoga and Nature in Nepal" 
+                    src="/images/home/why-choose-nepal-hd.jpg" 
+                    alt="Digital nomad meditating with laptop overlooking Annapurna mountain sanctuary in Nepal" 
                     fill 
                     sizes="(max-width: 1024px) 100vw, 42vw"
                     className="object-cover object-center group-hover:scale-105 transition-transform duration-700" 
+                    quality={95}
                   />
-                  {/* Subtle lighting gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/30" />
+                  {/* Subtle lighting gradient overlay tailored for crisp mountain clarity */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent" />
 
                   {/* Top Badge */}
                   <div className="absolute top-4 left-4 z-10">

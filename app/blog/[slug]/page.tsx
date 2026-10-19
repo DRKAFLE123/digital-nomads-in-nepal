@@ -13,7 +13,24 @@ import { Calendar, Clock, User } from "lucide-react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import type { Metadata } from "next"
-import { generateArticleJsonLd, generateBreadcrumbJsonLd, SITE_URL } from "@/lib/seo"
+import { generateArticleJsonLd, generateBreadcrumbJsonLd, generateFaqJsonLd, SITE_URL } from "@/lib/seo"
+
+function extractFaqsFromContent(content: string): Array<{ question: string; answer: string }> {
+  const faqs: Array<{ question: string; answer: string }> = []
+  const faqSectionMatch = content.match(/(?:##|###)\s*(?:Frequently Asked Questions|FAQ)[\s\S]*$/i)
+  const targetText = faqSectionMatch ? faqSectionMatch[0] : content
+
+  const regex = /(?:###|\*\*Q:?\*\*)\s*([^\n\?]+\?)\s*\n+([\s\S]*?)(?=(?:###|\*\*Q:?\*\*)|(?:##\s)|$)/gi
+  let match
+  while ((match = regex.exec(targetText)) !== null) {
+    const question = match[1].replace(/\*\*/g, "").trim()
+    const answer = match[2].replace(/\*\*/g, "").replace(/\[([^\]]+)\]\([^)]+\)/g, "$1").trim()
+    if (question.length > 5 && answer.length > 10 && faqs.length < 8) {
+      faqs.push({ question, answer: answer.slice(0, 450) })
+    }
+  }
+  return faqs
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getFlattenedText(children: any): string {
@@ -161,6 +178,9 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     { name: post.title, item: `/blog/${post.slug}` },
   ])
 
+  const faqs = extractFaqsFromContent(post.content)
+  const faqJsonLd = faqs.length > 0 ? generateFaqJsonLd(faqs) : null
+
   return (
     <>
       <script
@@ -171,6 +191,12 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
       <ReadingProgressBar />
       <Navbar />
       <main className="min-h-screen bg-background pb-20">

@@ -9,7 +9,7 @@ const clusterArticles = [
     category: "Cost of Living",
     coverImage: "https://images.unsplash.com/photo-1544735716-392fe2449fee?auto=format&fit=crop&w=1200&q=80",
     readTime: "7 min read",
-    author: "DR kafle",
+    author: "Damodar Kafle",
     tags: ["kathmandu", "cost of living", "nepal budget", "remote work", "digital nomad kathmandu"],
     content: `# Cost of Living in Kathmandu: 2026 Monthly Budget for Nomads
 
@@ -70,7 +70,7 @@ Ideal for newly arriving nomads who want to be steps away from travel agencies, 
     category: "Cost of Living",
     coverImage: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80",
     readTime: "6 min read",
-    author: "DR kafle",
+    author: "Damodar Kafle",
     tags: ["pokhara", "cost of living", "lakeside", "remote work", "digital nomad pokhara"],
     content: `# Cost of Living in Pokhara: Lakeside Nomad Budget (2026)
 
@@ -122,7 +122,7 @@ Located south of central Lakeside, Damside offers panoramic views of the Annapur
     category: "Cost of Living",
     coverImage: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=1200&q=80",
     readTime: "5 min read",
-    author: "DR kafle",
+    author: "Damodar Kafle",
     tags: ["nepal food cost", "grocery prices nepal", "foodmandu", "eating out nepal"],
     content: `# Nepal Food & Grocery Cost Guide for Remote Workers (2026)
 
@@ -170,7 +170,7 @@ Cooking at home is affordable if you shop at neighborhood vegetable vendors (*sa
     category: "Accommodation",
     coverImage: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=1200&q=80",
     readTime: "6 min read",
-    author: "DR kafle",
+    author: "Damodar Kafle",
     tags: ["nepal rent", "apartments kathmandu", "coliving nepal", "pokhara rent"],
     content: `# Nepal Rent & Apartment Guide: Leases, Coliving & Deposits (2026)
 
@@ -210,7 +210,7 @@ Use our verified [Stay & Work Directory](/stay) to find accommodation with teste
     category: "Destinations",
     coverImage: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1200&q=80",
     readTime: "8 min read",
-    author: "DR kafle",
+    author: "Damodar Kafle",
     tags: ["digital nomad kathmandu", "kathmandu city guide", "workation kathmandu", "coworking kathmandu"],
     content: `# Digital Nomad Kathmandu City Guide (2026 Edition)
 
@@ -244,7 +244,7 @@ For digital nomads, Kathmandu offers the fastest internet in the country, the hi
     category: "Destinations",
     coverImage: "https://images.unsplash.com/photo-1582650625119-3a31f8418365?auto=format&fit=crop&w=1200&q=80",
     readTime: "7 min read",
-    author: "DR kafle",
+    author: "Damodar Kafle",
     tags: ["digital nomad pokhara", "pokhara guide", "lakeside remote work", "workation nepal"],
     content: `# Digital Nomad Pokhara City Guide: Working by Phewa Lake (2026)
 
@@ -277,7 +277,7 @@ Surrounded by the snowcapped peaks of the Annapurna range and mirrored in the wa
     category: "Comparison",
     coverImage: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
     readTime: "6 min read",
-    author: "DR kafle",
+    author: "Damodar Kafle",
     tags: ["kathmandu vs pokhara", "where to live nepal", "nepal digital nomad hubs", "remote work comparison"],
     content: `# Kathmandu vs. Pokhara for Digital Nomads: 2026 Head-to-Head Comparison
 
@@ -307,7 +307,7 @@ Here is an objective comparison to help you choose the best home base.
     category: "Tech & Setup",
     coverImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80",
     readTime: "6 min read",
-    author: "DR kafle",
+    author: "Damodar Kafle",
     tags: ["internet speed nepal", "wifi nepal", "fiber broadband kathmandu", "power backup nepal"],
     content: `# Internet & Wi-Fi Speed in Nepal: 2026 Remote Worker Technical Guide
 
@@ -342,7 +342,7 @@ In reality, Nepal has leapfrogged older copper telecommunications, rolling out *
     category: "Tech & Setup",
     coverImage: "https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?auto=format&fit=crop&w=1200&q=80",
     readTime: "5 min read",
-    author: "DR kafle",
+    author: "Damodar Kafle",
     tags: ["sim cards nepal", "ncell vs ntc", "esim nepal", "mobile data nepal"],
     content: `# SIM Cards & Mobile 4G/5G in Nepal: Ncell vs. NTC (2026 Guide)
 
@@ -374,7 +374,7 @@ Here is the definitive guide on choosing between **Ncell** and **Nepal Telecom (
     category: "Workation",
     coverImage: "https://images.unsplash.com/photo-1486916856992-e4db22c8df33?auto=format&fit=crop&w=1200&q=80",
     readTime: "7 min read",
-    author: "DR kafle",
+    author: "Damodar Kafle",
     tags: ["workation nepal", "mountain remote work", "bandipur", "nagarkot", "himalayan workation"],
     content: `# Workation Nepal: Working Remotely from Himalayan Hill Stations (2026)
 
