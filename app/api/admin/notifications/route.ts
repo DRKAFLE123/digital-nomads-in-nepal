@@ -57,9 +57,19 @@ export async function GET() {
     return NextResponse.json({
       totalCount: notifications.length,
       notifications,
+      dbConnected: true,
     })
-  } catch (err) {
-    console.error("Failed to fetch admin notifications:", err)
-    return NextResponse.json({ error: "Failed to fetch notifications" }, { status: 500 })
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : String(err)
+    console.warn("Database unreachable for admin notifications:", errorMsg)
+    return NextResponse.json(
+      {
+        totalCount: 0,
+        notifications: [],
+        dbConnected: false,
+        warning: "Database currently unreachable",
+      },
+      { status: 200 }
+    )
   }
 }

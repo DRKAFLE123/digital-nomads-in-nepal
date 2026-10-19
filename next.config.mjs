@@ -43,17 +43,6 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/:path*',
-        has: [
-          {
-            type: 'host',
-            value: 'www.digitalnomadsinnepal.com',
-          },
-        ],
-        destination: 'https://digitalnomadsinnepal.com/:path*',
-        permanent: true,
-      },
-      {
         source: '/privacy-policy',
         destination: '/privacy',
         permanent: true,
