@@ -4,6 +4,7 @@ import { useState } from "react"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import { Mail, MapPin, CheckCircle, Building, Send } from "lucide-react"
+import { WhatsAppIcon } from "@/components/SocialIcons"
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -74,6 +75,26 @@ export default function ContactPage() {
                   <p className="text-muted-foreground text-sm mt-0.5">Kathmandu & Lakeside Pokhara, Nepal</p>
                 </div>
               </div>
+
+              <a
+                href="https://wa.me/9779865575108?text=Hi!%20I'm%20planning%20to%20work%20remotely%20in%20Nepal%20and%20have%20a%20quick%20question."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-start gap-4 p-3.5 rounded-2xl bg-[#25D366]/10 hover:bg-[#25D366]/20 transition-all border border-[#25D366]/30 group"
+              >
+                <div className="w-10 h-10 rounded-xl bg-[#25D366] text-white flex items-center justify-center shrink-0 shadow-md">
+                  <WhatsAppIcon size={20} />
+                </div>
+                <div>
+                  <h3 className="font-bold text-xs text-foreground uppercase tracking-wider flex items-center gap-2">
+                    WhatsApp Chat
+                    <span className="text-[10px] bg-[#25D366] text-white px-2 py-0.5 rounded-full font-bold">Fast Reply</span>
+                  </h3>
+                  <p className="text-muted-foreground text-sm mt-0.5 font-medium group-hover:text-foreground transition-colors">
+                    +977 9865575108
+                  </p>
+                </div>
+              </a>
             </div>
 
             <div className="p-6 bg-card border border-border rounded-2xl flex items-center gap-3">

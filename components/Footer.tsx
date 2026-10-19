@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import TrekkingGuideIcon from "./TrekkingGuideIcon"
-import { FacebookIcon, TikTokIcon, YouTubeIcon, InstagramIcon, TwitterIcon } from "./SocialIcons"
+import { FacebookIcon, TikTokIcon, YouTubeIcon, InstagramIcon, TwitterIcon, WhatsAppIcon } from "./SocialIcons"
 
 const DEFAULTS = {
   bio: "The definitive guide for digital nomads in Nepal. Get up-to-date info on the Nepal Nomad Visa, Pokhara remote work hubs, and the cost of living for 2026.\n\nBuilt for remote workers, freelancers, and location-independent entrepreneurs exploring Nepal.",
@@ -98,6 +98,16 @@ export default function Footer() {
                   <TwitterIcon size={17} />
                 </a>
               )}
+              <a
+                href="https://wa.me/9779865575108?text=Hi!%20I'm%20planning%20to%20work%20remotely%20in%20Nepal%20and%20have%20a%20quick%20question."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-[#25D366] transition-all hover:-translate-y-1"
+                aria-label="WhatsApp"
+                title="Chat on WhatsApp"
+              >
+                <WhatsAppIcon size={19} />
+              </a>
             </div>
             <div className="flex items-center text-sm font-medium text-muted-foreground">
               <span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-2 shadow-[0_0_8px_rgba(34,197,94,0.5)]"></span>
