@@ -56,6 +56,7 @@ export async function GET(req: Request) {
       searchQueries.push(
         prisma.workHub.findMany({
           where: {
+            published: true,
             OR: [
               { name: { contains: query } },
               { city: { contains: query } },

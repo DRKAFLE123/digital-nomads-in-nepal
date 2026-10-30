@@ -4,6 +4,16 @@ import { NextRequest, NextResponse } from "next/server"
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
 
+  // 0. Redirect Sofa Hub / Workspace keyword traffic to homepage
+  const lowerPath = pathname.toLowerCase()
+  if (
+    lowerPath.includes("sofa-hub") ||
+    lowerPath.includes("sofahub") ||
+    ((lowerPath.startsWith("/workspaces") || lowerPath.startsWith("/resources/coworking")) && lowerPath.includes("sofa"))
+  ) {
+    return NextResponse.redirect(new URL("/", req.url), 301)
+  }
+
   // 1. Protect Owner Dashboard (/owner/dashboard)
   if (pathname.startsWith("/owner/dashboard")) {
     const token = await getToken({ req })
@@ -97,6 +107,12 @@ export const config = {
     "/guides/dashboard/:path*",
     "/guides/dashboard",
     "/nomad/bookings/:path*",
-    "/nomad/bookings"
+    "/nomad/bookings",
+    "/workspaces/:path*",
+    "/resources/coworking/:path*",
+    "/sofa-hub",
+    "/sofa-hub/:path*",
+    "/sofahub",
+    "/sofahub/:path*"
   ],
 }

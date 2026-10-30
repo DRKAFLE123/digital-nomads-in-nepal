@@ -146,7 +146,10 @@ export default async function Home() {
       url: socialConfig.facebook,
       enabled: socialConfig.showFacebook && Boolean(socialConfig.facebook),
       icon: FacebookIcon,
-      hoverClass: "hover:bg-[#1877F2]/10 hover:border-[#1877F2] group-hover:text-[#1877F2]",
+      hoverCardClass: "hover:border-[#1877F2] hover:bg-gradient-to-b hover:from-[#1877F2]/20 hover:via-[#1877F2]/5 hover:to-transparent hover:shadow-[0_12px_30px_-5px_rgba(24,119,242,0.35)]",
+      hoverIconClass: "group-hover:text-[#1877F2] group-hover:scale-110 group-hover:drop-shadow-[0_0_14px_rgba(24,119,242,0.7)]",
+      hoverTitleClass: "group-hover:text-white",
+      hoverBadgeClass: "group-hover:text-[#1877F2]",
       badgeText: "Nomad Group & Meetups",
     },
     {
@@ -154,7 +157,10 @@ export default async function Home() {
       url: socialConfig.tiktok,
       enabled: socialConfig.showTiktok && Boolean(socialConfig.tiktok),
       icon: TikTokIcon,
-      hoverClass: "hover:bg-pink-500/10 hover:border-pink-500 group-hover:text-pink-500",
+      hoverCardClass: "hover:border-[#00f2fe] hover:bg-gradient-to-b hover:from-[#fe2c55]/20 hover:via-[#00f2fe]/10 hover:to-transparent hover:shadow-[0_12px_30px_-5px_rgba(254,44,85,0.35)]",
+      hoverIconClass: "group-hover:text-[#fe2c55] group-hover:scale-110 group-hover:drop-shadow-[0_0_14px_rgba(0,242,254,0.8)]",
+      hoverTitleClass: "group-hover:text-white",
+      hoverBadgeClass: "group-hover:text-[#00f2fe]",
       badgeText: "Short Travel Videos",
     },
     {
@@ -162,7 +168,10 @@ export default async function Home() {
       url: socialConfig.youtube,
       enabled: socialConfig.showYoutube && Boolean(socialConfig.youtube),
       icon: YouTubeIcon,
-      hoverClass: "hover:bg-red-500/10 hover:border-red-500 group-hover:text-red-500",
+      hoverCardClass: "hover:border-[#FF0000] hover:bg-gradient-to-b hover:from-[#FF0000]/20 hover:via-[#FF0000]/5 hover:to-transparent hover:shadow-[0_12px_30px_-5px_rgba(255,0,0,0.35)]",
+      hoverIconClass: "group-hover:text-[#FF0000] group-hover:scale-110 group-hover:drop-shadow-[0_0_14px_rgba(255,0,0,0.7)]",
+      hoverTitleClass: "group-hover:text-white",
+      hoverBadgeClass: "group-hover:text-red-400",
       badgeText: "Vlogs & Space Tours",
     },
     {
@@ -170,7 +179,10 @@ export default async function Home() {
       url: socialConfig.instagram,
       enabled: socialConfig.showInstagram && Boolean(socialConfig.instagram),
       icon: InstagramIcon,
-      hoverClass: "hover:bg-purple-500/10 hover:border-purple-500 group-hover:text-pink-500",
+      hoverCardClass: "hover:border-[#E1306C] hover:bg-gradient-to-br hover:from-[#833AB4]/25 hover:via-[#FD1D1D]/20 hover:to-[#FCAF45]/20 hover:shadow-[0_12px_30px_-5px_rgba(225,48,108,0.35)]",
+      hoverIconClass: "group-hover:text-[#E1306C] group-hover:scale-110 group-hover:drop-shadow-[0_0_14px_rgba(225,48,108,0.7)]",
+      hoverTitleClass: "group-hover:text-white",
+      hoverBadgeClass: "group-hover:text-pink-400",
       badgeText: "Daily Stories & Tips",
     },
     {
@@ -178,7 +190,10 @@ export default async function Home() {
       url: socialConfig.twitter,
       enabled: Boolean(socialConfig.showTwitter) && Boolean(socialConfig.twitter),
       icon: TwitterIcon,
-      hoverClass: "hover:bg-white/10 hover:border-white group-hover:text-white",
+      hoverCardClass: "hover:border-zinc-400 hover:bg-gradient-to-b hover:from-white/15 hover:via-white/5 hover:to-transparent hover:shadow-[0_12px_30px_-5px_rgba(255,255,255,0.2)]",
+      hoverIconClass: "group-hover:text-white group-hover:scale-110 group-hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.6)]",
+      hoverTitleClass: "group-hover:text-white",
+      hoverBadgeClass: "group-hover:text-zinc-300",
       badgeText: "Fast News & Alerts",
     },
   ].filter(s => s.enabled)
@@ -741,11 +756,11 @@ export default async function Home() {
                       href={social.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`flex flex-col items-center justify-center p-6 bg-background border border-border rounded-2xl transition-all duration-300 group shadow-sm hover:-translate-y-1 ${social.hoverClass}`}
+                      className={`flex flex-col items-center justify-center p-6 bg-background border border-border rounded-2xl transition-all duration-300 group shadow-sm hover:-translate-y-1.5 ${social.hoverCardClass}`}
                     >
-                      <Icon size={32} className="text-muted-foreground mb-3 transition-colors" />
-                      <span className="text-foreground font-bold text-sm">{social.name}</span>
-                      <span className="text-[11px] text-muted-foreground mt-1 text-center line-clamp-1">
+                      <Icon size={34} className={`text-muted-foreground mb-3 transition-all duration-300 ${social.hoverIconClass}`} />
+                      <span className={`text-foreground font-bold text-sm transition-colors duration-300 ${social.hoverTitleClass}`}>{social.name}</span>
+                      <span className={`text-[11px] text-muted-foreground mt-1 text-center line-clamp-1 transition-colors duration-300 ${social.hoverBadgeClass}`}>
                         {social.badgeText}
                       </span>
                     </a>

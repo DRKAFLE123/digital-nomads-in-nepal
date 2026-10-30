@@ -1,4 +1,5 @@
 import { Metadata } from "next"
+import { redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { generateCoworkingJsonLd, generateBreadcrumbJsonLd } from "@/lib/seo"
 
@@ -14,9 +15,10 @@ export async function generateMetadata({
   const baseUrl = "https://digitalnomadsinnepal.com"
   const url = `${baseUrl}/resources/coworking/${params.slug}`
 
-  if (!hub) {
+  if (!hub || !hub.published) {
     return {
       title: "Coworking Space in Nepal | Digital Nomads in Nepal",
+      robots: { index: false, follow: false },
       alternates: { canonical: url },
     }
   }
@@ -80,11 +82,21 @@ export default async function CoworkingDetailLayout({
   children: React.ReactNode
   params: { slug: string }
 }) {
+  if (params.slug?.toLowerCase().includes("sofa")) {
+    redirect("/")
+  }
+
   const hub = await prisma.workHub.findUnique({
     where: { slug: params.slug },
   }).catch(() => null)
 
-  const coworkingJsonLd = hub
+  if (hub && !hub.published) {
+    redirect("/")
+  }
+
+  const isPublished = hub && hub.published
+
+  const coworkingJsonLd = isPublished
     ? generateCoworkingJsonLd({
         name: hub.name,
         slug: hub.slug,

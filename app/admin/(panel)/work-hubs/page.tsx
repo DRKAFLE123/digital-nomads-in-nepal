@@ -41,6 +41,7 @@ type Hub = {
   totalReviews: number;
   isVerified: boolean;
   isPartner: boolean;
+  published?: boolean;
   photoUrl: string | null;
   facilities: string[];
   priceDaily: number | null;
@@ -119,6 +120,7 @@ export default function AdminWorkHubsPage() {
   const [priceMonthly, setPriceMonthly] = useState("");
   const [isVerified, setIsVerified] = useState(false);
   const [isPartner, setIsPartner] = useState(false);
+  const [published, setPublished] = useState(true);
   const [rating, setRating] = useState("4.5");
   const [totalReviews, setTotalReviews] = useState("0");
 
@@ -185,6 +187,7 @@ export default function AdminWorkHubsPage() {
       setPriceMonthly(hub.priceMonthly?.toString() || "");
       setIsVerified(hub.isVerified);
       setIsPartner(hub.isPartner);
+      setPublished(hub.published !== false);
       setRating(hub.rating.toString());
       setTotalReviews(hub.totalReviews.toString());
 
@@ -216,6 +219,7 @@ export default function AdminWorkHubsPage() {
       setPriceMonthly("");
       setIsVerified(true);
       setIsPartner(true);
+      setPublished(true);
       setRating("4.8");
       setTotalReviews("12");
 
@@ -278,6 +282,7 @@ export default function AdminWorkHubsPage() {
       priceMonthly: priceMonthly ? parseFloat(priceMonthly) : null,
       isVerified,
       isPartner,
+      published,
       rating: parseFloat(rating),
       totalReviews: parseInt(totalReviews),
     };
@@ -491,6 +496,15 @@ export default function AdminWorkHubsPage() {
                         </td>
                         <td className="p-4">
                           <div className="flex flex-wrap gap-1">
+                            {hub.published === false ? (
+                              <span className="flex items-center gap-0.5 bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded text-[9px] font-bold">
+                                Draft
+                              </span>
+                            ) : (
+                              <span className="flex items-center gap-0.5 bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded text-[9px] font-bold">
+                                Published
+                              </span>
+                            )}
                             {hub.isPartner && (
                               <span className="flex items-center gap-0.5 bg-yellow-400/10 text-yellow-400 border border-yellow-400/20 px-2 py-0.5 rounded text-[9px] font-bold">
                                 <Award size={8} /> Partner
@@ -886,7 +900,16 @@ export default function AdminWorkHubsPage() {
               </div>
 
               {/* Status Toggles */}
-              <div className="flex gap-6 items-center pt-2">
+              <div className="flex flex-wrap gap-6 items-center pt-2">
+                <label className="flex items-center gap-2 text-xs font-bold text-white cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={published}
+                    onChange={(e) => setPublished(e.target.checked)}
+                    className="accent-primary"
+                  />
+                  <span>Published (Publicly Visible)</span>
+                </label>
                 <label className="flex items-center gap-2 text-xs font-bold text-white cursor-pointer select-none">
                   <input
                     type="checkbox"

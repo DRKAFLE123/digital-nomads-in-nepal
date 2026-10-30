@@ -97,6 +97,37 @@ const nextConfig = {
         destination: '/workspaces/register',
         permanent: true,
       },
+      // ── Sofa Hub Draft & Traffic Redirects to Homepage ──
+      {
+        source: '/workspaces/sofa-hub-:slug*',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/resources/coworking/sofa-hub-:slug*',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/sofa-hub',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/sofa-hub/:slug*',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/sofahub',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/sofahub/:slug*',
+        destination: '/',
+        permanent: true,
+      },
       {
         source: '/resources/coworking/:slug',
         destination: '/workspaces/:slug',

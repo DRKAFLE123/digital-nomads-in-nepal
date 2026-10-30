@@ -10,7 +10,7 @@ export async function GET(
       where: { slug: params.slug }
     })
 
-    if (!hub) {
+    if (!hub || !hub.published) {
       return NextResponse.json({ error: "Work hub not found" }, { status: 404 })
     }
 

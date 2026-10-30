@@ -19,7 +19,7 @@ export default async function SitemapPage() {
   const [destinations, posts, hubs, guides] = await Promise.all([
     prisma.destination.findMany({ select: { slug: true, name: true }, orderBy: { name: "asc" } }).catch(() => []),
     prisma.post.findMany({ where: { published: true }, select: { slug: true, title: true }, orderBy: { createdAt: "desc" } }).catch(() => []),
-    prisma.workHub.findMany({ select: { slug: true, name: true, city: true }, orderBy: { name: "asc" } }).catch(() => []),
+    prisma.workHub.findMany({ where: { published: true }, select: { slug: true, name: true, city: true }, orderBy: { name: "asc" } }).catch(() => []),
     prisma.guide.findMany({ where: { isVerified: true }, select: { id: true, name: true, location: true }, orderBy: { avgRating: "desc" } }).catch(() => []),
   ])
 

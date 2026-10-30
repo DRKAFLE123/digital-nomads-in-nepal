@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client"
 import { useState, useEffect, useCallback } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
@@ -49,9 +50,16 @@ function parsePhotos(photoUrl: string | null): string[] {
 }
 
 export default function CoworkingDetailPage({ params }: { params: { slug: string } }) {
+  const router = useRouter()
   const [hub, setHub] = useState<Hub | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
+
+  useEffect(() => {
+    if (params.slug?.toLowerCase().includes("sofa")) {
+      router.replace("/")
+    }
+  }, [params.slug, router])
 
   // Gallery, Lightbox, Enquiry & Booking Modal State
   const [selectedImgIdx, setSelectedImgIdx] = useState(0)
