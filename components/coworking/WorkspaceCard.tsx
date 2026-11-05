@@ -130,7 +130,7 @@ export default function WorkspaceCard({ hub }: WorkspaceCardProps) {
 
         {/* Top-Left Single Badge (Verified or Partner) */}
         {(hub.isVerified || hub.isPartner) && (
-          <span className="absolute top-3 left-3 bg-[#F5B301] text-[#1A1A1C] text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm z-10">
+          <span className="absolute top-3 left-3 bg-[#C2410C] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm z-10">
             {hub.isVerified ? "Verified" : "Partner"}
           </span>
         )}
@@ -158,7 +158,7 @@ export default function WorkspaceCard({ hub }: WorkspaceCardProps) {
       <div className="p-4 sm:p-5 flex flex-col justify-between space-y-3">
         <div>
           {/* Title: 18px (text-lg), 600 weight, max 2 lines */}
-          <h3 className="text-base sm:text-[17px] font-semibold text-gray-900 dark:text-[#F5F5F4] group-hover:text-[#B45309] dark:group-hover:text-[#F5B301] transition-colors line-clamp-1 leading-snug">
+          <h3 className="text-base sm:text-[17px] font-semibold text-gray-900 dark:text-[#F5F5F4] group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors line-clamp-1 leading-snug">
             {hub.name}
           </h3>
 
@@ -170,7 +170,7 @@ export default function WorkspaceCard({ hub }: WorkspaceCardProps) {
               <>
                 <span className="text-gray-300 dark:text-gray-600 select-none">·</span>
                 <span className="flex items-center gap-0.5 text-gray-700 dark:text-gray-300 font-medium">
-                  <Star size={11} className="fill-[#F5B301] text-[#F5B301]" />
+                  <Star size={11} className="fill-[#EA580C] text-[#EA580C]" />
                   <span>{hub.rating.toFixed(1)}</span>
                 </span>
                 {hub.totalReviews > 0 && (
@@ -190,7 +190,7 @@ export default function WorkspaceCard({ hub }: WorkspaceCardProps) {
                 key={idx}
                 className="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-full bg-[#F3EEE5] dark:bg-[#1C1C1F] text-gray-800 dark:text-[#E4E4E7] border border-[#E8E2D8] dark:border-[#26262A]"
               >
-                {Icon && <Icon size={11} className="text-[#F5B301] shrink-0" />}
+                {Icon && <Icon size={11} className="text-[#C2410C] dark:text-[#FB923C] shrink-0" />}
                 <span>{chip.label}</span>
               </span>
             )

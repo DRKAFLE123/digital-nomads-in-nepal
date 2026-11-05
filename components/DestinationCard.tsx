@@ -48,7 +48,7 @@ export default function DestinationCard({ name, description, image, slug, counts
         <p className="text-xs sm:text-sm font-medium text-gray-300 flex items-center gap-1 mb-2">
           <span>{displayCounts}</span>
         </p>
-        <div className="inline-flex items-center text-xs font-bold text-[#F5B301] group-hover:translate-x-1 transition-transform">
+        <div className="inline-flex items-center text-xs font-bold text-[#FB923C] group-hover:translate-x-1 transition-transform">
           <span>Explore destination</span>
           <ArrowRight size={12} className="ml-1" />
         </div>

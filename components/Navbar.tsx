@@ -399,15 +399,15 @@ export default function Navbar() {
               >
                 <span className={`font-black text-xs sm:text-[15px] md:text-[17px] tracking-normal leading-tight uppercase transition-colors text-center ${
                   isSolid
-                    ? "text-gray-900 dark:text-[#F5F5F5] lg:group-hover/name:text-[#B45309] dark:lg:group-hover/name:text-[#F5B301]"
-                    : "text-white lg:group-hover/name:text-[#F5B301]"
+                    ? "text-gray-900 dark:text-[#F5F5F5] lg:group-hover/name:text-[#C2410C] dark:lg:group-hover/name:text-[#FB923C]"
+                    : "text-white lg:group-hover/name:text-[#FB923C]"
                 } ${
                   !isScrolled ? "inline-block" : "hidden sm:inline-block"
                 }`}>
                   DIGITAL NOMADS
                 </span>
                 <span className={`w-full flex items-center justify-center gap-1.5 font-black text-[9.5px] sm:text-[11.5px] tracking-[0.2em] uppercase leading-none mt-0.5 select-none text-center ${
-                  isSolid ? "text-[#B45309] dark:text-[#F5B301]" : "text-[#F5B301]"
+                  isSolid ? "text-[#C2410C] dark:text-[#FB923C]" : "text-[#FB923C]"
                 } ${
                   !isScrolled ? "flex" : "hidden sm:flex"
                 }`}>
@@ -646,20 +646,28 @@ export default function Navbar() {
                                     onClick={() => setActiveDropdown(null)}
                                     className={`group/item flex items-center justify-between p-2.5 rounded-xl border transition-all ${
                                       isHovered
-                                        ? "bg-amber-500/10 border-amber-500/40 text-[#FFD400]"
+                                        ? "bg-[#C2410C]/10 border-[#C2410C]/35 text-[#C2410C] dark:text-[#FB923C]"
                                         : "bg-gray-50/80 dark:bg-[#161616] border-transparent hover:border-gray-200 dark:hover:border-[#282828] text-gray-900 dark:text-white"
                                     }`}
                                   >
                                     <div className="min-w-0 pr-2">
                                       <div className="flex items-center gap-2 mb-0.5">
-                                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-400/15 text-amber-600 dark:text-amber-400 uppercase tracking-wide">
+                                        <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wide transition-colors ${
+                                          isHovered
+                                            ? "bg-[#C2410C] text-white"
+                                            : "bg-[#C2410C]/10 text-[#C2410C] dark:bg-[#FB923C]/15 dark:text-[#FB923C]"
+                                        }`}>
                                           {post.category || "Guide"}
                                         </span>
                                         <span className="text-[10px] text-muted-foreground">
                                           {post.readTime}
                                         </span>
                                       </div>
-                                      <h4 className="text-xs font-bold truncate group-hover/item:text-primary transition-colors">
+                                      <h4 className={`text-xs font-bold truncate transition-colors ${
+                                        isHovered
+                                          ? "text-[#C2410C] dark:text-[#FB923C]"
+                                          : "text-gray-900 dark:text-white group-hover/item:text-[#C2410C] dark:group-hover/item:text-[#FB923C]"
+                                      }`}>
                                         {post.title}
                                       </h4>
                                     </div>
@@ -667,7 +675,7 @@ export default function Navbar() {
                                       size={14}
                                       className={`shrink-0 transition-transform ${
                                         isHovered
-                                          ? "translate-x-1 text-primary"
+                                          ? "translate-x-1 text-[#C2410C] dark:text-[#FB923C]"
                                           : "text-muted-foreground opacity-60"
                                       }`}
                                     />
@@ -857,10 +865,10 @@ export default function Navbar() {
                     </div>
                     <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-[#141416]" title="Online" />
                   </div>
-                  <span className="text-xs font-bold text-gray-800 dark:text-gray-200 group-hover/avatar:text-[#FFD400] max-w-[85px] truncate hidden sm:inline-block transition-colors">
+                  <span className="text-xs font-bold text-gray-800 dark:text-gray-200 group-hover/avatar:text-[#C2410C] dark:group-hover/avatar:text-[#FB923C] max-w-[85px] truncate hidden sm:inline-block transition-colors">
                     {session.user?.name?.split(" ")[0] || "Account"}
                   </span>
-                  <ChevronDown size={13} className="text-gray-400 group-hover/avatar:text-[#FFD400] transition-transform duration-200 group-hover/avatar:rotate-180" />
+                  <ChevronDown size={13} className="text-gray-400 group-hover/avatar:text-[#C2410C] dark:group-hover/avatar:text-[#FB923C] transition-transform duration-200 group-hover/avatar:rotate-180" />
                 </button>
               </div>
             ) : (
@@ -869,8 +877,8 @@ export default function Navbar() {
                 href="/auth/signin"
                 className={`text-xs font-bold px-4 py-2 rounded-full border transition-all whitespace-nowrap cursor-pointer ${
                   isSolid
-                    ? "border-[#E8E2D8] dark:border-[#26262A] text-gray-800 dark:text-[#F5F5F4] hover:border-[#B45309] dark:hover:border-[#F5B301] hover:text-[#B45309] dark:hover:text-[#F5B301] bg-white/60 dark:bg-[#141416]/60 shadow-xs"
-                    : "border-white/25 text-white hover:border-[#F5B301] hover:text-[#F5B301] bg-white/10 backdrop-blur-sm"
+                    ? "border-[#E8E2D8] dark:border-[#26262A] text-gray-800 dark:text-[#F5F5F4] hover:border-[#C2410C] dark:hover:border-[#FB923C] hover:text-[#C2410C] dark:hover:text-[#FB923C] bg-white/60 dark:bg-[#141416]/60 shadow-xs"
+                    : "border-white/25 text-white hover:border-[#FB923C] hover:text-[#FB923C] bg-white/10 backdrop-blur-sm"
                 }`}
               >
                 Sign In
@@ -884,8 +892,8 @@ export default function Navbar() {
               onClick={() => setIsSearchOpen(true)}
               className={`flex items-center justify-center w-9 h-9 rounded-full border transition-all cursor-pointer ${
                 isSolid
-                  ? "bg-gray-100/90 hover:bg-gray-200 dark:bg-[#161616] dark:hover:bg-[#202020] border-gray-200 dark:border-[#2A2A2A] text-gray-700 dark:text-gray-200 hover:text-[#B45309] dark:hover:text-[#FFD400] shadow-xs"
-                  : "bg-white/10 hover:bg-white/20 border-white/20 text-white hover:text-[#FFD400] backdrop-blur-sm"
+                  ? "bg-gray-100/90 hover:bg-gray-200 dark:bg-[#161616] dark:hover:bg-[#202020] border-gray-200 dark:border-[#2A2A2A] text-gray-700 dark:text-gray-200 hover:text-[#C2410C] dark:hover:text-[#FB923C] shadow-xs"
+                  : "bg-white/10 hover:bg-white/20 border-white/20 text-white hover:text-[#FB923C] backdrop-blur-sm"
               }`}
               title="Search workspaces, guides, destinations (Ctrl+K)"
               aria-label="Search"
@@ -897,7 +905,7 @@ export default function Navbar() {
             <div className="relative group/booknow">
               <Link
                 href="/resources/coworking#book"
-                className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#F5B301] hover:bg-[#E0A200] text-[#1A1A1C] font-bold text-xs rounded-full transition-all shadow-sm active:scale-95 whitespace-nowrap cursor-pointer z-10"
+                className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold text-xs rounded-full transition-all shadow-sm active:scale-95 whitespace-nowrap cursor-pointer z-10"
               >
                 <CalendarCheck size={13} className="group-hover/booknow:rotate-12 transition-transform duration-200" />
                 <span>Book Now</span>
@@ -1171,7 +1179,7 @@ export default function Navbar() {
                 <Link
                   href="/about"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block py-2.5 text-sm font-semibold text-gray-900 dark:text-white hover:text-[#FFD400] transition-colors"
+                  className="block py-2.5 text-sm font-semibold text-gray-900 dark:text-white hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors"
                 >
                   About Us
                 </Link>
@@ -1184,7 +1192,7 @@ export default function Navbar() {
                 <Link
                   href="/auth/signin"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center text-center w-full px-4 py-3 bg-[#F5B301] hover:bg-[#E0A200] text-[#1A1A1C] font-bold rounded-xl text-xs transition-all shadow-sm"
+                  className="flex items-center justify-center text-center w-full px-4 py-3 bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold rounded-xl text-xs transition-all shadow-sm"
                 >
                   Sign In
                 </Link>

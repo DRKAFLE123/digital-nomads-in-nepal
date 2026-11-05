@@ -164,8 +164,8 @@ export default function HeroSection() {
       <div className="relative z-20 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 sm:pt-40 sm:pb-28 text-center flex flex-col items-center">
         
         {/* Eyebrow Label */}
-        <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-[#F5B301] mb-4 bg-black/50 backdrop-blur-md border border-white/15 px-3.5 py-1 rounded-full shadow-sm">
-          <Compass size={13} className="text-[#F5B301]" />
+        <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-[#FB923C] mb-4 bg-black/50 backdrop-blur-md border border-white/15 px-3.5 py-1 rounded-full shadow-sm">
+          <Compass size={13} className="text-[#FB923C]" />
           <span>The Himalayan Remote Work Ecosystem</span>
         </div>
 
@@ -174,7 +174,7 @@ export default function HeroSection() {
           <span className="block font-bold text-3xl sm:text-5xl lg:text-6xl text-white leading-[1.08]">
             Digital Nomads in Nepal
           </span>
-          <span className="block font-serif italic font-normal text-2xl sm:text-4xl lg:text-5xl text-[#F5B301] mt-1 sm:mt-2 leading-[1.15]">
+          <span className="block font-serif italic font-normal text-2xl sm:text-4xl lg:text-5xl text-[#FB923C] mt-1 sm:mt-2 leading-[1.15]">
             Live, Work &amp; Explore
           </span>
         </h1>
@@ -210,7 +210,7 @@ export default function HeroSection() {
               <ChevronDown
                 size={14}
                 className={`text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-transform duration-200 shrink-0 ${
-                  whereOpen ? "rotate-180 text-[#F5B301]" : ""
+                  whereOpen ? "rotate-180 text-[#FB923C]" : ""
                 }`}
               />
             </button>
@@ -233,15 +233,15 @@ export default function HeroSection() {
                       }}
                       className={`w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors ${
                         isSelected
-                          ? "bg-[#F5B301]/15 text-[#B45309] dark:text-[#F5B301]"
+                          ? "bg-[#C2410C]/15 text-[#C2410C] dark:text-[#FB923C]"
                           : "text-gray-800 dark:text-gray-200 hover:bg-[#FAF7F2] dark:hover:bg-[#1C1C1F]"
                       }`}
                     >
                       <span className="flex items-center gap-2 truncate">
-                        <MapPin size={13} className={isSelected ? "text-[#F5B301]" : "text-gray-400"} />
+                        <MapPin size={13} className={isSelected ? "text-[#C2410C] dark:text-[#FB923C]" : "text-gray-400"} />
                         <span className="truncate">{loc.label}</span>
                       </span>
-                      {isSelected && <Check size={14} className="text-[#F5B301] shrink-0" />}
+                      {isSelected && <Check size={14} className="text-[#C2410C] dark:text-[#FB923C] shrink-0" />}
                     </button>
                   )
                 })}
@@ -273,7 +273,7 @@ export default function HeroSection() {
               <ChevronDown
                 size={14}
                 className={`text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-transform duration-200 shrink-0 ${
-                  whatOpen ? "rotate-180 text-[#F5B301]" : ""
+                  whatOpen ? "rotate-180 text-[#FB923C]" : ""
                 }`}
               />
             </button>
@@ -297,15 +297,15 @@ export default function HeroSection() {
                       }}
                       className={`w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors ${
                         isSelected
-                          ? "bg-[#F5B301]/15 text-[#B45309] dark:text-[#F5B301]"
+                          ? "bg-[#C2410C]/15 text-[#C2410C] dark:text-[#FB923C]"
                           : "text-gray-800 dark:text-gray-200 hover:bg-[#FAF7F2] dark:hover:bg-[#1C1C1F]"
                       }`}
                     >
                       <span className="flex items-center gap-2 truncate">
-                        <Icon size={13} className={isSelected ? "text-[#F5B301]" : "text-gray-400"} />
+                        <Icon size={13} className={isSelected ? "text-[#C2410C] dark:text-[#FB923C]" : "text-gray-400"} />
                         <span className="truncate">{cat.label}</span>
                       </span>
-                      {isSelected && <Check size={14} className="text-[#F5B301] shrink-0" />}
+                      {isSelected && <Check size={14} className="text-[#C2410C] dark:text-[#FB923C] shrink-0" />}
                     </button>
                   )
                 })}
@@ -313,10 +313,10 @@ export default function HeroSection() {
             )}
           </div>
 
-          {/* Search Button (Full width on small phones, pill on desktop) */}
+          {/* Search Button (Solid Terracotta, Crisp White Text passes AA/AAA) */}
           <button
             type="submit"
-            className="w-full sm:w-auto bg-[#F5B301] hover:bg-[#E0A200] active:scale-95 text-[#1A1A1C] font-bold text-xs sm:text-sm px-6 sm:px-8 py-3 rounded-xl sm:rounded-full transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer shrink-0 mt-1 sm:mt-0"
+            className="w-full sm:w-auto bg-[#C2410C] hover:bg-[#9A3412] active:scale-95 text-white font-bold text-xs sm:text-sm px-6 sm:px-8 py-3 rounded-xl sm:rounded-full transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer shrink-0 mt-1 sm:mt-0"
           >
             <span>Search</span>
           </button>
@@ -326,7 +326,7 @@ export default function HeroSection() {
         <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-5 text-xs sm:text-sm font-semibold text-gray-300">
           <Link
             href="/workspaces"
-            className="hover:text-[#F5B301] transition-colors inline-flex items-center gap-1 group py-1"
+            className="hover:text-[#FB923C] transition-colors inline-flex items-center gap-1 group py-1"
           >
             <span>Workspaces</span>
             <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
@@ -336,7 +336,7 @@ export default function HeroSection() {
 
           <Link
             href="/stay"
-            className="hover:text-[#F5B301] transition-colors inline-flex items-center gap-1 group py-1"
+            className="hover:text-[#FB923C] transition-colors inline-flex items-center gap-1 group py-1"
           >
             <span>Stays &amp; coliving</span>
             <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
@@ -346,7 +346,7 @@ export default function HeroSection() {
 
           <Link
             href="/guides"
-            className="hover:text-[#F5B301] transition-colors inline-flex items-center gap-1 group py-1"
+            className="hover:text-[#FB923C] transition-colors inline-flex items-center gap-1 group py-1"
           >
             <span>Local guides</span>
             <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />

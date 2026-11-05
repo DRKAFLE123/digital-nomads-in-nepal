@@ -172,7 +172,7 @@ function UnifiedAuthForm() {
               <span className="font-black text-sm sm:text-base tracking-normal uppercase text-gray-900 dark:text-white leading-tight">
                 DIGITAL NOMADS
               </span>
-              <div className="w-full flex items-center justify-center gap-1.5 font-extrabold text-[9px] text-[#B45309] dark:text-[#F5B301] tracking-[0.16em] uppercase leading-none mt-1 select-none text-center">
+              <div className="w-full flex items-center justify-center gap-1.5 font-extrabold text-[9px] text-[#C2410C] dark:text-[#FB923C] tracking-[0.16em] uppercase leading-none mt-1 select-none text-center">
                 <span className="opacity-60 font-medium select-none">—</span>
                 <span>IN NEPAL</span>
                 <span className="opacity-60 font-medium select-none">—</span>
@@ -191,15 +191,15 @@ function UnifiedAuthForm() {
             </h1>
             <p className="text-xs sm:text-[13px] text-gray-500 dark:text-[#A8A8B0] leading-relaxed max-w-sm mx-auto">
               By continuing, including through our platform partners, you agree to our{" "}
-              <Link href="/terms" className="text-[#B45309] dark:text-[#F5B301] font-medium hover:underline">
+              <Link href="/terms" className="text-[#C2410C] dark:text-[#FB923C] font-medium hover:underline">
                 User Agreement
               </Link>{" "}
               (including{" "}
-              <Link href="/terms#arbitration" className="text-[#B45309] dark:text-[#F5B301] font-medium hover:underline">
+              <Link href="/terms#arbitration" className="text-[#C2410C] dark:text-[#FB923C] font-medium hover:underline">
                 arbitration provisions
               </Link>
               ) and acknowledge our{" "}
-              <Link href="/privacy" className="text-[#B45309] dark:text-[#F5B301] font-medium hover:underline">
+              <Link href="/privacy" className="text-[#C2410C] dark:text-[#FB923C] font-medium hover:underline">
                 Privacy Policy
               </Link>
               .
@@ -322,7 +322,7 @@ function UnifiedAuthForm() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="you@example.com"
-                className="w-full bg-[#FAF7F2] dark:bg-[#0B0B0C] border border-[#E8E2D8] dark:border-[#26262A] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-gray-900 dark:text-white focus:outline-none focus:border-[#B45309] dark:focus:border-[#F5B301] transition-colors"
+                className="w-full bg-[#FAF7F2] dark:bg-[#0B0B0C] border border-[#E8E2D8] dark:border-[#26262A] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-gray-900 dark:text-white focus:outline-none focus:border-[#C2410C] dark:focus:border-[#FB923C] transition-colors"
               />
             </div>
 
@@ -338,7 +338,7 @@ function UnifiedAuthForm() {
                   required
                   minLength={6}
                   placeholder="••••••••"
-                  className="w-full bg-[#FAF7F2] dark:bg-[#0B0B0C] border border-[#E8E2D8] dark:border-[#26262A] rounded-xl pl-3.5 pr-10 py-2.5 text-xs sm:text-sm text-gray-900 dark:text-white focus:outline-none focus:border-[#B45309] dark:focus:border-[#F5B301] transition-colors"
+                  className="w-full bg-[#FAF7F2] dark:bg-[#0B0B0C] border border-[#E8E2D8] dark:border-[#26262A] rounded-xl pl-3.5 pr-10 py-2.5 text-xs sm:text-sm text-gray-900 dark:text-white focus:outline-none focus:border-[#C2410C] dark:focus:border-[#FB923C] transition-colors"
                 />
                 <button
                   type="button"
@@ -364,7 +364,7 @@ function UnifiedAuthForm() {
                     required
                     minLength={6}
                     placeholder="••••••••"
-                    className="w-full bg-[#FAF7F2] dark:bg-[#0B0B0C] border border-[#E8E2D8] dark:border-[#26262A] rounded-xl pl-3.5 pr-10 py-2.5 text-xs sm:text-sm text-gray-900 dark:text-white focus:outline-none focus:border-[#B45309] dark:focus:border-[#F5B301] transition-colors"
+                    className="w-full bg-[#FAF7F2] dark:bg-[#0B0B0C] border border-[#E8E2D8] dark:border-[#26262A] rounded-xl pl-3.5 pr-10 py-2.5 text-xs sm:text-sm text-gray-900 dark:text-white focus:outline-none focus:border-[#C2410C] dark:focus:border-[#FB923C] transition-colors"
                   />
                   <button
                     type="button"
@@ -378,11 +378,11 @@ function UnifiedAuthForm() {
               </div>
             )}
 
-            {/* Submit Button (Solid Saffron, dark charcoal text passes AAA) */}
+            {/* Submit Button (Solid Terracotta, White text passes AAA) */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#F5B301] hover:bg-[#E0A200] active:scale-[0.98] text-[#1A1A1C] font-bold text-xs sm:text-sm py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+              className="w-full bg-[#C2410C] hover:bg-[#9A3412] active:scale-[0.98] text-white font-bold text-xs sm:text-sm py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed mt-2"
             >
               <span>{loading ? "Processing..." : mode === "signin" ? "Continue with e-mail" : "Create Account & Continue"}</span>
               <ArrowRight size={14} />
@@ -401,7 +401,7 @@ function UnifiedAuthForm() {
                     setError("")
                     setSuccess("")
                   }}
-                  className="font-bold text-[#B45309] dark:text-[#F5B301] hover:underline cursor-pointer"
+                  className="font-bold text-[#C2410C] dark:text-[#FB923C] hover:underline cursor-pointer"
                 >
                   Create an account
                 </button>
@@ -416,7 +416,7 @@ function UnifiedAuthForm() {
                     setError("")
                     setSuccess("")
                   }}
-                  className="font-bold text-[#B45309] dark:text-[#F5B301] hover:underline cursor-pointer"
+                  className="font-bold text-[#C2410C] dark:text-[#FB923C] hover:underline cursor-pointer"
                 >
                   Sign in
                 </button>

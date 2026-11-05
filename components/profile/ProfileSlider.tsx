@@ -188,7 +188,7 @@ export default function ProfileSlider({
 
                     {/* Role & Location Badge */}
                     <div className="flex items-center gap-2 mt-1 flex-wrap">
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#FFD400]/15 text-[#B45309] dark:text-[#FFD400] border border-[#FFD400]/25">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#C2410C]/10 text-[#C2410C] dark:bg-[#FB923C]/15 dark:text-[#FB923C] border border-[#C2410C]/20">
                         {roleInfo.isOwner ? (
                           <>
                             <Building size={10} /> Coworking Owner
@@ -220,7 +220,7 @@ export default function ProfileSlider({
                   className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-white dark:bg-[#1E1E22] hover:bg-gray-100 dark:hover:bg-[#26262B] text-gray-900 dark:text-white font-bold text-xs border border-gray-200 dark:border-[#2C2C32] transition-all group/btn shadow-2xs"
                 >
                   <span className="flex items-center gap-2">
-                    <User size={14} className="text-[#FFD400]" />
+                    <User size={14} className="text-[#C2410C] dark:text-[#FB923C]" />
                     <span>View & Edit Profile</span>
                   </span>
                   <ChevronRight size={14} className="text-gray-400 group-hover/btn:translate-x-0.5 transition-transform" />
@@ -233,7 +233,7 @@ export default function ProfileSlider({
                     <button
                       type="button"
                       onClick={() => setUserMode(prev => (prev === "DASHBOARD" ? "NOMAD" : "DASHBOARD"))}
-                      className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-[#FFD400]/10 text-[#B45309] dark:text-[#FFD400] border border-[#FFD400]/30 hover:bg-[#FFD400]/20 transition-all flex items-center gap-1.5 cursor-pointer"
+                      className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-[#C2410C]/10 text-[#C2410C] dark:bg-[#FB923C]/15 dark:text-[#FB923C] border border-[#C2410C]/20 hover:bg-[#C2410C]/20 transition-all flex items-center gap-1.5 cursor-pointer"
                     >
                       <Repeat size={11} />
                       <span>{userMode === "DASHBOARD" ? "Switch to Nomad View" : "Switch to Portal"}</span>
@@ -453,7 +453,7 @@ export default function ProfileSlider({
             /* Guest / Unauthenticated Slide-out Experience */
             <div className="space-y-4 py-2">
               <div className="text-center p-5 rounded-2xl bg-gray-50 dark:bg-[#141416] border border-gray-200/80 dark:border-[#222226] space-y-3">
-                <div className="w-16 h-16 mx-auto rounded-full bg-[#FFD400]/20 text-[#B45309] dark:text-[#FFD400] flex items-center justify-center ring-4 ring-[#FFD400]/10">
+                <div className="w-16 h-16 mx-auto rounded-full bg-[#C2410C]/10 text-[#C2410C] dark:text-[#FB923C] flex items-center justify-center ring-4 ring-[#C2410C]/10">
                   <User size={28} />
                 </div>
                 <div>
@@ -469,7 +469,7 @@ export default function ProfileSlider({
                   <Link
                     href="/auth/signin"
                     onClick={onClose}
-                    className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#F5B301] hover:bg-[#E0A200] text-[#1A1A1C] font-bold text-xs transition-all shadow-sm"
+                    className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold text-xs transition-all shadow-sm"
                   >
                     <LogIn size={14} />
                     <span>Sign In or Create Account</span>

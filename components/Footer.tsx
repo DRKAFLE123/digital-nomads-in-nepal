@@ -75,27 +75,27 @@ export default function Footer() {
             {/* Social Media Icons */}
             <div className="flex items-center space-x-4 mb-6">
               {data.showFacebook !== false && data.facebook && (
-                <a href={data.facebook} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-all hover:-translate-y-1" aria-label="Facebook">
+                <a href={data.facebook} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-all hover:-translate-y-1" aria-label="Facebook">
                   <FacebookIcon size={19} />
                 </a>
               )}
               {data.showTiktok !== false && data.tiktok && (
-                <a href={data.tiktok} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-all hover:-translate-y-1" aria-label="TikTok">
+                <a href={data.tiktok} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-all hover:-translate-y-1" aria-label="TikTok">
                   <TikTokIcon size={19} />
                 </a>
               )}
               {data.showYoutube !== false && data.youtube && (
-                <a href={data.youtube} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-all hover:-translate-y-1" aria-label="YouTube">
+                <a href={data.youtube} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-all hover:-translate-y-1" aria-label="YouTube">
                   <YouTubeIcon size={19} />
                 </a>
               )}
               {data.showInstagram !== false && data.instagram && (
-                <a href={data.instagram} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-all hover:-translate-y-1" aria-label="Instagram">
+                <a href={data.instagram} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-all hover:-translate-y-1" aria-label="Instagram">
                   <InstagramIcon size={19} />
                 </a>
               )}
               {Boolean(data.showTwitter) && data.twitter && (
-                <a href={data.twitter} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-all hover:-translate-y-1" aria-label="X (formerly Twitter)">
+                <a href={data.twitter} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-all hover:-translate-y-1" aria-label="X (formerly Twitter)">
                   <TwitterIcon size={17} />
                 </a>
               )}
@@ -112,7 +112,7 @@ export default function Footer() {
             </div>
             <div className="flex items-center text-sm font-medium text-muted-foreground">
               <span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-2 shadow-[0_0_8px_rgba(34,197,94,0.5)]"></span>
-              <MapPin size={13} className="text-[#B45309] dark:text-[#F5B301] mr-1 shrink-0" />
+              <MapPin size={13} className="text-[#C2410C] dark:text-[#FB923C] mr-1 shrink-0" />
               <span>{data.basecamp}</span>
             </div>
           </div>
@@ -121,19 +121,19 @@ export default function Footer() {
           <div className="flex flex-col">
             <h3 className="text-sm font-black tracking-widest text-foreground uppercase mb-6">Community</h3>
             <ul className="flex flex-col space-y-4">
-              <li><Link href="/community#forum" className="text-sm text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors inline-block group">Nomad Forum<span className="block h-px w-0 bg-[#B45309] dark:bg-[#F5B301] transition-all group-hover:w-full"></span></Link></li>
-              <li><Link href="/community#directory" className="text-sm text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors inline-block group">Member Directory<span className="block h-px w-0 bg-[#B45309] dark:bg-[#F5B301] transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/community#forum" className="text-sm text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors inline-block group">Nomad Forum<span className="block h-px w-0 bg-[#C2410C] dark:bg-[#FB923C] transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/community#directory" className="text-sm text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors inline-block group">Member Directory<span className="block h-px w-0 bg-[#C2410C] dark:bg-[#FB923C] transition-all group-hover:w-full"></span></Link></li>
               <li>
-                <Link href="/local-guides" className="text-sm text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors flex items-center gap-1.5 group w-fit">
+                <Link href="/local-guides" className="text-sm text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors flex items-center gap-1.5 group w-fit">
                   <span className="relative">
                     Find a Local Guide
-                    <span className="block absolute bottom-[-2px] left-0 h-px w-0 bg-[#B45309] dark:bg-[#F5B301] transition-all group-hover:w-full"></span>
+                    <span className="block absolute bottom-[-2px] left-0 h-px w-0 bg-[#C2410C] dark:bg-[#FB923C] transition-all group-hover:w-full"></span>
                   </span>
-                  <TrekkingGuideIcon size={14} className="text-muted-foreground group-hover:text-[#B45309] dark:group-hover:text-[#F5B301] transition-colors" />
+                  <TrekkingGuideIcon size={14} className="text-muted-foreground group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors" />
                 </Link>
               </li>
-              <li><Link href="/events" className="text-sm text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors inline-block group">Events in Nepal<span className="block h-px w-0 bg-[#B45309] dark:bg-[#F5B301] transition-all group-hover:w-full"></span></Link></li>
-              <li><Link href="/newsletter" className="text-sm text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors inline-block group">Join Newsletter<span className="block h-px w-0 bg-[#B45309] dark:bg-[#F5B301] transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/events" className="text-sm text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors inline-block group">Events in Nepal<span className="block h-px w-0 bg-[#C2410C] dark:bg-[#FB923C] transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/newsletter" className="text-sm text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors inline-block group">Join Newsletter<span className="block h-px w-0 bg-[#C2410C] dark:bg-[#FB923C] transition-all group-hover:w-full"></span></Link></li>
             </ul>
           </div>
 
@@ -141,13 +141,13 @@ export default function Footer() {
           <div className="flex flex-col">
             <h3 className="text-sm font-black tracking-widest text-foreground uppercase mb-6">Practical Guides</h3>
             <ul className="flex flex-col space-y-4">
-              <li><Link href="/nomad-visa-guide" className="text-sm text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors inline-block group">Nepal Digital Nomad Visa Guide (2026)<span className="block h-px w-0 bg-[#B45309] dark:bg-[#F5B301] transition-all group-hover:w-full"></span></Link></li>
-              <li><Link href="/nepal-cost-of-living-guide" className="text-sm text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors inline-block group">Cost of Living in Nepal for Remote Workers<span className="block h-px w-0 bg-[#B45309] dark:bg-[#F5B301] transition-all group-hover:w-full"></span></Link></li>
-              <li><Link href="/nepal-transportation-guide" className="text-sm text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors inline-block group">Transport & Apps<span className="block h-px w-0 bg-[#B45309] dark:bg-[#F5B301] transition-all group-hover:w-full"></span></Link></li>
-              <li><Link href="/nepal-sim-cards-guide" className="text-sm text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors inline-block group">SIM Cards, Internet & Connectivity<span className="block h-px w-0 bg-[#B45309] dark:bg-[#F5B301] transition-all group-hover:w-full"></span></Link></li>
-              <li><Link href="/workspaces" className="text-sm text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors inline-block group">Best Coworking Spaces in Nepal ⭐<span className="block h-px w-0 bg-[#B45309] dark:bg-[#F5B301] transition-all group-hover:w-full"></span></Link></li>
-              <li><Link href="/nepal-banking-atm-guide" className="text-sm text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors inline-block group">Banking & Payments in Nepal<span className="block h-px w-0 bg-[#B45309] dark:bg-[#F5B301] transition-all group-hover:w-full"></span></Link></li>
-              <li><Link href="/practical-guides" className="text-sm text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors inline-block group">All Practical Guides →<span className="block h-px w-0 bg-[#B45309] dark:bg-[#F5B301] transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/nomad-visa-guide" className="text-sm text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors inline-block group">Nepal Digital Nomad Visa Guide (2026)<span className="block h-px w-0 bg-[#C2410C] dark:bg-[#FB923C] transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/nepal-cost-of-living-guide" className="text-sm text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors inline-block group">Cost of Living in Nepal for Remote Workers<span className="block h-px w-0 bg-[#C2410C] dark:bg-[#FB923C] transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/nepal-transportation-guide" className="text-sm text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors inline-block group">Transport & Apps<span className="block h-px w-0 bg-[#C2410C] dark:bg-[#FB923C] transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/nepal-sim-cards-guide" className="text-sm text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors inline-block group">SIM Cards, Internet & Connectivity<span className="block h-px w-0 bg-[#C2410C] dark:bg-[#FB923C] transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/workspaces" className="text-sm text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors inline-block group">Best Coworking Spaces in Nepal ⭐<span className="block h-px w-0 bg-[#C2410C] dark:bg-[#FB923C] transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/nepal-banking-atm-guide" className="text-sm text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors inline-block group">Banking & Payments in Nepal<span className="block h-px w-0 bg-[#C2410C] dark:bg-[#FB923C] transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/practical-guides" className="text-sm text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors inline-block group">All Practical Guides →<span className="block h-px w-0 bg-[#C2410C] dark:bg-[#FB923C] transition-all group-hover:w-full"></span></Link></li>
             </ul>
           </div>
 
@@ -155,10 +155,10 @@ export default function Footer() {
           <div className="flex flex-col">
             <h3 className="text-sm font-black tracking-widest text-foreground uppercase mb-6">Destinations</h3>
             <ul className="flex flex-col space-y-4">
-              <li><Link href="/destinations/kathmandu" className="text-sm text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors inline-block group">Nomads in Kathmandu<span className="block h-px w-0 bg-[#B45309] dark:bg-[#F5B301] transition-all group-hover:w-full"></span></Link></li>
-              <li><Link href="/destinations/pokhara" className="text-sm text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors inline-block group">Nomads in Pokhara<span className="block h-px w-0 bg-[#B45309] dark:bg-[#F5B301] transition-all group-hover:w-full"></span></Link></li>
-              <li><Link href="/destinations/bandipur" className="text-sm text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors inline-block group">Remote Work in Bandipur<span className="block h-px w-0 bg-[#B45309] dark:bg-[#F5B301] transition-all group-hover:w-full"></span></Link></li>
-              <li><Link href="/map" className="text-sm text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors inline-block group">Digital Nomad Map<span className="block h-px w-0 bg-[#B45309] dark:bg-[#F5B301] transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/destinations/kathmandu" className="text-sm text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors inline-block group">Nomads in Kathmandu<span className="block h-px w-0 bg-[#C2410C] dark:bg-[#FB923C] transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/destinations/pokhara" className="text-sm text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors inline-block group">Nomads in Pokhara<span className="block h-px w-0 bg-[#C2410C] dark:bg-[#FB923C] transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/destinations/bandipur" className="text-sm text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors inline-block group">Remote Work in Bandipur<span className="block h-px w-0 bg-[#C2410C] dark:bg-[#FB923C] transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/map" className="text-sm text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors inline-block group">Digital Nomad Map<span className="block h-px w-0 bg-[#C2410C] dark:bg-[#FB923C] transition-all group-hover:w-full"></span></Link></li>
             </ul>
           </div>
 
@@ -166,12 +166,12 @@ export default function Footer() {
           <div className="flex flex-col">
             <h3 className="text-sm font-black tracking-widest text-foreground uppercase mb-6">Company</h3>
             <ul className="flex flex-col space-y-4">
-              <li><Link href="/about" className="text-sm text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors inline-block group">About Us<span className="block h-px w-0 bg-[#B45309] dark:bg-[#F5B301] transition-all group-hover:w-full"></span></Link></li>
-              <li><Link href="/blog" className="text-sm text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors inline-block group">Our Blog<span className="block h-px w-0 bg-[#B45309] dark:bg-[#F5B301] transition-all group-hover:w-full"></span></Link></li>
-              <li><Link href="/partners" className="text-sm text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors inline-block group">Partnerships<span className="block h-px w-0 bg-[#B45309] dark:bg-[#F5B301] transition-all group-hover:w-full"></span></Link></li>
-              <li><Link href="/contact" className="text-sm text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors inline-block group">Contact Support<span className="block h-px w-0 bg-[#B45309] dark:bg-[#F5B301] transition-all group-hover:w-full"></span></Link></li>
-              <li><Link href="/faq" className="text-sm text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors inline-block group">FAQ &amp; Help<span className="block h-px w-0 bg-[#B45309] dark:bg-[#F5B301] transition-all group-hover:w-full"></span></Link></li>
-              <li><Link href="/insurance" className="text-sm text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors inline-block group">Travel Insurance<span className="block h-px w-0 bg-[#B45309] dark:bg-[#F5B301] transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/about" className="text-sm text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors inline-block group">About Us<span className="block h-px w-0 bg-[#C2410C] dark:bg-[#FB923C] transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/blog" className="text-sm text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors inline-block group">Our Blog<span className="block h-px w-0 bg-[#C2410C] dark:bg-[#FB923C] transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/partners" className="text-sm text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors inline-block group">Partnerships<span className="block h-px w-0 bg-[#C2410C] dark:bg-[#FB923C] transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/contact" className="text-sm text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors inline-block group">Contact Support<span className="block h-px w-0 bg-[#C2410C] dark:bg-[#FB923C] transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/faq" className="text-sm text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors inline-block group">FAQ &amp; Help<span className="block h-px w-0 bg-[#C2410C] dark:bg-[#FB923C] transition-all group-hover:w-full"></span></Link></li>
+              <li><Link href="/insurance" className="text-sm text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors inline-block group">Travel Insurance<span className="block h-px w-0 bg-[#C2410C] dark:bg-[#FB923C] transition-all group-hover:w-full"></span></Link></li>
             </ul>
           </div>
 
@@ -184,10 +184,10 @@ export default function Footer() {
               © 2026 Digital Nomads in Nepal. All rights reserved.
             </p>
             <div className="flex flex-wrap justify-center gap-x-10 gap-y-4">
-              <Link href="/privacy" className="text-sm font-semibold text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors focus:outline-none focus:underline underline-offset-4 tracking-tight">Privacy Policy</Link>
-              <Link href="/terms" className="text-sm font-semibold text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors focus:outline-none focus:underline underline-offset-4 tracking-tight">Terms of Service</Link>
-              <Link href="/sitemap" className="text-sm font-semibold text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors focus:outline-none focus:underline underline-offset-4 tracking-tight">Sitemap</Link>
-              <Link href="/disclaimer" className="text-sm font-semibold text-muted-foreground hover:text-[#B45309] dark:hover:text-[#F5B301] transition-colors focus:outline-none focus:underline underline-offset-4 tracking-tight">Disclaimer</Link>
+              <Link href="/privacy" className="text-sm font-semibold text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors focus:outline-none focus:underline underline-offset-4 tracking-tight">Privacy Policy</Link>
+              <Link href="/terms" className="text-sm font-semibold text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors focus:outline-none focus:underline underline-offset-4 tracking-tight">Terms of Service</Link>
+              <Link href="/sitemap" className="text-sm font-semibold text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors focus:outline-none focus:underline underline-offset-4 tracking-tight">Sitemap</Link>
+              <Link href="/disclaimer" className="text-sm font-semibold text-muted-foreground hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors focus:outline-none focus:underline underline-offset-4 tracking-tight">Disclaimer</Link>
             </div>
           </div>
           {/* SEO Header */}

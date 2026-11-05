@@ -152,9 +152,9 @@ export default async function Home() {
       url: socialConfig.facebook,
       enabled: socialConfig.showFacebook && Boolean(socialConfig.facebook),
       icon: FacebookIcon,
-      hoverCardClass: "hover:border-[#1877F2] hover:bg-gradient-to-b hover:from-[#1877F2]/20 hover:via-[#1877F2]/5 hover:to-transparent hover:shadow-[0_12px_30px_-5px_rgba(24,119,242,0.35)]",
+      hoverCardClass: "hover:border-[#1877F2] hover:bg-gradient-to-b hover:from-[#1877F2]/10 hover:via-transparent hover:to-transparent hover:shadow-[0_12px_30px_-5px_rgba(24,119,242,0.25)]",
       hoverIconClass: "group-hover:text-[#1877F2] group-hover:scale-110 group-hover:drop-shadow-[0_0_14px_rgba(24,119,242,0.7)]",
-      hoverTitleClass: "group-hover:text-white",
+      hoverTitleClass: "group-hover:text-[#1877F2]",
       hoverBadgeClass: "group-hover:text-[#1877F2]",
       badgeText: "Nomad Group & Meetups",
     },
@@ -163,10 +163,10 @@ export default async function Home() {
       url: socialConfig.tiktok,
       enabled: socialConfig.showTiktok && Boolean(socialConfig.tiktok),
       icon: TikTokIcon,
-      hoverCardClass: "hover:border-[#00f2fe] hover:bg-gradient-to-b hover:from-[#fe2c55]/20 hover:via-[#00f2fe]/10 hover:to-transparent hover:shadow-[0_12px_30px_-5px_rgba(254,44,85,0.35)]",
-      hoverIconClass: "group-hover:text-[#fe2c55] group-hover:scale-110 group-hover:drop-shadow-[0_0_14px_rgba(0,242,254,0.8)]",
-      hoverTitleClass: "group-hover:text-white",
-      hoverBadgeClass: "group-hover:text-[#00f2fe]",
+      hoverCardClass: "hover:border-[#fe2c55] hover:bg-gradient-to-b hover:from-[#fe2c55]/10 hover:via-transparent hover:to-transparent hover:shadow-[0_12px_30px_-5px_rgba(254,44,85,0.25)]",
+      hoverIconClass: "group-hover:text-[#fe2c55] group-hover:scale-110 group-hover:drop-shadow-[0_0_14px_rgba(254,44,85,0.7)]",
+      hoverTitleClass: "group-hover:text-[#fe2c55]",
+      hoverBadgeClass: "group-hover:text-[#0f766e] dark:group-hover:text-[#00f2fe]",
       badgeText: "Short Travel Videos",
     },
     {
@@ -174,10 +174,10 @@ export default async function Home() {
       url: socialConfig.youtube,
       enabled: socialConfig.showYoutube && Boolean(socialConfig.youtube),
       icon: YouTubeIcon,
-      hoverCardClass: "hover:border-[#FF0000] hover:bg-gradient-to-b hover:from-[#FF0000]/20 hover:via-[#FF0000]/5 hover:to-transparent hover:shadow-[0_12px_30px_-5px_rgba(255,0,0,0.35)]",
+      hoverCardClass: "hover:border-[#FF0000] hover:bg-gradient-to-b hover:from-[#FF0000]/10 hover:via-transparent hover:to-transparent hover:shadow-[0_12px_30px_-5px_rgba(255,0,0,0.25)]",
       hoverIconClass: "group-hover:text-[#FF0000] group-hover:scale-110 group-hover:drop-shadow-[0_0_14px_rgba(255,0,0,0.7)]",
-      hoverTitleClass: "group-hover:text-white",
-      hoverBadgeClass: "group-hover:text-red-400",
+      hoverTitleClass: "group-hover:text-[#FF0000]",
+      hoverBadgeClass: "group-hover:text-[#DC2626] dark:group-hover:text-red-400",
       badgeText: "Vlogs & Space Tours",
     },
     {
@@ -185,10 +185,10 @@ export default async function Home() {
       url: socialConfig.instagram,
       enabled: socialConfig.showInstagram && Boolean(socialConfig.instagram),
       icon: InstagramIcon,
-      hoverCardClass: "hover:border-[#E1306C] hover:bg-gradient-to-br hover:from-[#833AB4]/25 hover:via-[#FD1D1D]/20 hover:to-[#FCAF45]/20 hover:shadow-[0_12px_30px_-5px_rgba(225,48,108,0.35)]",
+      hoverCardClass: "hover:border-[#E1306C] hover:bg-gradient-to-br hover:from-[#E1306C]/10 hover:via-transparent hover:to-transparent hover:shadow-[0_12px_30px_-5px_rgba(225,48,108,0.25)]",
       hoverIconClass: "group-hover:text-[#E1306C] group-hover:scale-110 group-hover:drop-shadow-[0_0_14px_rgba(225,48,108,0.7)]",
-      hoverTitleClass: "group-hover:text-white",
-      hoverBadgeClass: "group-hover:text-pink-400",
+      hoverTitleClass: "group-hover:text-[#E1306C]",
+      hoverBadgeClass: "group-hover:text-[#BE185D] dark:group-hover:text-pink-400",
       badgeText: "Daily Stories & Tips",
     },
     {
@@ -196,10 +196,10 @@ export default async function Home() {
       url: socialConfig.twitter,
       enabled: Boolean(socialConfig.showTwitter) && Boolean(socialConfig.twitter),
       icon: TwitterIcon,
-      hoverCardClass: "hover:border-zinc-400 hover:bg-gradient-to-b hover:from-white/15 hover:via-white/5 hover:to-transparent hover:shadow-[0_12px_30px_-5px_rgba(255,255,255,0.2)]",
-      hoverIconClass: "group-hover:text-white group-hover:scale-110 group-hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.6)]",
-      hoverTitleClass: "group-hover:text-white",
-      hoverBadgeClass: "group-hover:text-zinc-300",
+      hoverCardClass: "hover:border-zinc-400 hover:bg-gradient-to-b hover:from-black/5 dark:hover:from-white/10 hover:via-transparent hover:to-transparent hover:shadow-[0_12px_30px_-5px_rgba(0,0,0,0.15)]",
+      hoverIconClass: "group-hover:text-gray-900 dark:group-hover:text-white group-hover:scale-110 transition-transform",
+      hoverTitleClass: "group-hover:text-gray-900 dark:group-hover:text-white",
+      hoverBadgeClass: "group-hover:text-gray-700 dark:group-hover:text-zinc-300",
       badgeText: "Fast News & Alerts",
     },
   ].filter(s => s.enabled)
@@ -216,7 +216,7 @@ export default async function Home() {
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 sm:mb-12">
               <div>
-                <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#B45309] dark:text-[#F5B301] mb-2">
+                <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#C2410C] dark:text-[#FB923C] mb-2">
                   Work infrastructure
                 </p>
                 <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight">
@@ -228,7 +228,7 @@ export default async function Home() {
               </div>
               <Link
                 href="/workspaces"
-                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#B45309] dark:text-[#F5B301] hover:underline group"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#C2410C] dark:text-[#FB923C] hover:underline group"
               >
                 <span>View all workspaces</span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
@@ -244,7 +244,7 @@ export default async function Home() {
             ) : (
               <div className="text-center py-12 bg-white dark:bg-[#141416] rounded-2xl border border-[#E8E2D8] dark:border-[#26262A]">
                 <p className="text-muted-foreground text-sm font-normal">Discover verified workspaces across Kathmandu and Pokhara.</p>
-                <Link href="/workspaces" className="inline-block mt-4 px-6 py-2.5 bg-[#F5B301] text-[#1A1A1C] font-bold rounded-full text-xs uppercase tracking-wider">
+                <Link href="/workspaces" className="inline-block mt-4 px-6 py-2.5 bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold rounded-full text-xs uppercase tracking-wider transition-colors shadow-sm">
                   Open Coworking Marketplace
                 </Link>
               </div>
@@ -257,7 +257,7 @@ export default async function Home() {
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 sm:mb-12">
               <div>
-                <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#B45309] dark:text-[#F5B301] mb-2">
+                <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#C2410C] dark:text-[#FB923C] mb-2">
                   Nomad bases
                 </p>
                 <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight">
@@ -269,7 +269,7 @@ export default async function Home() {
               </div>
               <Link
                 href="/destinations"
-                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#B45309] dark:text-[#F5B301] hover:underline group"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#C2410C] dark:text-[#FB923C] hover:underline group"
               >
                 <span>Explore all destinations</span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
@@ -291,7 +291,7 @@ export default async function Home() {
             <div className="max-w-7xl mx-auto">
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 sm:mb-12">
                 <div>
-                  <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#B45309] dark:text-[#F5B301] mb-2">
+                  <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#C2410C] dark:text-[#FB923C] mb-2">
                     Verified experts
                   </p>
                   <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight">
@@ -303,7 +303,7 @@ export default async function Home() {
                 </div>
                 <Link
                   href="/guides"
-                  className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#B45309] dark:text-[#F5B301] hover:underline group"
+                  className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#C2410C] dark:text-[#FB923C] hover:underline group"
                 >
                   <span>Meet all guides</span>
                   <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
@@ -321,12 +321,12 @@ export default async function Home() {
                       {guide.photoUrl ? (
                         <Image src={guide.photoUrl} alt={guide.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center font-bold text-2xl text-[#F5B301] bg-[#F5B301]/10">
+                        <div className="w-full h-full flex items-center justify-center font-bold text-2xl text-[#C2410C] dark:text-[#FB923C] bg-[#C2410C]/10">
                           {guide.name.charAt(0)}
                         </div>
                       )}
                       {guide.isVerified && (
-                        <span className="absolute top-3 left-3 bg-[#F5B301] text-[#1A1A1C] text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm z-10">
+                        <span className="absolute top-3 left-3 bg-[#C2410C] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm z-10">
                           Licensed Guide
                         </span>
                       )}
@@ -334,7 +334,7 @@ export default async function Home() {
 
                     <div className="p-4 sm:p-5 space-y-3">
                       <div>
-                        <h3 className="text-base sm:text-[17px] font-semibold text-gray-900 dark:text-[#F5F5F4] group-hover:text-[#B45309] dark:group-hover:text-[#F5B301] transition-colors line-clamp-1 leading-snug">
+                        <h3 className="text-base sm:text-[17px] font-semibold text-gray-900 dark:text-[#F5F5F4] group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors line-clamp-1 leading-snug">
                           {guide.name}
                         </h3>
                         <div className="flex items-center gap-1.5 text-xs sm:text-[13px] text-gray-500 dark:text-[#A8A8B0] mt-1 font-normal">
@@ -342,7 +342,7 @@ export default async function Home() {
                           <span className="truncate">{guide.location}</span>
                           <span className="text-gray-300 dark:text-gray-600 select-none">·</span>
                           <span className="flex items-center gap-0.5 text-gray-700 dark:text-gray-300 font-medium">
-                            <Star size={11} className="fill-[#F5B301] text-[#F5B301]" />
+                            <Star size={11} className="fill-[#EA580C] text-[#EA580C]" />
                             <span>{guide.avgRating ? guide.avgRating.toFixed(1) : "5.0"}</span>
                           </span>
                         </div>
@@ -361,7 +361,7 @@ export default async function Home() {
 
                       <div className="pt-2 border-t border-[#E8E2D8] dark:border-[#26262A] flex items-center justify-between text-xs sm:text-sm font-semibold text-gray-900 dark:text-[#F5F5F4]">
                         <span>From $35/day</span>
-                        <span className="text-xs text-[#B45309] dark:text-[#F5B301] group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5">
+                        <span className="text-xs text-[#C2410C] dark:text-[#FB923C] group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5">
                           View profile →
                         </span>
                       </div>
@@ -378,7 +378,7 @@ export default async function Home() {
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 sm:mb-12">
               <div>
-                <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#B45309] dark:text-[#F5B301] mb-2">
+                <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#C2410C] dark:text-[#FB923C] mb-2">
                   Sleep &amp; work
                 </p>
                 <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight">
@@ -390,7 +390,7 @@ export default async function Home() {
               </div>
               <Link
                 href="/stay"
-                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#B45309] dark:text-[#F5B301] hover:underline group"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#C2410C] dark:text-[#FB923C] hover:underline group"
               >
                 <span>Browse all nomad stays</span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
@@ -411,14 +411,14 @@ export default async function Home() {
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    <span className="absolute top-3 left-3 bg-[#F5B301] text-[#1A1A1C] text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm z-10">
+                    <span className="absolute top-3 left-3 bg-[#C2410C] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm z-10">
                       {stay.type}
                     </span>
                   </div>
 
                   <div className="p-4 sm:p-5 space-y-3">
                     <div>
-                      <h3 className="text-base sm:text-[17px] font-semibold text-gray-900 dark:text-[#F5F5F4] group-hover:text-[#B45309] dark:group-hover:text-[#F5B301] transition-colors line-clamp-1 leading-snug">
+                      <h3 className="text-base sm:text-[17px] font-semibold text-gray-900 dark:text-[#F5F5F4] group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors line-clamp-1 leading-snug">
                         {stay.name}
                       </h3>
                       <div className="flex items-center gap-1.5 text-xs sm:text-[13px] text-gray-500 dark:text-[#A8A8B0] mt-1 font-normal">
@@ -426,7 +426,7 @@ export default async function Home() {
                         <span className="truncate">{stay.area}</span>
                         <span className="text-gray-300 dark:text-gray-600 select-none">·</span>
                         <span className="flex items-center gap-0.5 text-gray-700 dark:text-gray-300 font-medium">
-                          <Star size={11} className="fill-[#F5B301] text-[#F5B301]" />
+                          <Star size={11} className="fill-[#EA580C] text-[#EA580C]" />
                           <span>{stay.rating}</span>
                         </span>
                       </div>
@@ -434,11 +434,11 @@ export default async function Home() {
 
                     <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
                       <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-full bg-white dark:bg-[#1C1C1F] text-gray-800 dark:text-[#E4E4E7] border border-[#E8E2D8] dark:border-[#26262A]">
-                        <Wifi size={11} className="text-[#F5B301] shrink-0" />
+                        <Wifi size={11} className="text-[#C2410C] dark:text-[#FB923C] shrink-0" />
                         <span>{stay.speed}</span>
                       </span>
                       <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-full bg-white dark:bg-[#1C1C1F] text-gray-800 dark:text-[#E4E4E7] border border-[#E8E2D8] dark:border-[#26262A]">
-                        <Zap size={11} className="text-[#F5B301] shrink-0" />
+                        <Zap size={11} className="text-[#C2410C] dark:text-[#FB923C] shrink-0" />
                         <span>{stay.power}</span>
                       </span>
                     </div>
@@ -489,7 +489,7 @@ export default async function Home() {
 
           <div className="relative z-10 max-w-7xl mx-auto">
             <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
-              <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#F5B301] mb-2">
+              <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#C2410C] dark:text-[#FB923C] mb-2">
                 Nomad life &amp; adventure
               </p>
               <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground drop-shadow-sm tracking-tight">
@@ -502,65 +502,65 @@ export default async function Home() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* Activity 1 */}
-              <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-[#F5B301]/60 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
-                <div className="w-12 h-12 rounded-xl bg-[#F5B301]/15 text-[#B45309] dark:text-[#F5B301] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-[#C2410C]/40 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
+                <div className="w-12 h-12 rounded-xl bg-[#C2410C]/10 text-[#C2410C] dark:bg-[#FB923C]/15 dark:text-[#FB923C] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Mountain size={24} />
                 </div>
-                <h3 className="font-bold text-lg text-foreground group-hover:text-[#B45309] dark:group-hover:text-[#F5B301] transition-colors mb-2">
+                <h3 className="font-bold text-lg text-foreground group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors mb-2">
                   Weekend Annapurna Treks
                 </h3>
                 <p className="text-xs text-muted-foreground leading-relaxed mb-4">
                   Do quick 3 to 4 day treks like Poon Hill, Australian Camp, or Mardi Himal directly from your desk in Pokhara.
                 </p>
-                <Link href="/guides" className="text-xs font-bold text-[#B45309] dark:text-[#F5B301] inline-flex items-center gap-1 hover:underline">
+                <Link href="/guides" className="text-xs font-bold text-[#C2410C] dark:text-[#FB923C] hover:text-[#9A3412] dark:hover:text-[#FDBA74] inline-flex items-center gap-1 hover:underline">
                   Find trekking guides <ArrowRight size={12} />
                 </Link>
               </div>
 
               {/* Activity 2 */}
-              <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-[#F5B301]/60 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
-                <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-[#C2410C]/40 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
+                <div className="w-12 h-12 rounded-xl bg-[#C2410C]/10 text-[#C2410C] dark:bg-[#FB923C]/15 dark:text-[#FB923C] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Coffee size={24} />
                 </div>
-                <h3 className="font-bold text-lg text-foreground group-hover:text-[#B45309] dark:group-hover:text-[#F5B301] transition-colors mb-2">
+                <h3 className="font-bold text-lg text-foreground group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors mb-2">
                   Heritage Cafe Working
                 </h3>
                 <p className="text-xs text-muted-foreground leading-relaxed mb-4">
                   Sample single-origin Himalayan Arabica in centuries-old Newari brick courtyards in Patan, Jhamsikhel, and Sanepa.
                 </p>
-                <Link href="/destinations/lalitpur" className="text-xs font-bold text-[#B45309] dark:text-[#F5B301] inline-flex items-center gap-1 hover:underline">
+                <Link href="/destinations/lalitpur" className="text-xs font-bold text-[#C2410C] dark:text-[#FB923C] hover:text-[#9A3412] dark:hover:text-[#FDBA74] inline-flex items-center gap-1 hover:underline">
                   Explore Lalitpur cafes <ArrowRight size={12} />
                 </Link>
               </div>
 
               {/* Activity 3 */}
-              <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-[#F5B301]/60 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
-                <div className="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-[#C2410C]/40 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
+                <div className="w-12 h-12 rounded-xl bg-[#C2410C]/10 text-[#C2410C] dark:bg-[#FB923C]/15 dark:text-[#FB923C] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Wind size={24} />
                 </div>
-                <h3 className="font-bold text-lg text-foreground group-hover:text-[#B45309] dark:group-hover:text-[#F5B301] transition-colors mb-2">
+                <h3 className="font-bold text-lg text-foreground group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors mb-2">
                   Paragliding Fewa Lake
                 </h3>
                 <p className="text-xs text-muted-foreground leading-relaxed mb-4">
                   Take off from Sarangkot and thermal above emerald waters with panoramic views of Machapuchare (Fishtail peak).
                 </p>
-                <Link href="/destinations/pokhara" className="text-xs font-bold text-[#B45309] dark:text-[#F5B301] inline-flex items-center gap-1 hover:underline">
+                <Link href="/destinations/pokhara" className="text-xs font-bold text-[#C2410C] dark:text-[#FB923C] hover:text-[#9A3412] dark:hover:text-[#FDBA74] inline-flex items-center gap-1 hover:underline">
                   Explore Pokhara guide <ArrowRight size={12} />
                 </Link>
               </div>
 
               {/* Activity 4 */}
-              <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-[#F5B301]/60 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
-                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-[#C2410C]/40 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
+                <div className="w-12 h-12 rounded-xl bg-[#C2410C]/10 text-[#C2410C] dark:bg-[#FB923C]/15 dark:text-[#FB923C] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Heart size={24} />
                 </div>
-                <h3 className="font-bold text-lg text-foreground group-hover:text-[#B45309] dark:group-hover:text-[#F5B301] transition-colors mb-2">
+                <h3 className="font-bold text-lg text-foreground group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors mb-2">
                   Sound Healing &amp; Yoga
                 </h3>
                 <p className="text-xs text-muted-foreground leading-relaxed mb-4">
                   Recharge your focus with traditional Tibetan singing bowl sound meditation and weekend mountain retreats.
                 </p>
-                <Link href="/blog" className="text-xs font-bold text-[#B45309] dark:text-[#F5B301] inline-flex items-center gap-1 hover:underline">
+                <Link href="/blog" className="text-xs font-bold text-[#C2410C] dark:text-[#FB923C] hover:text-[#9A3412] dark:hover:text-[#FDBA74] inline-flex items-center gap-1 hover:underline">
                   Read wellness tips <ArrowRight size={12} />
                 </Link>
               </div>
@@ -573,7 +573,7 @@ export default async function Home() {
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 sm:mb-12">
               <div>
-                <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#B45309] dark:text-[#F5B301] mb-2">
+                <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#C2410C] dark:text-[#FB923C] mb-2">
                   Knowledge base
                 </p>
                 <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight">
@@ -585,7 +585,7 @@ export default async function Home() {
               </div>
               <Link
                 href="/blog"
-                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#B45309] dark:text-[#F5B301] hover:underline group"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#C2410C] dark:text-[#FB923C] hover:underline group"
               >
                 <span>View all articles</span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
@@ -617,14 +617,14 @@ export default async function Home() {
                   {/* Top Badge */}
                   <div className="absolute top-4 left-4 z-10">
                     <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white text-xs font-semibold shadow-lg">
-                      <MapPin size={12} className="text-[#F5B301]" /> Annapurna Sanctuary • Nepal
+                      <MapPin size={12} className="text-[#FB923C]" /> Annapurna Sanctuary • Nepal
                     </span>
                   </div>
 
                   {/* Bottom Floating Stats Pill */}
                   <div className="absolute bottom-5 inset-x-5 z-10 p-4 rounded-xl bg-black/75 backdrop-blur-md border border-white/15 text-white shadow-xl">
                     <div className="flex items-center justify-between text-xs font-semibold text-gray-200">
-                      <span className="flex items-center gap-1.5 text-[#F5B301]">
+                      <span className="flex items-center gap-1.5 text-[#FB923C]">
                         <Sparkles size={14} /> Work-Life Harmony
                       </span>
                       <span>8 of 14 Highest Peaks</span>
@@ -640,7 +640,7 @@ export default async function Home() {
               <div className="lg:col-span-7 flex flex-col justify-center">
                 {/* Header */}
                 <div className="mb-8">
-                  <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#F5B301] mb-2">
+                  <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#FB923C] mb-2">
                     The Himalayan advantage
                   </p>
                   <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight">
@@ -656,18 +656,18 @@ export default async function Home() {
                   {/* Card 1 */}
                   <Link
                     href="/blog/cost-of-living-nepal-2026-nomad-budget"
-                    className="p-5 sm:p-6 border border-white/10 border-l-4 border-l-[#F5B301] bg-[#1C1C1F] rounded-2xl hover:border-[#F5B301]/60 hover:-translate-y-0.5 transition-all duration-300 shadow-sm block group"
+                    className="p-5 sm:p-6 border border-white/10 border-l-4 border-l-[#C2410C] bg-[#1C1C1F] rounded-2xl hover:border-[#FB923C]/60 hover:-translate-y-0.5 transition-all duration-300 shadow-sm block group"
                   >
                     <div className="flex items-center justify-between mb-1.5">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-lg bg-[#F5B301]/10 flex items-center justify-center text-[#F5B301] shrink-0">
+                        <div className="w-8 h-8 rounded-lg bg-[#C2410C]/20 flex items-center justify-center text-[#FB923C] shrink-0">
                           <DollarSign size={16} />
                         </div>
-                        <h3 className="text-base sm:text-lg font-semibold text-white group-hover:text-[#F5B301] transition-colors">
+                        <h3 className="text-base sm:text-lg font-semibold text-white group-hover:text-[#FB923C] transition-colors">
                           Unbeatable Cost of Living
                         </h3>
                       </div>
-                      <span className="text-xs font-semibold text-[#F5B301] group-hover:translate-x-1 inline-flex items-center gap-1 transition-transform">
+                      <span className="text-xs font-semibold text-[#FB923C] group-hover:translate-x-1 inline-flex items-center gap-1 transition-transform">
                         From $500/mo <ArrowRight size={13} />
                       </span>
                     </div>
@@ -679,18 +679,18 @@ export default async function Home() {
                   {/* Card 2 */}
                   <Link
                     href="/guides"
-                    className="p-5 sm:p-6 border border-white/10 border-l-4 border-l-[#F5B301] bg-[#1C1C1F] rounded-2xl hover:border-[#F5B301]/60 hover:-translate-y-0.5 transition-all duration-300 shadow-sm block group"
+                    className="p-5 sm:p-6 border border-white/10 border-l-4 border-l-[#C2410C] bg-[#1C1C1F] rounded-2xl hover:border-[#FB923C]/60 hover:-translate-y-0.5 transition-all duration-300 shadow-sm block group"
                   >
                     <div className="flex items-center justify-between mb-1.5">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-lg bg-[#F5B301]/10 flex items-center justify-center text-[#F5B301] shrink-0">
+                        <div className="w-8 h-8 rounded-lg bg-[#C2410C]/20 flex items-center justify-center text-[#FB923C] shrink-0">
                           <Mountain size={16} />
                         </div>
-                        <h3 className="text-base sm:text-lg font-semibold text-white group-hover:text-[#F5B301] transition-colors">
+                        <h3 className="text-base sm:text-lg font-semibold text-white group-hover:text-[#FB923C] transition-colors">
                           Nature &amp; Mountains at Your Desk
                         </h3>
                       </div>
-                      <span className="text-xs font-semibold text-[#F5B301] group-hover:translate-x-1 inline-flex items-center gap-1 transition-transform">
+                      <span className="text-xs font-semibold text-[#FB923C] group-hover:translate-x-1 inline-flex items-center gap-1 transition-transform">
                         Explore Guides <ArrowRight size={13} />
                       </span>
                     </div>
@@ -702,18 +702,18 @@ export default async function Home() {
                   {/* Card 3 */}
                   <Link
                     href="/workspaces"
-                    className="p-5 sm:p-6 border border-white/10 border-l-4 border-l-[#F5B301] bg-[#1C1C1F] rounded-2xl hover:border-[#F5B301]/60 hover:-translate-y-0.5 transition-all duration-300 shadow-sm block group"
+                    className="p-5 sm:p-6 border border-white/10 border-l-4 border-l-[#C2410C] bg-[#1C1C1F] rounded-2xl hover:border-[#FB923C]/60 hover:-translate-y-0.5 transition-all duration-300 shadow-sm block group"
                   >
                     <div className="flex items-center justify-between mb-1.5">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-lg bg-[#F5B301]/10 flex items-center justify-center text-[#F5B301] shrink-0">
+                        <div className="w-8 h-8 rounded-lg bg-[#C2410C]/20 flex items-center justify-center text-[#FB923C] shrink-0">
                           <Zap size={16} />
                         </div>
-                        <h3 className="text-base sm:text-lg font-semibold text-white group-hover:text-[#F5B301] transition-colors">
+                        <h3 className="text-base sm:text-lg font-semibold text-white group-hover:text-[#FB923C] transition-colors">
                           Growing Remote Culture &amp; Fiber
                         </h3>
                       </div>
-                      <span className="text-xs font-semibold text-[#F5B301] group-hover:translate-x-1 inline-flex items-center gap-1 transition-transform">
+                      <span className="text-xs font-semibold text-[#FB923C] group-hover:translate-x-1 inline-flex items-center gap-1 transition-transform">
                         50+ Hubs <ArrowRight size={13} />
                       </span>
                     </div>
@@ -732,7 +732,7 @@ export default async function Home() {
         {activeSocials.length > 0 && (
           <section className="w-full py-20 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white dark:bg-[#141416] border-t border-[#E8E2D8] dark:border-[#26262A]">
             <div className="max-w-4xl mx-auto text-center">
-              <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#B45309] dark:text-[#F5B301] mb-2">
+              <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#C2410C] dark:text-[#FB923C] mb-2">
                 Connected community
               </p>
               <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-[#F5F5F4] mb-4 tracking-tight">

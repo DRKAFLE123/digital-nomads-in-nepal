@@ -10,11 +10,13 @@
     --border: #E8E2D8;
     --muted: #5E5A54;
     --muted-foreground: #5E5A54;
-    --accent: #F5B301;
-    --primary: #F5B301;
-    --on-accent: #1A1A1C;
+    --accent: #C2410C;
+    --accent-hover: #9A3412;
+    --primary: #C2410C;
+    --primary-foreground: #FFFFFF;
+    --on-accent: #FFFFFF;
     --ok: #15803D;
-    --accent-link: #B45309;
+    --accent-link: #C2410C;
     --radius: 16px;
   }
 
@@ -25,18 +27,20 @@
     --border: #26262A;
     --muted: #A8A8B0;
     --muted-foreground: #A8A8B0;
-    --accent: #F5B301;
-    --primary: #F5B301;
-    --on-accent: #1A1A1C;
+    --accent: #FB923C;
+    --accent-hover: #FDBA74;
+    --primary: #EA580C;
+    --primary-foreground: #FFFFFF;
+    --on-accent: #FFFFFF;
     --ok: #34D399;
-    --accent-link: #F5B301;
+    --accent-link: #FB923C;
     --radius: 16px;
   }
 }
 
 @layer base {
   body {
-    @apply bg-background text-foreground antialiased selection:bg-primary selection:text-black transition-colors duration-200;
+    @apply bg-background text-foreground antialiased selection:bg-primary selection:text-white transition-colors duration-200;
   }
 }
 
@@ -60,16 +64,16 @@
     border-radius: 9999px;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #ffd400;
+    background: #C2410C;
   }
   .custom-scrollbar {
     scrollbar-width: thin;
     scrollbar-color: #2c2c2c transparent;
   }
 
-  /* Editorial Saffron Text Highlights & Accents (Accessible on Light & Dark) */
+  /* Editorial Himalayan Terracotta Text Highlights & Accents (Accessible on Light & Dark) */
   .highlight-marker {
-    background-color: rgba(245, 179, 1, 0.22);
+    background-color: rgba(194, 65, 12, 0.12);
     color: inherit;
     padding: 0.12em 0.4em;
     border-radius: 4px;
@@ -79,14 +83,14 @@
 
   .highlight-underline {
     text-decoration: underline;
-    text-decoration-color: #F5B301;
+    text-decoration-color: #C2410C;
     text-decoration-thickness: 2.5px;
     text-underline-offset: 4px;
   }
 
   .highlight-pill {
-    background-color: #F5B301;
-    color: #1A1A1C;
+    background-color: #C2410C;
+    color: #FFFFFF;
     font-weight: 700;
     padding: 0.2em 0.65em;
     border-radius: 9999px;
@@ -97,4 +101,3 @@
     line-height: 1rem;
   }
 }
-

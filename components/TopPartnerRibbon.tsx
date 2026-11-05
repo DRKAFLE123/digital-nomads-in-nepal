@@ -36,7 +36,7 @@ export default function TopPartnerRibbon({ isScrolled = false }: TopPartnerRibbo
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <Link
             href="/register/space"
-            className="inline-flex items-center gap-1 font-semibold text-[#F5B301] hover:text-[#FFC933] transition-colors py-0.5 px-1.5 sm:px-2 rounded-md hover:bg-white/5 active:scale-95 text-[10.5px] sm:text-xs"
+            className="inline-flex items-center gap-1 font-semibold text-[#FB923C] hover:text-[#FDBA74] transition-colors py-0.5 px-1.5 sm:px-2 rounded-md hover:bg-white/5 active:scale-95 text-[10.5px] sm:text-xs"
           >
             <Building2 className="w-3 h-3" />
             <span>List Space</span>
@@ -49,7 +49,7 @@ export default function TopPartnerRibbon({ isScrolled = false }: TopPartnerRibbo
             href="/local-guides/register"
             className="inline-flex items-center gap-1 font-semibold text-zinc-300 hover:text-white transition-colors py-0.5 px-1.5 sm:px-2 rounded-md hover:bg-white/5 active:scale-95 text-[10.5px] sm:text-xs"
           >
-            <Compass className="w-3 h-3 text-[#F5B301]" />
+            <Compass className="w-3 h-3 text-[#FB923C]" />
             <span>Join as Guide</span>
           </Link>
         </div>

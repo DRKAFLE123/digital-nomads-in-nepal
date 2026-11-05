@@ -63,7 +63,7 @@ export default function HomeFaq() {
 
             <Link
               href="/faq"
-              className="hidden sm:inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#B45309] dark:text-[#FFD400] hover:underline whitespace-nowrap"
+              className="hidden sm:inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#C2410C] dark:text-[#FB923C] hover:underline whitespace-nowrap"
             >
               <span>View all FAQs</span>
               <ArrowRight size={14} />
@@ -83,7 +83,7 @@ export default function HomeFaq() {
                   className="w-full py-3.5 sm:py-4 flex items-center justify-between gap-4 text-left cursor-pointer group focus:outline-none select-none"
                   aria-expanded={isOpen}
                 >
-                  <span className="text-[15px] sm:text-[16px] text-gray-900 dark:text-gray-100 font-normal group-hover:text-[#B45309] dark:group-hover:text-[#FFD400] transition-colors leading-snug">
+                  <span className="text-[15px] sm:text-[16px] text-gray-900 dark:text-gray-100 font-normal group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors leading-snug">
                     {faq.question}
                   </span>
 
@@ -120,10 +120,10 @@ export default function HomeFaq() {
           </p>
           <Link
             href="/faq"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 dark:bg-[#181818] dark:hover:bg-[#222222] text-xs font-bold text-gray-900 dark:text-white border border-gray-200 dark:border-[#2A2A2A] transition-all hover:border-[#FFD400]"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 dark:bg-[#181818] dark:hover:bg-[#222222] text-xs font-bold text-gray-900 dark:text-white border border-gray-200 dark:border-[#2A2A2A] transition-all hover:border-[#C2410C] dark:hover:border-[#FB923C]"
           >
             <span>View All FAQs &amp; Search</span>
-            <ArrowRight size={13} className="text-[#B45309] dark:text-[#FFD400]" />
+            <ArrowRight size={13} className="text-[#C2410C] dark:text-[#FB923C]" />
           </Link>
         </div>
       </div>

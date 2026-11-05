@@ -301,7 +301,7 @@ export default function GoogleSearchModal({ isOpen, onClose }: GoogleSearchModal
       >
         {/* Top Google-Style Search Input Bar */}
         <div className="flex items-center px-4 sm:px-6 py-3.5 sm:py-4 border-b border-gray-200 dark:border-[#242424] gap-3">
-          <div className="w-8 h-8 rounded-full bg-[#FFD400]/15 dark:bg-[#FFD400]/20 flex items-center justify-center text-[#B45309] dark:text-[#FFD400] flex-shrink-0">
+          <div className="w-8 h-8 rounded-full bg-[#C2410C]/10 dark:bg-[#FB923C]/15 flex items-center justify-center text-[#C2410C] dark:text-[#FB923C] flex-shrink-0">
             <Search size={18} />
           </div>
 
@@ -602,7 +602,7 @@ export default function GoogleSearchModal({ isOpen, onClose }: GoogleSearchModal
                     onClick={onClose}
                     className="p-3.5 rounded-2xl border border-gray-200 dark:border-[#262626] bg-gradient-to-br from-amber-50/50 to-white dark:from-[#181818] dark:to-[#121212] hover:border-primary/50 transition-all group"
                   >
-                    <div className="w-9 h-9 rounded-xl bg-[#FFD400]/15 dark:bg-[#FFD400]/20 text-[#B45309] dark:text-[#FFD400] flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
+                    <div className="w-9 h-9 rounded-xl bg-[#C2410C]/10 dark:bg-[#FB923C]/15 text-[#C2410C] dark:text-[#FB923C] flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
                       <Building size={18} />
                     </div>
                     <h5 className="text-xs font-bold text-gray-900 dark:text-white flex items-center justify-between">
@@ -653,7 +653,7 @@ export default function GoogleSearchModal({ isOpen, onClose }: GoogleSearchModal
               {/* Frequent / Trending Nomad Searches */}
               <div>
                 <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2.5 flex items-center gap-1.5">
-                  <TrendingUp size={14} className="text-amber-500" /> Frequent & Trending Searches
+                  <TrendingUp size={14} className="text-[#C2410C] dark:text-[#FB923C]" /> Frequent & Trending Searches
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {TRENDING_KEYWORDS.map((keyword) => (
@@ -661,7 +661,7 @@ export default function GoogleSearchModal({ isOpen, onClose }: GoogleSearchModal
                       key={keyword}
                       type="button"
                       onClick={() => handleSelectKeyword(keyword)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-[#1A1A1A] border border-gray-200 dark:border-[#282828] text-gray-800 dark:text-gray-200 hover:border-[#FFD400] hover:text-[#B45309] dark:hover:text-[#FFD400] transition-colors"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-[#1A1A1A] border border-gray-200 dark:border-[#282828] text-gray-800 dark:text-gray-200 hover:border-[#C2410C] hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors"
                     >
                       <Search size={11} className="opacity-50" />
                       <span>{keyword}</span>
