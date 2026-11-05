@@ -212,25 +212,26 @@ export default async function Home() {
         <HeroSection />
 
         {/* 2. Featured Workspaces */}
-        <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-background border-t border-border">
+        <section className="w-full py-20 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#FAF7F2] dark:bg-[#0B0B0C] border-t border-[#E8E2D8] dark:border-[#26262A]">
           <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 sm:mb-12">
               <div>
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/25 text-primary text-xs font-semibold uppercase tracking-wider mb-3">
-                  <Building size={13} /> Work Infrastructure
-                </div>
-                <h2 className="text-3xl md:text-5xl font-black text-foreground">
-                  Featured Workspaces
+                <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#B45309] dark:text-[#F5B301] mb-2">
+                  Work infrastructure
+                </p>
+                <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight">
+                  Featured workspaces
                 </h2>
-                <p className="text-muted-foreground text-sm md:text-base mt-2 max-w-2xl">
-                  Handpicked coworking spaces with verified high-speed fiber Wi-Fi, 24/7 power backup, and quiet call areas across Kathmandu and Pokhara.
+                <p className="text-sm sm:text-base text-gray-600 dark:text-[#A8A8B0] font-normal mt-2 max-w-xl">
+                  Fast fiber, backup power and quiet call areas, checked by our team.
                 </p>
               </div>
               <Link
                 href="/workspaces"
-                className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline group"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#B45309] dark:text-[#F5B301] hover:underline group"
               >
-                Browse All 50+ Workspaces <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                <span>View all workspaces</span>
+                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
 
@@ -241,9 +242,9 @@ export default async function Home() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12 bg-card rounded-2xl border border-border">
-                <p className="text-muted-foreground text-sm">Discover verified workspaces across Kathmandu and Pokhara.</p>
-                <Link href="/workspaces" className="inline-block mt-4 px-6 py-2.5 bg-primary text-black font-bold rounded-xl text-xs uppercase tracking-wider">
+              <div className="text-center py-12 bg-white dark:bg-[#141416] rounded-2xl border border-[#E8E2D8] dark:border-[#26262A]">
+                <p className="text-muted-foreground text-sm font-normal">Discover verified workspaces across Kathmandu and Pokhara.</p>
+                <Link href="/workspaces" className="inline-block mt-4 px-6 py-2.5 bg-[#F5B301] text-[#1A1A1C] font-bold rounded-full text-xs uppercase tracking-wider">
                   Open Coworking Marketplace
                 </Link>
               </div>
@@ -252,226 +253,201 @@ export default async function Home() {
         </section>
 
         {/* 3. Popular Destinations */}
-        <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-card border-y border-border">
+        <section className="w-full py-20 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white dark:bg-[#141416] border-y border-[#E8E2D8] dark:border-[#26262A]">
           <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 sm:mb-12">
               <div>
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/25 text-primary text-xs font-semibold uppercase tracking-wider mb-3">
-                  <Mountain size={13} /> Nomad Bases
-                </div>
-                <h2 className="text-3xl md:text-5xl font-black text-foreground">
-                  Popular Destinations
+                <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#B45309] dark:text-[#F5B301] mb-2">
+                  Nomad bases
+                </p>
+                <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight">
+                  Popular destinations
                 </h2>
-                <p className="text-muted-foreground text-sm md:text-base mt-2 max-w-2xl">
-                  From bustling urban cafe culture in Kathmandu to tranquil lakeside coworking in Pokhara, explore where digital nomads thrive in Nepal.
+                <p className="text-sm sm:text-base text-gray-600 dark:text-[#A8A8B0] font-normal mt-2 max-w-xl">
+                  From urban heritage cafe culture in Kathmandu to tranquil lakeside coworking in Pokhara.
                 </p>
               </div>
               <Link
                 href="/destinations"
-                className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline group"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#B45309] dark:text-[#F5B301] hover:underline group"
               >
-                Explore All Destinations <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                <span>Explore all destinations</span>
+                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <DestinationCard name="Kathmandu" description="The bustling cultural heart with fast fiber internet and historic heritage cafes." image="/images/destinations/kathmandu.png" slug="kathmandu" />
-              <DestinationCard name="Pokhara" description="Lakeside tranquility, mountain views, and the ultimate gateway to the Annapurnas." image="/images/destinations/pokhara.png" slug="pokhara" />
-              <DestinationCard name="Lalitpur" description="Artisan heritage courtyards, quiet expat cafes, and modern innovation spaces." image="/images/destinations/lalitpur.png" slug="lalitpur" />
-              <DestinationCard name="Bandipur" description="A preserved hilltop Newari town offering peace, panoramic views, and clean mountain air." image="/images/destinations/bandipur.png" slug="bandipur" />
+              <DestinationCard name="Kathmandu" description="The bustling cultural heart with fast fiber internet." image="/images/destinations/kathmandu.png" slug="kathmandu" counts="22 workspaces · 15 stays" />
+              <DestinationCard name="Pokhara" description="Lakeside tranquility and gateway to Annapurna trails." image="/images/destinations/pokhara.png" slug="pokhara" counts="14 workspaces · 12 stays" />
+              <DestinationCard name="Lalitpur" description="Heritage courtyards, quiet expat cafes & innovation labs." image="/images/destinations/lalitpur.png" slug="lalitpur" counts="11 workspaces · 8 stays" />
+              <DestinationCard name="Bandipur" description="A preserved hilltop Newari town with panoramic views." image="/images/destinations/bandipur.png" slug="bandipur" counts="3 workspaces · 6 stays" />
             </div>
           </div>
         </section>
 
-        {/* 4. Local Experts & Mountain Guides */}
-        <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-background">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
-              <div>
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/25 text-primary text-xs font-semibold uppercase tracking-wider mb-3">
-                  <ShieldCheck size={13} /> Verified Local Humans
+        {/* 4. Local Experts & Mountain Guides (Rendered only if at least 3 guides exist) */}
+        {guides.length >= 3 && (
+          <section className="w-full py-20 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#FAF7F2] dark:bg-[#0B0B0C] border-b border-[#E8E2D8] dark:border-[#26262A]">
+            <div className="max-w-7xl mx-auto">
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 sm:mb-12">
+                <div>
+                  <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#B45309] dark:text-[#F5B301] mb-2">
+                    Verified experts
+                  </p>
+                  <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight">
+                    Local guides &amp; mountain leaders
+                  </h2>
+                  <p className="text-sm sm:text-base text-gray-600 dark:text-[#A8A8B0] font-normal mt-2 max-w-xl">
+                    Government-licensed trekking guides and cultural insiders for weekend treks and custom expeditions.
+                  </p>
                 </div>
-                <h2 className="text-3xl md:text-5xl font-black text-foreground">
-                  Local Experts &amp; Trekking Guides
-                </h2>
-                <p className="text-muted-foreground text-sm md:text-base mt-2 max-w-2xl">
-                  Connect with government-licensed mountain guides, Sherpa leaders, and cultural insiders for weekend treks and custom expeditions.
-                </p>
+                <Link
+                  href="/guides"
+                  className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#B45309] dark:text-[#F5B301] hover:underline group"
+                >
+                  <span>Meet all guides</span>
+                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                </Link>
               </div>
-              <Link
-                href="/guides"
-                className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline group"
-              >
-                Meet All Local Guides <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {guides.length > 0 ? (
-                guides.map(guide => (
-                  <div
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {guides.slice(0, 3).map(guide => (
+                  <Link
                     key={guide.id}
-                    className="group bg-card border border-border rounded-2xl p-6 flex flex-col justify-between hover:border-primary/60 transition-all hover:shadow-lg hover:shadow-primary/5"
+                    href={`/guides/${guide.id}`}
+                    className="group block bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-2xl overflow-hidden hover:-translate-y-1 hover:shadow-xl transition-all duration-200 select-none"
                   >
-                    <div>
-                      <div className="flex items-start justify-between gap-4 mb-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-14 h-14 rounded-full overflow-hidden bg-muted border border-border relative flex-shrink-0">
-                            {guide.photoUrl ? (
-                              <Image src={guide.photoUrl} alt={guide.name} fill className="object-cover" />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center font-bold text-lg text-primary bg-primary/10">
-                                {guide.name.charAt(0)}
-                              </div>
-                            )}
-                          </div>
-                          <div>
-                            <div className="flex items-center gap-1.5">
-                              <h3 className="font-bold text-foreground text-base group-hover:text-primary transition-colors">
-                                {guide.name}
-                              </h3>
-                              {guide.isVerified && (
-                                <span title="Verified Guide" className="inline-flex items-center">
-                                  <CheckCircle2 size={15} className="text-primary fill-primary/20 flex-shrink-0" />
-                                </span>
-                              )}
-                            </div>
-                            <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
-                              <MapPin size={12} className="text-primary" /> {guide.location}
-                            </p>
-                          </div>
+                    <div className="relative aspect-[4/3] w-full bg-[#1A1A1C] overflow-hidden">
+                      {guide.photoUrl ? (
+                        <Image src={guide.photoUrl} alt={guide.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center font-bold text-2xl text-[#F5B301] bg-[#F5B301]/10">
+                          {guide.name.charAt(0)}
                         </div>
+                      )}
+                      {guide.isVerified && (
+                        <span className="absolute top-3 left-3 bg-[#F5B301] text-[#1A1A1C] text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm z-10">
+                          Licensed Guide
+                        </span>
+                      )}
+                    </div>
 
-                        <div className="flex items-center gap-1 bg-primary/10 text-primary px-2.5 py-1 rounded-full text-xs font-bold">
-                          <Star size={12} className="fill-primary text-primary" />
-                          <span>{guide.avgRating ? guide.avgRating.toFixed(1) : "5.0"}</span>
+                    <div className="p-4 sm:p-5 space-y-3">
+                      <div>
+                        <h3 className="text-base sm:text-[17px] font-semibold text-gray-900 dark:text-[#F5F5F4] group-hover:text-[#F5B301] transition-colors line-clamp-1 leading-snug">
+                          {guide.name}
+                        </h3>
+                        <div className="flex items-center gap-1.5 text-xs sm:text-[13px] text-gray-500 dark:text-[#A8A8B0] mt-1 font-normal">
+                          <MapPin size={13} className="text-gray-400 shrink-0" />
+                          <span className="truncate">{guide.location}</span>
+                          <span className="text-gray-300 dark:text-gray-600 select-none">·</span>
+                          <span className="flex items-center gap-0.5 text-gray-700 dark:text-gray-300 font-medium">
+                            <Star size={11} className="fill-[#F5B301] text-[#F5B301]" />
+                            <span>{guide.avgRating ? guide.avgRating.toFixed(1) : "5.0"}</span>
+                          </span>
                         </div>
                       </div>
 
-                      <p className="text-xs sm:text-sm text-muted-foreground line-clamp-3 mb-4 leading-relaxed">
-                        {guide.bio}
-                      </p>
-
-                      {/* Specialties */}
-                      <div className="flex flex-wrap gap-1.5 mb-6">
-                        {guide.specialties.slice(0, 3).map((spec, idx) => (
+                      <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                        {guide.specialties.slice(0, 2).map((spec, idx) => (
                           <span
                             key={idx}
-                            className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-secondary text-secondary-foreground border border-border"
+                            className="inline-flex items-center text-[11px] font-medium px-2.5 py-1 rounded-full bg-[#F3EEE5] dark:bg-[#1C1C1F] text-gray-800 dark:text-[#E4E4E7] border border-[#E8E2D8] dark:border-[#26262A]"
                           >
                             {spec}
                           </span>
                         ))}
                       </div>
+
+                      <div className="pt-2 border-t border-[#E8E2D8] dark:border-[#26262A] flex items-center justify-between text-xs sm:text-sm font-semibold text-gray-900 dark:text-[#F5F5F4]">
+                        <span>From $35/day</span>
+                        <span className="text-xs text-[#B45309] dark:text-[#F5B301] group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5">
+                          View profile →
+                        </span>
+                      </div>
                     </div>
-
-                    <Link
-                      href={`/guides/${guide.id}`}
-                      className="w-full py-2.5 px-4 rounded-xl bg-background border border-border group-hover:border-primary group-hover:bg-primary group-hover:text-black font-bold text-xs text-center transition-all flex items-center justify-center gap-2"
-                    >
-                      View Guide Profile <ArrowRight size={13} />
-                    </Link>
-                  </div>
-                ))
-              ) : (
-                <div className="col-span-3 text-center py-10 bg-card rounded-2xl border border-border">
-                  <p className="text-muted-foreground text-sm">Meet certified trekking guides and mountain leaders in Nepal.</p>
-                  <Link href="/guides" className="inline-block mt-3 px-6 py-2 bg-primary text-black font-bold rounded-xl text-xs">
-                    View Guide Directory
                   </Link>
-                </div>
-              )}
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
-        {/* 5. Recommended Stays */}
-        <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-card border-y border-border">
+        {/* 5. Recommended Stays & Coliving */}
+        <section className="w-full py-20 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white dark:bg-[#141416] border-b border-[#E8E2D8] dark:border-[#26262A]">
           <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 sm:mb-12">
               <div>
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/25 text-primary text-xs font-semibold uppercase tracking-wider mb-3">
-                  <Building size={13} /> Sleep &amp; Work
-                </div>
-                <h2 className="text-3xl md:text-5xl font-black text-foreground">
-                  Recommended Stays &amp; Coliving
+                <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#B45309] dark:text-[#F5B301] mb-2">
+                  Sleep &amp; work
+                </p>
+                <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight">
+                  Recommended stays &amp; coliving
                 </h2>
-                <p className="text-muted-foreground text-sm md:text-base mt-2 max-w-2xl">
-                  Work-friendly hotels, coliving houses, and serviced apartments vetted for dedicated desks, high-speed fiber Wi-Fi, and power backup.
+                <p className="text-sm sm:text-base text-gray-600 dark:text-[#A8A8B0] font-normal mt-2 max-w-xl">
+                  Work-friendly hotels and coliving houses vetted for dedicated desks and high-speed Wi-Fi.
                 </p>
               </div>
               <Link
                 href="/stay"
-                className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline group"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#B45309] dark:text-[#F5B301] hover:underline group"
               >
-                Browse All Nomad Stays <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                <span>Browse all nomad stays</span>
+                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {stays.map(stay => (
-                <div
+                <Link
                   key={stay.id}
-                  className="group bg-background border border-border rounded-2xl overflow-hidden flex flex-col justify-between hover:border-primary/60 transition-all hover:shadow-lg hover:shadow-primary/5"
+                  href={`/stay?type=${encodeURIComponent(stay.type.toLowerCase())}`}
+                  className="group block bg-[#FAF7F2] dark:bg-[#0B0B0C] border border-[#E8E2D8] dark:border-[#26262A] rounded-2xl overflow-hidden hover:-translate-y-1 hover:shadow-xl transition-all duration-200 select-none"
                 >
-                  <div>
-                    <div className="relative h-48 w-full bg-muted overflow-hidden">
-                      <Image
-                        src={stay.photoUrl}
-                        alt={stay.name}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-bold text-white border border-white/20">
-                        {stay.type}
-                      </div>
-                      <div className="absolute top-3 right-3 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-bold text-primary border border-primary/30 flex items-center gap-1">
-                        <Star size={11} className="fill-primary" /> {stay.rating}
-                      </div>
-                    </div>
+                  <div className="relative aspect-[4/3] w-full bg-[#1A1A1C] overflow-hidden">
+                    <Image
+                      src={stay.photoUrl}
+                      alt={stay.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <span className="absolute top-3 left-3 bg-[#F5B301] text-[#1A1A1C] text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm z-10">
+                      {stay.type}
+                    </span>
+                  </div>
 
-                    <div className="p-6">
-                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1.5">
-                        <MapPin size={12} className="text-primary" /> {stay.area}
-                      </div>
-                      <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors mb-2">
+                  <div className="p-4 sm:p-5 space-y-3">
+                    <div>
+                      <h3 className="text-base sm:text-[17px] font-semibold text-gray-900 dark:text-[#F5F5F4] group-hover:text-[#F5B301] transition-colors line-clamp-1 leading-snug">
                         {stay.name}
                       </h3>
-                      <p className="text-xs text-muted-foreground line-clamp-2 mb-4 leading-relaxed">
-                        {stay.description}
-                      </p>
-
-                      {/* Work Features Badges */}
-                      <div className="grid grid-cols-2 gap-2 mb-4">
-                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-foreground/80 bg-muted/60 px-2.5 py-1.5 rounded-lg border border-border">
-                          <Wifi size={13} className="text-primary flex-shrink-0" />
-                          <span className="truncate">{stay.speed}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-foreground/80 bg-muted/60 px-2.5 py-1.5 rounded-lg border border-border">
-                          <Zap size={13} className="text-primary flex-shrink-0" />
-                          <span className="truncate">{stay.power}</span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-baseline justify-between border-t border-border pt-3">
-                        <div>
-                          <span className="text-xs text-muted-foreground">From </span>
-                          <span className="text-base font-black text-foreground">{stay.price}</span>
-                        </div>
-                        <span className="text-xs font-bold text-primary">{stay.monthlyPrice}</span>
+                      <div className="flex items-center gap-1.5 text-xs sm:text-[13px] text-gray-500 dark:text-[#A8A8B0] mt-1 font-normal">
+                        <MapPin size={13} className="text-gray-400 shrink-0" />
+                        <span className="truncate">{stay.area}</span>
+                        <span className="text-gray-300 dark:text-gray-600 select-none">·</span>
+                        <span className="flex items-center gap-0.5 text-gray-700 dark:text-gray-300 font-medium">
+                          <Star size={11} className="fill-[#F5B301] text-[#F5B301]" />
+                          <span>{stay.rating}</span>
+                        </span>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="p-6 pt-0">
-                    <Link
-                      href={`/stay?type=${encodeURIComponent(stay.type.toLowerCase())}`}
-                      className="w-full py-2.5 px-4 rounded-xl bg-card border border-border group-hover:border-primary group-hover:bg-primary group-hover:text-black font-bold text-xs text-center transition-all flex items-center justify-center gap-2"
-                    >
-                      View {stay.type} Details <ArrowRight size={13} />
-                    </Link>
+                    <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                      <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-full bg-white dark:bg-[#1C1C1F] text-gray-800 dark:text-[#E4E4E7] border border-[#E8E2D8] dark:border-[#26262A]">
+                        <Wifi size={11} className="text-[#F5B301] shrink-0" />
+                        <span>{stay.speed}</span>
+                      </span>
+                      <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-full bg-white dark:bg-[#1C1C1F] text-gray-800 dark:text-[#E4E4E7] border border-[#E8E2D8] dark:border-[#26262A]">
+                        <Zap size={11} className="text-[#F5B301] shrink-0" />
+                        <span>{stay.power}</span>
+                      </span>
+                    </div>
+
+                    <div className="pt-2 border-t border-[#E8E2D8] dark:border-[#26262A] flex items-center justify-between text-xs sm:text-sm font-semibold text-gray-900 dark:text-[#F5F5F4]">
+                      <span>From {stay.price} · {stay.monthlyPrice}</span>
+                    </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
@@ -512,15 +488,15 @@ export default async function Home() {
           </div>
 
           <div className="relative z-10 max-w-7xl mx-auto">
-            <div className="text-center max-w-3xl mx-auto mb-16">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/15 backdrop-blur-md border border-primary/30 text-primary text-xs font-semibold uppercase tracking-wider mb-3 shadow-sm">
-                <Sparkles size={13} /> Nomad Life &amp; Adventure
-              </div>
-              <h2 className="text-3xl md:text-5xl font-black text-foreground drop-shadow-sm">
-                Things to Do in Nepal
+            <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
+              <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#F5B301] mb-2">
+                Nomad life &amp; adventure
+              </p>
+              <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground drop-shadow-sm tracking-tight">
+                Things to do in Nepal
               </h2>
-              <p className="text-muted-foreground text-sm md:text-base mt-2 max-w-2xl mx-auto font-medium">
-                Balance deep remote work sprints with legendary Himalayan outdoors, historic cafe culture, and restorative escapes.
+              <p className="text-muted-foreground text-sm sm:text-base mt-2 max-w-2xl mx-auto font-normal">
+                Balance deep remote work sprints with Himalayan outdoors, heritage cafe culture, and restorative escapes.
               </p>
             </div>
 
@@ -593,19 +569,26 @@ export default async function Home() {
         </section>
 
         {/* 7. Latest Guides & Articles (Blog) */}
-        <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-card border-y border-border">
+        <section className="w-full py-20 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#FAF7F2] dark:bg-[#0B0B0C] border-y border-[#E8E2D8] dark:border-[#26262A]">
           <div className="max-w-7xl mx-auto">
-            <div className="flex justify-between items-end gap-4 mb-12 flex-wrap">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 sm:mb-12">
               <div>
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/25 text-primary text-xs font-semibold uppercase tracking-wider mb-3">
-                  <BookOpen size={13} /> Knowledge Base
-                </div>
-                <h2 className="text-3xl md:text-5xl font-black text-foreground">
-                  Latest from the Blog
+                <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#B45309] dark:text-[#F5B301] mb-2">
+                  Knowledge base
+                </p>
+                <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight">
+                  Field guides &amp; articles
                 </h2>
+                <p className="text-sm sm:text-base text-gray-600 dark:text-[#A8A8B0] font-normal mt-2 max-w-xl">
+                  Cost breakdowns, visa rules, and remote work logistics across Nepal.
+                </p>
               </div>
-              <Link href="/blog" className="text-sm font-bold text-primary hover:underline group flex items-center gap-1">
-                View All Posts <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+              <Link
+                href="/blog"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#B45309] dark:text-[#F5B301] hover:underline group"
+              >
+                <span>View all articles</span>
+                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
             <BlogGrid posts={posts} />
@@ -613,13 +596,13 @@ export default async function Home() {
         </section>
 
         {/* 8. Why Digital Nomads Choose Nepal (Side-by-Side: Image Left, Content Right) */}
-        <section className="w-full py-24 px-4 sm:px-6 lg:px-8 bg-background border-t border-border">
+        <section className="w-full py-24 px-4 sm:px-6 lg:px-8 bg-[#141416] text-white border-t border-[#26262A]">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-stretch">
               
               {/* LEFT COLUMN: Visual Image Frame */}
               <div className="lg:col-span-5 relative group">
-                <div className="relative w-full h-[450px] sm:h-[520px] lg:h-full min-h-[520px] rounded-3xl overflow-hidden border border-border shadow-2xl bg-card">
+                <div className="relative w-full h-[450px] sm:h-[520px] lg:h-full min-h-[520px] rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-[#1C1C1F]">
                   <Image 
                     src="/images/home/why-choose-nepal-hd.jpg" 
                     alt="Digital nomad meditating with laptop overlooking Annapurna mountain sanctuary in Nepal" 
@@ -629,24 +612,24 @@ export default async function Home() {
                     quality={95}
                   />
                   {/* Subtle lighting gradient overlay tailored for crisp mountain clarity */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
 
                   {/* Top Badge */}
                   <div className="absolute top-4 left-4 z-10">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white text-xs font-bold shadow-lg">
-                      <MapPin size={12} className="text-[#FFD400]" /> Annapurna Sanctuary • Nepal
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white text-xs font-semibold shadow-lg">
+                      <MapPin size={12} className="text-[#F5B301]" /> Annapurna Sanctuary • Nepal
                     </span>
                   </div>
 
                   {/* Bottom Floating Stats Pill */}
-                  <div className="absolute bottom-5 inset-x-5 z-10 p-4 rounded-2xl bg-black/75 backdrop-blur-md border border-white/15 text-white shadow-xl">
-                    <div className="flex items-center justify-between text-xs font-bold text-gray-200">
-                      <span className="flex items-center gap-1.5 text-primary">
+                  <div className="absolute bottom-5 inset-x-5 z-10 p-4 rounded-xl bg-black/75 backdrop-blur-md border border-white/15 text-white shadow-xl">
+                    <div className="flex items-center justify-between text-xs font-semibold text-gray-200">
+                      <span className="flex items-center gap-1.5 text-[#F5B301]">
                         <Sparkles size={14} /> Work-Life Harmony
                       </span>
                       <span>8 of 14 Highest Peaks</span>
                     </div>
-                    <p className="text-[11px] text-gray-300 mt-1 leading-snug">
+                    <p className="text-[11px] text-gray-300 mt-1 leading-snug font-normal">
                       Step away from your screen directly into serene Himalayan landscapes.
                     </p>
                   </div>
@@ -657,13 +640,13 @@ export default async function Home() {
               <div className="lg:col-span-7 flex flex-col justify-center">
                 {/* Header */}
                 <div className="mb-8">
-                  <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/25 text-primary text-xs font-semibold uppercase tracking-wider mb-3">
-                    <Sparkles size={13} /> The Himalayan Advantage
-                  </div>
-                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-foreground tracking-tight leading-tight">
-                    Why Digital Nomads Choose Nepal
+                  <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#F5B301] mb-2">
+                    The Himalayan advantage
+                  </p>
+                  <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight">
+                    Why digital nomads choose Nepal
                   </h2>
-                  <p className="text-muted-foreground text-sm sm:text-base mt-3 leading-relaxed">
+                  <p className="text-gray-300 text-sm sm:text-base mt-3 leading-relaxed font-normal">
                     More than just breathtaking mountains: Nepal offers an inspiring lifestyle where world-class nature meets unprecedented affordability, expanding fiber connectivity, and warm hospitality.
                   </p>
                 </div>
@@ -673,22 +656,22 @@ export default async function Home() {
                   {/* Card 1 */}
                   <Link
                     href="/blog/cost-of-living-nepal-2026-nomad-budget"
-                    className="p-5 sm:p-6 border border-border border-l-4 border-l-primary bg-card rounded-2xl hover:border-primary/60 hover:-translate-y-0.5 transition-all duration-300 shadow-sm block group"
+                    className="p-5 sm:p-6 border border-white/10 border-l-4 border-l-[#F5B301] bg-[#1C1C1F] rounded-2xl hover:border-[#F5B301]/60 hover:-translate-y-0.5 transition-all duration-300 shadow-sm block group"
                   >
                     <div className="flex items-center justify-between mb-1.5">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                        <div className="w-8 h-8 rounded-lg bg-[#F5B301]/10 flex items-center justify-center text-[#F5B301] shrink-0">
                           <DollarSign size={16} />
                         </div>
-                        <h3 className="text-lg sm:text-xl font-bold text-foreground group-hover:text-primary transition-colors">
+                        <h3 className="text-base sm:text-lg font-semibold text-white group-hover:text-[#F5B301] transition-colors">
                           Unbeatable Cost of Living
                         </h3>
                       </div>
-                      <span className="text-xs font-bold text-primary group-hover:translate-x-1 inline-flex items-center gap-1 transition-transform">
+                      <span className="text-xs font-semibold text-[#F5B301] group-hover:translate-x-1 inline-flex items-center gap-1 transition-transform">
                         From $500/mo <ArrowRight size={13} />
                       </span>
                     </div>
-                    <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed pl-10">
+                    <p className="text-gray-400 text-xs sm:text-sm leading-relaxed pl-10 font-normal">
                       Live comfortably in private furnished apartments, dine out daily at healthy cafes, and access coworking spaces for $500–$1,200/month total.
                     </p>
                   </Link>
@@ -696,22 +679,22 @@ export default async function Home() {
                   {/* Card 2 */}
                   <Link
                     href="/guides"
-                    className="p-5 sm:p-6 border border-border border-l-4 border-l-primary bg-card rounded-2xl hover:border-primary/60 hover:-translate-y-0.5 transition-all duration-300 shadow-sm block group"
+                    className="p-5 sm:p-6 border border-white/10 border-l-4 border-l-[#F5B301] bg-[#1C1C1F] rounded-2xl hover:border-[#F5B301]/60 hover:-translate-y-0.5 transition-all duration-300 shadow-sm block group"
                   >
                     <div className="flex items-center justify-between mb-1.5">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                        <div className="w-8 h-8 rounded-lg bg-[#F5B301]/10 flex items-center justify-center text-[#F5B301] shrink-0">
                           <Mountain size={16} />
                         </div>
-                        <h3 className="text-lg sm:text-xl font-bold text-foreground group-hover:text-primary transition-colors">
+                        <h3 className="text-base sm:text-lg font-semibold text-white group-hover:text-[#F5B301] transition-colors">
                           Nature &amp; Mountains at Your Desk
                         </h3>
                       </div>
-                      <span className="text-xs font-bold text-primary group-hover:translate-x-1 inline-flex items-center gap-1 transition-transform">
+                      <span className="text-xs font-semibold text-[#F5B301] group-hover:translate-x-1 inline-flex items-center gap-1 transition-transform">
                         Explore Guides <ArrowRight size={13} />
                       </span>
                     </div>
-                    <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed pl-10">
+                    <p className="text-gray-400 text-xs sm:text-sm leading-relaxed pl-10 font-normal">
                       Close your laptop on Friday and be trekking surrounded by eight of the world&apos;s highest peaks on Saturday. Himalayan trails are right outside your window.
                     </p>
                   </Link>
@@ -719,22 +702,22 @@ export default async function Home() {
                   {/* Card 3 */}
                   <Link
                     href="/workspaces"
-                    className="p-5 sm:p-6 border border-border border-l-4 border-l-primary bg-card rounded-2xl hover:border-primary/60 hover:-translate-y-0.5 transition-all duration-300 shadow-sm block group"
+                    className="p-5 sm:p-6 border border-white/10 border-l-4 border-l-[#F5B301] bg-[#1C1C1F] rounded-2xl hover:border-[#F5B301]/60 hover:-translate-y-0.5 transition-all duration-300 shadow-sm block group"
                   >
                     <div className="flex items-center justify-between mb-1.5">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                        <div className="w-8 h-8 rounded-lg bg-[#F5B301]/10 flex items-center justify-center text-[#F5B301] shrink-0">
                           <Zap size={16} />
                         </div>
-                        <h3 className="text-lg sm:text-xl font-bold text-foreground group-hover:text-primary transition-colors">
+                        <h3 className="text-base sm:text-lg font-semibold text-white group-hover:text-[#F5B301] transition-colors">
                           Growing Remote Culture &amp; Fiber
                         </h3>
                       </div>
-                      <span className="text-xs font-bold text-primary group-hover:translate-x-1 inline-flex items-center gap-1 transition-transform">
+                      <span className="text-xs font-semibold text-[#F5B301] group-hover:translate-x-1 inline-flex items-center gap-1 transition-transform">
                         50+ Hubs <ArrowRight size={13} />
                       </span>
                     </div>
-                    <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed pl-10">
+                    <p className="text-gray-400 text-xs sm:text-sm leading-relaxed pl-10 font-normal">
                       With 100+ Mbps fiber internet expansion, automatic battery/solar backups, and modern coworking spaces, working remotely in Nepal is seamless.
                     </p>
                   </Link>
@@ -747,15 +730,15 @@ export default async function Home() {
 
         {/* 9. Join the Community (Dynamic Admin Social Media Links) */}
         {activeSocials.length > 0 && (
-          <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-card border-t border-border">
+          <section className="w-full py-20 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white dark:bg-[#141416] border-t border-[#E8E2D8] dark:border-[#26262A]">
             <div className="max-w-4xl mx-auto text-center">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/25 text-primary text-xs font-semibold uppercase tracking-wider mb-3">
-                <Users size={13} /> Connected Community
-              </div>
-              <h2 className="text-3xl md:text-5xl font-black text-foreground mb-4">
-                Join the Nomad Community
+              <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#B45309] dark:text-[#F5B301] mb-2">
+                Connected community
+              </p>
+              <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-[#F5F5F4] mb-4 tracking-tight">
+                Join the nomad community
               </h2>
-              <p className="text-muted-foreground text-sm md:text-base mb-10 max-w-xl mx-auto">
+              <p className="text-muted-foreground text-sm sm:text-base mb-10 max-w-xl mx-auto font-normal">
                 Connect with our active digital nomad community across our verified social channels for meetup announcements, trek invites, and insider advice.
               </p>
 

@@ -406,12 +406,12 @@ export default function Navbar() {
                 }`}>
                   DIGITAL NOMADS
                 </span>
-                <span className={`w-full flex items-center justify-center gap-1 font-extrabold text-[8px] sm:text-[10px] text-[#FFD400] tracking-[0.16em] uppercase leading-none mt-0.5 select-none text-center ${
+                <span className={`w-full flex items-center justify-center gap-1.5 font-black text-[9.5px] sm:text-[11.5px] text-[#F5B301] tracking-[0.2em] uppercase leading-none mt-0.5 select-none text-center ${
                   !isScrolled ? "flex" : "hidden sm:flex"
                 }`}>
-                  <span className="text-[#FFD400]/60 font-medium select-none">—</span>
+                  <span className="text-[#F5B301]/60 font-medium select-none">—</span>
                   <span>IN NEPAL</span>
-                  <span className="text-[#FFD400]/60 font-medium select-none">—</span>
+                  <span className="text-[#F5B301]/60 font-medium select-none">—</span>
                 </span>
               </Link>
 
@@ -901,7 +901,7 @@ export default function Navbar() {
             <div className="relative group/booknow">
               <Link
                 href="/resources/coworking#book"
-                className="flex items-center gap-1.5 px-4 py-2 bg-[#FFD400] hover:bg-[#FFE033] text-black font-bold text-xs rounded-full transition-all shadow-md shadow-[#FFD400]/20 hover:shadow-[#FFD400]/35 hover:scale-[1.02] active:scale-95 whitespace-nowrap cursor-pointer z-10"
+                className="flex items-center gap-1.5 px-3.5 py-1.5 border border-[#F5B301]/80 hover:border-[#F5B301] text-[#F5B301] hover:bg-[#F5B301] hover:text-[#1A1A1C] font-bold text-xs rounded-full transition-all shadow-xs active:scale-95 whitespace-nowrap cursor-pointer z-10"
               >
                 <CalendarCheck size={13} className="group-hover/booknow:rotate-12 transition-transform duration-200" />
                 <span>Book Now</span>

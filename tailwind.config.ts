@@ -8,6 +8,10 @@ const config: Config = {
   darkMode: 'class',
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-inter)", "sans-serif"],
+        serif: ["var(--font-fraunces)", "serif"],
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",

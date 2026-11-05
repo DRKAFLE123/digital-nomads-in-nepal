@@ -3,25 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState } from "react"
 import Link from "next/link"
-import {
-  MapPin,
-  Star,
-  CheckCircle,
-  Award,
-  Wifi,
-  Zap,
-  Building,
-  Heart,
-  CalendarCheck,
-  ShieldCheck,
-  ChevronLeft,
-  ChevronRight,
-  ImageIcon,
-  Home,
-} from "lucide-react"
-import { calculateWorkabilityScore } from "./WorkabilityScoreBadge"
-
-import BookingModalCard from "./BookingModalCard"
+import { MapPin, Star, Heart, Building, Wifi, Zap } from "lucide-react"
 
 export type Unit = {
   type: string
@@ -75,284 +57,156 @@ function parsePhotos(photoUrl: string | null): string[] {
 
 export default function WorkspaceCard({ hub }: WorkspaceCardProps) {
   const [favorited, setFavorited] = useState(false)
-  const [activeImageIdx, setActiveImageIdx] = useState(0)
-  const [bookingModalOpen, setBookingModalOpen] = useState(false)
-
   const photos = parsePhotos(hub.photoUrl)
-  const hasMultiplePhotos = photos.length > 1
-  const activePhoto = photos[activeImageIdx] || photos[0] || null
+  const photo = photos[0] || null
 
   const facs = Array.isArray(hub.facilities) ? (hub.facilities as string[]) : []
 
-  // Check if property offers Coliving / Work & Stay rooms
-  const hasColiving =
-    facs.some(f => f.toLowerCase().includes("coliving") || f.toLowerCase().includes("stay") || f.toLowerCase().includes("room") || f.toLowerCase().includes("suite")) ||
-    (hub.units && hub.units.some(u => (u.type || u.name || "").toLowerCase().includes("coliving") || (u.type || u.name || "").toLowerCase().includes("suite") || (u.type || u.name || "").toLowerCase().includes("room"))) ||
-    hub.name.toLowerCase().includes("coliving") || hub.name.toLowerCase().includes("resort") || hub.name.toLowerCase().includes("hostel") || hub.name.toLowerCase().includes("hotel")
+  // Extract clean chips (max 3)
+  const chips: { label: string; icon?: React.ElementType }[] = []
+  const hasFiber = facs.some(f => f.toLowerCase().includes("fiber") || f.toLowerCase().includes("wifi") || f.toLowerCase().includes("mbps"))
+  const hasBackup = facs.some(f => f.toLowerCase().includes("generator") || f.toLowerCase().includes("backup") || f.toLowerCase().includes("ups") || f.toLowerCase().includes("solar"))
 
-  // Detect internet speed & power backup from facilities or defaults
-  const internetFacility = facs.find(f => f.includes("Mbps") || f.includes("Fiber") || f.includes("Starlink")) || "100+ Mbps Fiber"
-  const powerFacility = facs.find(f => f.includes("Generator") || f.includes("UPS") || f.includes("Inverter") || f.includes("Solar")) || "Generator + UPS"
+  if (hasFiber) {
+    const fiberText = facs.find(f => f.toLowerCase().includes("fiber") || f.toLowerCase().includes("mbps")) || "Dual fiber"
+    chips.push({ label: fiberText.length > 15 ? "Fast fiber" : fiberText, icon: Wifi })
+  }
+  if (hasBackup && chips.length < 3) {
+    const backupText = facs.find(f => f.toLowerCase().includes("generator") || f.toLowerCase().includes("backup")) || "Generator backup"
+    chips.push({ label: backupText.length > 18 ? "Power backup" : backupText, icon: Zap })
+  }
 
-  const workabilityScore = calculateWorkabilityScore({
-    rating: hub.rating || 4.8,
-    internetSpeed: internetFacility,
-    powerBackup: powerFacility,
-    facilities: facs,
+  // Fill remaining slots from other amenities
+  const otherFacs = facs.filter(f => {
+    const l = f.toLowerCase()
+    return !l.includes("wifi") && !l.includes("fiber") && !l.includes("generator") && !l.includes("backup") && !l.includes("ups")
   })
 
-  // Format starting price string (starts from cheapest hot desk / basic room)
-  const dailyNpr = hub.priceDaily ? Math.round(hub.priceDaily * 135) : null
-  const monthlyNpr = hub.priceMonthly ? Math.round(hub.priceMonthly * 130) : null
-
-  const displayPrice = hub.priceDaily
-    ? `From NPR ${dailyNpr?.toLocaleString()}/day ($${hub.priceDaily})`
-    : hub.priceMonthly
-    ? `From NPR ${monthlyNpr?.toLocaleString()}/mo ($${hub.priceMonthly})`
-    : "From NPR 540/day ($4)"
-
-  const nextImage = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setActiveImageIdx((prev) => (prev + 1) % photos.length)
+  while (chips.length < 3 && otherFacs.length > 0) {
+    const next = otherFacs.shift()
+    if (next) chips.push({ label: next })
   }
 
-  const prevImage = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setActiveImageIdx((prev) => (prev - 1 + photos.length) % photos.length)
+  // If DB had empty facilities, fallback to realistic defaults
+  if (chips.length === 0) {
+    chips.push({ label: "Fast fiber", icon: Wifi })
+    chips.push({ label: "Generator backup", icon: Zap })
+    chips.push({ label: "24/7 access" })
   }
+
+  const remainingCount = facs.length > chips.length ? facs.length - chips.length : 0
+
+  // Price formatting
+  const priceDaily = hub.priceDaily ? `$${hub.priceDaily}/day` : null
+  const priceMonthly = hub.priceMonthly ? `$${hub.priceMonthly}/month` : null
+  const priceLine = priceDaily && priceMonthly
+    ? `From ${priceDaily} · ${priceMonthly}`
+    : priceDaily
+    ? `From ${priceDaily}`
+    : priceMonthly
+    ? `From ${priceMonthly}`
+    : "From $5/day"
 
   return (
-    <>
-      <div className="group bg-[#121212] border border-[#242424] hover:border-amber-400/40 rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-amber-400/5 hover:-translate-y-1 flex flex-col justify-between">
-        <div>
-          {/* Card Header Media & Slider */}
-          <div className="relative h-52 w-full overflow-hidden bg-[#181818]">
-            {activePhoto ? (
-              <img
-                src={activePhoto}
-                alt={`${hub.name} photo ${activeImageIdx + 1}`}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-            ) : (
-              <div className="w-full h-full flex flex-col items-center justify-center text-gray-600 bg-gradient-to-br from-[#161616] to-[#0d0d0d]">
-                <Building size={36} />
-                <span className="text-xs font-semibold mt-2">Digital Nomad WorkHub</span>
-              </div>
-            )}
-
-            {/* Slider Chevrons */}
-            {hasMultiplePhotos && (
-              <>
-                <button
-                  type="button"
-                  onClick={prevImage}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/70 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-amber-400 hover:text-black transition-all z-20"
-                  title="Previous photo"
-                >
-                  <ChevronLeft size={16} />
-                </button>
-                <button
-                  type="button"
-                  onClick={nextImage}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/70 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-amber-400 hover:text-black transition-all z-20"
-                  title="Next photo"
-                >
-                  <ChevronRight size={16} />
-                </button>
-
-                {/* Photo Count Indicator */}
-                <div className="absolute top-3 right-14 bg-black/75 border border-white/10 px-2 py-0.5 rounded-full text-[10px] font-mono text-white flex items-center gap-1 z-10">
-                  <ImageIcon size={10} className="text-amber-400" />
-                  {activeImageIdx + 1}/{photos.length}
-                </div>
-
-                {/* Slider Dots */}
-                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1 z-10 bg-black/40 px-2 py-1 rounded-full backdrop-blur-xs">
-                  {photos.map((_, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      onClick={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        setActiveImageIdx(i)
-                      }}
-                      className={`h-1.5 rounded-full transition-all ${
-                        i === activeImageIdx ? "w-4 bg-amber-400" : "w-1.5 bg-white/50 hover:bg-white"
-                      }`}
-                    />
-                  ))}
-                </div>
-              </>
-            )}
-
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-transparent to-black/40 pointer-events-none" />
-
-            {/* Badges Stack */}
-            <div className="absolute top-3 left-3 flex flex-wrap gap-1 max-w-[75%] z-10">
-              {hub.isVerified && (
-                <span className="inline-flex items-center gap-1 bg-emerald-500/90 text-black font-extrabold text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-lg shadow-md backdrop-blur-md">
-                  <CheckCircle size={10} className="fill-black text-emerald-500" /> Verified
-                </span>
-              )}
-              {hub.isPartner && (
-                <span className="inline-flex items-center gap-1 bg-amber-400 text-black font-extrabold text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-lg shadow-md">
-                  <Award size={10} className="fill-black" /> Partner
-                </span>
-              )}
-              {hasColiving && (
-                <span className="inline-flex items-center gap-1 bg-indigo-600/90 text-white font-extrabold text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-lg shadow-md backdrop-blur-md border border-indigo-400/30">
-                  <Home size={10} className="text-white" /> Coliving
-                </span>
-              )}
-            </div>
-
-            {/* Favorite Bookmark Button */}
-            <button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault()
-                setFavorited(!favorited)
-              }}
-              className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center transition-all z-10 backdrop-blur ${
-                favorited
-                  ? "bg-rose-500 text-white shadow-lg shadow-rose-500/30"
-                  : "bg-black/60 text-gray-300 hover:text-white border border-white/10 hover:bg-black"
-              }`}
-              title={favorited ? "Saved" : "Save workspace"}
-            >
-              <Heart size={15} className={favorited ? "fill-white" : ""} />
-            </button>
-
-            {/* Price Badge on Image */}
-            <div className="absolute bottom-3 right-3 bg-black/85 border border-[#333] px-2.5 py-1 rounded-xl text-xs font-black text-amber-400 shadow-md">
-              {displayPrice}
-            </div>
+    <Link
+      href={`/workspaces/${hub.slug}`}
+      className="group block bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-2xl overflow-hidden hover:-translate-y-1 hover:shadow-xl transition-all duration-200 select-none"
+    >
+      {/* 4:3 Aspect Ratio Photo Crop */}
+      <div className="relative aspect-[4/3] w-full bg-[#1A1A1C] overflow-hidden">
+        {photo ? (
+          <img
+            src={photo}
+            alt={hub.name}
+            loading="lazy"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center text-gray-500 bg-gradient-to-br from-[#1A1A1C] to-[#121214]">
+            <Building size={32} className="opacity-40" />
+            <span className="text-[11px] font-medium mt-1 text-gray-400">Workspace in {hub.city}</span>
           </div>
+        )}
 
-          {/* Card Body */}
-          <div className="p-4 sm:p-5 space-y-3">
-            {/* City & Rating Bar */}
-            <div className="flex items-center justify-between text-xs">
-              <span className="flex items-center gap-1 text-amber-400 font-bold uppercase tracking-wide text-[11px]">
-                <MapPin size={12} /> {hub.city}, Nepal
-              </span>
-              <div className="flex items-center gap-1 bg-[#1a1a1a] border border-[#262626] px-2 py-0.5 rounded-lg">
-                <Star size={11} className="text-amber-400 fill-amber-400" />
-                <span className="font-extrabold text-white text-xs">{hub.rating ? hub.rating.toFixed(1) : "4.8"}</span>
-                <span className="text-gray-500 text-[10px]">({hub.totalReviews || 42})</span>
-              </div>
-            </div>
+        {/* Top-Left Single Badge (Verified or Partner) */}
+        {(hub.isVerified || hub.isPartner) && (
+          <span className="absolute top-3 left-3 bg-[#F5B301] text-[#1A1A1C] text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm z-10">
+            {hub.isVerified ? "Verified" : "Partner"}
+          </span>
+        )}
 
-            {/* Workspace Title */}
-            <div>
-              <Link href={`/resources/coworking/${hub.slug}`}>
-                <h3 className="text-base font-black text-white group-hover:text-amber-400 transition-colors line-clamp-1">
-                  {hub.name}
-                </h3>
-              </Link>
-              <p className="text-gray-400 text-[11px] mt-0.5 truncate flex items-center gap-1">
-                <MapPin size={11} className="text-gray-500 shrink-0" />
-                <span className="truncate">{hub.address}</span>
-              </p>
-            </div>
-
-            {/* Workability Score & Speed Badges */}
-            <div className="grid grid-cols-2 gap-2 pt-0.5">
-              {/* Workability score component */}
-              <div className="bg-[#161616] border border-[#222] rounded-xl px-2.5 py-1.5 flex items-center justify-between">
-                <span className="text-[10px] text-gray-400 font-semibold flex items-center gap-1">
-                  <ShieldCheck size={11} className="text-emerald-400" /> Workability
-                </span>
-                <span className="text-xs font-black text-emerald-400 font-mono">{workabilityScore}/100</span>
-              </div>
-
-              {/* Speed Badge */}
-              <div className="bg-[#161616] border border-[#222] rounded-xl px-2.5 py-1.5 flex items-center justify-between truncate">
-                <span className="text-[10px] text-gray-400 font-semibold flex items-center gap-1 truncate">
-                  <Wifi size={11} className="text-amber-400" /> Speed
-                </span>
-                <span className="text-[11px] font-extrabold text-white truncate">{internetFacility.split(" ")[0]}</span>
-              </div>
-            </div>
-
-            {/* Power Backup Strip */}
-            <div className="flex items-center gap-1.5 text-[11px] bg-[#161616] border border-[#222] px-2.5 py-1.5 rounded-xl text-gray-300">
-              <Zap size={12} className="text-amber-400 shrink-0" />
-              <span className="truncate font-medium">{powerFacility}</span>
-            </div>
-
-            {/* Amenities Pills (Non-duplicate) */}
-            {(() => {
-              const cleanFacs = facs.filter(f => {
-                const l = f.toLowerCase()
-                return !l.includes("wifi") && !l.includes("fiber") && !l.includes("generator") && !l.includes("battery") && !l.includes("ups")
-              })
-              if (cleanFacs.length === 0) return null
-              return (
-                <div className="flex flex-wrap gap-1 pt-0.5">
-                  {cleanFacs.slice(0, 3).map((f) => (
-                    <span
-                      key={f}
-                      className="text-[10px] font-semibold px-2 py-0.5 bg-white/5 text-gray-300 rounded-md border border-white/5"
-                    >
-                      {f}
-                    </span>
-                  ))}
-                  {cleanFacs.length > 3 && (
-                    <span className="text-[10px] font-semibold px-1.5 py-0.5 bg-white/5 text-gray-500 rounded-md border border-white/5">
-                      +{cleanFacs.length - 3} more
-                    </span>
-                  )}
-                </div>
-              )
-            })()}
-          </div>
-        </div>
-
-        {/* Card Footer Actions */}
-        <div className="p-5 pt-0 space-y-3">
-          <div className="flex items-center justify-between text-[11px] pt-3 border-t border-[#222]">
-            <span className="flex items-center gap-1 text-emerald-400 font-bold">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-pulse" /> Available today
-            </span>
-            {hub.priceMonthly && hub.priceDaily ? (
-              <span className="text-amber-400 font-bold text-[10px] sm:text-[11px] bg-amber-400/10 px-2 py-0.5 rounded border border-amber-400/20" title="Cheaper long-term monthly rate">
-                Monthly: ${hub.priceMonthly}/mo (Save {Math.round((1 - hub.priceMonthly / (hub.priceDaily * 30)) * 100)}%)
-              </span>
-            ) : (
-              <span className="text-gray-400">{hub.openingHours || "24/7 Access"}</span>
-            )}
-          </div>
-
-          <div className="grid grid-cols-2 gap-2">
-            <Link
-              href={`/resources/coworking/${hub.slug}`}
-              className="flex items-center justify-center gap-1 py-2.5 px-3 rounded-xl border border-[#333] text-white font-bold text-xs hover:border-amber-400/50 hover:bg-white/5 transition-all text-center"
-            >
-              View Details
-            </Link>
-            <button
-              type="button"
-              onClick={() => setBookingModalOpen(true)}
-              className="flex items-center justify-center gap-1 py-2.5 px-3 rounded-xl bg-amber-400 text-black font-extrabold text-xs hover:bg-yellow-300 transition-all shadow-md shadow-amber-400/15 text-center cursor-pointer active:scale-95"
-            >
-              <CalendarCheck size={13} /> Book Now
-            </button>
-          </div>
-        </div>
+        {/* Top-Right Save Heart */}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            setFavorited(!favorited)
+          }}
+          className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center transition-all z-10 ${
+            favorited
+              ? "bg-rose-500 text-white"
+              : "bg-black/40 hover:bg-black/70 text-white backdrop-blur-xs border border-white/10"
+          }`}
+          aria-label={favorited ? "Saved" : "Save workspace"}
+        >
+          <Heart size={14} className={favorited ? "fill-white" : ""} />
+        </button>
       </div>
 
-      {/* REUSABLE BOOKING MODAL CARD */}
-      <BookingModalCard
-        isOpen={bookingModalOpen}
-        onClose={() => setBookingModalOpen(false)}
-        hub={hub}
-      />
-    </>
+      {/* Card Body */}
+      <div className="p-4 sm:p-5 flex flex-col justify-between space-y-3">
+        <div>
+          {/* Title: 18px (text-lg), 600 weight, max 2 lines */}
+          <h3 className="text-base sm:text-[17px] font-semibold text-gray-900 dark:text-[#F5F5F4] group-hover:text-[#F5B301] transition-colors line-clamp-1 leading-snug">
+            {hub.name}
+          </h3>
+
+          {/* Location & Authentic Rating: 14px muted */}
+          <div className="flex items-center gap-1.5 text-xs sm:text-[13px] text-gray-500 dark:text-[#A8A8B0] mt-1 font-normal">
+            <MapPin size={13} className="text-gray-400 shrink-0" />
+            <span className="truncate">{hub.city}</span>
+            {hub.rating > 0 && (
+              <>
+                <span className="text-gray-300 dark:text-gray-600 select-none">·</span>
+                <span className="flex items-center gap-0.5 text-gray-700 dark:text-gray-300 font-medium">
+                  <Star size={11} className="fill-[#F5B301] text-[#F5B301]" />
+                  <span>{hub.rating.toFixed(1)}</span>
+                </span>
+                {hub.totalReviews > 0 && (
+                  <span className="text-gray-400 dark:text-gray-500 text-[11px]">({hub.totalReviews})</span>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Chips Row: Maximum 3 neutral chips + '+X more' */}
+        <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+          {chips.map((chip, idx) => {
+            const Icon = chip.icon
+            return (
+              <span
+                key={idx}
+                className="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-full bg-[#F3EEE5] dark:bg-[#1C1C1F] text-gray-800 dark:text-[#E4E4E7] border border-[#E8E2D8] dark:border-[#26262A]"
+              >
+                {Icon && <Icon size={11} className="text-[#F5B301] shrink-0" />}
+                <span>{chip.label}</span>
+              </span>
+            )
+          })}
+          {remainingCount > 0 && (
+            <span className="text-[10px] font-medium text-gray-500 dark:text-gray-400 px-1">
+              +{remainingCount} more
+            </span>
+          )}
+        </div>
+
+        {/* Price Line: 16px font-semibold, single clean line */}
+        <div className="pt-2 border-t border-[#E8E2D8] dark:border-[#26262A] flex items-center justify-between text-xs sm:text-sm font-semibold text-gray-900 dark:text-[#F5F5F4]">
+          <span>{priceLine}</span>
+        </div>
+      </div>
+    </Link>
   )
 }
-
