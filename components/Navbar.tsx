@@ -864,23 +864,17 @@ export default function Navbar() {
                 </button>
               </div>
             ) : (
-              /* Signed out actions */
-              <div className="flex items-center gap-2">
-                <Link
-                  href="/auth/signin"
-                  className="text-xs font-extrabold text-gray-700 dark:text-[#F5F5F5] hover:text-[#FFD400] px-3 py-2 rounded-xl transition-colors whitespace-nowrap"
-                >
-                  Sign In
-                </Link>
-
-                <Link
-                  href="/auth/register"
-                  className="text-xs font-bold px-3.5 py-2 border border-[#FFD400] text-[#FFD400] hover:bg-[#FFD400] hover:text-black rounded-full transition-all flex items-center justify-center gap-1.5 whitespace-nowrap shadow-sm shadow-[#FFD400]/10"
-                >
-                  <Users size={13} />
-                  <span>Join Free</span>
-                </Link>
-              </div>
+              /* Signed out actions: Single clean Sign In button (no 'Join Free') */
+              <Link
+                href="/auth/signin"
+                className={`text-xs font-bold px-4 py-2 rounded-full border transition-all whitespace-nowrap cursor-pointer ${
+                  isSolid
+                    ? "border-[#E8E2D8] dark:border-[#26262A] text-gray-800 dark:text-[#F5F5F4] hover:border-[#B45309] dark:hover:border-[#F5B301] hover:text-[#B45309] dark:hover:text-[#F5B301] bg-white/60 dark:bg-[#141416]/60 shadow-xs"
+                    : "border-white/25 text-white hover:border-[#F5B301] hover:text-[#F5B301] bg-white/10 backdrop-blur-sm"
+                }`}
+              >
+                Sign In
+              </Link>
             )}
 
             {/* Desktop Search Trigger Icon */}
@@ -1187,23 +1181,13 @@ export default function Navbar() {
             {/* Mobile Actions Footer (Pinned to bottom of drawer) */}
             <div className="border-t border-gray-200 dark:border-[#242424] pt-4 space-y-2.5 shrink-0 bg-white dark:bg-[#080808]">
               {!session ? (
-                <div className="grid grid-cols-2 gap-2">
-                  <Link
-                    href="/auth/signin"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-center text-center px-4 py-2.5 border border-gray-200 dark:border-[#242424] text-gray-900 dark:text-white hover:border-[#FFD400] font-semibold rounded-xl text-xs transition-all"
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    href="/auth/register"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-center gap-1.5 text-center px-4 py-2.5 border border-[#FFD400] text-[#FFD400] hover:bg-[#FFD400] hover:text-black font-bold rounded-xl text-xs transition-all"
-                  >
-                    <Users size={13} />
-                    <span>Join Free</span>
-                  </Link>
-                </div>
+                <Link
+                  href="/auth/signin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center text-center w-full px-4 py-3 bg-[#F5B301] hover:bg-[#E0A200] text-[#1A1A1C] font-bold rounded-xl text-xs transition-all shadow-sm"
+                >
+                  Sign In
+                </Link>
               ) : (
                 <div
                   onClick={() => {

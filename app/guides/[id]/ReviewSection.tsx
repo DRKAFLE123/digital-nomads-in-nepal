@@ -74,11 +74,11 @@ export default function ReviewSection({ guideId, initialReviews }: { guideId: st
         {!session ? (
           <div className="text-center py-6">
             <p className="text-muted mb-4">You need to sign in as a Nomad to leave a review.</p>
-            <button onClick={() => signIn()} className="px-6 py-3 bg-primary text-black font-bold rounded-full hover:bg-white hover:text-black transition-all">
+            <button onClick={() => signIn()} className="px-6 py-2.5 bg-[#F5B301] text-[#1A1A1C] font-bold text-xs rounded-full hover:bg-[#E0A200] transition-all shadow-sm">
               Sign In to Review
             </button>
             <p className="text-xs text-muted mt-3">
-              No account? <Link href="/auth/register" className="text-primary hover:underline">Create one free</Link>
+              No account? <Link href="/auth/signin?mode=register" className="text-[#B45309] dark:text-[#F5B301] hover:underline font-semibold">Create one free</Link>
             </p>
           </div>
         ) : userRole !== "NOMAD" ? (

@@ -381,15 +381,15 @@ export default function UnifiedRegisterSpacePage() {
               <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center max-w-sm mx-auto">
                 <Link
                   href="/auth/signin?callbackUrl=/register/space"
-                  className="flex items-center justify-center gap-2 bg-primary hover:bg-yellow-400 text-black font-black px-6 py-3.5 rounded-xl text-sm transition-all shadow-md shadow-primary/20"
+                  className="flex items-center justify-center gap-2 bg-[#F5B301] hover:bg-[#E0A200] text-[#1A1A1C] font-bold px-6 py-3 rounded-xl text-xs sm:text-sm transition-all shadow-md"
                 >
-                  <LogIn size={16} /> Sign In to Host Account
+                  <LogIn size={15} /> Sign In
                 </Link>
                 <Link
-                  href="/auth/register?callbackUrl=/register/space"
-                  className="flex items-center justify-center gap-2 bg-muted hover:bg-muted/80 border border-border text-foreground font-bold px-6 py-3.5 rounded-xl text-sm transition-all"
+                  href="/auth/signin?callbackUrl=/register/space&mode=register"
+                  className="flex items-center justify-center gap-2 bg-white dark:bg-[#141416] hover:bg-gray-50 dark:hover:bg-[#1F1F23] border border-[#E8E2D8] dark:border-[#26262A] text-gray-800 dark:text-gray-200 font-bold px-6 py-3 rounded-xl text-xs sm:text-sm transition-all shadow-xs"
                 >
-                  <UserPlus size={16} /> Create Free Account
+                  <UserPlus size={15} /> Create Account
                 </Link>
               </div>
             </div>

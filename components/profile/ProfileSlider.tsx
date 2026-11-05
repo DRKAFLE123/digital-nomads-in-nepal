@@ -465,23 +465,14 @@ export default function ProfileSlider({
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 pt-2">
+                <div className="pt-2">
                   <Link
                     href="/auth/signin"
                     onClick={onClose}
-                    className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-black font-bold text-xs hover:bg-black dark:hover:bg-gray-100 transition-all shadow-xs"
+                    className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#F5B301] hover:bg-[#E0A200] text-[#1A1A1C] font-bold text-xs transition-all shadow-sm"
                   >
-                    <LogIn size={13} />
-                    <span>Sign In</span>
-                  </Link>
-
-                  <Link
-                    href="/auth/register"
-                    onClick={onClose}
-                    className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-[#FFD400] hover:bg-[#FFE033] text-black font-extrabold text-xs transition-all shadow-xs shadow-[#FFD400]/20"
-                  >
-                    <Users size={13} />
-                    <span>Join Free</span>
+                    <LogIn size={14} />
+                    <span>Sign In or Create Account</span>
                   </Link>
                 </div>
               </div>
