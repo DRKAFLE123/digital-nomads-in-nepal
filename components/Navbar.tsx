@@ -316,10 +316,6 @@ export default function Navbar() {
         { name: "Work-Friendly Cafés", desc: "Find cafés suitable for focused remote work.", href: "/workspaces?category=Work-Friendly%20Cafes" },
         { name: "24/7 Workspaces", desc: "Find workspaces with round-the-clock access.", href: "/workspaces?amenity=24/7%20Access" },
       ],
-      actions: [
-        { name: "Owner Console", desc: "Manage your listings, rates & incoming nomad reservations.", href: "/owner/dashboard", icon: Building2, variant: "owner" },
-        { name: "+ List Your Space", desc: "Register your workspace, coliving stay, or hybrid hub.", href: "/register/space", icon: PlusCircle, variant: "register" }
-      ]
     },
     {
       name: "Stay",
@@ -331,9 +327,6 @@ export default function Navbar() {
         { name: "Long-Term Stays", desc: "Accommodation suitable for extended stays.", href: "/stay?type=longterm" },
         { name: "My Nomad Passes", desc: "View your stay & workspace reservations and Wi-Fi passes.", href: "/nomad/bookings", icon: CalendarCheck },
       ],
-      actions: [
-        { name: "+ List Your Space", desc: "List your hotel, hostel, coliving, or nomad apartment.", href: "/register/space", icon: Home, variant: "register" }
-      ]
     },
     {
       name: "Local Experts",
@@ -344,10 +337,6 @@ export default function Navbar() {
         { name: "Tours", desc: "Find private and group tours.", href: "/local-guides#tours" },
         { name: "Local Services", desc: "Useful local fixer services for digital nomads.", href: "/local-guides#services" },
       ],
-      actions: [
-        { name: "Guide Dashboard", desc: "Manage your expert profile & incoming trek inquiries.", href: "/local-guides/dashboard", icon: Compass, variant: "owner" },
-        { name: "+ Become a Local Expert", desc: "Register as a licensed trekking or cultural guide.", href: "/local-guides/register", isTrekkingGuideIcon: true, variant: "register" }
-      ]
     },
     {
       name: "Community",
@@ -760,56 +749,6 @@ export default function Navbar() {
                               </Link>
                             ))}
                           </div>
-
-                          {/* Distinctive Highlighted Actions Section (Owner Console & Registrations) */}
-                          {cat.actions && cat.actions.length > 0 && (
-                            <div className="pt-2.5 mt-2 border-t border-gray-100 dark:border-[#222222] space-y-1.5">
-                              {cat.actions.map((act, actIdx) => {
-                                const ActionIcon = act.icon
-                                const isRegister = act.variant === "register"
-                                return (
-                                  <Link
-                                    key={actIdx}
-                                    href={act.href}
-                                    onClick={() => setActiveDropdown(null)}
-                                    className={`flex items-center justify-between p-2.5 rounded-xl border transition-all ${
-                                      isRegister
-                                        ? "bg-amber-400/10 dark:bg-[#FFD400]/10 border-[#FFD400]/30 hover:border-[#FFD400] text-gray-900 dark:text-white"
-                                        : "bg-gray-50 dark:bg-[#181818] border-gray-200/80 dark:border-[#282828] hover:border-gray-300 dark:hover:border-[#383838] text-gray-900 dark:text-white"
-                                    }`}
-                                  >
-                                    <div className="flex items-center gap-2.5 min-w-0">
-                                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
-                                        isRegister
-                                          ? "bg-[#FFD400] text-black shadow-xs"
-                                          : "bg-gray-200 dark:bg-[#252525] text-[#FFD400]"
-                                      }`}>
-                                        {act.isTrekkingGuideIcon ? (
-                                          <TrekkingGuideIcon size={16} />
-                                        ) : ActionIcon ? (
-                                          <ActionIcon size={14} />
-                                        ) : null}
-                                      </div>
-                                      <div className="min-w-0">
-                                        <div className="text-xs font-black truncate flex items-center gap-1.5">
-                                          <span>{act.name}</span>
-                                          {isRegister && (
-                                            <span className="px-1.5 py-0.2 rounded text-[9px] font-extrabold uppercase bg-[#FFD400] text-black tracking-wide">
-                                              New
-                                            </span>
-                                          )}
-                                        </div>
-                                        <p className="text-[10px] text-gray-500 dark:text-[#A1A1AA] truncate mt-0.5">
-                                          {act.desc}
-                                        </p>
-                                      </div>
-                                    </div>
-                                    <ArrowRight size={13} className="text-gray-400 shrink-0 ml-2" />
-                                  </Link>
-                                )
-                              })}
-                            </div>
-                          )}
                         </div>
                       </div>
                     )
@@ -1225,42 +1164,6 @@ export default function Navbar() {
                             <p className="text-[10px] text-gray-500 dark:text-[#A1A1AA] mt-0.5">{sub.desc}</p>
                           </Link>
                         ))}
-
-                        {/* Highlighted Actions in Mobile Drawer */}
-                        {cat.actions && cat.actions.length > 0 && (
-                          <div className="pt-2 mt-1 border-t border-gray-100 dark:border-[#222222] space-y-1.5 pr-2">
-                            {cat.actions.map((act, actIdx) => {
-                              const ActionIcon = act.icon
-                              const isRegister = act.variant === "register"
-                              return (
-                                <Link
-                                  key={actIdx}
-                                  href={act.href}
-                                  onClick={() => setMobileMenuOpen(false)}
-                                  className={`flex items-center justify-between p-2 rounded-xl border transition-all ${
-                                    isRegister
-                                      ? "bg-[#FFD400]/10 border-[#FFD400]/40 text-gray-900 dark:text-white"
-                                      : "bg-gray-100 dark:bg-[#181818] border-gray-200 dark:border-[#282828] text-gray-900 dark:text-white"
-                                  }`}
-                                >
-                                  <div className="flex items-center gap-2">
-                                    <div className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${
-                                      isRegister ? "bg-[#FFD400] text-black" : "bg-gray-200 dark:bg-[#252525] text-[#FFD400]"
-                                    }`}>
-                                      {act.isTrekkingGuideIcon ? (
-                                        <TrekkingGuideIcon size={14} />
-                                      ) : ActionIcon ? (
-                                        <ActionIcon size={13} />
-                                      ) : null}
-                                    </div>
-                                    <div className="text-xs font-bold">{act.name}</div>
-                                  </div>
-                                  <ArrowRight size={12} className="text-gray-400" />
-                                </Link>
-                              )
-                            })}
-                          </div>
-                        )}
                       </div>
                     )}
                   </div>

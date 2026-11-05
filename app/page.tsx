@@ -24,7 +24,12 @@ import {
   Mountain,
   Coffee,
   CheckCircle2,
-  ExternalLink
+  ExternalLink,
+  DollarSign,
+  Wind,
+  BookOpen,
+  Users,
+  Heart
 } from "lucide-react"
 import { prisma } from "@/lib/prisma"
 
@@ -51,6 +56,7 @@ export default async function Home() {
       take: 3
     }),
     prisma.workHub.findMany({
+      where: { published: true },
       take: 3,
       orderBy: [
         { isPartner: "desc" },
@@ -459,10 +465,10 @@ export default async function Home() {
 
                   <div className="p-6 pt-0">
                     <Link
-                      href="/stay"
+                      href={`/stay?type=${encodeURIComponent(stay.type.toLowerCase())}`}
                       className="w-full py-2.5 px-4 rounded-xl bg-card border border-border group-hover:border-primary group-hover:bg-primary group-hover:text-black font-bold text-xs text-center transition-all flex items-center justify-center gap-2"
                     >
-                      View Stay Details <ArrowRight size={13} />
+                      View {stay.type} Details <ArrowRight size={13} />
                     </Link>
                   </div>
                 </div>
@@ -521,8 +527,8 @@ export default async function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* Activity 1 */}
               <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-primary/60 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
-                  🏔️
+                <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <Mountain size={24} />
                 </div>
                 <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors mb-2">
                   Weekend Annapurna Treks
@@ -537,8 +543,8 @@ export default async function Home() {
 
               {/* Activity 2 */}
               <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-primary/60 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
-                <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
-                  ☕
+                <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <Coffee size={24} />
                 </div>
                 <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors mb-2">
                   Heritage Cafe Working
@@ -553,8 +559,8 @@ export default async function Home() {
 
               {/* Activity 3 */}
               <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-primary/60 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
-                <div className="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
-                  🪂
+                <div className="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <Wind size={24} />
                 </div>
                 <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors mb-2">
                   Paragliding Fewa Lake
@@ -569,8 +575,8 @@ export default async function Home() {
 
               {/* Activity 4 */}
               <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-primary/60 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
-                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
-                  🧘
+                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <Heart size={24} />
                 </div>
                 <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors mb-2">
                   Sound Healing &amp; Yoga
@@ -592,7 +598,7 @@ export default async function Home() {
             <div className="flex justify-between items-end gap-4 mb-12 flex-wrap">
               <div>
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/25 text-primary text-xs font-semibold uppercase tracking-wider mb-3">
-                  📖 Knowledge Base
+                  <BookOpen size={13} /> Knowledge Base
                 </div>
                 <h2 className="text-3xl md:text-5xl font-black text-foreground">
                   Latest from the Blog
@@ -628,7 +634,7 @@ export default async function Home() {
                   {/* Top Badge */}
                   <div className="absolute top-4 left-4 z-10">
                     <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white text-xs font-bold shadow-lg">
-                      📍 Annapurna Sanctuary • Nepal
+                      <MapPin size={12} className="text-[#FFD400]" /> Annapurna Sanctuary • Nepal
                     </span>
                   </div>
 
@@ -671,7 +677,9 @@ export default async function Home() {
                   >
                     <div className="flex items-center justify-between mb-1.5">
                       <div className="flex items-center gap-2.5">
-                        <span className="text-lg">💵</span>
+                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                          <DollarSign size={16} />
+                        </div>
                         <h3 className="text-lg sm:text-xl font-bold text-foreground group-hover:text-primary transition-colors">
                           Unbeatable Cost of Living
                         </h3>
@@ -680,7 +688,7 @@ export default async function Home() {
                         From $500/mo <ArrowRight size={13} />
                       </span>
                     </div>
-                    <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed pl-7">
+                    <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed pl-10">
                       Live comfortably in private furnished apartments, dine out daily at healthy cafes, and access coworking spaces for $500–$1,200/month total.
                     </p>
                   </Link>
@@ -692,7 +700,9 @@ export default async function Home() {
                   >
                     <div className="flex items-center justify-between mb-1.5">
                       <div className="flex items-center gap-2.5">
-                        <span className="text-lg">🏔️</span>
+                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                          <Mountain size={16} />
+                        </div>
                         <h3 className="text-lg sm:text-xl font-bold text-foreground group-hover:text-primary transition-colors">
                           Nature &amp; Mountains at Your Desk
                         </h3>
@@ -701,7 +711,7 @@ export default async function Home() {
                         Explore Guides <ArrowRight size={13} />
                       </span>
                     </div>
-                    <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed pl-7">
+                    <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed pl-10">
                       Close your laptop on Friday and be trekking surrounded by eight of the world&apos;s highest peaks on Saturday. Himalayan trails are right outside your window.
                     </p>
                   </Link>
@@ -713,7 +723,9 @@ export default async function Home() {
                   >
                     <div className="flex items-center justify-between mb-1.5">
                       <div className="flex items-center gap-2.5">
-                        <span className="text-lg">⚡</span>
+                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                          <Zap size={16} />
+                        </div>
                         <h3 className="text-lg sm:text-xl font-bold text-foreground group-hover:text-primary transition-colors">
                           Growing Remote Culture &amp; Fiber
                         </h3>
@@ -722,7 +734,7 @@ export default async function Home() {
                         50+ Hubs <ArrowRight size={13} />
                       </span>
                     </div>
-                    <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed pl-7">
+                    <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed pl-10">
                       With 100+ Mbps fiber internet expansion, automatic battery/solar backups, and modern coworking spaces, working remotely in Nepal is seamless.
                     </p>
                   </Link>
@@ -738,7 +750,7 @@ export default async function Home() {
           <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-card border-t border-border">
             <div className="max-w-4xl mx-auto text-center">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/25 text-primary text-xs font-semibold uppercase tracking-wider mb-3">
-                🌐 Connected Community
+                <Users size={13} /> Connected Community
               </div>
               <h2 className="text-3xl md:text-5xl font-black text-foreground mb-4">
                 Join the Nomad Community

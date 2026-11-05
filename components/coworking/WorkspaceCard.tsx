@@ -17,6 +17,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ImageIcon,
+  Home,
 } from "lucide-react"
 import { calculateWorkabilityScore } from "./WorkabilityScoreBadge"
 
@@ -204,7 +205,7 @@ export default function WorkspaceCard({ hub }: WorkspaceCardProps) {
               )}
               {hasColiving && (
                 <span className="inline-flex items-center gap-1 bg-indigo-600/90 text-white font-extrabold text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-lg shadow-md backdrop-blur-md border border-indigo-400/30">
-                  🛌 Coliving Rooms
+                  <Home size={10} className="text-white" /> Coliving
                 </span>
               )}
             </div>
@@ -253,7 +254,10 @@ export default function WorkspaceCard({ hub }: WorkspaceCardProps) {
                   {hub.name}
                 </h3>
               </Link>
-              <p className="text-gray-400 text-[11px] mt-0.5 truncate">📍 {hub.address}</p>
+              <p className="text-gray-400 text-[11px] mt-0.5 truncate flex items-center gap-1">
+                <MapPin size={11} className="text-gray-500 shrink-0" />
+                <span className="truncate">{hub.address}</span>
+              </p>
             </div>
 
             {/* Workability Score & Speed Badges */}

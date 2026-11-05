@@ -24,14 +24,15 @@ export function calculateWorkabilityScore({
   powerBackup?: string | null
   facilities?: string[]
 }) {
-  let score = 70 // Base baseline score
+  let score = 55 // Realistic baseline
 
-  // Rating contribution (up to 15 pts)
-  score += Math.min(15, (rating / 5) * 15)
+  // Rating contribution (up to 20 pts)
+  score += Math.min(20, (rating / 5) * 20)
 
-  // Internet speed contribution (up to 10 pts)
+  // Internet speed contribution (up to 12 pts)
   const speedNum = parseInt(internetSpeed?.replace(/[^0-9]/g, "") || "50", 10)
-  if (speedNum >= 200) score += 10
+  if (speedNum >= 250) score += 12
+  else if (speedNum >= 150) score += 10
   else if (speedNum >= 100) score += 8
   else if (speedNum >= 50) score += 6
   else score += 4
@@ -39,15 +40,15 @@ export function calculateWorkabilityScore({
   // Power backup contribution (up to 10 pts)
   const powerLower = (powerBackup || "").toLowerCase()
   if (powerLower.includes("generator") && (powerLower.includes("ups") || powerLower.includes("inverter"))) score += 10
-  else if (powerLower.includes("generator") || powerLower.includes("solar")) score += 8
-  else if (powerLower.includes("ups") || powerLower.includes("inverter")) score += 6
-  else score += 3
+  else if (powerLower.includes("generator") || powerLower.includes("solar")) score += 7
+  else if (powerLower.includes("ups") || powerLower.includes("inverter")) score += 5
+  else score += 2
 
-  // Facilities contribution (up to 5 pts)
+  // Facilities contribution (up to 6 pts)
   const facCount = Array.isArray(facilities) ? facilities.length : 0
-  score += Math.min(5, facCount)
+  score += Math.min(6, Math.round(facCount * 0.8))
 
-  return Math.min(99, Math.max(75, Math.round(score)))
+  return Math.min(96, Math.max(76, Math.round(score)))
 }
 
 export default function WorkabilityScoreBadge({

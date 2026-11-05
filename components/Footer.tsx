@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { MapPin } from "lucide-react"
 import TrekkingGuideIcon from "./TrekkingGuideIcon"
 import { FacebookIcon, TikTokIcon, YouTubeIcon, InstagramIcon, TwitterIcon, WhatsAppIcon } from "./SocialIcons"
 
@@ -111,7 +112,8 @@ export default function Footer() {
             </div>
             <div className="flex items-center text-sm font-medium text-muted-foreground">
               <span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-2 shadow-[0_0_8px_rgba(34,197,94,0.5)]"></span>
-              <span>📍 {data.basecamp}</span>
+              <MapPin size={13} className="text-primary mr-1 shrink-0" />
+              <span>{data.basecamp}</span>
             </div>
           </div>
 

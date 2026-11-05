@@ -1,10 +1,10 @@
 "use client"
+
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
-import { Search, ChevronLeft, ChevronRight, Laptop, BookOpen, ArrowRight, Sparkles } from "lucide-react"
-import TrekkingGuideIcon from "./TrekkingGuideIcon"
+import { Search, ChevronLeft, ChevronRight, Wifi, Zap, ShieldCheck, Users, Compass, TrendingUp } from "lucide-react"
 
 const HERO_SLIDES = [
   {
@@ -27,16 +27,22 @@ const HERO_SLIDES = [
   },
 ]
 
-
-const keywords = [
+const KEYWORDS = [
   "workspaces in Kathmandu",
-  "stays in Pokhara",
-  "coliving in Mustang",
-  "high-speed fiber cafes",
+  "coliving in Pokhara",
+  "Jhamsikhel fiber cafes",
   "licensed mountain guides",
-  "Jhamsikhel hubs",
   "Lakeside nomad villas",
-  "24/7 power backup hubs"
+  "24/7 power backup hubs",
+  "Nepal nomad visa guide"
+]
+
+const QUICK_TRENDING = [
+  { label: "Kathmandu Hubs", href: "/workspaces?city=Kathmandu" },
+  { label: "Pokhara Lakeside", href: "/workspaces?city=Pokhara" },
+  { label: "Coliving Stays", href: "/stay?type=coliving" },
+  { label: "Mountain Guides", href: "/guides" },
+  { label: "Nomad Visa", href: "/nomad-visa-guide" },
 ]
 
 export default function HeroSection() {
@@ -58,19 +64,19 @@ export default function HeroSection() {
   }, [])
 
   useEffect(() => {
-    if (subIdx === keywords[wordIdx].length + 1 && !isDeleting) {
+    if (subIdx === KEYWORDS[wordIdx].length + 1 && !isDeleting) {
       const timeout = setTimeout(() => setIsDeleting(true), 1500)
       return () => clearTimeout(timeout)
     }
 
     if (subIdx === 0 && isDeleting) {
       setIsDeleting(false)
-      setWordIdx(prev => (prev + 1) % keywords.length)
+      setWordIdx(prev => (prev + 1) % KEYWORDS.length)
       return
     }
 
     const timeout = setTimeout(() => {
-      setPlaceholder(keywords[wordIdx].substring(0, subIdx + (isDeleting ? -1 : 1)))
+      setPlaceholder(KEYWORDS[wordIdx].substring(0, subIdx + (isDeleting ? -1 : 1)))
       setSubIdx(prev => prev + (isDeleting ? -1 : 1))
     }, isDeleting ? 40 : 100)
 
@@ -79,15 +85,20 @@ export default function HeroSection() {
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault()
-    if (!query.trim()) return
-    router.push(`/resources/coworking?search=${encodeURIComponent(query.trim())}`)
+    if (!query.trim()) {
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("open-search-modal"))
+      }
+      return
+    }
+    router.push(`/workspaces?search=${encodeURIComponent(query.trim())}`)
   }
 
   const prevSlide = () => setCurrentSlide(prev => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length)
   const nextSlide = () => setCurrentSlide(prev => (prev + 1) % HERO_SLIDES.length)
 
   return (
-    <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-background">
+    <section className="relative w-full min-h-[92vh] sm:min-h-screen flex items-center justify-center overflow-hidden bg-background">
       {/* Dynamic Background Slider with Art-Directed HD Images */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none">
         {HERO_SLIDES.map((slide, idx) => (
@@ -144,32 +155,38 @@ export default function HeroSection() {
         <ChevronRight size={20} />
       </button>
 
-      {/* Adaptive Gradient Overlay for text readability and smooth transition into page */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-t from-background via-black/45 to-black/30 dark:from-[#0B0B0B] dark:via-black/50 dark:to-black/30" />
+      {/* Adaptive Gradient Overlay */}
+      <div className="absolute inset-0 z-10 bg-gradient-to-t from-background via-black/50 to-black/35 dark:from-[#0B0B0B] dark:via-black/55 dark:to-black/35" />
 
-      {/* Content */}
-      <div className="relative z-20 w-full max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 text-center flex flex-col items-center py-8 sm:py-16 md:py-24">
+      {/* Hero Central Content */}
+      <div className="relative z-20 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center pt-24 pb-16 sm:py-24">
         
-        {/* H1 */}
-        <h1 className="tracking-tight drop-shadow-xl mb-2.5 sm:mb-4 text-center max-w-4xl mx-auto">
-          <span className="block font-bold text-2xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-tight">
+        {/* Eyebrow Pill */}
+        <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-[#FFD400] text-xs font-bold uppercase tracking-wider mb-4 shadow-md">
+          <Compass size={13} className="text-[#FFD400]" />
+          <span>The Himalayan Remote Work Ecosystem</span>
+        </div>
+
+        {/* H1 Title */}
+        <h1 className="tracking-tight drop-shadow-xl mb-3 sm:mb-4 text-center max-w-4xl mx-auto">
+          <span className="block font-bold text-3xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-tight">
             Digital Nomads in Nepal
           </span>
-          <span className="block font-extrabold text-xl sm:text-4xl md:text-5xl lg:text-6xl text-primary mt-1 sm:mt-2 leading-tight">
+          <span className="block font-extrabold text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-primary mt-1 sm:mt-2 leading-tight">
             Live, Work &amp; Explore
           </span>
         </h1>
 
-        {/* Supporting text */}
-        <p className="text-xs sm:text-base md:text-lg text-gray-200 font-medium drop-shadow-md max-w-2xl mb-4 sm:mb-6 px-1 sm:px-2 leading-relaxed">
-          The definitive guide &amp; verified directory for remote workers, freelancers, and adventurers across Nepal.
+        {/* Supporting Subtitle */}
+        <p className="text-sm sm:text-base md:text-lg text-gray-200 font-medium drop-shadow-md max-w-2xl mb-6 sm:mb-8 px-2 leading-relaxed">
+          The verified directory and field guide for remote workers, founders, and creators living and working across Nepal.
         </p>
 
-        {/* Search Bar for Workspaces, Stays, Guides */}
-        <form onSubmit={handleSearch} className="w-full max-w-lg mb-4 sm:mb-6 px-1 sm:px-2 relative group z-30">
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-yellow-500 rounded-full blur opacity-30 group-hover:opacity-50 transition duration-300"></div>
-          <div className="relative flex items-center bg-white/95 dark:bg-black/85 backdrop-blur border border-gray-200 dark:border-white/10 rounded-full p-1 sm:p-1.5 focus-within:border-primary shadow-lg transition-colors">
-            <Search className="text-gray-400 dark:text-muted w-4 h-4 ml-3 sm:ml-4 flex-shrink-0" />
+        {/* Primary Hero Action: Unified Search */}
+        <form onSubmit={handleSearch} className="w-full max-w-xl mb-4 px-1 relative group z-30">
+          <div className="absolute -inset-1 bg-gradient-to-r from-primary via-yellow-400 to-amber-500 rounded-full blur-md opacity-35 group-hover:opacity-60 transition duration-300"></div>
+          <div className="relative flex items-center bg-white/95 dark:bg-[#121212]/95 backdrop-blur-md border border-gray-200 dark:border-white/15 rounded-full p-1.5 sm:p-2 focus-within:border-primary shadow-2xl transition-all">
+            <Search className="text-gray-400 dark:text-gray-400 w-5 h-5 ml-3 sm:ml-4 flex-shrink-0" />
             <input
               type="text"
               value={query}
@@ -179,106 +196,59 @@ export default function HeroSection() {
                   window.dispatchEvent(new CustomEvent("open-search-modal"))
                 }
               }}
-              placeholder={placeholder ? `Search ${placeholder}...` : "Search workspaces, stays, guides..."}
-              className="w-full bg-transparent border-0 text-gray-900 dark:text-white text-xs sm:text-sm pl-2 sm:pl-3 pr-2 sm:pr-4 py-2 sm:py-2.5 focus:outline-none placeholder:text-gray-500 cursor-pointer"
+              placeholder={placeholder ? `Search ${placeholder}...` : "Search workspaces, stays, guides, visas..."}
+              className="w-full bg-transparent border-0 text-gray-900 dark:text-white text-xs sm:text-sm pl-2 sm:pl-3 pr-2 sm:pr-4 py-2 sm:py-2.5 focus:outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 cursor-pointer font-medium"
             />
             <button
               type="submit"
-              className="bg-primary hover:bg-yellow-500 text-black font-black text-[11px] sm:text-xs px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full uppercase tracking-wider transition-all active:scale-95 whitespace-nowrap shadow-sm"
+              className="bg-primary hover:bg-[#FFE033] text-black font-extrabold text-xs sm:text-sm px-4 sm:px-6 py-2.5 rounded-full uppercase tracking-wider transition-all active:scale-95 whitespace-nowrap shadow-md cursor-pointer"
             >
               Search
             </button>
           </div>
         </form>
 
-        {/* Quick Access (Two distinct intent cards: WORK & EXPLORE - 2 columns on mobile & desktop) */}
-        <div className="w-full max-w-xl mx-auto grid grid-cols-2 gap-2.5 sm:gap-4 mb-4 sm:mb-6 px-1 sm:px-2">
-          {/* Card 1: WORK INTENT */}
-          <Link
-            href="/workspaces"
-            className="group relative flex flex-col justify-between text-left p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-black/60 hover:bg-black/80 backdrop-blur-xl border border-white/15 hover:border-[#FFD400]/80 transition-all duration-300 shadow-xl hover:shadow-[0_12px_32px_rgba(255,212,0,0.18)] hover:-translate-y-1 overflow-hidden"
-          >
-            {/* Ambient hover light */}
-            <div className="absolute -top-12 -right-12 w-28 h-28 bg-[#FFD400]/10 rounded-full blur-2xl group-hover:bg-[#FFD400]/25 transition-all pointer-events-none" />
-
-            <div>
-              <div className="flex items-center justify-between">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-white/10 border border-white/15 text-[#FFD400] flex items-center justify-center group-hover:scale-110 group-hover:bg-[#FFD400] group-hover:text-black transition-all duration-300 shadow-xs">
-                  <Laptop className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
-                </div>
-                <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest px-2 sm:px-2.5 py-0.5 rounded-full bg-[#FFD400]/15 text-[#FFD400] border border-[#FFD400]/30 shadow-xs">
-                  Work
-                </span>
-              </div>
-
-              <h2 className="text-xs sm:text-base font-extrabold text-white group-hover:text-[#FFD400] transition-colors mt-2 sm:mt-3 leading-snug">
-                Find Workspaces
-              </h2>
-              <p className="hidden sm:block text-xs text-gray-300/90 mt-1 leading-snug line-clamp-2">
-                Verified fiber Wi-Fi, ergonomic desks &amp; 24/7 power backup.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs font-bold text-[#FFD400] mt-2.5 sm:mt-3.5 pt-2 sm:pt-2.5 border-t border-white/10 group-hover:border-[#FFD400]/30 transition-colors">
-              <span className="hidden sm:inline">Explore 50+ Hubs</span>
-              <span className="sm:hidden">50+ Hubs</span>
-              <ArrowRight size={12} className="group-hover:translate-x-1.5 transition-transform duration-200" />
-            </div>
-          </Link>
-
-          {/* Card 2: EXPLORE INTENT */}
-          <Link
-            href="/guides"
-            className="group relative flex flex-col justify-between text-left p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-black/60 hover:bg-black/80 backdrop-blur-xl border border-white/15 hover:border-emerald-400/80 transition-all duration-300 shadow-xl hover:shadow-[0_12px_32px_rgba(52,211,153,0.18)] hover:-translate-y-1 overflow-hidden"
-          >
-            {/* Ambient hover light */}
-            <div className="absolute -top-12 -right-12 w-28 h-28 bg-emerald-400/10 rounded-full blur-2xl group-hover:bg-emerald-400/25 transition-all pointer-events-none" />
-
-            <div>
-              <div className="flex items-center justify-between">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-white/10 border border-white/15 text-emerald-400 flex items-center justify-center group-hover:scale-110 group-hover:bg-emerald-400 group-hover:text-black transition-all duration-300 shadow-xs">
-                  <TrekkingGuideIcon size={16} className="sm:w-[18px] sm:h-[18px]" />
-                </div>
-                <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest px-2 sm:px-2.5 py-0.5 rounded-full bg-emerald-400/15 text-emerald-300 border border-emerald-400/30 shadow-xs">
-                  Explore
-                </span>
-              </div>
-
-              <h2 className="text-xs sm:text-base font-extrabold text-white group-hover:text-emerald-300 transition-colors mt-2 sm:mt-3 leading-snug">
-                Find Local Guides
-              </h2>
-              <p className="hidden sm:block text-xs text-gray-300/90 mt-1 leading-snug line-clamp-2">
-                Trekking, hiking &amp; Himalayan experiences.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs font-bold text-emerald-300 mt-2.5 sm:mt-3.5 pt-2 sm:pt-2.5 border-t border-white/10 group-hover:border-emerald-400/30 transition-colors">
-              <span className="hidden sm:inline">Meet Local Guides</span>
-              <span className="sm:hidden">Local Guides</span>
-              <ArrowRight size={12} className="group-hover:translate-x-1.5 transition-transform duration-200" />
-            </div>
-          </Link>
+        {/* Trending Search Suggestions */}
+        <div className="w-full max-w-xl flex flex-wrap items-center justify-center gap-2 mb-8 px-2">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-gray-300/80 flex items-center gap-1">
+            <TrendingUp size={12} className="text-[#FFD400]" /> Trending:
+          </span>
+          {QUICK_TRENDING.map((item, i) => (
+            <Link
+              key={i}
+              href={item.href}
+              className="text-[11px] font-semibold text-gray-200 hover:text-white bg-black/45 hover:bg-black/70 backdrop-blur-sm border border-white/15 hover:border-[#FFD400]/60 px-3 py-1 rounded-full transition-all hover:scale-105 active:scale-95"
+            >
+              {item.label}
+            </Link>
+          ))}
         </div>
 
-        {/* Content CTA: Read the Blog Guides */}
-        <div className="flex items-center justify-center w-full">
-          <Link
-            href="/blog"
-            className="group inline-flex items-center gap-2 px-5 py-2.5 sm:px-8 sm:py-3 rounded-full bg-gradient-to-r from-[#FFD400] via-[#FFE033] to-[#FFC700] hover:from-[#FFE033] hover:to-[#FFD400] text-black font-black text-xs sm:text-sm tracking-wide shadow-lg shadow-[#FFD400]/25 hover:shadow-[#FFD400]/45 hover:scale-105 active:scale-95 transition-all border border-amber-300/60"
-          >
-            <BookOpen size={15} className="text-black" />
-            <span>Read the Blog Guides</span>
-            <ArrowRight size={13} className="text-black group-hover:translate-x-1 transition-transform" />
-          </Link>
+        {/* Minimalist Trust Features Bar (Emoji-free, Line-icon driven) */}
+        <div className="w-full max-w-2xl mx-auto flex flex-wrap items-center justify-center gap-3 sm:gap-6 py-2.5 px-4 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10 text-gray-300 text-[11px] sm:text-xs font-semibold shadow-lg">
+          <div className="flex items-center gap-1.5">
+            <Wifi size={14} className="text-[#FFD400]" />
+            <span>Verified Fiber Wi-Fi</span>
+          </div>
+          <span className="hidden sm:inline text-white/20">•</span>
+          <div className="flex items-center gap-1.5">
+            <Zap size={14} className="text-[#FFD400]" />
+            <span>24/7 Generator Backup</span>
+          </div>
+          <span className="hidden sm:inline text-white/20">•</span>
+          <div className="flex items-center gap-1.5">
+            <ShieldCheck size={14} className="text-[#FFD400]" />
+            <span>Licensed Guides</span>
+          </div>
+          <span className="hidden sm:inline text-white/20">•</span>
+          <div className="flex items-center gap-1.5">
+            <Users size={14} className="text-[#FFD400]" />
+            <span>2,400+ Nomads</span>
+          </div>
         </div>
-
-        {/* Trust Line */}
-        <p className="mt-3.5 sm:mt-6 text-gray-300/90 text-[11px] sm:text-sm font-medium tracking-wide">
-          ✨ Built for digital nomads working and exploring Nepal.
-        </p>
 
         {/* Slider Indicator Dots */}
-        <div className="flex items-center gap-2 mt-3 sm:mt-4 z-20">
+        <div className="flex items-center gap-2 mt-6 z-20">
           {HERO_SLIDES.map((slide, idx) => (
             <button
               key={idx}
@@ -294,12 +264,13 @@ export default function HeroSection() {
             />
           ))}
         </div>
+
       </div>
 
-      {/* Curved Arch Edge SVG mask at the bottom smoothly transitioning into the theme */}
+      {/* Curved Arch Edge SVG mask at the bottom smoothly transitioning into page background */}
       <div className="absolute bottom-0 left-0 w-full z-20 overflow-hidden leading-none pointer-events-none translate-y-[2px] text-background">
-        <svg className="relative block w-[calc(100%+5px)] h-[50px] md:h-[80px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-            <path d="M600,112.77C268.63,112.77,0,65.52,0,7.23V120H1200V7.23C1200,65.52,931.37,112.77,600,112.77Z" fill="currentColor"></path>
+        <svg className="relative block w-[calc(100%+5px)] h-[40px] md:h-[60px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <path d="M600,112.77C268.63,112.77,0,65.52,0,7.23V120H1200V7.23C1200,65.52,931.37,112.77,600,112.77Z" fill="currentColor"></path>
         </svg>
       </div>
     </section>

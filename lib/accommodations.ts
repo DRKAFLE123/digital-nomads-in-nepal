@@ -28,7 +28,7 @@ export const ACCOMMODATIONS: Accommodation[] = [
     reviews: 38,
     speed: "200 Mbps Fiber",
     power: "24/7 Generator",
-    photoUrl: "/blog-lakeside-pokhara.png",
+    photoUrl: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80",
     description: "Modern coliving space with dedicated hot desks, high-speed fiber internet, and weekly community dinners in Jhamsikhel.",
     amenities: ["Dedicated Desk", "High-Speed WiFi", "Community Dinners", "Daily Housekeeping", "24/7 Access"]
   },
@@ -44,7 +44,7 @@ export const ACCOMMODATIONS: Accommodation[] = [
     reviews: 52,
     speed: "150 Mbps Fiber",
     power: "Automatic UPS + Solar",
-    photoUrl: "/blog-cost-of-living.png",
+    photoUrl: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
     description: "Quiet lakefront hotel with ergonomic desk setups, private balconies overlooking Fewa Lake, and rooftop coworking.",
     amenities: ["Balcony View", "Ergonomic Chair", "Rooftop Workspace", "Breakfast Included", "Power Backup"]
   },
@@ -60,7 +60,7 @@ export const ACCOMMODATIONS: Accommodation[] = [
     reviews: 64,
     speed: "100 Mbps",
     power: "UPS Backup",
-    photoUrl: "/hero-bg.png",
+    photoUrl: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80",
     description: "Vibrant community hostel designed for remote workers on a budget. Includes quiet call booths and social events.",
     amenities: ["Dorm & Private Rooms", "Call Booths", "Bar & Cafe", "Organized Treks", "Free Coffee"]
   },
@@ -76,7 +76,7 @@ export const ACCOMMODATIONS: Accommodation[] = [
     reviews: 29,
     speed: "200 Mbps Fiber",
     power: "Full Generator Backup",
-    photoUrl: "/blog-top-10-destinations.png",
+    photoUrl: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
     description: "Fully furnished apartments designed for 1–6 month stays with fully equipped kitchens, laundry, and private fiber WiFi.",
     amenities: ["Full Kitchen", "Private Fiber Line", "Washing Machine", "Mountain Views", "Weekly Cleaning"]
   }
