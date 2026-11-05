@@ -158,7 +158,7 @@ export default function WorkspaceCard({ hub }: WorkspaceCardProps) {
       <div className="p-4 sm:p-5 flex flex-col justify-between space-y-3">
         <div>
           {/* Title: 18px (text-lg), 600 weight, max 2 lines */}
-          <h3 className="text-base sm:text-[17px] font-semibold text-gray-900 dark:text-[#F5F5F4] group-hover:text-[#F5B301] transition-colors line-clamp-1 leading-snug">
+          <h3 className="text-base sm:text-[17px] font-semibold text-gray-900 dark:text-[#F5F5F4] group-hover:text-[#B45309] dark:group-hover:text-[#F5B301] transition-colors line-clamp-1 leading-snug">
             {hub.name}
           </h3>
 

@@ -334,7 +334,7 @@ export default async function Home() {
 
                     <div className="p-4 sm:p-5 space-y-3">
                       <div>
-                        <h3 className="text-base sm:text-[17px] font-semibold text-gray-900 dark:text-[#F5F5F4] group-hover:text-[#F5B301] transition-colors line-clamp-1 leading-snug">
+                        <h3 className="text-base sm:text-[17px] font-semibold text-gray-900 dark:text-[#F5F5F4] group-hover:text-[#B45309] dark:group-hover:text-[#F5B301] transition-colors line-clamp-1 leading-snug">
                           {guide.name}
                         </h3>
                         <div className="flex items-center gap-1.5 text-xs sm:text-[13px] text-gray-500 dark:text-[#A8A8B0] mt-1 font-normal">
@@ -418,7 +418,7 @@ export default async function Home() {
 
                   <div className="p-4 sm:p-5 space-y-3">
                     <div>
-                      <h3 className="text-base sm:text-[17px] font-semibold text-gray-900 dark:text-[#F5F5F4] group-hover:text-[#F5B301] transition-colors line-clamp-1 leading-snug">
+                      <h3 className="text-base sm:text-[17px] font-semibold text-gray-900 dark:text-[#F5F5F4] group-hover:text-[#B45309] dark:group-hover:text-[#F5B301] transition-colors line-clamp-1 leading-snug">
                         {stay.name}
                       </h3>
                       <div className="flex items-center gap-1.5 text-xs sm:text-[13px] text-gray-500 dark:text-[#A8A8B0] mt-1 font-normal">
@@ -502,65 +502,65 @@ export default async function Home() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* Activity 1 */}
-              <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-primary/60 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-[#F5B301]/60 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
+                <div className="w-12 h-12 rounded-xl bg-[#F5B301]/15 text-[#B45309] dark:text-[#F5B301] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Mountain size={24} />
                 </div>
-                <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors mb-2">
+                <h3 className="font-bold text-lg text-foreground group-hover:text-[#B45309] dark:group-hover:text-[#F5B301] transition-colors mb-2">
                   Weekend Annapurna Treks
                 </h3>
                 <p className="text-xs text-muted-foreground leading-relaxed mb-4">
                   Do quick 3 to 4 day treks like Poon Hill, Australian Camp, or Mardi Himal directly from your desk in Pokhara.
                 </p>
-                <Link href="/guides" className="text-xs font-bold text-primary inline-flex items-center gap-1 hover:underline">
+                <Link href="/guides" className="text-xs font-bold text-[#B45309] dark:text-[#F5B301] inline-flex items-center gap-1 hover:underline">
                   Find trekking guides <ArrowRight size={12} />
                 </Link>
               </div>
 
               {/* Activity 2 */}
-              <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-primary/60 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
-                <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-[#F5B301]/60 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
+                <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Coffee size={24} />
                 </div>
-                <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors mb-2">
+                <h3 className="font-bold text-lg text-foreground group-hover:text-[#B45309] dark:group-hover:text-[#F5B301] transition-colors mb-2">
                   Heritage Cafe Working
                 </h3>
                 <p className="text-xs text-muted-foreground leading-relaxed mb-4">
                   Sample single-origin Himalayan Arabica in centuries-old Newari brick courtyards in Patan, Jhamsikhel, and Sanepa.
                 </p>
-                <Link href="/destinations/lalitpur" className="text-xs font-bold text-primary inline-flex items-center gap-1 hover:underline">
+                <Link href="/destinations/lalitpur" className="text-xs font-bold text-[#B45309] dark:text-[#F5B301] inline-flex items-center gap-1 hover:underline">
                   Explore Lalitpur cafes <ArrowRight size={12} />
                 </Link>
               </div>
 
               {/* Activity 3 */}
-              <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-primary/60 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
-                <div className="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-[#F5B301]/60 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
+                <div className="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Wind size={24} />
                 </div>
-                <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors mb-2">
+                <h3 className="font-bold text-lg text-foreground group-hover:text-[#B45309] dark:group-hover:text-[#F5B301] transition-colors mb-2">
                   Paragliding Fewa Lake
                 </h3>
                 <p className="text-xs text-muted-foreground leading-relaxed mb-4">
                   Take off from Sarangkot and thermal above emerald waters with panoramic views of Machapuchare (Fishtail peak).
                 </p>
-                <Link href="/destinations/pokhara" className="text-xs font-bold text-primary inline-flex items-center gap-1 hover:underline">
+                <Link href="/destinations/pokhara" className="text-xs font-bold text-[#B45309] dark:text-[#F5B301] inline-flex items-center gap-1 hover:underline">
                   Explore Pokhara guide <ArrowRight size={12} />
                 </Link>
               </div>
 
               {/* Activity 4 */}
-              <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-primary/60 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
-                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-[#F5B301]/60 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
+                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Heart size={24} />
                 </div>
-                <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors mb-2">
+                <h3 className="font-bold text-lg text-foreground group-hover:text-[#B45309] dark:group-hover:text-[#F5B301] transition-colors mb-2">
                   Sound Healing &amp; Yoga
                 </h3>
                 <p className="text-xs text-muted-foreground leading-relaxed mb-4">
                   Recharge your focus with traditional Tibetan singing bowl sound meditation and weekend mountain retreats.
                 </p>
-                <Link href="/blog" className="text-xs font-bold text-primary inline-flex items-center gap-1 hover:underline">
+                <Link href="/blog" className="text-xs font-bold text-[#B45309] dark:text-[#F5B301] inline-flex items-center gap-1 hover:underline">
                   Read wellness tips <ArrowRight size={12} />
                 </Link>
               </div>

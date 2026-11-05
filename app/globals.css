@@ -66,5 +66,35 @@
     scrollbar-width: thin;
     scrollbar-color: #2c2c2c transparent;
   }
+
+  /* Editorial Saffron Text Highlights & Accents (Accessible on Light & Dark) */
+  .highlight-marker {
+    background-color: rgba(245, 179, 1, 0.22);
+    color: inherit;
+    padding: 0.12em 0.4em;
+    border-radius: 4px;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  .highlight-underline {
+    text-decoration: underline;
+    text-decoration-color: #F5B301;
+    text-decoration-thickness: 2.5px;
+    text-underline-offset: 4px;
+  }
+
+  .highlight-pill {
+    background-color: #F5B301;
+    color: #1A1A1C;
+    font-weight: 700;
+    padding: 0.2em 0.65em;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
 }
 

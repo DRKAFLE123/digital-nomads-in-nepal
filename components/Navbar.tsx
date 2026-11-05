@@ -399,19 +399,21 @@ export default function Navbar() {
               >
                 <span className={`font-black text-xs sm:text-[15px] md:text-[17px] tracking-normal leading-tight uppercase transition-colors text-center ${
                   isSolid
-                    ? "text-gray-900 dark:text-[#F5F5F5] lg:group-hover/name:text-primary"
-                    : "text-white lg:group-hover/name:text-[#FFD400]"
+                    ? "text-gray-900 dark:text-[#F5F5F5] lg:group-hover/name:text-[#B45309] dark:lg:group-hover/name:text-[#F5B301]"
+                    : "text-white lg:group-hover/name:text-[#F5B301]"
                 } ${
                   !isScrolled ? "inline-block" : "hidden sm:inline-block"
                 }`}>
                   DIGITAL NOMADS
                 </span>
-                <span className={`w-full flex items-center justify-center gap-1.5 font-black text-[9.5px] sm:text-[11.5px] text-[#F5B301] tracking-[0.2em] uppercase leading-none mt-0.5 select-none text-center ${
+                <span className={`w-full flex items-center justify-center gap-1.5 font-black text-[9.5px] sm:text-[11.5px] tracking-[0.2em] uppercase leading-none mt-0.5 select-none text-center ${
+                  isSolid ? "text-[#B45309] dark:text-[#F5B301]" : "text-[#F5B301]"
+                } ${
                   !isScrolled ? "flex" : "hidden sm:flex"
                 }`}>
-                  <span className="text-[#F5B301]/60 font-medium select-none">—</span>
+                  <span className="opacity-60 font-medium select-none">—</span>
                   <span>IN NEPAL</span>
-                  <span className="text-[#F5B301]/60 font-medium select-none">—</span>
+                  <span className="opacity-60 font-medium select-none">—</span>
                 </span>
               </Link>
 
@@ -901,7 +903,7 @@ export default function Navbar() {
             <div className="relative group/booknow">
               <Link
                 href="/resources/coworking#book"
-                className="flex items-center gap-1.5 px-3.5 py-1.5 border border-[#F5B301]/80 hover:border-[#F5B301] text-[#F5B301] hover:bg-[#F5B301] hover:text-[#1A1A1C] font-bold text-xs rounded-full transition-all shadow-xs active:scale-95 whitespace-nowrap cursor-pointer z-10"
+                className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#F5B301] hover:bg-[#E0A200] text-[#1A1A1C] font-bold text-xs rounded-full transition-all shadow-sm active:scale-95 whitespace-nowrap cursor-pointer z-10"
               >
                 <CalendarCheck size={13} className="group-hover/booknow:rotate-12 transition-transform duration-200" />
                 <span>Book Now</span>
