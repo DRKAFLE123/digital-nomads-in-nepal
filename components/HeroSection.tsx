@@ -47,7 +47,7 @@ export default function HeroSection() {
   const [selectedCategory, setSelectedCategory] = useState("workspace")
   const router = useRouter()
 
-  // Auto-slide every 6 seconds
+  // Auto-slide every 6.5 seconds
   useEffect(() => {
     const slideTimer = setInterval(() => {
       setCurrentSlide(prev => (prev + 1) % HERO_SLIDES.length)
@@ -73,7 +73,7 @@ export default function HeroSection() {
   const nextSlide = () => setCurrentSlide(prev => (prev + 1) % HERO_SLIDES.length)
 
   return (
-    <section className="relative w-full min-h-[92vh] sm:min-h-screen flex items-center overflow-hidden bg-[#0B0B0C]">
+    <section className="relative w-full min-h-[92vh] sm:min-h-screen flex items-center justify-center overflow-hidden bg-[#0B0B0C]">
       {/* Dynamic Background Slider */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none">
         {HERO_SLIDES.map((slide, idx) => (
@@ -112,9 +112,9 @@ export default function HeroSection() {
         ))}
       </div>
 
-      {/* Directional Horizontal Gradient: dense on the left for text contrast, transparent on the right to reveal mountains & nomad */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-r from-[#0B0B0C]/95 via-[#0B0B0C]/75 to-[#0B0B0C]/20 sm:to-transparent" />
-      <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#0B0B0C] via-transparent to-[#0B0B0C]/40" />
+      {/* Balanced Vignette Overlay: clear mountain center with soft dissolves top and bottom */}
+      <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#0B0B0C] via-black/40 to-[#0B0B0C]/60" />
+      <div className="absolute inset-0 z-10 bg-radial-gradient from-transparent via-black/20 to-black/60 pointer-events-none" />
 
       {/* Manual Slide Navigation Arrows (Desktop) */}
       <button
@@ -134,142 +134,140 @@ export default function HeroSection() {
         <ChevronRight size={18} />
       </button>
 
-      {/* Content Container (Left-aligned on desktop, max-w-7xl) */}
-      <div className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 pt-32 pb-20 sm:pt-40 sm:pb-28 text-left">
-        <div className="max-w-2xl">
-          
-          {/* Eyebrow Label */}
-          <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-[#F5B301] mb-4">
-            <Compass size={13} className="text-[#F5B301]" />
-            <span>The Himalayan Remote Work Ecosystem</span>
-          </div>
-
-          {/* Editorial H1 (Inter + Fraunces Italic Contrast) */}
-          <h1 className="tracking-tight text-left drop-shadow-md mb-4 sm:mb-5">
-            <span className="block font-bold text-3xl sm:text-5xl lg:text-6xl text-white leading-[1.08]">
-              Digital Nomads in Nepal
-            </span>
-            <span className="block font-serif italic font-normal text-2xl sm:text-4xl lg:text-5xl text-[#F5B301] mt-1 sm:mt-2 leading-[1.15]">
-              Live, Work &amp; Explore
-            </span>
-          </h1>
-
-          {/* Supporting Text: Regular 400 weight, max 70 chars */}
-          <p className="text-sm sm:text-base text-gray-300 font-normal leading-relaxed max-w-xl mb-8 sm:mb-10 drop-shadow-sm">
-            Verified coworking spaces, high-speed fiber stays, and licensed guides across Kathmandu, Pokhara &amp; the Himalayas.
-          </p>
-
-          {/* Segmented Search Bar (Where / What / Search) */}
-          <form
-            onSubmit={handleSearch}
-            className="w-full max-w-xl bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] rounded-2xl sm:rounded-full p-2 sm:p-2.5 shadow-2xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-2"
-          >
-            {/* Segment 1: WHERE */}
-            <div className="flex-1 px-3 sm:px-4 py-1 flex flex-col justify-center">
-              <label htmlFor="hero-where" className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 block mb-0.5">
-                Where
-              </label>
-              <div className="relative flex items-center">
-                <select
-                  id="hero-where"
-                  value={selectedCity}
-                  onChange={(e) => setSelectedCity(e.target.value)}
-                  className="w-full bg-transparent text-xs sm:text-sm font-semibold text-gray-900 dark:text-white focus:outline-none appearance-none pr-5 cursor-pointer"
-                >
-                  {LOCATIONS.map((loc) => (
-                    <option key={loc.value} value={loc.value} className="bg-white dark:bg-[#141416] text-gray-900 dark:text-white">
-                      {loc.label}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown size={13} className="absolute right-0 text-gray-400 pointer-events-none" />
-              </div>
-            </div>
-
-            {/* Divider (Desktop) */}
-            <div className="hidden sm:block w-[1px] h-8 bg-gray-200 dark:bg-[#26262A]" />
-
-            {/* Segment 2: WHAT */}
-            <div className="flex-1 px-3 sm:px-4 py-1 flex flex-col justify-center">
-              <label htmlFor="hero-what" className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 block mb-0.5">
-                What
-              </label>
-              <div className="relative flex items-center">
-                <select
-                  id="hero-what"
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full bg-transparent text-xs sm:text-sm font-semibold text-gray-900 dark:text-white focus:outline-none appearance-none pr-5 cursor-pointer"
-                >
-                  {CATEGORIES.map((cat) => (
-                    <option key={cat.value} value={cat.value} className="bg-white dark:bg-[#141416] text-gray-900 dark:text-white">
-                      {cat.label}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown size={13} className="absolute right-0 text-gray-400 pointer-events-none" />
-              </div>
-            </div>
-
-            {/* Single Primary Yellow Button for Hero */}
-            <button
-              type="submit"
-              className="bg-[#F5B301] hover:bg-[#E0A200] active:scale-95 text-[#1A1A1C] font-bold text-xs sm:text-sm px-6 sm:px-7 py-3 rounded-xl sm:rounded-full transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
-            >
-              <span>Search</span>
-            </button>
-          </form>
-
-          {/* Secondary Shortcuts (Clean Text Links Under Search) */}
-          <div className="flex flex-wrap items-center gap-4 sm:gap-6 mt-5 text-xs sm:text-sm font-semibold text-gray-300">
-            <Link
-              href="/workspaces"
-              className="hover:text-[#F5B301] transition-colors inline-flex items-center gap-1 group"
-            >
-              <span>Workspaces</span>
-              <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
-
-            <span className="text-gray-600 select-none">•</span>
-
-            <Link
-              href="/stay"
-              className="hover:text-[#F5B301] transition-colors inline-flex items-center gap-1 group"
-            >
-              <span>Stays &amp; coliving</span>
-              <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
-
-            <span className="text-gray-600 select-none">•</span>
-
-            <Link
-              href="/guides"
-              className="hover:text-[#F5B301] transition-colors inline-flex items-center gap-1 group"
-            >
-              <span>Local guides</span>
-              <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </div>
-
-          {/* Slider Indicator Dots */}
-          <div className="flex items-center gap-2 mt-8 z-20">
-            {HERO_SLIDES.map((slide, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => setCurrentSlide(idx)}
-                className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer ${
-                  currentSlide === idx
-                    ? "w-7 bg-[#F5B301] shadow-md shadow-[#F5B301]/40"
-                    : "w-2 bg-white/40 hover:bg-white/70"
-                }`}
-                aria-label={`Switch to slide ${idx + 1}: ${slide.label}`}
-                title={slide.label}
-              />
-            ))}
-          </div>
-
+      {/* Content Container (Perfect Center Alignment, max-w-4xl) */}
+      <div className="relative z-20 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 sm:pt-40 sm:pb-28 text-center flex flex-col items-center">
+        
+        {/* Eyebrow Label */}
+        <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-[#F5B301] mb-4 bg-black/40 backdrop-blur-md border border-white/15 px-3.5 py-1 rounded-full shadow-sm">
+          <Compass size={13} className="text-[#F5B301]" />
+          <span>The Himalayan Remote Work Ecosystem</span>
         </div>
+
+        {/* Editorial H1 (Inter + Fraunces Italic Contrast) */}
+        <h1 className="tracking-tight text-center drop-shadow-md mb-4 sm:mb-5 max-w-3xl">
+          <span className="block font-bold text-3xl sm:text-5xl lg:text-6xl text-white leading-[1.08]">
+            Digital Nomads in Nepal
+          </span>
+          <span className="block font-serif italic font-normal text-2xl sm:text-4xl lg:text-5xl text-[#F5B301] mt-1 sm:mt-2 leading-[1.15]">
+            Live, Work &amp; Explore
+          </span>
+        </h1>
+
+        {/* Supporting Text: Regular 400 weight, max 70 chars */}
+        <p className="text-sm sm:text-base text-gray-200 font-normal leading-relaxed max-w-xl mx-auto mb-8 sm:mb-10 drop-shadow-sm text-center">
+          Verified coworking spaces, high-speed fiber stays, and licensed guides across Kathmandu, Pokhara &amp; the Himalayas.
+        </p>
+
+        {/* Segmented Search Bar (Where / What / Search) */}
+        <form
+          onSubmit={handleSearch}
+          className="w-full max-w-2xl mx-auto bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] rounded-2xl sm:rounded-full p-2 sm:p-2.5 shadow-2xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-2 text-left"
+        >
+          {/* Segment 1: WHERE */}
+          <div className="flex-1 px-3 sm:px-4 py-1 flex flex-col justify-center">
+            <label htmlFor="hero-where" className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 block mb-0.5">
+              Where
+            </label>
+            <div className="relative flex items-center">
+              <select
+                id="hero-where"
+                value={selectedCity}
+                onChange={(e) => setSelectedCity(e.target.value)}
+                className="w-full bg-transparent text-xs sm:text-sm font-semibold text-gray-900 dark:text-white focus:outline-none appearance-none pr-5 cursor-pointer"
+              >
+                {LOCATIONS.map((loc) => (
+                  <option key={loc.value} value={loc.value} className="bg-white dark:bg-[#141416] text-gray-900 dark:text-white">
+                    {loc.label}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown size={13} className="absolute right-0 text-gray-400 pointer-events-none" />
+            </div>
+          </div>
+
+          {/* Divider (Desktop) */}
+          <div className="hidden sm:block w-[1px] h-8 bg-gray-200 dark:bg-[#26262A]" />
+
+          {/* Segment 2: WHAT */}
+          <div className="flex-1 px-3 sm:px-4 py-1 flex flex-col justify-center">
+            <label htmlFor="hero-what" className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 block mb-0.5">
+              What
+            </label>
+            <div className="relative flex items-center">
+              <select
+                id="hero-what"
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="w-full bg-transparent text-xs sm:text-sm font-semibold text-gray-900 dark:text-white focus:outline-none appearance-none pr-5 cursor-pointer"
+              >
+                {CATEGORIES.map((cat) => (
+                  <option key={cat.value} value={cat.value} className="bg-white dark:bg-[#141416] text-gray-900 dark:text-white">
+                    {cat.label}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown size={13} className="absolute right-0 text-gray-400 pointer-events-none" />
+            </div>
+          </div>
+
+          {/* Single Primary Yellow Button for Hero */}
+          <button
+            type="submit"
+            className="bg-[#F5B301] hover:bg-[#E0A200] active:scale-95 text-[#1A1A1C] font-bold text-xs sm:text-sm px-6 sm:px-8 py-3 rounded-xl sm:rounded-full transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
+          >
+            <span>Search</span>
+          </button>
+        </form>
+
+        {/* Secondary Shortcuts (Clean Text Links Under Search) */}
+        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-5 text-xs sm:text-sm font-semibold text-gray-300">
+          <Link
+            href="/workspaces"
+            className="hover:text-[#F5B301] transition-colors inline-flex items-center gap-1 group"
+          >
+            <span>Workspaces</span>
+            <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+          </Link>
+
+          <span className="text-gray-600 select-none">•</span>
+
+          <Link
+            href="/stay"
+            className="hover:text-[#F5B301] transition-colors inline-flex items-center gap-1 group"
+          >
+            <span>Stays &amp; coliving</span>
+            <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+          </Link>
+
+          <span className="text-gray-600 select-none">•</span>
+
+          <Link
+            href="/guides"
+            className="hover:text-[#F5B301] transition-colors inline-flex items-center gap-1 group"
+          >
+            <span>Local guides</span>
+            <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+
+        {/* Slider Indicator Dots */}
+        <div className="flex items-center justify-center gap-2 mt-8 z-20">
+          {HERO_SLIDES.map((slide, idx) => (
+            <button
+              key={idx}
+              type="button"
+              onClick={() => setCurrentSlide(idx)}
+              className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer ${
+                currentSlide === idx
+                  ? "w-7 bg-[#F5B301] shadow-md shadow-[#F5B301]/40"
+                  : "w-2 bg-white/40 hover:bg-white/70"
+              }`}
+              aria-label={`Switch to slide ${idx + 1}: ${slide.label}`}
+              title={slide.label}
+            />
+          ))}
+        </div>
+
       </div>
     </section>
   )
