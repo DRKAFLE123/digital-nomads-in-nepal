@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import { 
@@ -21,7 +21,10 @@ import {
   RefreshCw,
   ArrowRight,
   Sparkles,
-  Home
+  Home,
+  Eye,
+  ExternalLink,
+  Compass
 } from "lucide-react"
 
 interface HubData {
@@ -45,11 +48,24 @@ interface HubData {
 export default function OwnerDashboardPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const isJustRegistered = searchParams?.get("registered") === "true"
+  const registeredSlug = searchParams?.get("slug") || ""
+
   const [ownerEmail, setOwnerEmail] = useState("")
   const [hubs, setHubs] = useState<HubData[]>([])
   const [loading, setLoading] = useState(false)
   const [activeTab, setActiveTab] = useState<"BOOKINGS" | "LISTINGS" | "SETTINGS">("BOOKINGS")
   const [bookingFilter, setBookingFilter] = useState<"ALL" | "PENDING" | "CONFIRMED" | "CANCELLED">("ALL")
+  const [showCelebration, setShowCelebration] = useState(isJustRegistered)
+
+  // Switch to LISTINGS tab automatically if just registered
+  useEffect(() => {
+    if (isJustRegistered) {
+      setActiveTab("LISTINGS")
+      setShowCelebration(true)
+    }
+  }, [isJustRegistered])
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -195,8 +211,80 @@ export default function OwnerDashboardPage() {
       <Navbar />
 
       {/* Owner Header Banner */}
-      <div className="relative border-b border-gray-800/80 bg-gradient-to-b from-[#141414] to-[#0A0A0A] py-10">
+      <div className="relative border-b border-gray-800/80 bg-gradient-to-b from-[#141414] to-[#0A0A0A] py-8 sm:py-10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          {/* Top Switcher Bar (Airbnb Style: Switch to Traveling / Add Space) */}
+          <div className="flex flex-wrap items-center justify-between gap-3 pb-6 mb-6 border-b border-gray-800/80">
+            <div className="flex flex-wrap items-center gap-2">
+              <Link
+                href="/"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-[#1C1C1F] hover:bg-[#252528] text-white border border-gray-700/80 hover:border-[#FB923C] transition-all shadow-sm group"
+              >
+                <Compass size={14} className="text-[#FB923C] group-hover:rotate-45 transition-transform" />
+                <span>Switch to Traveling (Live Site)</span>
+              </Link>
+
+              <Link
+                href="/workspaces"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-gray-400 hover:text-white transition-colors"
+              >
+                <span>Browse Directory</span>
+                <ArrowRight size={12} />
+              </Link>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Link
+                href="/register/space"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-[#C2410C] hover:bg-[#9A3412] text-white transition-all shadow-sm shadow-[#C2410C]/20"
+              >
+                <PlusCircle size={14} />
+                <span>+ List Another Space</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* New Registration Celebration Notice */}
+          {showCelebration && (
+            <div className="mb-6 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-emerald-500/15 via-[#C2410C]/10 to-transparent border border-emerald-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-in fade-in slide-in-from-top-4 duration-300">
+              <div className="flex items-start sm:items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                    <span>🎉 Space Successfully Registered &amp; Listed in Host Console!</span>
+                  </h3>
+                  <p className="text-xs text-gray-300 mt-0.5">
+                    Your space has been added to your host portfolio. You can adjust rates, manage reservations, or switch to the live site anytime.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 self-end md:self-center shrink-0">
+                {registeredSlug && (
+                  <Link
+                    href={`/workspaces/${registeredSlug}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#C2410C] hover:bg-[#9A3412] text-white transition-all flex items-center gap-1.5 shadow-sm"
+                  >
+                    <Eye size={13} />
+                    <span>View Live Listing</span>
+                    <ExternalLink size={12} />
+                  </Link>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setShowCelebration(false)}
+                  className="px-3 py-2 rounded-xl text-xs font-semibold text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 transition-colors"
+                >
+                  Dismiss
+                </button>
+              </div>
+            </div>
+          )}
+
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 mb-3">
@@ -204,17 +292,17 @@ export default function OwnerDashboardPage() {
                 Property Partner Console
               </div>
               <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
-                Owner Dashboard & Booking Management
+                Owner Dashboard &amp; Booking Management
               </h1>
               <p className="text-gray-400 text-sm md:text-base mt-1">
-                Manage your Nepal coliving & workspace listings, adjust pricing rates, and confirm incoming nomad reservations.
+                Manage your Nepal coliving &amp; workspace listings, adjust pricing rates, and confirm incoming nomad reservations.
               </p>
             </div>
 
             {/* Owner Email Account Switcher */}
             <form onSubmit={handleOwnerSearch} className="flex items-center gap-2 bg-[#181818] p-1.5 rounded-xl border border-gray-800">
               <div className="flex items-center gap-2 px-3 text-gray-400">
-                <User className="w-4 h-4 text-[#FFD400]" />
+                <User className="w-4 h-4 text-[#FB923C]" />
                 <input
                   type="email"
                   value={ownerEmail}
@@ -227,7 +315,7 @@ export default function OwnerDashboardPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="px-4 py-2 bg-[#FFD400] text-black text-xs font-bold rounded-lg hover:bg-yellow-400 transition-colors flex items-center gap-1"
+                className="px-4 py-2 bg-[#C2410C] text-white text-xs font-bold rounded-lg hover:bg-[#9A3412] transition-colors flex items-center gap-1 shadow-sm"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
                 Load Portal
@@ -239,7 +327,7 @@ export default function OwnerDashboardPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
             <div className="bg-[#141414] p-4 rounded-xl border border-gray-800/80">
               <div className="text-gray-400 text-xs font-medium mb-1 flex items-center gap-1.5">
-                <Building2 className="w-3.5 h-3.5 text-[#FFD400]" /> Managed Properties
+                <Building2 className="w-3.5 h-3.5 text-[#FB923C]" /> Managed Properties
               </div>
               <div className="text-2xl font-extrabold text-white">{hubs.length}</div>
             </div>
@@ -260,7 +348,7 @@ export default function OwnerDashboardPage() {
 
             <div className="bg-[#141414] p-4 rounded-xl border border-gray-800/80">
               <div className="text-gray-400 text-xs font-medium mb-1 flex items-center gap-1.5">
-                <DollarSign className="w-3.5 h-3.5 text-[#FFD400]" /> Estimated Monthly Revenue
+                <DollarSign className="w-3.5 h-3.5 text-[#FB923C]" /> Estimated Monthly Revenue
               </div>
               <div className="text-2xl font-extrabold text-white">${estimatedRevenue}</div>
             </div>
@@ -279,19 +367,19 @@ export default function OwnerDashboardPage() {
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full">
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 text-center">
-            <RefreshCw className="w-8 h-8 text-[#FFD400] animate-spin mb-4" />
+            <RefreshCw className="w-8 h-8 text-[#C2410C] animate-spin mb-4" />
             <p className="text-gray-400 text-sm font-medium">Loading your property portfolio...</p>
           </div>
         ) : hubs.length === 0 ? (
           <div className="bg-[#121212] rounded-3xl border border-gray-800 p-8 sm:p-12 text-center max-w-2xl mx-auto my-6 shadow-2xl">
-            <div className="w-16 h-16 rounded-2xl bg-[#FFD400]/10 border border-[#FFD400]/20 flex items-center justify-center mx-auto mb-6 text-[#FFD400]">
+            <div className="w-16 h-16 rounded-2xl bg-[#C2410C]/10 border border-[#C2410C]/20 flex items-center justify-center mx-auto mb-6 text-[#C2410C]">
               <Building2 className="w-8 h-8" />
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-white mb-3">
               No Properties Registered Yet
             </h2>
             <p className="text-gray-400 text-sm sm:text-base leading-relaxed mb-3">
-              You are signed in as <span className="text-[#FFD400] font-medium">{ownerEmail || session?.user?.email}</span>. We could not find any active workspaces, coworking desks, or stays registered under this email.
+              You are signed in as <span className="text-[#FB923C] font-medium">{ownerEmail || session?.user?.email}</span>. We could not find any active workspaces, coworking desks, or stays registered under this email.
             </p>
             <p className="text-gray-500 text-xs sm:text-sm mb-8 max-w-lg mx-auto leading-relaxed">
               List your property on Digital Nomads in Nepal to receive direct reservation inquiries, manage pricing, and connect with remote workers from across the world.
@@ -300,12 +388,12 @@ export default function OwnerDashboardPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Link
                 href="/workspaces/register"
-                className="p-5 rounded-2xl bg-gradient-to-b from-[#1c1c1c] to-[#141414] border border-gray-800 hover:border-[#FFD400]/60 transition-all text-left group"
+                className="p-5 rounded-2xl bg-gradient-to-b from-[#1c1c1c] to-[#141414] border border-gray-800 hover:border-[#C2410C]/60 transition-all text-left group"
               >
-                <div className="w-10 h-10 rounded-xl bg-[#FFD400]/15 flex items-center justify-center text-[#FFD400] mb-3 group-hover:scale-105 transition-transform">
+                <div className="w-10 h-10 rounded-xl bg-[#C2410C]/15 flex items-center justify-center text-[#FB923C] mb-3 group-hover:scale-105 transition-transform">
                   <Building2 className="w-5 h-5" />
                 </div>
-                <h3 className="text-base font-bold text-white group-hover:text-[#FFD400] transition-colors flex items-center justify-between">
+                <h3 className="text-base font-bold text-white group-hover:text-[#FB923C] transition-colors flex items-center justify-between">
                   List a Workspace
                   <ArrowRight className="w-4 h-4 text-gray-500 group-hover:translate-x-1 transition-transform" />
                 </h3>
@@ -339,7 +427,7 @@ export default function OwnerDashboardPage() {
                 onClick={() => setActiveTab("BOOKINGS")}
                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border ${
                   activeTab === "BOOKINGS"
-                    ? "bg-[#FFD400] text-black border-[#FFD400] shadow-md shadow-yellow-500/10"
+                    ? "bg-[#C2410C] text-white border-[#C2410C] shadow-md shadow-[#C2410C]/20"
                     : "bg-[#141414] text-gray-400 border-gray-800 hover:text-white"
                 }`}
               >
@@ -351,20 +439,20 @@ export default function OwnerDashboardPage() {
                 onClick={() => setActiveTab("LISTINGS")}
                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border ${
                   activeTab === "LISTINGS"
-                    ? "bg-[#FFD400] text-black border-[#FFD400] shadow-md shadow-yellow-500/10"
+                    ? "bg-[#C2410C] text-white border-[#C2410C] shadow-md shadow-[#C2410C]/20"
                     : "bg-[#141414] text-gray-400 border-gray-800 hover:text-white"
                 }`}
               >
                 <Building2 className="w-4 h-4" />
-                Edit Listings & Pricing ({hubs.length})
+                Edit Listings &amp; Pricing ({hubs.length})
               </button>
 
               <Link
-                href="/stay/register"
-                className="px-4 py-2 rounded-xl text-xs font-bold bg-[#1A1A1A] text-gray-300 border border-gray-700 hover:border-gray-500 hover:text-white transition-colors flex items-center gap-1.5 ml-auto"
+                href="/register/space"
+                className="px-4 py-2 rounded-xl text-xs font-bold bg-[#1A1A1A] text-gray-200 border border-gray-700 hover:border-[#FB923C] hover:text-[#FB923C] transition-colors flex items-center gap-1.5 ml-auto shrink-0"
               >
-                <PlusCircle className="w-4 h-4 text-[#FFD400]" />
-                Register New Property
+                <PlusCircle className="w-4 h-4 text-[#FB923C]" />
+                Register New Space
               </Link>
             </div>
 
@@ -425,7 +513,7 @@ export default function OwnerDashboardPage() {
                             </span>
                           )}
 
-                          <span className="text-xs text-[#FFD400] font-semibold">
+                          <span className="text-xs text-[#FB923C] font-semibold">
                             {hubObj?.name || "Nepal Workspace"}
                           </span>
                         </div>
@@ -439,7 +527,7 @@ export default function OwnerDashboardPage() {
 
                         <div className="flex flex-wrap items-center gap-4 text-xs text-gray-400">
                           <span className="flex items-center gap-1 text-gray-200 font-medium">
-                            <Calendar className="w-3.5 h-3.5 text-[#FFD400]" />
+                            <Calendar className="w-3.5 h-3.5 text-[#FB923C]" />
                             {startDateFormatted} → {endDateFormatted}
                           </span>
                           {booking.notes && (
@@ -491,7 +579,7 @@ export default function OwnerDashboardPage() {
                       <h3 className="text-xl font-bold text-white flex items-center gap-2">
                         {hub.name}
                         {hub.city && (
-                          <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-500/10 text-[#FFD400] font-semibold border border-yellow-500/20">
+                          <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#C2410C]/15 text-[#FB923C] font-semibold border border-[#C2410C]/30">
                             {hub.city}
                           </span>
                         )}
@@ -502,12 +590,24 @@ export default function OwnerDashboardPage() {
                     </div>
 
                     {!isEditing ? (
-                      <button
-                        onClick={() => startEditHub(hub)}
-                        className="px-4 py-2 bg-[#FFD400] text-black text-xs font-bold rounded-xl hover:bg-yellow-400 transition-colors flex items-center gap-1.5 self-start md:self-auto"
-                      >
-                        <Edit3 className="w-3.5 h-3.5" /> Edit Pricing & Facilities
-                      </button>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Link
+                          href={`/workspaces/${hub.slug}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-3.5 py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 self-start md:self-auto border border-white/10 group/live"
+                        >
+                          <Eye className="w-3.5 h-3.5 text-[#FB923C]" />
+                          <span>View Live Listing</span>
+                          <ExternalLink className="w-3 h-3 text-gray-400 group-hover/live:translate-x-0.5 transition-transform" />
+                        </Link>
+                        <button
+                          onClick={() => startEditHub(hub)}
+                          className="px-4 py-2 bg-[#C2410C] hover:bg-[#9A3412] text-white text-xs font-bold rounded-xl transition-colors flex items-center gap-1.5 self-start md:self-auto shadow-sm"
+                        >
+                          <Edit3 className="w-3.5 h-3.5" /> Edit Rates &amp; Amenities
+                        </button>
+                      </div>
                     ) : (
                       <div className="flex items-center gap-2">
                         <button
@@ -533,7 +633,7 @@ export default function OwnerDashboardPage() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
                       <div className="bg-[#161616] p-4 rounded-xl border border-gray-800/80 space-y-1">
                         <span className="text-gray-400 font-medium">Daily Hot Desk Starting Rate:</span>
-                        <div className="text-xl font-bold text-[#FFD400]">
+                        <div className="text-xl font-bold text-[#FB923C]">
                           ${hub.priceDaily || 10} <span className="text-xs font-normal text-gray-400">/ day</span>
                         </div>
                       </div>
@@ -565,7 +665,7 @@ export default function OwnerDashboardPage() {
                     </div>
                   ) : (
                     /* Edit Form View */
-                    <div className="bg-[#161616] p-5 rounded-xl border border-yellow-500/30 space-y-4 text-xs">
+                    <div className="bg-[#161616] p-5 rounded-xl border border-[#C2410C]/30 space-y-4 text-xs">
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
                           <label className="block text-gray-300 font-semibold mb-1">
@@ -575,7 +675,7 @@ export default function OwnerDashboardPage() {
                             type="number"
                             value={editPriceDaily}
                             onChange={e => setEditPriceDaily(parseFloat(e.target.value) || 0)}
-                            className="w-full bg-[#111] border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#FFD400]"
+                            className="w-full bg-[#111] border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#C2410C]"
                           />
                         </div>
 
@@ -587,7 +687,7 @@ export default function OwnerDashboardPage() {
                             type="number"
                             value={editPriceMonthly}
                             onChange={e => setEditPriceMonthly(parseFloat(e.target.value) || 0)}
-                            className="w-full bg-[#111] border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#FFD400]"
+                            className="w-full bg-[#111] border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#C2410C]"
                           />
                         </div>
 
@@ -599,7 +699,7 @@ export default function OwnerDashboardPage() {
                             type="text"
                             value={editOpeningHours}
                             onChange={e => setEditOpeningHours(e.target.value)}
-                            className="w-full bg-[#111] border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#FFD400]"
+                            className="w-full bg-[#111] border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#C2410C]"
                           />
                         </div>
                       </div>
@@ -613,7 +713,7 @@ export default function OwnerDashboardPage() {
                           value={editFacilities}
                           onChange={e => setEditFacilities(e.target.value)}
                           placeholder="Starlink Wi-Fi, Solar Backup 24/7, Private Heating, Ergonomic Chairs"
-                          className="w-full bg-[#111] border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#FFD400]"
+                          className="w-full bg-[#111] border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#C2410C]"
                         />
                       </div>
                     </div>

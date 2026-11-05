@@ -2,12 +2,13 @@
 "use client"
 import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
+import { useSession } from "next-auth/react"
 import Link from "next/link"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import WorkabilityScoreBadge from "@/components/coworking/WorkabilityScoreBadge"
 import WorkspaceReviewsSection from "@/components/coworking/WorkspaceReviewsSection"
-import { ArrowLeft, MapPin, CheckCircle, Star, Loader2, Calendar, Info, Building, ShieldCheck, Wifi, Zap, ExternalLink, Maximize2, X, ChevronLeft, ChevronRight, ImageIcon, MessageSquare, Layers } from "lucide-react"
+import { ArrowLeft, MapPin, CheckCircle, Star, Loader2, Calendar, Info, Building, ShieldCheck, Wifi, Zap, ExternalLink, Maximize2, X, ChevronLeft, ChevronRight, ImageIcon, MessageSquare, Layers, Edit3 } from "lucide-react"
 
 import BookingModalCard from "@/components/coworking/BookingModalCard"
 import EnquiryModalCard from "@/components/coworking/EnquiryModalCard"
@@ -29,6 +30,7 @@ type Hub = {
   priceDaily: number | null
   priceMonthly: number | null
   contactEmail: string
+  ownerEmail?: string | null
   website: string | null
   updatedAt?: string
 }
@@ -51,6 +53,7 @@ function parsePhotos(photoUrl: string | null): string[] {
 
 export default function CoworkingDetailPage({ params }: { params: { slug: string } }) {
   const router = useRouter()
+  const { data: session } = useSession()
   const [hub, setHub] = useState<Hub | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
@@ -67,6 +70,13 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
   const [bookingModalOpen, setBookingModalOpen] = useState(false)
   const [enquiryModalOpen, setEnquiryModalOpen] = useState(false)
   const [selectedUnitType, setSelectedUnitType] = useState("hot_desk")
+
+  const isOwner = Boolean(
+    session?.user?.email &&
+      hub &&
+      (session.user.email.toLowerCase() === hub.contactEmail?.toLowerCase() ||
+        session.user.email.toLowerCase() === hub.ownerEmail?.toLowerCase())
+  )
 
   const loadDetails = useCallback(async () => {
     setLoading(true)
@@ -94,7 +104,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0A0A0A] flex justify-center items-center">
-        <Loader2 className="w-12 h-12 text-[#FFD400] animate-spin" />
+        <Loader2 className="w-12 h-12 text-[#FB923C] animate-spin" />
       </div>
     )
   }
@@ -107,7 +117,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
           <div className="max-w-xl mx-auto text-center py-20 bg-[#121212] border border-[#242424] rounded-3xl">
             <Info className="w-12 h-12 text-red-400 mx-auto mb-4" />
             <h2 className="text-xl font-bold text-white mb-2">{error || "Work Hub Not Found"}</h2>
-            <Link href="/resources/coworking" className="text-[#FFD400] hover:underline text-sm font-semibold flex items-center justify-center gap-1.5 mt-4">
+            <Link href="/resources/coworking" className="text-[#FB923C] hover:underline text-sm font-semibold flex items-center justify-center gap-1.5 mt-4">
               <ArrowLeft size={16} /> Back to Coworking Directory
             </Link>
           </div>
@@ -127,15 +137,27 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
       <main className="min-h-screen bg-[#0A0A0A] text-[#F5F5F5] pt-28 pb-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto space-y-8">
           
-          {/* Top Breadcrumb & Navigation */}
+          {/* Top Breadcrumb & Navigation + Host Switcher */}
           <div className="flex items-center justify-between flex-wrap gap-4">
-            <Link href="/resources/coworking" className="inline-flex items-center gap-2 text-[#FFD400] hover:text-white transition-colors text-xs font-bold uppercase tracking-wider bg-[#121212] px-3.5 py-2 rounded-xl border border-[#242424]">
-              <ArrowLeft size={14} /> Back to Workspaces Directory
-            </Link>
+            <div className="flex flex-wrap items-center gap-3">
+              <Link href="/resources/coworking" className="inline-flex items-center gap-2 text-[#FB923C] hover:text-white transition-colors text-xs font-bold uppercase tracking-wider bg-[#121212] px-3.5 py-2 rounded-xl border border-[#242424]">
+                <ArrowLeft size={14} /> Back to Workspaces
+              </Link>
+              {isOwner && (
+                <Link
+                  href="/owner/dashboard?tab=LISTINGS"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold px-3.5 py-2 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white transition-all shadow-sm"
+                  title="Switch to Host Dashboard to edit this listing"
+                >
+                  <Edit3 size={13} />
+                  <span>Switch to Host Console (Edit Listing)</span>
+                </Link>
+              )}
+            </div>
             <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-[#A1A1AA]">
               <Link href="/resources/coworking" className="hover:text-white transition-colors">Nepal Workspaces</Link>
               <span>/</span>
-              <span className="text-[#FFD400] font-semibold">{hub.city}</span>
+              <span className="text-[#FB923C] font-semibold">{hub.city}</span>
               <span>/</span>
               <span className="text-white font-bold">{hub.name}</span>
             </nav>
@@ -161,7 +183,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                     <button
                       type="button"
                       onClick={() => setLightboxOpen(true)}
-                      className="absolute top-6 right-6 bg-black/70 hover:bg-[#FFD400] text-white hover:text-black p-2.5 rounded-full transition-all backdrop-blur z-20 shadow-lg"
+                      className="absolute top-6 right-6 bg-black/70 hover:bg-[#C2410C] text-white p-2.5 rounded-full transition-all backdrop-blur z-20 shadow-lg"
                       title="View full screen gallery"
                     >
                       <Maximize2 size={16} />
@@ -170,8 +192,8 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
 
                   <div className="absolute top-6 left-6 flex flex-wrap gap-2.5 z-10">
                     {hub.isPartner && (
-                      <span className="flex items-center gap-1.5 bg-[#FFD400] text-black text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full shadow-lg">
-                        <Building size={13} className="fill-black" /> System Partner
+                      <span className="flex items-center gap-1.5 bg-[#C2410C] text-white text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full shadow-lg">
+                        <Building size={13} className="fill-white" /> System Partner
                       </span>
                     )}
                     {hub.isVerified && (
@@ -202,7 +224,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                         onClick={() => setSelectedImgIdx(i)}
                         className={`relative w-24 h-16 rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 ${
                           selectedImgIdx === i
-                            ? "border-[#FFD400] ring-2 ring-[#FFD400]/30 scale-105"
+                            ? "border-[#C2410C] ring-2 ring-[#C2410C]/30 scale-105"
                             : "border-[#242424] opacity-60 hover:opacity-100 hover:border-gray-500"
                         }`}
                       >
@@ -217,7 +239,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
               <div className="bg-[#121212] border border-[#242424] rounded-3xl p-6 sm:p-8 space-y-5 shadow-lg">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#242424] pb-5">
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-xs text-[#FFD400] font-bold uppercase tracking-wider">
+                    <div className="flex items-center gap-2 text-xs text-[#FB923C] font-bold uppercase tracking-wider">
                       <MapPin size={14} />
                       {hub.city}, Nepal
                     </div>
@@ -230,7 +252,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                       href={hub.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-xs font-extrabold text-[#FFD400] bg-[#FFD400]/10 hover:bg-[#FFD400]/20 border border-[#FFD400]/30 px-4 py-2.5 rounded-xl transition-all self-start sm:self-center"
+                      className="inline-flex items-center gap-2 text-xs font-extrabold text-[#FB923C] bg-[#C2410C]/10 hover:bg-[#C2410C]/20 border border-[#C2410C]/30 px-4 py-2.5 rounded-xl transition-all self-start sm:self-center"
                     >
                       Visit Space Website <ExternalLink size={13} />
                     </a>
@@ -239,7 +261,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
 
                 <div className="flex items-center flex-wrap gap-6 text-sm text-[#A1A1AA]">
                   <div className="flex items-center gap-2 text-white font-bold">
-                    <Star className="w-5 h-5 text-[#FFD400] fill-[#FFD400]" />
+                    <Star className="w-5 h-5 text-[#FB923C] fill-[#FB923C]" />
                     <span className="text-lg font-mono">{hub.rating.toFixed(1)}</span>
                     <span className="text-xs text-[#A1A1AA] font-normal">({hub.totalReviews} verified nomad reviews)</span>
                   </div>
@@ -257,19 +279,19 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
 
               {/* Verified Checklist Banner */}
               <div className="bg-[#121212] border border-[#242424] rounded-3xl p-6 space-y-4">
-                <h3 className="text-xs font-extrabold text-[#FFD400] uppercase tracking-wider flex items-center gap-2">
+                <h3 className="text-xs font-extrabold text-[#FB923C] uppercase tracking-wider flex items-center gap-2">
                   <ShieldCheck size={16} /> Verified Remote Work Checklist
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div className="bg-[#171717] border border-[#242424] rounded-2xl p-4 space-y-1">
                     <div className="flex items-center gap-2 text-xs font-bold text-white">
-                      <Wifi size={14} className="text-[#FFD400]" /> High-Speed Fiber
+                      <Wifi size={14} className="text-[#FB923C]" /> High-Speed Fiber
                     </div>
                     <p className="text-[11px] text-[#A1A1AA]">100+ Mbps dual-WAN backup line</p>
                   </div>
                   <div className="bg-[#171717] border border-[#242424] rounded-2xl p-4 space-y-1">
                     <div className="flex items-center gap-2 text-xs font-bold text-white">
-                      <Zap size={14} className="text-[#FFD400]" /> 24/7 Power Backup
+                      <Zap size={14} className="text-[#FB923C]" /> 24/7 Power Backup
                     </div>
                     <p className="text-[11px] text-[#A1A1AA]">Auto Generator + UPS Inverter</p>
                   </div>
@@ -306,7 +328,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
               <div className="bg-[#121212] border border-[#242424] rounded-3xl p-6 sm:p-8 space-y-5 shadow-lg">
                 <div className="flex items-center justify-between border-b border-[#242424] pb-4 flex-wrap gap-2">
                   <div>
-                    <span className="text-[10px] font-black uppercase tracking-widest text-[#FFD400] flex items-center gap-1.5">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-[#FB923C] flex items-center gap-1.5">
                       <Layers size={13} /> Building Inventory & Room Options
                     </span>
                     <h2 className="text-xl font-black text-white mt-1">Available Seat Types & Rooms</h2>
@@ -318,11 +340,11 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
                   {/* Hot Desks */}
-                  <div className="bg-[#171717] border border-[#242424] hover:border-[#FFD400]/40 rounded-2xl p-5 space-y-3 transition-all flex flex-col justify-between group">
+                  <div className="bg-[#171717] border border-[#242424] hover:border-[#C2410C]/40 rounded-2xl p-5 space-y-3 transition-all flex flex-col justify-between group">
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-black text-white uppercase tracking-wider">Hot Desks / Flexi Seats</span>
-                        <span className="text-xs font-black text-[#FFD400] font-mono">
+                        <span className="text-xs font-black text-[#FB923C] font-mono">
                           ${hub.priceDaily || 5}/day
                         </span>
                       </div>
@@ -343,18 +365,18 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                         setSelectedUnitType("hot_desk")
                         setBookingModalOpen(true)
                       }}
-                      className="w-full bg-[#222] hover:bg-[#FFD400] text-white hover:text-black font-bold text-xs py-2.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer"
+                      className="w-full bg-[#222] hover:bg-[#C2410C] text-white font-bold text-xs py-2.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer"
                     >
                       <Calendar size={13} /> Reserve Hot Desk
                     </button>
                   </div>
 
                   {/* Dedicated Fixed Desks */}
-                  <div className="bg-[#171717] border border-[#242424] hover:border-[#FFD400]/40 rounded-2xl p-5 space-y-3 transition-all flex flex-col justify-between group">
+                  <div className="bg-[#171717] border border-[#242424] hover:border-[#C2410C]/40 rounded-2xl p-5 space-y-3 transition-all flex flex-col justify-between group">
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-black text-white uppercase tracking-wider">Dedicated Fixed Desks</span>
-                        <span className="text-xs font-black text-[#FFD400] font-mono">
+                        <span className="text-xs font-black text-[#FB923C] font-mono">
                           ${hub.priceMonthly || 120}/mo
                         </span>
                       </div>
@@ -375,18 +397,18 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                         setSelectedUnitType("dedicated_desk")
                         setBookingModalOpen(true)
                       }}
-                      className="w-full bg-[#222] hover:bg-[#FFD400] text-white hover:text-black font-bold text-xs py-2.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer"
+                      className="w-full bg-[#222] hover:bg-[#C2410C] text-white font-bold text-xs py-2.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer"
                     >
                       <Calendar size={13} /> Reserve Fixed Desk
                     </button>
                   </div>
 
                   {/* Executive Private Offices */}
-                  <div className="bg-[#171717] border border-[#242424] hover:border-[#FFD400]/40 rounded-2xl p-5 space-y-3 transition-all flex flex-col justify-between group">
+                  <div className="bg-[#171717] border border-[#242424] hover:border-[#C2410C]/40 rounded-2xl p-5 space-y-3 transition-all flex flex-col justify-between group">
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-black text-white uppercase tracking-wider">Private Executive Rooms</span>
-                        <span className="text-xs font-black text-[#FFD400] font-mono">
+                        <span className="text-xs font-black text-[#FB923C] font-mono">
                           From $350/mo
                         </span>
                       </div>
@@ -407,21 +429,21 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                         setSelectedUnitType("private_room")
                         setBookingModalOpen(true)
                       }}
-                      className="w-full bg-[#222] hover:bg-[#FFD400] text-white hover:text-black font-bold text-xs py-2.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer"
+                      className="w-full bg-[#222] hover:bg-[#C2410C] text-white font-bold text-xs py-2.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer"
                     >
                       <Calendar size={13} /> Reserve Private Room
                     </button>
                   </div>
 
                   {/* Coliving Work & Stay Suite */}
-                  <div className="bg-[#171717] border border-[#FFD400]/30 hover:border-[#FFD400] rounded-2xl p-5 space-y-3 transition-all flex flex-col justify-between group relative overflow-hidden">
-                    <div className="absolute top-0 right-0 bg-[#FFD400] text-black text-[9px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-bl-lg">
+                  <div className="bg-[#171717] border border-[#C2410C]/30 hover:border-[#C2410C] rounded-2xl p-5 space-y-3 transition-all flex flex-col justify-between group relative overflow-hidden">
+                    <div className="absolute top-0 right-0 bg-[#C2410C] text-white text-[9px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-bl-lg">
                       ROOM + WORKSTATION
                     </div>
                     <div className="space-y-2 pt-1">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-black text-white uppercase tracking-wider">🛌 Coliving Work & Stay</span>
-                        <span className="text-xs font-black text-[#FFD400] font-mono">
+                        <span className="text-xs font-black text-[#FB923C] font-mono">
                           From $450/mo
                         </span>
                       </div>
@@ -429,7 +451,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                         <span className="text-[#22C55E] font-extrabold bg-[#22C55E]/10 border border-[#22C55E]/20 px-2 py-0.5 rounded-full flex items-center gap-1">
                           <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-pulse" /> 3 Suites Available
                         </span>
-                        <span className="text-[#FFD400] font-semibold">Room Included</span>
+                        <span className="text-[#FB923C] font-semibold">Room Included</span>
                       </div>
                       <p className="text-[11px] text-[#A1A1AA] leading-relaxed">
                         Private accommodation room + dedicated ergonomic desk with Starlink Wi-Fi, 24/7 solar power & breakfast.
@@ -442,18 +464,18 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                         setSelectedUnitType("coliving_room")
                         setBookingModalOpen(true)
                       }}
-                      className="w-full bg-[#FFD400] hover:bg-[#FFE033] text-black font-black text-xs py-2.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer shadow-md shadow-[#FFD400]/10"
+                      className="w-full bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold text-xs py-2.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer shadow-md shadow-[#C2410C]/10"
                     >
                       <Calendar size={13} /> Reserve Coliving Suite
                     </button>
                   </div>
 
                   {/* Meeting Halls & Conference */}
-                  <div className="bg-[#171717] border border-[#242424] hover:border-[#FFD400]/40 rounded-2xl p-5 space-y-3 transition-all flex flex-col justify-between group sm:col-span-2">
+                  <div className="bg-[#171717] border border-[#242424] hover:border-[#C2410C]/40 rounded-2xl p-5 space-y-3 transition-all flex flex-col justify-between group sm:col-span-2">
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-black text-white uppercase tracking-wider">Meeting Halls & Event Space</span>
-                        <span className="text-xs font-black text-[#FFD400] font-mono">
+                        <span className="text-xs font-black text-[#FB923C] font-mono">
                           From $40/day
                         </span>
                       </div>
@@ -474,7 +496,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                         setSelectedUnitType("meeting_hall")
                         setBookingModalOpen(true)
                       }}
-                      className="w-full bg-[#222] hover:bg-[#FFD400] text-white hover:text-black font-bold text-xs py-2.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer"
+                      className="w-full bg-[#222] hover:bg-[#C2410C] text-white font-bold text-xs py-2.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer"
                     >
                       <Calendar size={13} /> Book Meeting Room
                     </button>
@@ -493,12 +515,12 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
             {/* Right Sticky Sidebar: Desk Rates & Reserve Now / Send Enquiry CTAs */}
             <div className="space-y-6 lg:sticky lg:top-28">
               <div className="bg-[#121212] border border-[#242424] rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative overflow-hidden">
-                {/* Visual Gold Top Bar Accent */}
-                <div className="absolute top-0 inset-x-0 h-1.5 bg-[#FFD400]"></div>
+                {/* Visual Top Bar Accent */}
+                <div className="absolute top-0 inset-x-0 h-1.5 bg-[#C2410C]"></div>
 
                 <div className="space-y-1">
                   <h3 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
-                    <Calendar size={16} className="text-[#FFD400]" />
+                    <Calendar size={16} className="text-[#FB923C]" />
                     Desk Rates & Membership
                   </h3>
                   <p className="text-[11px] text-[#A1A1AA]">
@@ -511,7 +533,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                   {hub.priceDaily && (
                     <div className="flex justify-between items-center p-3.5 bg-[#171717] border border-[#242424] rounded-2xl">
                       <span className="text-xs text-[#A1A1AA] font-medium">Daily Hot Desk</span>
-                      <span className="text-base font-black text-[#FFD400] font-mono">
+                      <span className="text-base font-black text-[#FB923C] font-mono">
                         ${hub.priceDaily} <span className="text-[10px] text-[#A1A1AA] font-normal">/ day</span>
                       </span>
                     </div>
@@ -519,7 +541,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                   {hub.priceMonthly && (
                     <div className="flex justify-between items-center p-3.5 bg-[#171717] border border-[#242424] rounded-2xl">
                       <span className="text-xs text-[#A1A1AA] font-medium">Monthly Unlimited</span>
-                      <span className="text-base font-black text-[#FFD400] font-mono">
+                      <span className="text-base font-black text-[#FB923C] font-mono">
                         ${hub.priceMonthly} <span className="text-[10px] text-[#A1A1AA] font-normal">/ mo</span>
                       </span>
                     </div>
@@ -541,7 +563,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                   <button
                     type="button"
                     onClick={() => setBookingModalOpen(true)}
-                    className="w-full bg-[#FFD400] hover:bg-[#FFE033] text-black font-black text-xs py-4 rounded-xl uppercase tracking-wider transition-all shadow-lg shadow-[#FFD400]/20 flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
+                    className="w-full bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold text-xs py-4 rounded-xl uppercase tracking-wider transition-all shadow-lg shadow-[#C2410C]/20 flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
                   >
                     <Calendar size={15} /> Reserve Now
                   </button>
@@ -551,7 +573,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                     onClick={() => setEnquiryModalOpen(true)}
                     className="w-full bg-[#1A1A1A] hover:bg-[#242424] border border-[#333] hover:border-[#555] text-white font-bold text-xs py-3.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
                   >
-                    <MessageSquare size={14} className="text-[#FFD400]" /> Send Enquiry
+                    <MessageSquare size={14} className="text-[#FB923C]" /> Send Enquiry
                   </button>
                 </div>
 
@@ -576,7 +598,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
       <div className="fixed bottom-0 inset-x-0 z-40 bg-[#121212]/95 border-t border-[#242424] p-3.5 sm:hidden backdrop-blur-md flex items-center justify-between gap-4 shadow-2xl">
         <div>
           <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">Desk Rate</span>
-          <span className="text-sm font-black text-[#FFD400] font-mono">
+          <span className="text-sm font-black text-[#FB923C] font-mono">
             {hub.priceMonthly ? `$${hub.priceMonthly}/mo` : hub.priceDaily ? `$${hub.priceDaily}/day` : "Vetted Seat"}
           </span>
         </div>
@@ -587,12 +609,12 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
             className="bg-[#1F1F1F] border border-[#333] text-white font-bold text-xs px-3.5 py-3 rounded-xl uppercase tracking-wider transition-all flex items-center gap-1 active:scale-95"
             title="Send enquiry"
           >
-            <MessageSquare size={14} className="text-[#FFD400]" />
+            <MessageSquare size={14} className="text-[#FB923C]" />
           </button>
           <button
             type="button"
             onClick={() => setBookingModalOpen(true)}
-            className="bg-[#FFD400] hover:bg-yellow-400 text-black font-black text-xs px-5 py-3 rounded-xl uppercase tracking-wider transition-all shadow-md shadow-[#FFD400]/20 flex items-center gap-1.5 active:scale-95"
+            className="bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold text-xs px-5 py-3 rounded-xl uppercase tracking-wider transition-all shadow-md shadow-[#C2410C]/20 flex items-center gap-1.5 active:scale-95"
           >
             <Calendar size={14} /> Reserve Now
           </button>
@@ -606,7 +628,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
           <button
             type="button"
             onClick={() => setLightboxOpen(false)}
-            className="absolute top-6 right-6 text-white hover:text-[#FFD400] p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all z-50"
+            className="absolute top-6 right-6 text-white hover:text-[#FB923C] p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all z-50"
           >
             <X size={24} />
           </button>
@@ -625,14 +647,14 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                 <button
                   type="button"
                   onClick={() => setSelectedImgIdx((prev: number) => (prev - 1 + photos.length) % photos.length)}
-                  className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-[#FFD400] text-white hover:text-black p-3 rounded-full transition-all border border-white/10 shadow-xl"
+                  className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-[#C2410C] text-white p-3 rounded-full transition-all border border-white/10 shadow-xl"
                 >
                   <ChevronLeft size={24} />
                 </button>
                 <button
                   type="button"
                   onClick={() => setSelectedImgIdx((prev: number) => (prev + 1) % photos.length)}
-                  className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-[#FFD400] text-white hover:text-black p-3 rounded-full transition-all border border-white/10 shadow-xl"
+                  className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-[#C2410C] text-white p-3 rounded-full transition-all border border-white/10 shadow-xl"
                 >
                   <ChevronRight size={24} />
                 </button>
@@ -641,7 +663,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
 
             {/* Photo Counter */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/80 border border-white/10 px-4 py-1.5 rounded-full text-xs font-mono text-white flex items-center gap-2">
-              <ImageIcon size={14} className="text-[#FFD400]" />
+              <ImageIcon size={14} className="text-[#FB923C]" />
               {selectedImgIdx + 1} of {photos.length}
             </div>
           </div>

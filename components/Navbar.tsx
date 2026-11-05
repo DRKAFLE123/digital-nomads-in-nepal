@@ -385,7 +385,7 @@ export default function Navbar() {
             {/* Logo Image (no popover on hover) - Proportional size & seamless spacing */}
             <Link
               href="/"
-              className="relative h-[29px] sm:h-10 md:h-11 w-[70px] sm:w-[96px] md:w-[105px] overflow-hidden flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD400] rounded-xl flex items-center transition-transform hover:scale-105 active:scale-95 duration-200"
+              className="relative h-[29px] sm:h-10 md:h-11 w-[70px] sm:w-[96px] md:w-[105px] overflow-hidden flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C2410C] rounded-xl flex items-center transition-transform hover:scale-105 active:scale-95 duration-200"
               aria-label="Digital Nomads in Nepal Home"
             >
               <Image src="/webisteofficiallogo-removebg-preview.png" alt="Digital Nomads in Nepal Logo" fill className="object-contain object-center" priority unoptimized />
@@ -395,7 +395,7 @@ export default function Navbar() {
             <div className={`relative group/name items-center h-full ${mounted && session ? "hidden md:flex" : "flex"}`}>
               <Link
                 href="/"
-                className="flex flex-col items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD400] rounded-xl py-1 text-center select-none"
+                className="flex flex-col items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C2410C] rounded-xl py-1 text-center select-none"
               >
                 <span className={`font-black text-xs sm:text-[15px] md:text-[17px] tracking-normal leading-tight uppercase transition-colors text-center ${
                   isSolid
@@ -426,7 +426,7 @@ export default function Navbar() {
                 {/* Header Badge & Mission */}
                 <div className="border-b border-gray-100 dark:border-[#222222] pb-3">
                   <div className="flex items-center gap-1.5 mb-1.5">
-                    <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#FFD400]/15 text-[#B45309] dark:text-[#FFD400] border border-[#FFD400]/30 flex items-center gap-1">
+                    <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#C2410C]/15 text-[#C2410C] dark:text-[#FB923C] border border-[#C2410C]/30 flex items-center gap-1">
                       <Compass size={11} /> Remote Work in Nepal
                     </span>
                   </div>
@@ -449,7 +449,7 @@ export default function Navbar() {
                       className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#181818] border border-gray-100 dark:border-[#262626] hover:border-primary/50 transition-colors group/srv"
                     >
                       <div className="flex items-center gap-1.5 font-bold text-gray-900 dark:text-white group-hover/srv:text-primary">
-                        <Building size={13} className="text-[#FFD400] shrink-0" />
+                        <Building size={13} className="text-[#FB923C] shrink-0" />
                         <span>Workspaces</span>
                       </div>
                       <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5 leading-snug">
@@ -520,7 +520,7 @@ export default function Navbar() {
 
                   <Link
                     href="/resources/coworking"
-                    className="text-[11px] font-bold text-black bg-[#FFD400] hover:bg-[#FFE033] px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all shadow-xs"
+                    className="text-[11px] font-bold text-white bg-[#C2410C] hover:bg-[#9A3412] px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all shadow-xs"
                   >
                     <span>Explore Spaces</span>
                     <ArrowRight size={11} />
@@ -538,10 +538,10 @@ export default function Navbar() {
                 type="button"
                 id="mobile-scrolled-search-pill"
                 onClick={() => setIsSearchOpen(true)}
-                className="w-full flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100/95 dark:bg-[#181818]/95 border border-gray-200 dark:border-[#2C2C2C] text-gray-500 dark:text-gray-400 text-xs shadow-inner hover:border-[#FFD400] dark:hover:border-[#FFD400] transition-all text-left cursor-pointer"
+                className="w-full flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100/95 dark:bg-[#181818]/95 border border-gray-200 dark:border-[#2C2C2C] text-gray-500 dark:text-gray-400 text-xs shadow-inner hover:border-[#C2410C] dark:hover:border-[#FB923C] transition-all text-left cursor-pointer"
                 aria-label="Search workspaces, guides, destinations"
               >
-                <Search size={14} className="text-[#B45309] dark:text-[#FFD400] shrink-0" />
+                <Search size={14} className="text-[#C2410C] dark:text-[#FB923C] shrink-0" />
                 <span className="truncate text-[11px] sm:text-xs font-medium text-gray-700 dark:text-gray-300">
                   Search workspaces, guides, visa...
                 </span>
@@ -570,16 +570,16 @@ export default function Navbar() {
                       aria-haspopup="true"
                       className={`flex items-center gap-1 text-[13px] font-semibold px-3 py-2 rounded-xl transition-all duration-150 ${
                         isOpen
-                          ? "text-[#FFD400] bg-[#FFD400]/10"
+                          ? "text-[#C2410C] dark:text-[#FB923C] bg-[#C2410C]/10"
                           : isSolid
-                          ? "text-gray-700 hover:text-black hover:bg-gray-100 dark:text-[#F5F5F5] dark:hover:text-[#FFD400] dark:hover:bg-[#141414]"
-                          : "text-white/90 hover:text-[#FFD400] hover:bg-white/10"
+                          ? "text-gray-700 hover:text-[#C2410C] hover:bg-gray-100 dark:text-[#F5F5F5] dark:hover:text-[#FB923C] dark:hover:bg-[#141414]"
+                          : "text-white/90 hover:text-[#FB923C] hover:bg-white/10"
                       }`}
                     >
                       <span>{cat.name}</span>
                       <ChevronDown
                         size={13}
-                        className={`transition-transform duration-200 ${isOpen ? "rotate-180 text-[#FFD400]" : "opacity-60"}`}
+                        className={`transition-transform duration-200 ${isOpen ? "rotate-180 text-[#C2410C] dark:text-[#FB923C]" : "opacity-60"}`}
                       />
                     </button>
                   ) : (
@@ -587,8 +587,8 @@ export default function Navbar() {
                       href={cat.href || "#"}
                       className={`flex items-center gap-1 text-[13px] font-semibold px-3 py-2 rounded-xl transition-all duration-150 ${
                         isSolid
-                          ? "text-gray-700 hover:text-black hover:bg-gray-100 dark:text-[#F5F5F5] dark:hover:text-[#FFD400] dark:hover:bg-[#141414]"
-                          : "text-white/90 hover:text-[#FFD400] hover:bg-white/10"
+                          ? "text-gray-700 hover:text-[#C2410C] hover:bg-gray-100 dark:text-[#F5F5F5] dark:hover:text-[#FB923C] dark:hover:bg-[#141414]"
+                          : "text-white/90 hover:text-[#FB923C] hover:bg-white/10"
                       }`}
                     >
                       {cat.name}
@@ -747,7 +747,7 @@ export default function Navbar() {
                                 onClick={() => setActiveDropdown(null)}
                                 className="block p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-[#1a1a1a] transition-all group/item border border-transparent hover:border-gray-200 dark:hover:border-[#262626]"
                               >
-                                <div className="text-gray-900 dark:text-white font-extrabold text-xs flex items-center justify-between group-hover/item:text-[#FFD400] transition-colors">
+                                <div className="text-gray-900 dark:text-white font-extrabold text-xs flex items-center justify-between group-hover/item:text-[#C2410C] dark:group-hover/item:text-[#FB923C] transition-colors">
                                   <span className="flex items-center gap-1.5">
                                     {item.name}
                                     {item.hasTrekkingIcon && <TrekkingGuideIcon size={14} className="translate-y-[-1px]" />}
@@ -792,7 +792,7 @@ export default function Navbar() {
                   <div className="absolute top-full right-0 mt-2 w-72 bg-[#121212] border border-gray-800 rounded-2xl shadow-2xl p-3 z-50 text-left space-y-2">
                     <div className="flex items-center justify-between border-b border-gray-800 pb-2 px-1">
                       <span className="text-xs font-bold text-white flex items-center gap-1.5">
-                        <Bell size={13} className="text-[#FFD400]" /> Notifications
+                        <Bell size={13} className="text-[#FB923C]" /> Notifications
                       </span>
                       <span className="text-[10px] text-gray-400">Live Alerts</span>
                     </div>
@@ -803,9 +803,9 @@ export default function Navbar() {
                         onClick={() => setNotificationsOpen(false)}
                         className="block p-2.5 rounded-xl bg-[#161616] hover:bg-[#1C1C1C] border border-gray-800 transition-colors"
                       >
-                        <div className="flex items-center justify-between text-xs font-bold text-[#FFD400]">
+                        <div className="flex items-center justify-between text-xs font-bold text-[#FB923C]">
                           <span>Pending Guest Requests</span>
-                          <span className="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 text-[10px]">
+                          <span className="px-1.5 py-0.5 rounded bg-[#C2410C]/20 text-[#FB923C] text-[10px]">
                             {roleInfo.pendingOwnerBookings} New
                           </span>
                         </div>
@@ -833,17 +833,36 @@ export default function Navbar() {
               </div>
             )}
 
-            {/* Mode Switcher Toggle Pill for Owners / Guides */}
-            {mounted && (roleInfo.isOwner || roleInfo.isGuide) && (
-              <button
-                type="button"
-                onClick={() => setUserMode(prev => (prev === "DASHBOARD" ? "NOMAD" : "DASHBOARD"))}
-                className="px-2.5 py-1.5 rounded-xl text-[11px] font-bold transition-all flex items-center gap-1.5 bg-[#141414] text-gray-300 border border-gray-800 hover:border-gray-700"
+            {/* Airbnb-Style Mode Switcher (Switch to Hosting <-> Switch to Traveling) */}
+            {mounted && pathname.startsWith("/owner") ? (
+              <Link
+                href="/"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all bg-[#1C1C1F] hover:bg-[#28282D] text-white border border-white/15 hover:border-[#FB923C] shadow-xs group"
+                title="Switch back to traveling view on the live site"
               >
-                <Repeat size={12} className="text-[#FFD400]" />
-                <span>{userMode === "DASHBOARD" ? (roleInfo.isOwner ? "Owner Mode" : "Expert Mode") : "Nomad View"}</span>
-              </button>
-            )}
+                <Compass size={13} className="text-[#FB923C] group-hover:rotate-45 transition-transform" />
+                <span>Switch to traveling</span>
+              </Link>
+            ) : mounted ? (
+              roleInfo.isOwner ? (
+                <Link
+                  href="/owner/dashboard"
+                  className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all bg-white/10 dark:bg-white/5 hover:bg-[#C2410C]/10 text-gray-900 dark:text-white border border-gray-300 dark:border-white/15 hover:border-[#C2410C] dark:hover:border-[#FB923C] shadow-xs group"
+                  title="Switch to your Airbnb-style Host Dashboard"
+                >
+                  <Building2 size={13} className="text-[#C2410C] dark:text-[#FB923C]" />
+                  <span>Switch to hosting</span>
+                </Link>
+              ) : (
+                <Link
+                  href="/register/space"
+                  className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all text-gray-700 dark:text-gray-300 hover:text-[#C2410C] dark:hover:text-[#FB923C] hover:bg-black/5 dark:hover:bg-white/5"
+                  title="List your workspace or nomad stay in Nepal"
+                >
+                  <span>Switch to hosting</span>
+                </Link>
+              )
+            ) : null}
 
             {mounted && session ? (
               /* Signed in profile avatar with interactive hover pill and drawer trigger */
@@ -851,12 +870,12 @@ export default function Navbar() {
                 <button
                   type="button"
                   onClick={() => setIsProfileSliderOpen(true)}
-                  className="flex items-center gap-2 pl-1.5 pr-2.5 py-1 rounded-full bg-gray-100/90 dark:bg-[#141416] border border-gray-200 dark:border-[#26262B] hover:border-[#FFD400] dark:hover:border-[#FFD400] hover:bg-gray-200/50 dark:hover:bg-[#1C1C20] hover:shadow-md hover:shadow-[#FFD400]/10 transition-all duration-200 cursor-pointer active:scale-95 group/avatar"
+                  className="flex items-center gap-2 pl-1.5 pr-2.5 py-1 rounded-full bg-gray-100/90 dark:bg-[#141416] border border-gray-200 dark:border-[#26262B] hover:border-[#C2410C] dark:hover:border-[#FB923C] hover:bg-gray-200/50 dark:hover:bg-[#1C1C20] hover:shadow-md hover:shadow-[#C2410C]/10 transition-all duration-200 cursor-pointer active:scale-95 group/avatar"
                   aria-label="Open User Profile Drawer"
                   title={`${session.user?.name || "User Profile"} (Click to open profile)`}
                 >
                   <div className="relative shrink-0 w-8 h-8 min-w-[32px] min-h-[32px] max-w-[32px] max-h-[32px]">
-                    <div className="w-8 h-8 min-w-[32px] min-h-[32px] max-w-[32px] max-h-[32px] rounded-full bg-[#FFD400] text-black font-black text-xs flex items-center justify-center overflow-hidden shadow-xs ring-2 ring-[#FFD400]/30 group-hover/avatar:ring-[#FFD400] group-hover/avatar:scale-105 transition-all">
+                    <div className="w-8 h-8 min-w-[32px] min-h-[32px] max-w-[32px] max-h-[32px] rounded-full bg-[#C2410C] text-white font-black text-xs flex items-center justify-center overflow-hidden shadow-xs ring-2 ring-[#C2410C]/30 group-hover/avatar:ring-[#C2410C] group-hover/avatar:scale-105 transition-all">
                       {avatarUrl ? (
                         <img src={avatarUrl} alt="User Avatar" className="w-8 h-8 min-w-[32px] min-h-[32px] max-w-[32px] max-h-[32px] rounded-full object-cover" />
                       ) : (
@@ -919,7 +938,7 @@ export default function Navbar() {
                   <div className="bg-white dark:bg-[#121212] border border-gray-200 dark:border-[#242424] rounded-2xl shadow-2xl overflow-hidden p-3.5 space-y-3 text-left">
                     <div className="flex items-center justify-between border-b border-gray-200 dark:border-[#242424] pb-2.5 px-1">
                       <span className="text-xs font-black text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
-                        <CalendarCheck size={14} className="text-[#FFD400]" /> Quick Marketplace Booking
+                        <CalendarCheck size={14} className="text-[#FB923C]" /> Quick Marketplace Booking
                       </span>
                       <span className="text-[10px] font-bold text-[#16a34a] dark:text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded border border-[#22C55E]/20">
                         Instant Access
@@ -929,30 +948,30 @@ export default function Navbar() {
                     <div className="space-y-1.5">
                       <Link
                         href="/resources/coworking#book"
-                        className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-[#1a1a1a] transition-all group/opt border border-transparent hover:border-gray-200 dark:hover:border-[#282828]"
+                        className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-[#1a1a1a] transition-all group/opt border border-transparent hover:border-gray-200 dark:border-[#282828]"
                       >
-                        <div className="w-8 h-8 rounded-lg bg-[#FFD400]/10 border border-[#FFD400]/20 flex items-center justify-center text-[#FFD400] flex-shrink-0 group-hover/opt:bg-[#FFD400] group-hover/opt:text-black transition-colors">
+                        <div className="w-8 h-8 rounded-lg bg-[#C2410C]/10 border border-[#C2410C]/20 flex items-center justify-center text-[#FB923C] flex-shrink-0 group-hover/opt:bg-[#C2410C] group-hover/opt:text-white transition-colors">
                           <Building size={15} />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between">
-                            <span className="text-xs font-bold text-gray-900 dark:text-white group-hover/opt:text-[#FFD400] transition-colors">Workspaces & Desks</span>
+                            <span className="text-xs font-bold text-gray-900 dark:text-white group-hover/opt:text-[#C2410C] dark:group-hover/opt:text-[#FB923C] transition-colors">Workspaces &amp; Desks</span>
                             <ArrowRight size={12} className="text-[#A1A1AA] group-hover/opt:translate-x-1 transition-transform" />
                           </div>
-                          <p className="text-[11px] text-gray-500 dark:text-[#A1A1AA] truncate">Hot desks, private offices & meeting rooms</p>
+                          <p className="text-[11px] text-gray-500 dark:text-[#A1A1AA] truncate">Hot desks, private offices &amp; meeting rooms</p>
                         </div>
                       </Link>
 
                       <Link
                         href="/stay"
-                        className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-[#1a1a1a] transition-all group/opt border border-transparent hover:border-gray-200 dark:hover:border-[#282828]"
+                        className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-[#1a1a1a] transition-all group/opt border border-transparent hover:border-gray-200 dark:border-[#282828]"
                       >
-                        <div className="w-8 h-8 rounded-lg bg-[#FFD400]/10 border border-[#FFD400]/20 flex items-center justify-center text-[#FFD400] flex-shrink-0 group-hover/opt:bg-[#FFD400] group-hover/opt:text-black transition-colors">
+                        <div className="w-8 h-8 rounded-lg bg-[#C2410C]/10 border border-[#C2410C]/20 flex items-center justify-center text-[#FB923C] flex-shrink-0 group-hover/opt:bg-[#C2410C] group-hover/opt:text-white transition-colors">
                           <Home size={15} />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between">
-                            <span className="text-xs font-bold text-gray-900 dark:text-white group-hover/opt:text-[#FFD400] transition-colors">Nomad Stays &amp; Coliving</span>
+                            <span className="text-xs font-bold text-gray-900 dark:text-white group-hover/opt:text-[#C2410C] dark:group-hover/opt:text-[#FB923C] transition-colors">Nomad Stays &amp; Coliving</span>
                             <ArrowRight size={12} className="text-[#A1A1AA] group-hover/opt:translate-x-1 transition-transform" />
                           </div>
                           <p className="text-[11px] text-gray-500 dark:text-[#A1A1AA] truncate">Hotels, hostels &amp; long-term apartments</p>
@@ -961,14 +980,14 @@ export default function Navbar() {
 
                       <Link
                         href="/guides"
-                        className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-[#1a1a1a] transition-all group/opt border border-transparent hover:border-gray-200 dark:hover:border-[#282828]"
+                        className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-[#1a1a1a] transition-all group/opt border border-transparent hover:border-gray-200 dark:border-[#282828]"
                       >
-                        <div className="w-8 h-8 rounded-lg bg-[#FFD400]/10 border border-[#FFD400]/20 flex items-center justify-center text-[#FFD400] flex-shrink-0 group-hover/opt:bg-[#FFD400] group-hover/opt:text-black transition-colors">
+                        <div className="w-8 h-8 rounded-lg bg-[#C2410C]/10 border border-[#C2410C]/20 flex items-center justify-center text-[#FB923C] flex-shrink-0 group-hover/opt:bg-[#C2410C] group-hover/opt:text-white transition-colors">
                           <TrekkingGuideIcon size={15} />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between">
-                            <span className="text-xs font-bold text-gray-900 dark:text-white group-hover/opt:text-[#FFD400] transition-colors">Book a Local Guide</span>
+                            <span className="text-xs font-bold text-gray-900 dark:text-white group-hover/opt:text-[#C2410C] dark:group-hover/opt:text-[#FB923C] transition-colors">Book a Local Guide</span>
                             <ArrowRight size={12} className="text-[#A1A1AA] group-hover/opt:translate-x-1 transition-transform" />
                           </div>
                           <p className="text-[11px] text-gray-500 dark:text-[#A1A1AA] truncate">Himalayan trekking, Sherpas &amp; cultural fixers</p>
@@ -1002,7 +1021,7 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => setIsProfileSliderOpen(true)}
-                className="w-8 h-8 rounded-full overflow-hidden border border-gray-200 dark:border-[#242424] flex items-center justify-center bg-[#FFD400]/20 text-[#B45309] dark:text-[#FFD400] font-bold text-xs active:scale-95 cursor-pointer ring-1 ring-[#FFD400]/40"
+                className="w-8 h-8 rounded-full overflow-hidden border border-gray-200 dark:border-[#242424] flex items-center justify-center bg-[#C2410C] text-white font-bold text-xs active:scale-95 cursor-pointer ring-1 ring-[#C2410C]/40"
                 title={session.user?.name || "Profile"}
                 aria-label="Open Profile Slider"
               >
@@ -1061,10 +1080,10 @@ export default function Navbar() {
                   <span className="font-black text-xs tracking-normal uppercase text-gray-900 dark:text-white leading-tight">
                     DIGITAL NOMADS
                   </span>
-                  <div className="w-full flex items-center justify-center gap-1 font-extrabold text-[8px] text-[#FFD400] tracking-[0.16em] uppercase leading-none mt-0.5 select-none">
-                    <span className="text-[#FFD400]/60 font-medium select-none">—</span>
+                  <div className="w-full flex items-center justify-center gap-1 font-extrabold text-[8px] text-[#C2410C] dark:text-[#FB923C] tracking-[0.16em] uppercase leading-none mt-0.5 select-none">
+                    <span className="text-[#FB923C]/60 font-medium select-none">—</span>
                     <span>IN NEPAL</span>
-                    <span className="text-[#FFD400]/60 font-medium select-none">—</span>
+                    <span className="text-[#FB923C]/60 font-medium select-none">—</span>
                   </div>
                 </div>
               </Link>
@@ -1088,40 +1107,57 @@ export default function Navbar() {
                 className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-gray-100 dark:bg-[#161616] border border-gray-200 dark:border-[#282828] text-gray-700 dark:text-gray-300 hover:border-primary transition-all text-xs font-medium cursor-pointer"
               >
                 <span className="flex items-center gap-2">
-                  <Search size={15} className="text-[#FFD400]" />
+                  <Search size={15} className="text-[#FB923C]" />
                   <span>Search workspaces, guides, visa...</span>
                 </span>
                 <span className="text-[10px] text-primary font-bold">Open</span>
               </button>
             </div>
 
-            {/* Mobile Partner & Host Ribbon Card */}
-            <div className="py-2.5 px-3 rounded-2xl bg-amber-500/10 border border-amber-500/25 shrink-0 my-2">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[10px] font-black text-[#FFD400] uppercase tracking-wider flex items-center gap-1">
-                  <Sparkles size={11} /> Partner & Host Hub
-                </span>
-                <span className="text-[9px] text-zinc-400">Join our network</span>
-              </div>
-              <div className="grid grid-cols-2 gap-2">
+            {/* Mobile Partner & Host Ribbon Card / Airbnb Switcher */}
+            {pathname.startsWith("/owner") ? (
+              <div className="py-2.5 px-3 rounded-2xl bg-[#C2410C]/10 border border-[#C2410C]/25 shrink-0 my-2 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Compass size={16} className="text-[#FB923C]" />
+                  <span className="text-xs font-bold text-gray-900 dark:text-white">Host Console Active</span>
+                </div>
                 <Link
-                  href="/register/space"
+                  href="/"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center gap-1.5 bg-[#FFD400] text-black font-black text-xs py-2 px-2 rounded-xl text-center active:scale-95 transition-all shadow-sm"
+                  className="px-3 py-1.5 rounded-xl bg-[#C2410C] text-white text-xs font-bold shadow-xs flex items-center gap-1"
                 >
-                  <Building2 size={13} />
-                  <span>List Space</span>
-                </Link>
-                <Link
-                  href="/local-guides/register"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center gap-1.5 bg-black/40 dark:bg-white/10 text-foreground border border-border/80 font-bold text-xs py-2 px-2 rounded-xl text-center active:scale-95 transition-all"
-                >
-                  <Compass size={13} className="text-[#FFD400]" />
-                  <span>Join as Guide</span>
+                  <span>Live Site</span>
+                  <ArrowRight size={12} />
                 </Link>
               </div>
-            </div>
+            ) : (
+              <div className="py-2.5 px-3 rounded-2xl bg-amber-500/10 border border-amber-500/25 shrink-0 my-2">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] font-black text-[#C2410C] dark:text-[#FB923C] uppercase tracking-wider flex items-center gap-1">
+                    <Sparkles size={11} /> Partner &amp; Host Hub
+                  </span>
+                  <span className="text-[9px] text-zinc-400">Join our network</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <Link
+                    href={roleInfo.isOwner ? "/owner/dashboard" : "/register/space"}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-center gap-1.5 bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold text-xs py-2 px-2 rounded-xl text-center active:scale-95 transition-all shadow-sm"
+                  >
+                    <Building2 size={13} />
+                    <span>{roleInfo.isOwner ? "Host Console" : "List Space"}</span>
+                  </Link>
+                  <Link
+                    href="/local-guides/register"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-center gap-1.5 bg-black/40 dark:bg-white/10 text-foreground border border-border/80 font-bold text-xs py-2 px-2 rounded-xl text-center active:scale-95 transition-all"
+                  >
+                    <Compass size={13} className="text-[#FB923C]" />
+                    <span>Join as Guide</span>
+                  </Link>
+                </div>
+              </div>
+            )}
 
             {/* Mobile Navigation List (Scrollable middle container) */}
             <div className="flex-1 overflow-y-auto py-4 space-y-1.5 overscroll-contain">
@@ -1134,26 +1170,26 @@ export default function Navbar() {
                     {hasDropdown ? (
                       <button
                         onClick={() => setExpandedMobileItem(isExpanded ? null : cat.name)}
-                        className="flex items-center justify-between w-full text-left py-2.5 text-sm font-semibold text-gray-900 dark:text-white hover:text-[#FFD400] transition-colors cursor-pointer"
+                        className="flex items-center justify-between w-full text-left py-2.5 text-sm font-semibold text-gray-900 dark:text-white hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors cursor-pointer"
                       >
                         <span>{cat.name}</span>
                         <ChevronDown
                           size={16}
-                          className={`text-[#A1A1AA] transition-transform duration-200 ${isExpanded ? "rotate-180 text-[#FFD400]" : ""}`}
+                          className={`text-[#A1A1AA] transition-transform duration-200 ${isExpanded ? "rotate-180 text-[#C2410C] dark:text-[#FB923C]" : ""}`}
                         />
                       </button>
                     ) : (
                       <Link
                         href={cat.href || "#"}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="block py-2.5 text-sm font-semibold text-gray-900 dark:text-white hover:text-[#FFD400] transition-colors"
+                        className="block py-2.5 text-sm font-semibold text-gray-900 dark:text-white hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors"
                       >
                         {cat.name}
                       </Link>
                     )}
 
                     {hasDropdown && isExpanded && (
-                      <div className="mt-1 pl-3 border-l-2 border-[#FFD400]/40 ml-1 space-y-1.5 py-1">
+                      <div className="mt-1 pl-3 border-l-2 border-[#C2410C]/40 ml-1 space-y-1.5 py-1">
                         {cat.dropdown!.map((sub, idx) => (
                           <Link
                             key={idx}
@@ -1202,10 +1238,10 @@ export default function Navbar() {
                     setMobileMenuOpen(false)
                     setIsProfileSliderOpen(true)
                   }}
-                  className="flex justify-between items-center p-2.5 bg-gray-50 dark:bg-[#121212] border border-gray-200 dark:border-[#242424] rounded-xl cursor-pointer hover:border-[#FFD400]/50 transition-colors"
+                  className="flex justify-between items-center p-2.5 bg-gray-50 dark:bg-[#121212] border border-gray-200 dark:border-[#242424] rounded-xl cursor-pointer hover:border-[#C2410C]/50 transition-colors"
                 >
                   <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-[#FFD400] text-black font-bold text-[10px] flex items-center justify-center overflow-hidden">
+                    <div className="w-6 h-6 rounded-full bg-[#C2410C] text-white font-bold text-[10px] flex items-center justify-center overflow-hidden">
                       {avatarUrl ? (
                         <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
                       ) : (
@@ -1214,7 +1250,7 @@ export default function Navbar() {
                     </div>
                     <span className="text-xs text-gray-900 dark:text-white font-bold">{session.user?.name}</span>
                   </div>
-                  <span className="text-[11px] text-[#FFD400] font-bold">View Profile &rarr;</span>
+                  <span className="text-[11px] text-[#C2410C] dark:text-[#FB923C] font-bold">View Profile &rarr;</span>
                 </div>
               )}
 
@@ -1228,7 +1264,7 @@ export default function Navbar() {
                 <Link
                   href="/resources/coworking#book"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center gap-1.5 text-center px-3 py-2.5 bg-[#FFD400] hover:bg-[#FFE033] text-black font-bold rounded-xl transition-all text-xs shadow-md shadow-[#FFD400]/20 active:scale-95"
+                  className="flex items-center justify-center gap-1.5 text-center px-3 py-2.5 bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold rounded-xl transition-all text-xs shadow-md shadow-[#C2410C]/20 active:scale-95"
                 >
                   <CalendarCheck size={14} />
                   <span>Book Space</span>
@@ -1236,7 +1272,7 @@ export default function Navbar() {
                 <Link
                   href="/guides"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center gap-1.5 text-center px-3 py-2.5 bg-gray-100 dark:bg-[#181818] border border-gray-200 dark:border-[#282828] hover:border-[#FFD400] text-gray-900 dark:text-white font-bold rounded-xl transition-all text-xs shadow-xs active:scale-95"
+                  className="flex items-center justify-center gap-1.5 text-center px-3 py-2.5 bg-gray-100 dark:bg-[#181818] border border-gray-200 dark:border-[#282828] hover:border-[#C2410C] text-gray-900 dark:text-white font-bold rounded-xl transition-all text-xs shadow-xs active:scale-95"
                 >
                   <TrekkingGuideIcon size={14} />
                   <span>Book Guide</span>

@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
@@ -26,6 +27,10 @@ import {
   Zap,
   BedDouble,
   Compass,
+  ArrowRight,
+  ShieldCheck,
+  Check,
+  Star,
 } from "lucide-react";
 
 type SpaceCategory = "workspace" | "stay" | "hybrid";
@@ -81,6 +86,7 @@ const ALL_FACILITIES = [
 ];
 
 export default function UnifiedRegisterSpacePage() {
+  const router = useRouter();
   const { data: session, status } = useSession();
 
   // Mode Selection: "workspace" | "stay" | "hybrid"
@@ -161,52 +167,88 @@ export default function UnifiedRegisterSpacePage() {
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
 
     setUploading(true);
     setError("");
 
     try {
-      const formData = new FormData();
-      formData.append("file", file);
+      const fileList = Array.from(files);
+      const uploadedUrls: string[] = [];
 
-      const res = await fetch("/api/work-hubs/upload", {
-        method: "POST",
-        body: formData,
-      });
+      for (const file of fileList) {
+        const formData = new FormData();
+        formData.append("file", file);
 
-      if (res.ok) {
-        const data = await res.json();
-        if (!photoUrl) {
-          setPhotoUrl(data.url);
+        const res = await fetch("/api/work-hubs/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.url) {
+            uploadedUrls.push(data.url);
+          }
         } else {
-          setAdditionalPhotos((prev) => [...prev, data.url]);
+          const errData = await res.json();
+          setError(errData.error || `Upload failed for ${file.name}`);
         }
-      } else {
-        const errData = await res.json();
-        setError(errData.error || "Image upload failed.");
+      }
+
+      if (uploadedUrls.length > 0) {
+        if (!photoUrl) {
+          setPhotoUrl(uploadedUrls[0]);
+          if (uploadedUrls.length > 1) {
+            setAdditionalPhotos((prev) => [...prev, ...uploadedUrls.slice(1)]);
+          }
+        } else {
+          setAdditionalPhotos((prev) => [...prev, ...uploadedUrls]);
+        }
       }
     } catch (err) {
       console.error(err);
-      setError("Image upload failed. Try a URL instead.");
+      setError("Image upload failed. Try a direct image URL instead.");
     } finally {
       setUploading(false);
+      e.target.value = "";
     }
   };
 
   const handleAddPhotoUrl = () => {
     if (!newPhotoInput.trim()) return;
+    const url = newPhotoInput.trim();
     if (!photoUrl) {
-      setPhotoUrl(newPhotoInput.trim());
+      setPhotoUrl(url);
     } else {
-      setAdditionalPhotos((prev) => [...prev, newPhotoInput.trim()]);
+      setAdditionalPhotos((prev) => [...prev, url]);
     }
     setNewPhotoInput("");
   };
 
   const handleRemovePhoto = (index: number) => {
     setAdditionalPhotos((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleRemoveCoverPhoto = () => {
+    if (additionalPhotos.length > 0) {
+      setPhotoUrl(additionalPhotos[0]);
+      setAdditionalPhotos((prev) => prev.slice(1));
+    } else {
+      setPhotoUrl("");
+    }
+  };
+
+  const handleMakeCover = (index: number) => {
+    const currentCover = photoUrl;
+    const selectedPhoto = additionalPhotos[index];
+    setPhotoUrl(selectedPhoto);
+    setAdditionalPhotos((prev) => {
+      const copy = [...prev];
+      copy[index] = currentCover;
+      return copy.filter(Boolean);
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -216,6 +258,21 @@ export default function UnifiedRegisterSpacePage() {
 
     if (!name || !city || !address || !description || !contactEmail) {
       setError("Please fill in all mandatory fields.");
+      setLoading(false);
+      return;
+    }
+
+    // Require 1 Cover Photo + at least 3 additional photos (4 total)
+    if (!photoUrl) {
+      setError("Please provide a Main Cover Photo for your property.");
+      setLoading(false);
+      return;
+    }
+
+    if (additionalPhotos.length < 3) {
+      setError(
+        `Please upload at least 3 photos along with your main cover photo (minimum 4 photos required). Currently provided: ${1 + additionalPhotos.length} of 4.`
+      );
       setLoading(false);
       return;
     }
@@ -318,7 +375,13 @@ export default function UnifiedRegisterSpacePage() {
       });
 
       if (res.ok) {
+        const data = await res.json();
         setSuccess(true);
+        // Instant Airbnb-style redirect to Host Dashboard
+        setTimeout(() => {
+          const slugParam = data.hub?.slug ? `&slug=${encodeURIComponent(data.hub.slug)}` : "";
+          router.push(`/owner/dashboard?registered=true${slugParam}`);
+        }, 1200);
       } else {
         const data = await res.json();
         setError(data.error || "Submission failed. Please check required fields.");
@@ -340,14 +403,14 @@ export default function UnifiedRegisterSpacePage() {
           <div className="mb-6">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 text-primary hover:underline transition-colors text-xs font-bold uppercase tracking-wider"
+              className="inline-flex items-center gap-2 text-[#C2410C] dark:text-[#FB923C] hover:underline transition-colors text-xs font-bold uppercase tracking-wider"
             >
               <ArrowLeft size={14} /> Back to Homepage
             </Link>
           </div>
 
           <div className="mb-8">
-            <span className="text-primary text-xs font-bold uppercase tracking-widest flex items-center gap-1.5 mb-2">
+            <span className="text-[#C2410C] dark:text-[#FB923C] text-xs font-bold uppercase tracking-widest flex items-center gap-1.5 mb-2">
               <Sparkles size={14} /> Host & Space Partner Network
             </span>
             <h1 className="text-3xl sm:text-4xl font-black text-foreground tracking-tight">
@@ -361,12 +424,12 @@ export default function UnifiedRegisterSpacePage() {
           {/* AUTH GUARD */}
           {status === "loading" ? (
             <div className="bg-card border border-border rounded-3xl p-12 text-center shadow-xl">
-              <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto" />
+              <Loader2 className="w-8 h-8 text-[#C2410C] animate-spin mx-auto" />
               <p className="text-sm text-muted-foreground mt-3">Verifying authentication status...</p>
             </div>
           ) : !session ? (
             <div className="bg-card border border-border rounded-3xl p-8 sm:p-12 text-center shadow-2xl space-y-6">
-              <div className="w-20 h-20 bg-primary/10 border-2 border-primary/30 text-amber-600 dark:text-primary rounded-full flex items-center justify-center mx-auto">
+              <div className="w-20 h-20 bg-[#C2410C]/10 border-2 border-[#C2410C]/30 text-[#C2410C] dark:text-[#FB923C] rounded-full flex items-center justify-center mx-auto">
                 <Lock size={36} />
               </div>
               <div className="max-w-md mx-auto space-y-2">
@@ -381,7 +444,7 @@ export default function UnifiedRegisterSpacePage() {
               <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center max-w-sm mx-auto">
                 <Link
                   href="/auth/signin?callbackUrl=/register/space"
-                  className="flex items-center justify-center gap-2 bg-[#F5B301] hover:bg-[#E0A200] text-[#1A1A1C] font-bold px-6 py-3 rounded-xl text-xs sm:text-sm transition-all shadow-md"
+                  className="flex items-center justify-center gap-2 bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold px-6 py-3 rounded-xl text-xs sm:text-sm transition-all shadow-md"
                 >
                   <LogIn size={15} /> Sign In
                 </Link>
@@ -396,35 +459,28 @@ export default function UnifiedRegisterSpacePage() {
           ) : (
             <div className="bg-card border border-border rounded-3xl p-6 sm:p-10 shadow-xl dark:shadow-2xl">
               {success ? (
-                <div className="text-center py-10 space-y-4">
-                  <div className="w-16 h-16 bg-green-500/10 border border-green-500/30 text-green-600 dark:text-green-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="text-center py-12 space-y-5">
+                  <div className="w-16 h-16 bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-2 animate-bounce">
                     <CheckCircle size={32} />
                   </div>
-                  <h2 className="text-2xl font-black text-foreground">
-                    Space Application Submitted!
+                  <h2 className="text-2xl sm:text-3xl font-black text-foreground">
+                    Space Successfully Listed!
                   </h2>
                   <p className="text-muted-foreground text-sm leading-relaxed max-w-md mx-auto">
                     Your space has been registered under owner email{" "}
-                    <strong className="text-foreground">{ownerEmail}</strong>. Our team will verify your Wi-Fi speeds and backup power capabilities before activating the public badge.
+                    <strong className="text-foreground">{ownerEmail || session?.user?.email}</strong>.
                   </p>
-                  <div className="pt-6 flex flex-wrap gap-4 justify-center">
-                    <button
-                      onClick={() => {
-                        setSuccess(false);
-                        setName("");
-                        setAddress("");
-                        setDescription("");
-                        setPhotoUrl("");
-                      }}
-                      className="bg-muted text-foreground font-bold px-6 py-3 rounded-xl hover:bg-muted/80 transition-all text-xs uppercase tracking-wider border border-border"
-                    >
-                      Register Another Property
-                    </button>
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#C2410C]/10 text-[#C2410C] dark:text-[#FB923C] text-xs font-bold">
+                    <Loader2 size={14} className="animate-spin" />
+                    <span>Redirecting to your Airbnb-style Host Dashboard...</span>
+                  </div>
+                  <div className="pt-4 flex flex-wrap gap-4 justify-center">
                     <Link
-                      href="/workspaces"
-                      className="bg-primary text-black font-black px-8 py-3 rounded-xl hover:bg-yellow-400 transition-all text-xs uppercase tracking-wider shadow-md shadow-primary/20"
+                      href="/owner/dashboard?registered=true"
+                      className="bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold px-8 py-3 rounded-xl transition-all text-xs uppercase tracking-wider shadow-md shadow-[#C2410C]/20 flex items-center gap-2"
                     >
-                      View Directory
+                      <span>Open Host Dashboard</span>
+                      <ArrowRight size={14} />
                     </Link>
                   </div>
                 </div>
@@ -769,26 +825,52 @@ export default function UnifiedRegisterSpacePage() {
                     </div>
                   </div>
 
-                  {/* 6. PHOTOS & GALLERY */}
+                  {/* 6. PHOTOS & GALLERY (Enforce 1 Cover + 3 Additional Photos = 4 Total) */}
                   <div className="space-y-4 pt-4 border-t border-border">
-                    <h3 className="text-base font-bold text-foreground">Property Photography</h3>
-                    <p className="text-xs text-muted-foreground">
-                      Upload or paste high-resolution photos of your workstation setup and rooms.
-                    </p>
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <div>
+                        <h3 className="text-base font-bold text-foreground flex items-center gap-2">
+                          <span>Property Photography</span>
+                          <span className="text-xs font-bold text-[#C2410C] dark:text-[#FB923C] bg-[#C2410C]/10 px-2 py-0.5 rounded-full">
+                            Min 4 Photos Required
+                          </span>
+                        </h3>
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                          High-resolution photos increase bookings by over 300%. Add 1 Main Cover + at least 3 gallery photos.
+                        </p>
+                      </div>
 
-                    <div className="flex items-center gap-3">
-                      <label className="cursor-pointer bg-primary/10 border border-primary/30 hover:bg-primary/20 text-primary font-bold text-xs px-4 py-2.5 rounded-xl transition-all flex items-center gap-2">
+                      {/* Live Counter Badge */}
+                      <div className="self-start sm:self-auto">
+                        {((photoUrl ? 1 : 0) + additionalPhotos.length) >= 4 ? (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30">
+                            <CheckCircle size={13} />
+                            <span>{(photoUrl ? 1 : 0) + additionalPhotos.length} / 4 Uploaded (Ready)</span>
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/30">
+                            <span>📸 {(photoUrl ? 1 : 0) + additionalPhotos.length} / 4 Uploaded</span>
+                            <span className="font-normal text-[11px]">({4 - ((photoUrl ? 1 : 0) + additionalPhotos.length)} more needed)</span>
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Upload Actions (Supports multi-select files + URL entry) */}
+                    <div className="flex flex-wrap items-center gap-3">
+                      <label className="cursor-pointer bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold text-xs px-5 py-2.5 rounded-xl transition-all flex items-center gap-2 shadow-sm">
                         <Upload size={14} />
-                        <span>{uploading ? "Uploading..." : "Upload Photo File"}</span>
+                        <span>{uploading ? "Uploading Photos..." : "Upload Photos (Select Multiple)"}</span>
                         <input
                           type="file"
                           accept="image/*"
+                          multiple
                           onChange={handleFileUpload}
                           disabled={uploading}
                           className="hidden"
                         />
                       </label>
-                      <span className="text-xs text-muted-foreground">or paste image URL below:</span>
+                      <span className="text-xs text-muted-foreground">or add direct image URL:</span>
                     </div>
 
                     <div className="flex gap-2">
@@ -797,58 +879,239 @@ export default function UnifiedRegisterSpacePage() {
                         value={newPhotoInput}
                         onChange={(e) => setNewPhotoInput(e.target.value)}
                         placeholder="https://images.unsplash.com/... or direct image link"
-                        className="flex-1 bg-background border border-border rounded-xl px-4 py-2 text-sm outline-none"
+                        className="flex-1 bg-background border border-border rounded-xl px-4 py-2 text-sm outline-none focus:border-[#C2410C] focus:ring-1 focus:ring-[#C2410C]"
                       />
                       <button
                         type="button"
                         onClick={handleAddPhotoUrl}
-                        className="bg-muted hover:bg-muted/80 text-foreground font-bold px-4 py-2 rounded-xl text-xs"
+                        className="bg-muted hover:bg-muted/80 text-foreground font-bold px-4 py-2 rounded-xl text-xs transition-colors"
                       >
-                        Add Photo
+                        + Add Image URL
                       </button>
                     </div>
 
-                    {/* Preview Gallery */}
-                    {(photoUrl || additionalPhotos.length > 0) && (
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-                        {photoUrl && (
-                          <div className="relative aspect-video rounded-xl overflow-hidden border border-primary/40 group">
-                            <img src={photoUrl} alt="Cover" className="w-full h-full object-cover" />
-                            <span className="absolute bottom-1 left-1 bg-black/80 text-[10px] text-primary font-bold px-1.5 py-0.5 rounded">
-                              Main Cover
+                    {/* 4 Required Slots Visual Guide */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
+                      {/* Slot 1: Cover Photo */}
+                      <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border-2 border-dashed border-[#C2410C]/40 bg-[#FAF7F2] dark:bg-[#141416] flex flex-col items-center justify-center text-center p-3 group">
+                        {photoUrl ? (
+                          <>
+                            <img src={photoUrl} alt="Cover" className="absolute inset-0 w-full h-full object-cover" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30 pointer-events-none" />
+                            <span className="absolute top-2 left-2 bg-[#C2410C] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+                              ✓ Main Cover
                             </span>
-                          </div>
-                        )}
-                        {additionalPhotos.map((p, idx) => (
-                          <div key={idx} className="relative aspect-video rounded-xl overflow-hidden border border-border group">
-                            <img src={p} alt={`Photo ${idx + 1}`} className="w-full h-full object-cover" />
                             <button
                               type="button"
-                              onClick={() => handleRemovePhoto(idx)}
-                              className="absolute top-1 right-1 p-1 bg-black/70 hover:bg-red-600 text-white rounded-full transition-colors"
+                              onClick={handleRemoveCoverPhoto}
+                              className="absolute top-2 right-2 p-1.5 bg-black/60 hover:bg-red-600 text-white rounded-full transition-colors"
+                              title="Remove cover photo"
                             >
-                              <X size={12} />
+                              <X size={13} />
                             </button>
+                            <span className="absolute bottom-2 left-2 text-[10px] text-white/90 font-medium truncate max-w-[90%]">
+                              Primary Thumbnail
+                            </span>
+                          </>
+                        ) : (
+                          <div className="flex flex-col items-center justify-center text-center">
+                            <div className="w-10 h-10 rounded-full bg-[#C2410C]/10 text-[#C2410C] flex items-center justify-center mb-1.5">
+                              <Star size={18} />
+                            </div>
+                            <span className="text-xs font-bold text-gray-900 dark:text-white">Slot 1: Cover Photo</span>
+                            <span className="text-[10px] text-amber-700 dark:text-amber-400 font-semibold mt-0.5">Required</span>
+                            <span className="text-[10px] text-gray-400 mt-0.5">Hero image for cards</span>
                           </div>
-                        ))}
+                        )}
+                      </div>
+
+                      {/* Slot 2: Workspace Setup */}
+                      <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border-2 border-dashed border-[#E8E2D8] dark:border-[#26262A] bg-[#FAF7F2] dark:bg-[#141416] flex flex-col items-center justify-center text-center p-3 group">
+                        {additionalPhotos[0] ? (
+                          <>
+                            <img src={additionalPhotos[0]} alt="Workspace setup" className="absolute inset-0 w-full h-full object-cover" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30 pointer-events-none" />
+                            <span className="absolute top-2 left-2 bg-black/70 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                              Photo 1
+                            </span>
+                            <div className="absolute top-2 right-2 flex items-center gap-1">
+                              <button
+                                type="button"
+                                onClick={() => handleMakeCover(0)}
+                                className="px-2 py-0.5 bg-black/70 hover:bg-[#C2410C] text-white text-[9px] font-bold rounded-full transition-colors"
+                                title="Make this the Cover Photo"
+                              >
+                                Set Cover
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleRemovePhoto(0)}
+                                className="p-1.5 bg-black/60 hover:bg-red-600 text-white rounded-full transition-colors"
+                              >
+                                <X size={13} />
+                              </button>
+                            </div>
+                            <span className="absolute bottom-2 left-2 text-[10px] text-white/90 font-medium">
+                              Work Desks &amp; Chairs
+                            </span>
+                          </>
+                        ) : (
+                          <div className="flex flex-col items-center justify-center text-center">
+                            <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-[#202024] text-gray-600 dark:text-gray-300 flex items-center justify-center mb-1.5">
+                              <Building size={18} />
+                            </div>
+                            <span className="text-xs font-bold text-gray-900 dark:text-white">Slot 2: Workspace</span>
+                            <span className="text-[10px] text-amber-700 dark:text-amber-400 font-semibold mt-0.5">Required</span>
+                            <span className="text-[10px] text-gray-400 mt-0.5">Desks, fiber, monitors</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Slot 3: Bedrooms & Facilities */}
+                      <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border-2 border-dashed border-[#E8E2D8] dark:border-[#26262A] bg-[#FAF7F2] dark:bg-[#141416] flex flex-col items-center justify-center text-center p-3 group">
+                        {additionalPhotos[1] ? (
+                          <>
+                            <img src={additionalPhotos[1]} alt="Rooms" className="absolute inset-0 w-full h-full object-cover" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30 pointer-events-none" />
+                            <span className="absolute top-2 left-2 bg-black/70 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                              Photo 2
+                            </span>
+                            <div className="absolute top-2 right-2 flex items-center gap-1">
+                              <button
+                                type="button"
+                                onClick={() => handleMakeCover(1)}
+                                className="px-2 py-0.5 bg-black/70 hover:bg-[#C2410C] text-white text-[9px] font-bold rounded-full transition-colors"
+                              >
+                                Set Cover
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleRemovePhoto(1)}
+                                className="p-1.5 bg-black/60 hover:bg-red-600 text-white rounded-full transition-colors"
+                              >
+                                <X size={13} />
+                              </button>
+                            </div>
+                            <span className="absolute bottom-2 left-2 text-[10px] text-white/90 font-medium">
+                              Room / Coliving Suite
+                            </span>
+                          </>
+                        ) : (
+                          <div className="flex flex-col items-center justify-center text-center">
+                            <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-[#202024] text-gray-600 dark:text-gray-300 flex items-center justify-center mb-1.5">
+                              <BedDouble size={18} />
+                            </div>
+                            <span className="text-xs font-bold text-gray-900 dark:text-white">Slot 3: Living / Room</span>
+                            <span className="text-[10px] text-amber-700 dark:text-amber-400 font-semibold mt-0.5">Required</span>
+                            <span className="text-[10px] text-gray-400 mt-0.5">Bedroom, cafe or lounge</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Slot 4: Views / Common Areas */}
+                      <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border-2 border-dashed border-[#E8E2D8] dark:border-[#26262A] bg-[#FAF7F2] dark:bg-[#141416] flex flex-col items-center justify-center text-center p-3 group">
+                        {additionalPhotos[2] ? (
+                          <>
+                            <img src={additionalPhotos[2]} alt="Views" className="absolute inset-0 w-full h-full object-cover" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30 pointer-events-none" />
+                            <span className="absolute top-2 left-2 bg-black/70 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                              Photo 3
+                            </span>
+                            <div className="absolute top-2 right-2 flex items-center gap-1">
+                              <button
+                                type="button"
+                                onClick={() => handleMakeCover(2)}
+                                className="px-2 py-0.5 bg-black/70 hover:bg-[#C2410C] text-white text-[9px] font-bold rounded-full transition-colors"
+                              >
+                                Set Cover
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleRemovePhoto(2)}
+                                className="p-1.5 bg-black/60 hover:bg-red-600 text-white rounded-full transition-colors"
+                              >
+                                <X size={13} />
+                              </button>
+                            </div>
+                            <span className="absolute bottom-2 left-2 text-[10px] text-white/90 font-medium">
+                              Terrace / Mountain View
+                            </span>
+                          </>
+                        ) : (
+                          <div className="flex flex-col items-center justify-center text-center">
+                            <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-[#202024] text-gray-600 dark:text-gray-300 flex items-center justify-center mb-1.5">
+                              <Compass size={18} />
+                            </div>
+                            <span className="text-xs font-bold text-gray-900 dark:text-white">Slot 4: View / Common</span>
+                            <span className="text-[10px] text-amber-700 dark:text-amber-400 font-semibold mt-0.5">Required</span>
+                            <span className="text-[10px] text-gray-400 mt-0.5">Terrace, kitchen or view</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Extra Gallery Photos (Slot 5+) */}
+                    {additionalPhotos.length > 3 && (
+                      <div className="space-y-2 pt-2">
+                        <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">
+                          Additional Gallery Photos ({additionalPhotos.length - 3})
+                        </span>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                          {additionalPhotos.slice(3).map((p, idx) => {
+                            const realIdx = idx + 3;
+                            return (
+                              <div key={realIdx} className="relative aspect-video rounded-xl overflow-hidden border border-border group">
+                                <img src={p} alt={`Photo ${realIdx + 1}`} className="w-full h-full object-cover" />
+                                <div className="absolute top-1 right-1 flex items-center gap-1">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleMakeCover(realIdx)}
+                                    className="px-1.5 py-0.5 bg-black/70 hover:bg-[#C2410C] text-white text-[8px] font-bold rounded-full transition-colors"
+                                  >
+                                    Cover
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleRemovePhoto(realIdx)}
+                                    className="p-1 bg-black/70 hover:bg-red-600 text-white rounded-full transition-colors"
+                                  >
+                                    <X size={12} />
+                                  </button>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
                       </div>
                     )}
                   </div>
 
                   {/* SUBMISSION BUTTON */}
-                  <div className="pt-6 border-t border-border flex justify-end">
+                  <div className="pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <p className="text-xs text-muted-foreground">
+                      {((photoUrl ? 1 : 0) + additionalPhotos.length) < 4 ? (
+                        <span className="text-amber-600 dark:text-amber-400 font-semibold">
+                          ⚠️ Upload at least {4 - ((photoUrl ? 1 : 0) + additionalPhotos.length)} more photo(s) to enable submission.
+                        </span>
+                      ) : (
+                        <span className="text-emerald-600 dark:text-emerald-400 font-semibold">
+                          ✓ All 4 minimum photos provided. Ready to publish!
+                        </span>
+                      )}
+                    </p>
+
                     <button
                       type="submit"
-                      disabled={loading || uploading}
-                      className="bg-primary hover:bg-yellow-400 text-black font-black px-8 py-3.5 rounded-xl text-sm transition-all shadow-lg shadow-primary/20 flex items-center gap-2"
+                      disabled={loading || uploading || ((photoUrl ? 1 : 0) + additionalPhotos.length) < 4}
+                      className="w-full sm:w-auto bg-[#C2410C] hover:bg-[#9A3412] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold px-8 py-3.5 rounded-xl text-sm transition-all shadow-lg shadow-[#C2410C]/20 flex items-center justify-center gap-2 cursor-pointer"
                     >
                       {loading ? (
                         <>
                           <Loader2 size={16} className="animate-spin" />
-                          <span>Submitting Registration...</span>
+                          <span>Publishing &amp; Taking to Dashboard...</span>
                         </>
                       ) : (
-                        <span>Publish Space Listing</span>
+                        <span>Publish Space Listing →</span>
                       )}
                     </button>
                   </div>

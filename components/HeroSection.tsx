@@ -362,7 +362,7 @@ export default function HeroSection() {
               onClick={() => setCurrentSlide(idx)}
               className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer ${
                 currentSlide === idx
-                  ? "w-7 bg-[#F5B301] shadow-md shadow-[#F5B301]/40"
+                  ? "w-7 bg-[#C2410C] shadow-md shadow-[#C2410C]/40"
                   : "w-2 bg-white/40 hover:bg-white/70"
               }`}
               aria-label={`Switch to slide ${idx + 1}: ${slide.label}`}

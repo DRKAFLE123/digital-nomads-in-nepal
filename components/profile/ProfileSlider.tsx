@@ -158,9 +158,9 @@ export default function ProfileSlider({
               {/* Facebook-Style Main Profile Card */}
               <div className="p-4 rounded-2xl bg-gray-50 dark:bg-[#141416] border border-gray-200/80 dark:border-[#222226] shadow-xs space-y-3.5 overflow-hidden">
                 <div className="flex items-center gap-3.5">
-                  {/* Avatar with Gold Glow Ring (strictly sized to 56px) */}
+                  {/* Avatar with Terracotta Glow Ring (strictly sized to 56px) */}
                   <div className="relative shrink-0 w-14 h-14">
-                    <div className="w-14 h-14 min-w-[56px] min-h-[56px] max-w-[56px] max-h-[56px] rounded-full bg-[#FFD400] text-black font-black text-lg flex items-center justify-center overflow-hidden ring-2 ring-[#FFD400] shadow-sm">
+                    <div className="w-14 h-14 min-w-[56px] min-h-[56px] max-w-[56px] max-h-[56px] rounded-full bg-[#C2410C] text-white font-black text-lg flex items-center justify-center overflow-hidden ring-2 ring-[#C2410C]/40 shadow-sm">
                       {avatarUrl ? (
                         <img src={avatarUrl} alt={session.user?.name || "User"} className="w-14 h-14 min-w-[56px] min-h-[56px] max-w-[56px] max-h-[56px] rounded-full object-cover" />
                       ) : (
@@ -256,7 +256,7 @@ export default function ProfileSlider({
                   <Link
                     href={roleInfo.isOwner ? "/owner/dashboard?tab=BOOKINGS" : "/guides/dashboard"}
                     onClick={onClose}
-                    className="text-[10px] font-black uppercase px-2.5 py-1 rounded-lg bg-[#FFD400] text-black hover:bg-[#FFE033] transition-all"
+                    className="text-[10px] font-black uppercase px-2.5 py-1 rounded-lg bg-[#C2410C] hover:bg-[#9A3412] text-white transition-all shadow-xs"
                   >
                     Review
                   </Link>
@@ -275,7 +275,7 @@ export default function ProfileSlider({
                     onClick={onClose}
                     className="p-3 rounded-xl bg-gray-50 dark:bg-[#141416] hover:bg-gray-100 dark:hover:bg-[#1C1C20] border border-gray-200/70 dark:border-[#222226] transition-all group/sc flex flex-col justify-between"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 dark:text-[#FFD400] flex items-center justify-center mb-2 group-hover/sc:scale-105 transition-transform">
+                    <div className="w-8 h-8 rounded-lg bg-[#C2410C]/10 text-[#C2410C] dark:text-[#FB923C] flex items-center justify-center mb-2 group-hover/sc:scale-105 transition-transform">
                       <CalendarCheck size={16} />
                     </div>
                     <div>
@@ -318,12 +318,12 @@ export default function ProfileSlider({
                       onClick={onClose}
                       className="p-3 rounded-xl bg-gray-50 dark:bg-[#141416] hover:bg-gray-100 dark:hover:bg-[#1C1C20] border border-gray-200/70 dark:border-[#222226] transition-all group/sc flex flex-col justify-between"
                     >
-                      <div className="w-8 h-8 rounded-lg bg-yellow-500/10 text-[#FFD400] flex items-center justify-center mb-2 group-hover/sc:scale-105 transition-transform">
+                      <div className="w-8 h-8 rounded-lg bg-[#C2410C]/10 text-[#C2410C] dark:text-[#FB923C] flex items-center justify-center mb-2 group-hover/sc:scale-105 transition-transform">
                         <Building size={16} />
                       </div>
                       <div>
-                        <h4 className="text-xs font-bold text-gray-900 dark:text-white leading-tight">Owner Portal</h4>
-                        <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">Manage spaces</p>
+                        <h4 className="text-xs font-bold text-gray-900 dark:text-white leading-tight">Host Dashboard</h4>
+                        <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">Switch to hosting</p>
                       </div>
                     </Link>
                   ) : roleInfo.isGuide ? (
@@ -342,16 +342,16 @@ export default function ProfileSlider({
                     </Link>
                   ) : (
                     <Link
-                      href="/resources/coworking"
+                      href="/register/space"
                       onClick={onClose}
                       className="p-3 rounded-xl bg-gray-50 dark:bg-[#141416] hover:bg-gray-100 dark:hover:bg-[#1C1C20] border border-gray-200/70 dark:border-[#222226] transition-all group/sc flex flex-col justify-between"
                     >
-                      <div className="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center mb-2 group-hover/sc:scale-105 transition-transform">
+                      <div className="w-8 h-8 rounded-lg bg-[#C2410C]/10 text-[#C2410C] dark:text-[#FB923C] flex items-center justify-center mb-2 group-hover/sc:scale-105 transition-transform">
                         <Building size={16} />
                       </div>
                       <div>
-                        <h4 className="text-xs font-bold text-gray-900 dark:text-white leading-tight">Find Hubs</h4>
-                        <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">24/7 backup power</p>
+                        <h4 className="text-xs font-bold text-gray-900 dark:text-white leading-tight">List Your Space</h4>
+                        <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">Switch to hosting</p>
                       </div>
                     </Link>
                   )}
@@ -406,7 +406,7 @@ export default function ProfileSlider({
                       type="button"
                       onClick={() => setTheme("dark")}
                       className={`px-2 py-1 text-[10px] font-bold rounded-full transition-all flex items-center gap-1 cursor-pointer ${
-                        isDark ? "bg-[#141416] text-[#FFD400] shadow-xs" : "text-gray-600 hover:text-gray-900"
+                        isDark ? "bg-[#141416] text-[#FB923C] shadow-xs" : "text-gray-600 hover:text-gray-900"
                       }`}
                     >
                       <Moon size={11} /> Dark
@@ -489,7 +489,7 @@ export default function ProfileSlider({
                   className="flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-[#18181B] transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-[#FFD400] flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-lg bg-[#C2410C]/10 text-[#C2410C] dark:text-[#FB923C] flex items-center justify-center">
                       <Building size={16} />
                     </div>
                     <div>
@@ -557,7 +557,7 @@ export default function ProfileSlider({
                     type="button"
                     onClick={() => setTheme("dark")}
                     className={`px-2 py-1 text-[10px] font-bold rounded-full transition-all cursor-pointer ${
-                      isDark ? "bg-[#141416] text-[#FFD400] shadow-xs" : "text-gray-600 hover:text-gray-900"
+                      isDark ? "bg-[#141416] text-[#FB923C] shadow-xs" : "text-gray-600 hover:text-gray-900"
                     }`}
                   >
                     Dark
