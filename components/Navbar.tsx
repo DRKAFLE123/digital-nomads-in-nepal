@@ -12,6 +12,7 @@ import TrekkingGuideIcon from "./TrekkingGuideIcon"
 import { useSession, signOut } from "next-auth/react"
 import GoogleSearchModal from "./search/GoogleSearchModal"
 import ProfileSlider from "./profile/ProfileSlider"
+import TopPartnerRibbon from "./TopPartnerRibbon"
 
 interface NavActionItem {
   name: string
@@ -317,7 +318,7 @@ export default function Navbar() {
       ],
       actions: [
         { name: "Owner Console", desc: "Manage your listings, rates & incoming nomad reservations.", href: "/owner/dashboard", icon: Building2, variant: "owner" },
-        { name: "+ Register Workspace", desc: "List your coworking hub or café for digital nomads.", href: "/workspaces/register", icon: PlusCircle, variant: "register" }
+        { name: "+ List Your Space", desc: "Register your workspace, coliving stay, or hybrid hub.", href: "/register/space", icon: PlusCircle, variant: "register" }
       ]
     },
     {
@@ -331,7 +332,7 @@ export default function Navbar() {
         { name: "My Nomad Passes", desc: "View your stay & workspace reservations and Wi-Fi passes.", href: "/nomad/bookings", icon: CalendarCheck },
       ],
       actions: [
-        { name: "+ Register Your Stay / Coliving", desc: "List your hotel, hostel, coliving, or long-stay property.", href: "/stay/register", icon: Home, variant: "register" }
+        { name: "+ List Your Space", desc: "List your hotel, hostel, coliving, or nomad apartment.", href: "/register/space", icon: Home, variant: "register" }
       ]
     },
     {
@@ -375,16 +376,18 @@ export default function Navbar() {
   const isSolid = !isHome || isScrolled
 
   return (
-    <nav
-      ref={navRef}
-      suppressHydrationWarning
-      aria-label="Main Navigation"
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        isSolid
-          ? "bg-white/95 dark:bg-[#080808]/95 backdrop-blur-md border-b border-gray-200 dark:border-[#242424] shadow-md dark:shadow-xl py-0"
-          : "bg-transparent py-0"
-      }`}
-    >
+    <header className="fixed top-0 w-full z-50">
+      <TopPartnerRibbon isScrolled={isScrolled} />
+      <nav
+        ref={navRef}
+        suppressHydrationWarning
+        aria-label="Main Navigation"
+        className={`w-full transition-all duration-300 ${
+          isSolid
+            ? "bg-white/95 dark:bg-[#080808]/95 backdrop-blur-md border-b border-gray-200 dark:border-[#242424] shadow-md dark:shadow-xl py-0"
+            : "bg-transparent py-0"
+        }`}
+      >
       <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="flex justify-between items-center h-[72px]">
 
@@ -1149,6 +1152,34 @@ export default function Navbar() {
               </button>
             </div>
 
+            {/* Mobile Partner & Host Ribbon Card */}
+            <div className="py-2.5 px-3 rounded-2xl bg-amber-500/10 border border-amber-500/25 shrink-0 my-2">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[10px] font-black text-[#FFD400] uppercase tracking-wider flex items-center gap-1">
+                  <Sparkles size={11} /> Partner & Host Hub
+                </span>
+                <span className="text-[9px] text-zinc-400">Join our network</span>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <Link
+                  href="/register/space"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-1.5 bg-[#FFD400] text-black font-black text-xs py-2 px-2 rounded-xl text-center active:scale-95 transition-all shadow-sm"
+                >
+                  <Building2 size={13} />
+                  <span>List Space</span>
+                </Link>
+                <Link
+                  href="/local-guides/register"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-1.5 bg-black/40 dark:bg-white/10 text-foreground border border-border/80 font-bold text-xs py-2 px-2 rounded-xl text-center active:scale-95 transition-all"
+                >
+                  <Compass size={13} className="text-[#FFD400]" />
+                  <span>Join as Guide</span>
+                </Link>
+              </div>
+            </div>
+
             {/* Mobile Navigation List (Scrollable middle container) */}
             <div className="flex-1 overflow-y-auto py-4 space-y-1.5 overscroll-contain">
               {navCategories.map((cat) => {
@@ -1334,5 +1365,6 @@ export default function Navbar() {
         setUserMode={setUserMode}
       />
     </nav>
+  </header>
   )
 }

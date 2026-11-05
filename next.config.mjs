@@ -94,7 +94,17 @@ const nextConfig = {
       },
       {
         source: '/resources/coworking/register',
-        destination: '/workspaces/register',
+        destination: '/register/space',
+        permanent: true,
+      },
+      {
+        source: '/workspaces/register',
+        destination: '/register/space',
+        permanent: true,
+      },
+      {
+        source: '/stay/register',
+        destination: '/register/space',
         permanent: true,
       },
       // ── Sofa Hub Draft & Traffic Redirects to Homepage ──
