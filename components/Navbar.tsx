@@ -880,29 +880,33 @@ export default function Navbar() {
             ) : null}
 
             {mounted && session ? (
-              /* Signed in profile avatar with interactive hover pill and drawer trigger */
+              /* Signed in profile avatar (FB-style circular avatar icon only, no name) */
               <div className="flex items-center">
                 <button
                   type="button"
                   onClick={() => setIsProfileSliderOpen(true)}
-                  className="flex items-center gap-2 pl-1.5 pr-2.5 py-1 rounded-full bg-gray-100/90 dark:bg-[#141416] border border-gray-200 dark:border-[#26262B] hover:border-[#C2410C] dark:hover:border-[#FB923C] hover:bg-gray-200/50 dark:hover:bg-[#1C1C20] hover:shadow-md hover:shadow-[#C2410C]/10 transition-all duration-200 cursor-pointer active:scale-95 group/avatar"
-                  aria-label="Open User Profile Drawer"
+                  className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center p-0 transition-transform duration-200 hover:scale-105 active:scale-95 cursor-pointer ring-2 ring-gray-200/90 dark:ring-[#2C2C32] hover:ring-[#C2410C] dark:hover:ring-[#FB923C] shadow-xs group/avatar"
+                  aria-label="Open User Profile"
                   title={`${session.user?.name || "User Profile"} (Click to open profile)`}
                 >
-                  <div className="relative shrink-0 w-8 h-8 min-w-[32px] min-h-[32px] max-w-[32px] max-h-[32px]">
-                    <div className="w-8 h-8 min-w-[32px] min-h-[32px] max-w-[32px] max-h-[32px] rounded-full bg-[#C2410C] text-white font-black text-xs flex items-center justify-center overflow-hidden shadow-xs ring-2 ring-[#C2410C]/30 group-hover/avatar:ring-[#C2410C] group-hover/avatar:scale-105 transition-all">
-                      {avatarUrl ? (
-                        <img src={avatarUrl} alt="User Avatar" className="w-8 h-8 min-w-[32px] min-h-[32px] max-w-[32px] max-h-[32px] rounded-full object-cover" />
-                      ) : (
-                        session.user?.name?.[0]?.toUpperCase() || <User size={14} />
-                      )}
-                    </div>
-                    <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-[#141416]" title="Online" />
+                  <div className="w-full h-full rounded-full overflow-hidden bg-gradient-to-br from-[#C2410C] to-[#9A3412] text-white flex items-center justify-center">
+                    {avatarUrl ? (
+                      <img
+                        src={avatarUrl}
+                        alt={session.user?.name || "User Avatar"}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span className="font-black text-sm uppercase select-none">
+                        {session.user?.name?.trim()?.[0]?.toUpperCase() || <User size={16} />}
+                      </span>
+                    )}
                   </div>
-                  <span className="text-xs font-bold text-gray-800 dark:text-gray-200 group-hover/avatar:text-[#C2410C] dark:group-hover/avatar:text-[#FB923C] max-w-[85px] truncate hidden sm:inline-block transition-colors">
-                    {session.user?.name?.split(" ")[0] || "Account"}
-                  </span>
-                  <ChevronDown size={13} className="text-gray-400 group-hover/avatar:text-[#C2410C] dark:group-hover/avatar:text-[#FB923C] transition-transform duration-200 group-hover/avatar:rotate-180" />
+                  {/* Online presence indicator dot */}
+                  <span
+                    className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-[#0B0B0C]"
+                    title="Online"
+                  />
                 </button>
               </div>
             ) : (
