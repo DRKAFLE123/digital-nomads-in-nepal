@@ -19,12 +19,12 @@ export default function TopPartnerRibbon({ isScrolled = false }: TopPartnerRibbo
       <div className="w-full h-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between text-[11px] sm:text-xs">
         
         {/* Left: Indicator & Hook */}
-        <div className="flex items-center gap-1.5 sm:gap-2 text-[#E8F0E9] min-w-0 truncate">
+        <div className="flex items-center gap-1.5 sm:gap-2 text-[#F5F5F0] min-w-0 truncate">
           <span className="relative flex h-2 w-2 shrink-0">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#8FB89A] opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#8FB89A]"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
           </span>
-          <span className="hidden md:inline font-medium text-[#E8F0E9] truncate">
+          <span className="hidden md:inline font-medium text-[#F5F5F0] truncate">
             Host a workspace, coliving stay, or guide nomads in Nepal?
           </span>
           <span className="md:hidden font-semibold text-[#F5F5F0] truncate">
@@ -36,20 +36,20 @@ export default function TopPartnerRibbon({ isScrolled = false }: TopPartnerRibbo
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <Link
             href="/register/space"
-            className="inline-flex items-center gap-1 font-semibold text-[#8FB89A] hover:text-white transition-colors py-0.5 px-1.5 sm:px-2 rounded-md hover:bg-white/10 active:scale-95 text-[10.5px] sm:text-xs"
+            className="inline-flex items-center gap-1.5 font-semibold text-[#F5F5F0] hover:text-white transition-colors py-0.5 px-1.5 sm:px-2 rounded-md hover:bg-white/10 active:scale-95 text-[10.5px] sm:text-xs"
           >
-            <Building2 className="w-3 h-3 text-[#8FB89A]" />
+            <Building2 className="w-3.5 h-3.5 text-[#C58B55]" />
             <span>List Space</span>
-            <span className="hidden lg:inline text-[10px] text-emerald-300/70 font-normal">(Stay / Work)</span>
+            <span className="hidden lg:inline text-[10px] text-white/60 font-normal">(Stay / Work)</span>
           </Link>
 
-          <span className="text-emerald-800 select-none">•</span>
+          <span className="text-white/30 select-none">•</span>
 
           <Link
             href="/local-guides/register"
-            className="inline-flex items-center gap-1 font-semibold text-[#D6A06A] hover:text-[#E5B483] transition-colors py-0.5 px-1.5 sm:px-2 rounded-md hover:bg-white/10 active:scale-95 text-[10.5px] sm:text-xs"
+            className="inline-flex items-center gap-1.5 font-semibold text-[#D6A06A] hover:text-[#E5B483] transition-colors py-0.5 px-1.5 sm:px-2 rounded-md hover:bg-white/10 active:scale-95 text-[10.5px] sm:text-xs"
           >
-            <Compass className="w-3 h-3 text-[#D6A06A]" />
+            <Compass className="w-3.5 h-3.5 text-[#D6A06A]" />
             <span>Join as Guide</span>
           </Link>
         </div>
