@@ -454,114 +454,123 @@ export default async function Home() {
         </section>
 
         {/* 6. Things to Do in Nepal */}
-        <section className="relative w-full py-24 sm:py-28 px-4 sm:px-6 lg:px-8 overflow-hidden bg-background border-t border-border">
-          {/* Ambient Panoramic Background: Desktop 16:9 4K & Mobile 9:16 Portrait */}
+        <section className="relative w-full py-20 sm:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden bg-[#FAF7F2] dark:bg-[#0B0B0C] border-t border-[#E8E2D8] dark:border-[#26262A]">
+          {/* Subtle Himalayan Panorama Backdrop */}
           <div className="absolute inset-0 z-0 pointer-events-none select-none">
-            {/* Desktop Panoramic HD */}
+            {/* Desktop Panoramic */}
             <div className="hidden md:block absolute inset-0">
               <Image 
                 src="/images/home/things-to-do-desktop.jpg" 
                 alt="Things to do in Nepal outdoor adventures" 
                 fill 
                 sizes="100vw"
-                className="object-cover object-center opacity-45 dark:opacity-40" 
+                className="object-cover object-center opacity-20 dark:opacity-15" 
                 quality={95}
               />
             </div>
-            {/* Mobile Portrait HD */}
+            {/* Mobile Portrait */}
             <div className="block md:hidden absolute inset-0">
               <Image 
                 src="/images/home/things-to-do-mobile.jpg" 
                 alt="Things to do in Nepal alpine trails and paragliding" 
                 fill 
                 sizes="100vw"
-                className="object-cover object-center opacity-45 dark:opacity-40" 
+                className="object-cover object-center opacity-20 dark:opacity-15" 
                 quality={95}
               />
             </div>
-            {/* Top feathered dissolve for smooth transition from previous section */}
-            <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-background via-background/80 to-transparent" />
-            {/* Ambient tint overlay to maintain sharp text contrast in both light and dark mode */}
-            <div className="absolute inset-0 bg-background/50 dark:bg-background/65" />
-            {/* Bottom feathered dissolve into next section */}
-            <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-background via-background/80 to-transparent" />
+            {/* Soft dissolve overlays for seamless editorial flow */}
+            <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#FAF7F2] dark:from-[#0B0B0C] to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#FAF7F2] dark:from-[#0B0B0C] to-transparent" />
           </div>
 
           <div className="relative z-10 max-w-7xl mx-auto">
-            <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
+            <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14">
               <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#C2410C] dark:text-[#FB923C] mb-2">
                 Nomad life &amp; adventure
               </p>
-              <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground drop-shadow-sm tracking-tight">
+              <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight">
                 Things to do in Nepal
               </h2>
-              <p className="text-muted-foreground text-sm sm:text-base mt-2 max-w-2xl mx-auto font-normal">
+              <p className="text-gray-600 dark:text-[#A8A8B0] text-sm sm:text-base mt-2 max-w-2xl mx-auto font-normal">
                 Balance deep remote work sprints with Himalayan outdoors, heritage cafe culture, and restorative escapes.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* Activity 1 */}
-              <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-[#C2410C]/40 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
-                <div className="w-12 h-12 rounded-xl bg-[#C2410C]/10 text-[#C2410C] dark:bg-[#FB923C]/15 dark:text-[#FB923C] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <Mountain size={24} />
+              <div className="p-6 sm:p-7 bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-2xl shadow-sm hover:shadow-xl hover:border-[#C2410C]/60 dark:hover:border-[#FB923C]/60 transition-all duration-300 hover:-translate-y-1.5 group flex flex-col justify-between">
+                <div>
+                  <div className="w-12 h-12 rounded-xl bg-[#C2410C]/10 text-[#C2410C] dark:bg-[#FB923C]/15 dark:text-[#FB923C] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <Mountain size={24} />
+                  </div>
+                  <h3 className="font-serif font-bold text-lg sm:text-xl text-gray-900 dark:text-[#F5F5F4] group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors mb-2">
+                    Weekend Annapurna Treks
+                  </h3>
+                  <p className="text-xs sm:text-[13px] text-gray-600 dark:text-[#A8A8B0] leading-relaxed mb-4">
+                    Do quick 3 to 4 day treks like Poon Hill, Australian Camp, or Mardi Himal directly from your desk in Pokhara.
+                  </p>
                 </div>
-                <h3 className="font-bold text-lg text-foreground group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors mb-2">
-                  Weekend Annapurna Treks
-                </h3>
-                <p className="text-xs text-muted-foreground leading-relaxed mb-4">
-                  Do quick 3 to 4 day treks like Poon Hill, Australian Camp, or Mardi Himal directly from your desk in Pokhara.
-                </p>
-                <Link href="/guides" className="text-xs font-bold text-[#C2410C] dark:text-[#FB923C] hover:text-[#9A3412] dark:hover:text-[#FDBA74] inline-flex items-center gap-1 hover:underline">
-                  Find trekking guides <ArrowRight size={12} />
+                <Link href="/guides" className="text-xs font-bold text-[#C2410C] dark:text-[#FB923C] hover:text-[#9A3412] inline-flex items-center gap-1.5 group-hover:translate-x-1 transition-all">
+                  <span>Find trekking guides</span>
+                  <ArrowRight size={13} />
                 </Link>
               </div>
 
               {/* Activity 2 */}
-              <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-[#C2410C]/40 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
-                <div className="w-12 h-12 rounded-xl bg-[#C2410C]/10 text-[#C2410C] dark:bg-[#FB923C]/15 dark:text-[#FB923C] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <Coffee size={24} />
+              <div className="p-6 sm:p-7 bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-2xl shadow-sm hover:shadow-xl hover:border-[#C2410C]/60 dark:hover:border-[#FB923C]/60 transition-all duration-300 hover:-translate-y-1.5 group flex flex-col justify-between">
+                <div>
+                  <div className="w-12 h-12 rounded-xl bg-[#C2410C]/10 text-[#C2410C] dark:bg-[#FB923C]/15 dark:text-[#FB923C] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <Coffee size={24} />
+                  </div>
+                  <h3 className="font-serif font-bold text-lg sm:text-xl text-gray-900 dark:text-[#F5F5F4] group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors mb-2">
+                    Heritage Cafe Working
+                  </h3>
+                  <p className="text-xs sm:text-[13px] text-gray-600 dark:text-[#A8A8B0] leading-relaxed mb-4">
+                    Sample single-origin Himalayan Arabica in centuries-old Newari brick courtyards in Patan, Jhamsikhel, and Sanepa.
+                  </p>
                 </div>
-                <h3 className="font-bold text-lg text-foreground group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors mb-2">
-                  Heritage Cafe Working
-                </h3>
-                <p className="text-xs text-muted-foreground leading-relaxed mb-4">
-                  Sample single-origin Himalayan Arabica in centuries-old Newari brick courtyards in Patan, Jhamsikhel, and Sanepa.
-                </p>
-                <Link href="/destinations/lalitpur" className="text-xs font-bold text-[#C2410C] dark:text-[#FB923C] hover:text-[#9A3412] dark:hover:text-[#FDBA74] inline-flex items-center gap-1 hover:underline">
-                  Explore Lalitpur cafes <ArrowRight size={12} />
+                <Link href="/destinations/lalitpur" className="text-xs font-bold text-[#C2410C] dark:text-[#FB923C] hover:text-[#9A3412] inline-flex items-center gap-1.5 group-hover:translate-x-1 transition-all">
+                  <span>Explore Lalitpur cafes</span>
+                  <ArrowRight size={13} />
                 </Link>
               </div>
 
               {/* Activity 3 */}
-              <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-[#C2410C]/40 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
-                <div className="w-12 h-12 rounded-xl bg-[#C2410C]/10 text-[#C2410C] dark:bg-[#FB923C]/15 dark:text-[#FB923C] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <Wind size={24} />
+              <div className="p-6 sm:p-7 bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-2xl shadow-sm hover:shadow-xl hover:border-[#C2410C]/60 dark:hover:border-[#FB923C]/60 transition-all duration-300 hover:-translate-y-1.5 group flex flex-col justify-between">
+                <div>
+                  <div className="w-12 h-12 rounded-xl bg-[#C2410C]/10 text-[#C2410C] dark:bg-[#FB923C]/15 dark:text-[#FB923C] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <Wind size={24} />
+                  </div>
+                  <h3 className="font-serif font-bold text-lg sm:text-xl text-gray-900 dark:text-[#F5F5F4] group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors mb-2">
+                    Paragliding Fewa Lake
+                  </h3>
+                  <p className="text-xs sm:text-[13px] text-gray-600 dark:text-[#A8A8B0] leading-relaxed mb-4">
+                    Take off from Sarangkot and thermal above emerald waters with panoramic views of Machapuchare (Fishtail peak).
+                  </p>
                 </div>
-                <h3 className="font-bold text-lg text-foreground group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors mb-2">
-                  Paragliding Fewa Lake
-                </h3>
-                <p className="text-xs text-muted-foreground leading-relaxed mb-4">
-                  Take off from Sarangkot and thermal above emerald waters with panoramic views of Machapuchare (Fishtail peak).
-                </p>
-                <Link href="/destinations/pokhara" className="text-xs font-bold text-[#C2410C] dark:text-[#FB923C] hover:text-[#9A3412] dark:hover:text-[#FDBA74] inline-flex items-center gap-1 hover:underline">
-                  Explore Pokhara guide <ArrowRight size={12} />
+                <Link href="/destinations/pokhara" className="text-xs font-bold text-[#C2410C] dark:text-[#FB923C] hover:text-[#9A3412] inline-flex items-center gap-1.5 group-hover:translate-x-1 transition-all">
+                  <span>Explore Pokhara guide</span>
+                  <ArrowRight size={13} />
                 </Link>
               </div>
 
               {/* Activity 4 */}
-              <div className="p-6 bg-card/85 dark:bg-card/75 backdrop-blur-md border border-border/80 rounded-2xl hover:border-[#C2410C]/40 transition-all hover:-translate-y-1 shadow-md hover:shadow-2xl group">
-                <div className="w-12 h-12 rounded-xl bg-[#C2410C]/10 text-[#C2410C] dark:bg-[#FB923C]/15 dark:text-[#FB923C] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <Heart size={24} />
+              <div className="p-6 sm:p-7 bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-2xl shadow-sm hover:shadow-xl hover:border-[#C2410C]/60 dark:hover:border-[#FB923C]/60 transition-all duration-300 hover:-translate-y-1.5 group flex flex-col justify-between">
+                <div>
+                  <div className="w-12 h-12 rounded-xl bg-[#C2410C]/10 text-[#C2410C] dark:bg-[#FB923C]/15 dark:text-[#FB923C] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <Heart size={24} />
+                  </div>
+                  <h3 className="font-serif font-bold text-lg sm:text-xl text-gray-900 dark:text-[#F5F5F4] group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors mb-2">
+                    Sound Healing &amp; Yoga
+                  </h3>
+                  <p className="text-xs sm:text-[13px] text-gray-600 dark:text-[#A8A8B0] leading-relaxed mb-4">
+                    Recharge your focus with traditional Tibetan singing bowl sound meditation and weekend mountain retreats.
+                  </p>
                 </div>
-                <h3 className="font-bold text-lg text-foreground group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors mb-2">
-                  Sound Healing &amp; Yoga
-                </h3>
-                <p className="text-xs text-muted-foreground leading-relaxed mb-4">
-                  Recharge your focus with traditional Tibetan singing bowl sound meditation and weekend mountain retreats.
-                </p>
-                <Link href="/blog" className="text-xs font-bold text-[#C2410C] dark:text-[#FB923C] hover:text-[#9A3412] dark:hover:text-[#FDBA74] inline-flex items-center gap-1 hover:underline">
-                  Read wellness tips <ArrowRight size={12} />
+                <Link href="/blog" className="text-xs font-bold text-[#C2410C] dark:text-[#FB923C] hover:text-[#9A3412] inline-flex items-center gap-1.5 group-hover:translate-x-1 transition-all">
+                  <span>Read wellness tips</span>
+                  <ArrowRight size={13} />
                 </Link>
               </div>
             </div>
