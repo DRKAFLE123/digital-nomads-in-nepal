@@ -58,20 +58,6 @@ interface HubData {
   bookings: any[]
 }
 
-interface GuideData {
-  id: string
-  name: string
-  bio: string
-  location: string
-  specialties: string[] | any
-  photoUrl?: string | null
-  contactEmail: string
-  website?: string | null
-  isVerified: boolean
-  avgRating: number
-  totalReviews: number
-}
-
 export default function OwnerDashboardPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -82,7 +68,6 @@ export default function OwnerDashboardPage() {
   // Core Data
   const [ownerEmail, setOwnerEmail] = useState("")
   const [hubs, setHubs] = useState<HubData[]>([])
-  const [guide, setGuide] = useState<GuideData | null>(null)
   const [loading, setLoading] = useState(false)
 
   // Primary Airbnb Navigation Tabs: Today | Calendar | Listings | Messages
@@ -90,9 +75,6 @@ export default function OwnerDashboardPage() {
   
   // Today Sub-Filter: Today vs Upcoming
   const [todaySubFilter, setTodaySubFilter] = useState<"TODAY" | "UPCOMING">("TODAY")
-  
-  // Listings View: All | Workspaces & Stays | Local Guide Profiles
-  const [hostingMode, setHostingMode] = useState<"ALL" | "WORKSPACES" | "GUIDES">("ALL")
 
   // Bookings / Inquiries Filter: All | Pending | Confirmed | Cancelled
   const [bookingFilter, setBookingFilter] = useState<"ALL" | "PENDING" | "CONFIRMED" | "CANCELLED">("ALL")
@@ -110,14 +92,6 @@ export default function OwnerDashboardPage() {
   const [editOpeningHours, setEditOpeningHours] = useState<string>("24/7 Access")
   const [editFacilities, setEditFacilities] = useState<string>("")
   const [updatingHub, setUpdatingHub] = useState(false)
-
-  // Editing Guide Listing State
-  const [editingGuide, setEditingGuide] = useState(false)
-  const [guideBio, setGuideBio] = useState("")
-  const [guideLocation, setGuideLocation] = useState("")
-  const [guideSpecialties, setGuideSpecialties] = useState("")
-  const [guideWebsite, setGuideWebsite] = useState("")
-  const [updatingGuide, setUpdatingGuide] = useState(false)
 
   // Calendar Month State
   const [calendarDate, setCalendarDate] = useState(new Date())
@@ -152,24 +126,6 @@ export default function OwnerDashboardPage() {
         setHubs(Array.isArray(data) ? data : [])
       } else {
         setHubs([])
-      }
-
-      // 2. Fetch Guide profile matching user
-      const guidesRes = await fetch(`/api/guides?city=All`)
-      if (guidesRes.ok) {
-        const allGuides = await guidesRes.json()
-        const matched = Array.isArray(allGuides)
-          ? allGuides.find((g: any) => g.contactEmail?.toLowerCase() === email.toLowerCase())
-          : null
-        if (matched) {
-          setGuide(matched)
-          setGuideBio(matched.bio || "")
-          setGuideLocation(matched.location || "")
-          setGuideSpecialties(Array.isArray(matched.specialties) ? matched.specialties.join(", ") : "")
-          setGuideWebsite(matched.website || "")
-        } else {
-          setGuide(null)
-        }
       }
     } catch (err) {
       console.error("Failed to load host data:", err)
@@ -241,42 +197,6 @@ export default function OwnerDashboardPage() {
       console.error("Hub update error:", err)
     } finally {
       setUpdatingHub(false)
-    }
-  }
-
-  // Save Guide Details
-  const handleSaveGuide = async () => {
-    if (!guide) return
-    setUpdatingGuide(true)
-    try {
-      const specArray = guideSpecialties.split(",").map(s => s.trim()).filter(Boolean)
-      const res = await fetch(`/api/guides/${guide.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          bio: guideBio,
-          location: guideLocation,
-          specialties: specArray,
-          website: guideWebsite
-        })
-      })
-
-      if (res.ok) {
-        setGuide(prev => prev ? {
-          ...prev,
-          bio: guideBio,
-          location: guideLocation,
-          specialties: specArray,
-          website: guideWebsite
-        } : null)
-        setEditingGuide(false)
-        setSuccessMessage("Local guide credentials & profile updated!")
-        setTimeout(() => setSuccessMessage(""), 4000)
-      }
-    } catch (err) {
-      console.error("Guide update error:", err)
-    } finally {
-      setUpdatingGuide(false)
     }
   }
 
@@ -418,14 +338,6 @@ export default function OwnerDashboardPage() {
                       + List another workspace or stay
                     </Link>
 
-                    <Link
-                      href="/guides/register"
-                      onClick={() => setMenuOpen(false)}
-                      className="block px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-[#1F1F23] font-medium text-gray-700 dark:text-gray-200"
-                    >
-                      + Register as local trekking guide
-                    </Link>
-
                     <div className="border-t border-gray-100 dark:border-[#222225] my-1" />
 
                     <button
@@ -511,7 +423,7 @@ export default function OwnerDashboardPage() {
               {/* Badge with count */}
               <div className="relative shrink-0 w-11 h-11 rounded-xl bg-[#FAF7F2] dark:bg-[#1F1F23] border border-[#E8E2D8] dark:border-[#2D2D32] flex items-center justify-center">
                 <span className="absolute -top-1.5 -left-1.5 w-5 h-5 rounded-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold text-[11px] flex items-center justify-center shadow-xs">
-                  {hubs.length > 0 ? (guide ? "✓" : "1") : "2"}
+                  {hubs.length > 0 ? "✓" : "1"}
                 </span>
                 <Sparkles size={20} className="text-[#C2410C]" />
               </div>
@@ -520,22 +432,22 @@ export default function OwnerDashboardPage() {
                 <h3 className="text-sm sm:text-base font-bold text-gray-900 dark:text-white truncate">
                   {hubs.length === 0 
                     ? "Complete your property listing" 
-                    : (!guide ? "Add your local guide credentials" : "Your host profile is complete & active")}
+                    : "Your property listings are active & live on Nomads Nepal"}
                 </h3>
                 <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">
                   {hubs.length === 0
                     ? "Add photo gallery, fiber speeds & daily desk rates to publish"
-                    : (!guide ? "Trek leaders & cultural guides can register in 2 minutes" : "Ready to receive remote worker reservations & trek bookings")}
+                    : `${hubs.length} properties published and receiving booking inquiries`}
                 </p>
               </div>
             </div>
 
             <div className="flex items-center gap-2 shrink-0">
               <Link
-                href={hubs.length === 0 ? "/register/space" : (!guide ? "/guides/register" : "/workspaces")}
+                href={hubs.length === 0 ? "/register/space" : "/workspaces"}
                 className="px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors shadow-xs"
               >
-                {hubs.length === 0 ? "Get Started" : (!guide ? "Become a Guide" : "Explore Hubs")}
+                {hubs.length === 0 ? "Get Started" : "View Live Listings"}
               </Link>
               <button
                 type="button"
@@ -736,9 +648,9 @@ export default function OwnerDashboardPage() {
             {/* Quick Metrics Cards */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-4">
               <div className="p-4 rounded-2xl bg-gray-50 dark:bg-[#141416] border border-gray-200 dark:border-[#26262A]">
-                <p className="text-xs font-medium text-gray-500">Live Listings</p>
+                <p className="text-xs font-medium text-gray-500">Live Properties</p>
                 <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                  {hubs.length + (guide ? 1 : 0)}
+                  {hubs.length}
                 </p>
               </div>
               <div className="p-4 rounded-2xl bg-gray-50 dark:bg-[#141416] border border-gray-200 dark:border-[#26262A]">
@@ -754,9 +666,9 @@ export default function OwnerDashboardPage() {
                 </p>
               </div>
               <div className="p-4 rounded-2xl bg-gray-50 dark:bg-[#141416] border border-gray-200 dark:border-[#26262A]">
-                <p className="text-xs font-medium text-gray-500">Guide Profile</p>
-                <p className="text-sm font-bold text-gray-900 dark:text-white mt-2">
-                  {guide ? (guide.isVerified ? "✓ Verified Guide" : "Registered") : "Not Created"}
+                <p className="text-xs font-medium text-gray-500">Total Inquiries</p>
+                <p className="text-xl sm:text-2xl font-bold text-[#C2410C] dark:text-[#FB923C] mt-1">
+                  {allBookings.length}
                 </p>
               </div>
             </div>
@@ -864,328 +776,147 @@ export default function OwnerDashboardPage() {
         )}
 
         {/* ═════════════════════════════════════════════════════════════
-            TAB 3: LISTINGS (Local Guides & Space Hosts Working Together)
+            TAB 3: LISTINGS (Pure Property Listings: Workspaces & Stays)
            ═════════════════════════════════════════════════════════════ */}
         {mainNavTab === "LISTINGS" && (
           <div className="space-y-6">
             
-            {/* Header with Switcher for Space Hosting & Local Guide Hosting */}
+            {/* Header with Add Property Button */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-200 dark:border-[#222225]">
               <div>
                 <h2 className="text-xl sm:text-2xl font-serif font-bold text-gray-900 dark:text-white tracking-tight">
-                  Your Listings &amp; Services
+                  Your Listed Properties ({hubs.length})
                 </h2>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                  Manage your workspaces, coliving rooms, and local guide profiles in one console.
+                  Manage your active workspaces, coliving hubs, daily desk rates, and nomad stays across Nepal.
                 </p>
               </div>
 
-              {/* Mode Filter Pills */}
-              <div className="flex items-center gap-1.5 bg-gray-100 dark:bg-[#161619] p-1 rounded-full text-xs font-semibold">
-                <button
-                  type="button"
-                  onClick={() => setHostingMode("ALL")}
-                  className={`px-3 py-1.5 rounded-full transition-all ${
-                    hostingMode === "ALL" ? "bg-white dark:bg-[#252529] shadow-xs text-gray-900 dark:text-white" : "text-gray-500"
-                  }`}
-                >
-                  All ({hubs.length + (guide ? 1 : 0)})
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setHostingMode("WORKSPACES")}
-                  className={`px-3 py-1.5 rounded-full transition-all ${
-                    hostingMode === "WORKSPACES" ? "bg-white dark:bg-[#252529] shadow-xs text-gray-900 dark:text-white" : "text-gray-500"
-                  }`}
-                >
-                  Spaces ({hubs.length})
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setHostingMode("GUIDES")}
-                  className={`px-3 py-1.5 rounded-full transition-all ${
-                    hostingMode === "GUIDES" ? "bg-white dark:bg-[#252529] shadow-xs text-gray-900 dark:text-white" : "text-gray-500"
-                  }`}
-                >
-                  Guides ({guide ? 1 : 0})
-                </button>
-              </div>
+              <Link
+                href="/register/space"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-[#C2410C] hover:bg-[#9A3412] text-white shadow-xs transition-colors self-start sm:self-center"
+              >
+                <PlusCircle size={14} />
+                <span>+ List another property</span>
+              </Link>
             </div>
 
-            {/* SECTION A: WORKSPACE / COLIVING PROPERTY LISTINGS */}
-            {(hostingMode === "ALL" || hostingMode === "WORKSPACES") && (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                    <Building2 size={16} className="text-[#C2410C]" />
-                    <span>Workspace &amp; Coliving Listings ({hubs.length})</span>
-                  </h3>
+            {/* WORKSPACE / COLIVING PROPERTY LISTINGS GRID */}
+            <div className="space-y-4">
+              {hubs.length === 0 ? (
+                <div className="p-8 sm:p-12 rounded-2xl bg-gray-50 dark:bg-[#141416] border border-dashed border-gray-300 dark:border-gray-700 text-center">
+                  <Building2 className="w-10 h-10 text-gray-400 mx-auto mb-2 opacity-50" />
+                  <p className="text-sm font-bold text-gray-800 dark:text-gray-200">No properties listed yet</p>
+                  <p className="text-xs text-gray-500 mt-1 mb-4">Add your coworking space, workstation villa, or nomad stay to start receiving bookings.</p>
                   <Link
                     href="/register/space"
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#C2410C] hover:underline"
+                    className="px-4 py-2 bg-[#C2410C] text-white text-xs font-bold rounded-xl shadow-xs"
                   >
-                    <PlusCircle size={14} />
-                    <span>List another property</span>
+                    + Add your first property
                   </Link>
                 </div>
-
-                {hubs.length === 0 ? (
-                  <div className="p-8 rounded-2xl bg-gray-50 dark:bg-[#141416] border border-dashed border-gray-300 dark:border-gray-700 text-center">
-                    <p className="text-xs text-gray-500 mb-3">No workspaces or coliving properties listed yet.</p>
-                    <Link
-                      href="/register/space"
-                      className="px-4 py-2 bg-[#C2410C] text-white text-xs font-bold rounded-xl"
-                    >
-                      + Add your first property
-                    </Link>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {hubs.map(hub => {
-                      const isEditing = editingHubId === hub.id
-                      return (
-                        <div key={hub.id} className="bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-shadow">
-                          {/* Image Thumbnail */}
-                          <div className="relative aspect-video w-full bg-gray-100 dark:bg-[#1F1F22] overflow-hidden">
-                            <img
-                              src={hub.photoUrl ? (hub.photoUrl.startsWith("[") ? JSON.parse(hub.photoUrl)[0] : hub.photoUrl) : "/hero-bg.png"}
-                              alt={hub.name}
-                              className="w-full h-full object-cover"
-                            />
-                            <span className="absolute top-2.5 left-2.5 bg-black/75 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
-                              {hub.city || "Nepal"}
-                            </span>
-                          </div>
-
-                          <div className="p-4 space-y-3">
-                            <div className="flex items-start justify-between gap-2">
-                              <div>
-                                <h4 className="font-bold text-sm text-gray-900 dark:text-white line-clamp-1">
-                                  {hub.name}
-                                </h4>
-                                <p className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
-                                  <MapPin size={12} /> {hub.address}
-                                </p>
-                              </div>
-                              <span className="text-xs font-bold text-[#C2410C] shrink-0">
-                                ${hub.priceDaily || 10}/day
-                              </span>
-                            </div>
-
-                            {/* Editing Form Inline */}
-                            {isEditing ? (
-                              <div className="space-y-3 pt-2 border-t border-gray-100 dark:border-[#242428] text-xs">
-                                <div>
-                                  <label className="block text-gray-500 font-semibold mb-1">Daily Rate ($USD)</label>
-                                  <input
-                                    type="number"
-                                    value={editPriceDaily}
-                                    onChange={e => setEditPriceDaily(parseFloat(e.target.value) || 0)}
-                                    className="w-full p-2 bg-gray-50 dark:bg-[#1C1C1F] border border-gray-200 dark:border-[#333] rounded-lg"
-                                  />
-                                </div>
-                                <div>
-                                  <label className="block text-gray-500 font-semibold mb-1">Monthly Coliving Rate ($USD)</label>
-                                  <input
-                                    type="number"
-                                    value={editPriceMonthly}
-                                    onChange={e => setEditPriceMonthly(parseFloat(e.target.value) || 0)}
-                                    className="w-full p-2 bg-gray-50 dark:bg-[#1C1C1F] border border-gray-200 dark:border-[#333] rounded-lg"
-                                  />
-                                </div>
-                                <div className="flex gap-2 pt-1">
-                                  <button
-                                    onClick={() => handleSaveHubDetails(hub.id)}
-                                    disabled={updatingHub}
-                                    className="flex-1 py-1.5 bg-[#C2410C] text-white font-bold rounded-lg"
-                                  >
-                                    {updatingHub ? "Saving..." : "Save"}
-                                  </button>
-                                  <button
-                                    onClick={() => setEditingHubId(null)}
-                                    className="px-3 py-1.5 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-600"
-                                  >
-                                    Cancel
-                                  </button>
-                                </div>
-                              </div>
-                            ) : (
-                              <div className="flex items-center gap-2 pt-2 border-t border-gray-100 dark:border-[#222226]">
-                                <Link
-                                  href={`/workspaces/${hub.slug}`}
-                                  target="_blank"
-                                  className="flex-1 py-2 text-center text-xs font-bold rounded-xl border border-gray-200 dark:border-[#2A2A2E] hover:bg-gray-50 dark:hover:bg-[#1C1C20] flex items-center justify-center gap-1.5"
-                                >
-                                  <Eye size={13} />
-                                  <span>View Live Listing</span>
-                                </Link>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setEditingHubId(hub.id)
-                                    setEditPriceDaily(hub.priceDaily || 10)
-                                    setEditPriceMonthly(hub.priceMonthly || 180)
-                                    setEditOpeningHours(hub.openingHours || "24/7 Access")
-                                    setEditFacilities(Array.isArray(hub.facilities) ? hub.facilities.join(", ") : "")
-                                  }}
-                                  className="px-3 py-2 text-xs font-bold rounded-xl bg-gray-100 dark:bg-[#1E1E22] hover:bg-gray-200 text-gray-800 dark:text-gray-200"
-                                >
-                                  Edit Rates
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      )
-                    })}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* SECTION B: LOCAL GUIDE & TREK HOSTING PROFILE */}
-            {(hostingMode === "ALL" || hostingMode === "GUIDES") && (
-              <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-[#222225]">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                    <Mountain size={16} className="text-[#C2410C]" />
-                    <span>Local Guide &amp; Trek Host Profile</span>
-                  </h3>
-                  {!guide && (
-                    <Link
-                      href="/guides/register"
-                      className="inline-flex items-center gap-1.5 text-xs font-bold text-[#C2410C] hover:underline"
-                    >
-                      <PlusCircle size={14} />
-                      <span>Register as Local Guide</span>
-                    </Link>
-                  )}
-                </div>
-
-                {!guide ? (
-                  <div className="p-6 rounded-2xl bg-gradient-to-r from-amber-500/10 via-[#C2410C]/5 to-transparent border border-amber-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div>
-                      <h4 className="font-bold text-sm text-gray-900 dark:text-white">
-                        Are you a licensed trekking guide or outdoor host?
-                      </h4>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                        Connect with remote workers in Pokhara &amp; Kathmandu looking for guided weekend treks, alpine routes, and cultural tours.
-                      </p>
-                    </div>
-                    <Link
-                      href="/guides/register"
-                      className="px-4 py-2 rounded-xl text-xs font-bold bg-[#C2410C] text-white hover:bg-[#9A3412] shrink-0"
-                    >
-                      Apply as Guide
-                    </Link>
-                  </div>
-                ) : (
-                  <div className="bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] rounded-2xl p-5 shadow-xs space-y-4">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                      <div className="flex items-center gap-3.5">
-                        <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-200 shrink-0">
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {hubs.map(hub => {
+                    const isEditing = editingHubId === hub.id
+                    return (
+                      <div key={hub.id} className="bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-shadow">
+                        {/* Image Thumbnail */}
+                        <div className="relative aspect-video w-full bg-gray-100 dark:bg-[#1F1F22] overflow-hidden">
                           <img
-                            src={guide.photoUrl || "/hero-bg.png"}
-                            alt={guide.name}
+                            src={hub.photoUrl ? (hub.photoUrl.startsWith("[") ? JSON.parse(hub.photoUrl)[0] : hub.photoUrl) : "/hero-bg.png"}
+                            alt={hub.name}
                             className="w-full h-full object-cover"
                           />
+                          <span className="absolute top-2.5 left-2.5 bg-black/75 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                            {hub.city || "Nepal"}
+                          </span>
                         </div>
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <h4 className="font-bold text-base text-gray-900 dark:text-white">
-                              {guide.name}
-                            </h4>
-                            {guide.isVerified && (
-                              <span className="flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
-                                <ShieldCheck size={11} /> Verified Guide
-                              </span>
-                            )}
-                          </div>
-                          <p className="text-xs text-gray-500 flex items-center gap-1.5 mt-0.5">
-                            <MapPin size={12} /> {guide.location} · {guide.contactEmail}
-                          </p>
-                        </div>
-                      </div>
 
-                      <div className="flex items-center gap-2">
-                        <Link
-                          href={`/guides/${guide.id}`}
-                          target="_blank"
-                          className="px-3.5 py-2 text-xs font-bold rounded-xl border border-gray-200 dark:border-[#2D2D32] hover:bg-gray-50 dark:hover:bg-[#1C1C20] flex items-center gap-1.5"
-                        >
-                          <Eye size={13} />
-                          <span>View Public Profile</span>
-                        </Link>
-                        <button
-                          type="button"
-                          onClick={() => setEditingGuide(!editingGuide)}
-                          className="px-3.5 py-2 text-xs font-bold rounded-xl bg-gray-100 dark:bg-[#1E1E22] hover:bg-gray-200 text-gray-800 dark:text-gray-200"
-                        >
-                          {editingGuide ? "Close" : "Edit Profile"}
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Guide Edit Form */}
-                    {editingGuide ? (
-                      <div className="space-y-3 pt-3 border-t border-gray-100 dark:border-[#222226] text-xs">
-                        <div>
-                          <label className="block text-gray-500 font-semibold mb-1">Guide Bio &amp; Himalayan Experience</label>
-                          <textarea
-                            rows={3}
-                            value={guideBio}
-                            onChange={e => setGuideBio(e.target.value)}
-                            className="w-full p-2.5 bg-gray-50 dark:bg-[#1C1C1F] border border-gray-200 dark:border-[#333] rounded-lg"
-                          />
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                          <div>
-                            <label className="block text-gray-500 font-semibold mb-1">Base Location</label>
-                            <input
-                              type="text"
-                              value={guideLocation}
-                              onChange={e => setGuideLocation(e.target.value)}
-                              className="w-full p-2 bg-gray-50 dark:bg-[#1C1C1F] border border-gray-200 dark:border-[#333] rounded-lg"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-gray-500 font-semibold mb-1">Specialties (comma-separated)</label>
-                            <input
-                              type="text"
-                              value={guideSpecialties}
-                              onChange={e => setGuideSpecialties(e.target.value)}
-                              placeholder="Annapurna, Langtang, Mardi Himal, Photography"
-                              className="w-full p-2 bg-gray-50 dark:bg-[#1C1C1F] border border-gray-200 dark:border-[#333] rounded-lg"
-                            />
-                          </div>
-                        </div>
-                        <div className="flex gap-2 pt-1">
-                          <button
-                            type="button"
-                            onClick={handleSaveGuide}
-                            disabled={updatingGuide}
-                            className="px-4 py-2 bg-[#C2410C] text-white font-bold rounded-xl"
-                          >
-                            {updatingGuide ? "Saving..." : "Save Guide Profile"}
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="text-xs text-gray-600 dark:text-gray-400 space-y-2 pt-2 border-t border-gray-100 dark:border-[#202024]">
-                        <p>{guide.bio}</p>
-                        <div className="flex flex-wrap gap-1 pt-1">
-                          {Array.isArray(guide.specialties) && guide.specialties.map((s, idx) => (
-                            <span key={idx} className="px-2 py-0.5 rounded-md bg-gray-100 dark:bg-[#202024] text-gray-700 dark:text-gray-300 text-[11px]">
-                              🏔️ {s}
+                        <div className="p-4 space-y-3">
+                          <div className="flex items-start justify-between gap-2">
+                            <div>
+                              <h4 className="font-bold text-sm text-gray-900 dark:text-white line-clamp-1">
+                                {hub.name}
+                              </h4>
+                              <p className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
+                                <MapPin size={12} /> {hub.address}
+                              </p>
+                            </div>
+                            <span className="text-xs font-bold text-[#C2410C] shrink-0">
+                              ${hub.priceDaily || 10}/day
                             </span>
-                          ))}
+                          </div>
+
+                          {/* Editing Form Inline */}
+                          {isEditing ? (
+                            <div className="space-y-3 pt-2 border-t border-gray-100 dark:border-[#242428] text-xs">
+                              <div>
+                                <label className="block text-gray-500 font-semibold mb-1">Daily Rate ($USD)</label>
+                                <input
+                                  type="number"
+                                  value={editPriceDaily}
+                                  onChange={e => setEditPriceDaily(parseFloat(e.target.value) || 0)}
+                                  className="w-full p-2 bg-gray-50 dark:bg-[#1C1C1F] border border-gray-200 dark:border-[#333] rounded-lg"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-gray-500 font-semibold mb-1">Monthly Coliving Rate ($USD)</label>
+                                <input
+                                  type="number"
+                                  value={editPriceMonthly}
+                                  onChange={e => setEditPriceMonthly(parseFloat(e.target.value) || 0)}
+                                  className="w-full p-2 bg-gray-50 dark:bg-[#1C1C1F] border border-gray-200 dark:border-[#333] rounded-lg"
+                                />
+                              </div>
+                              <div className="flex gap-2 pt-1">
+                                <button
+                                  onClick={() => handleSaveHubDetails(hub.id)}
+                                  disabled={updatingHub}
+                                  className="flex-1 py-1.5 bg-[#C2410C] text-white font-bold rounded-lg"
+                                >
+                                  {updatingHub ? "Saving..." : "Save"}
+                                </button>
+                                <button
+                                  onClick={() => setEditingHubId(null)}
+                                  className="px-3 py-1.5 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-600"
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-2 pt-2 border-t border-gray-100 dark:border-[#222226]">
+                              <Link
+                                href={`/workspaces/${hub.slug}`}
+                                target="_blank"
+                                className="flex-1 py-2 text-center text-xs font-bold rounded-xl border border-gray-200 dark:border-[#2A2A2E] hover:bg-gray-50 dark:hover:bg-[#1C1C20] flex items-center justify-center gap-1.5"
+                              >
+                                <Eye size={13} />
+                                <span>View Live Listing</span>
+                              </Link>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setEditingHubId(hub.id)
+                                  setEditPriceDaily(hub.priceDaily || 10)
+                                  setEditPriceMonthly(hub.priceMonthly || 180)
+                                  setEditOpeningHours(hub.openingHours || "24/7 Access")
+                                  setEditFacilities(Array.isArray(hub.facilities) ? hub.facilities.join(", ") : "")
+                                }}
+                                className="px-3 py-2 text-xs font-bold rounded-xl bg-gray-100 dark:bg-[#1E1E22] hover:bg-gray-200 text-gray-800 dark:text-gray-200"
+                              >
+                                Edit Rates
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
+                    )
+                  })}
+                </div>
+              )}
+            </div>
 
           </div>
         )}

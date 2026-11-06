@@ -755,14 +755,22 @@ export default function Navbar() {
                   <Building2 size={13} className="text-blue-600 dark:text-blue-400" />
                   <span>Switch to hosting</span>
                 </Link>
+              ) : roleInfo.isGuide ? (
+                <Link
+                  href="/guides/dashboard"
+                  className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-emerald-50/80 hover:bg-emerald-100/90 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/50 shadow-xs group"
+                  title="Switch to Guide Console"
+                >
+                  <Compass size={13} className="text-emerald-600 dark:text-emerald-400" />
+                  <span>Guide Console</span>
+                </Link>
               ) : (
                 <Link
                   href="/register/space"
-                  className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-blue-50/80 hover:bg-blue-100/90 dark:bg-blue-950/40 dark:hover:bg-blue-900/50 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 border border-blue-200/80 dark:border-blue-800/50 shadow-xs group"
+                  className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#1E1E22] transition-colors"
                   title="List your workspace or nomad stay in Nepal"
                 >
-                  <Building2 size={13} className="text-blue-600 dark:text-blue-400" />
-                  <span>Switch to hosting</span>
+                  <span>List a space</span>
                 </Link>
               )
             ) : null}

@@ -351,7 +351,7 @@ export default function ProfileSlider({
                       </div>
                       <div>
                         <h4 className="text-xs font-bold text-gray-900 dark:text-white leading-tight">List Your Space</h4>
-                        <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">Switch to hosting</p>
+                        <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">Become a property host</p>
                       </div>
                     </Link>
                   )}
