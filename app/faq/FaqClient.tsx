@@ -74,7 +74,7 @@ export default function FaqClient() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search any question (e.g. visa, wifi, cost of living, sim card, guide)..."
-            className="w-full pl-11 pr-10 py-3.5 bg-card border border-border focus:border-[#FFD400] dark:focus:border-[#FFD400] rounded-2xl text-sm sm:text-base text-foreground placeholder:text-muted-foreground focus:outline-none shadow-sm transition-all"
+            className="w-full pl-11 pr-10 py-3.5 bg-card border border-border focus:border-[#C2410C] dark:focus:border-[#FB923C] rounded-2xl text-sm sm:text-base text-foreground placeholder:text-muted-foreground focus:outline-none shadow-sm transition-all"
           />
           {searchQuery && (
             <button
@@ -98,7 +98,7 @@ export default function FaqClient() {
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                   isSelected
-                    ? "bg-[#FFD400] text-black shadow-xs font-bold"
+                    ? "bg-[#C2410C] text-white shadow-xs font-bold"
                     : "bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground border border-border"
                 }`}
               >
@@ -166,7 +166,7 @@ export default function FaqClient() {
                     className="w-full py-3.5 sm:py-4 flex items-center justify-between gap-4 text-left cursor-pointer group focus:outline-none select-none"
                     aria-expanded={isOpen}
                   >
-                    <span className="text-[15px] sm:text-[16px] text-gray-900 dark:text-gray-100 font-normal group-hover:text-[#B45309] dark:group-hover:text-[#FFD400] transition-colors leading-snug">
+                    <span className="text-[15px] sm:text-[16px] text-gray-900 dark:text-gray-100 font-normal group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors leading-snug">
                       {faq.question}
                     </span>
 
@@ -211,12 +211,12 @@ export default function FaqClient() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <Link
             href="/workspaces"
-            className="p-4 rounded-2xl bg-card border border-border hover:border-[#FFD400] transition-all group"
+            className="p-4 rounded-2xl bg-card border border-border hover:border-[#C2410C]/60 transition-all group"
           >
-            <div className="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-2.5 group-hover:bg-primary group-hover:text-black transition-colors">
+            <div className="w-8 h-8 rounded-xl bg-[#C2410C]/10 text-[#C2410C] dark:text-[#FB923C] flex items-center justify-center mb-2.5 group-hover:bg-[#C2410C] group-hover:text-white transition-colors">
               <Building size={16} />
             </div>
-            <h4 className="text-xs font-bold text-foreground group-hover:text-primary transition-colors">
+            <h4 className="text-xs font-bold text-foreground group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors">
               Coworking Spaces
             </h4>
             <p className="text-[11px] text-muted-foreground mt-1">
@@ -226,12 +226,12 @@ export default function FaqClient() {
 
           <Link
             href="/guides"
-            className="p-4 rounded-2xl bg-card border border-border hover:border-[#FFD400] transition-all group"
+            className="p-4 rounded-2xl bg-card border border-border hover:border-[#C2410C]/60 transition-all group"
           >
-            <div className="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-2.5 group-hover:bg-primary group-hover:text-black transition-colors">
+            <div className="w-8 h-8 rounded-xl bg-[#C2410C]/10 text-[#C2410C] dark:text-[#FB923C] flex items-center justify-center mb-2.5 group-hover:bg-[#C2410C] group-hover:text-white transition-colors">
               <TrekkingGuideIcon size={16} />
             </div>
-            <h4 className="text-xs font-bold text-foreground group-hover:text-primary transition-colors">
+            <h4 className="text-xs font-bold text-foreground group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors">
               Trekking &amp; Local Guides
             </h4>
             <p className="text-[11px] text-muted-foreground mt-1">
@@ -241,12 +241,12 @@ export default function FaqClient() {
 
           <Link
             href="/practical-guides"
-            className="p-4 rounded-2xl bg-card border border-border hover:border-[#FFD400] transition-all group"
+            className="p-4 rounded-2xl bg-card border border-border hover:border-[#C2410C]/60 transition-all group"
           >
-            <div className="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-2.5 group-hover:bg-primary group-hover:text-black transition-colors">
+            <div className="w-8 h-8 rounded-xl bg-[#C2410C]/10 text-[#C2410C] dark:text-[#FB923C] flex items-center justify-center mb-2.5 group-hover:bg-[#C2410C] group-hover:text-white transition-colors">
               <Compass size={16} />
             </div>
-            <h4 className="text-xs font-bold text-foreground group-hover:text-primary transition-colors">
+            <h4 className="text-xs font-bold text-foreground group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors">
               Practical Guides
             </h4>
             <p className="text-[11px] text-muted-foreground mt-1">

@@ -219,29 +219,29 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
         {/* Text Area Card with a slight blur behind it (Glassmorphic) */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 -mt-20 md:-mt-28">
-          <div className="max-w-4xl bg-[#141414]/85 backdrop-blur-lg border border-[#222222] p-8 md:p-10 rounded-2xl shadow-2xl">
+          <div className="max-w-4xl bg-white/95 dark:bg-[#141416]/90 backdrop-blur-lg border border-gray-200 dark:border-[#222222] p-8 md:p-10 rounded-2xl shadow-xl">
             {/* Category */}
-            <span className="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-black bg-primary text-black uppercase tracking-wider mb-4 shadow-lg shadow-primary/10">
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-[#C2410C] text-white uppercase tracking-wider mb-4 shadow-sm">
               {post.category}
             </span>
             
             {/* Title */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-6 leading-tight">
+            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight tracking-tight">
               {post.title}
             </h1>
             
             {/* Meta information: Author • Date • Reading Time */}
-            <div className="flex flex-wrap items-center text-gray-300 text-sm font-semibold">
+            <div className="flex flex-wrap items-center text-gray-600 dark:text-gray-300 text-sm font-semibold">
               <span className="flex items-center gap-2">
-                <User size={14} className="text-primary" /> {post.author}
+                <User size={14} className="text-[#C2410C] dark:text-[#FB923C]" /> {post.author}
               </span>
-              <span className="mx-3 text-gray-600">•</span>
+              <span className="mx-3 text-gray-400">•</span>
               <span className="flex items-center gap-2">
-                <Calendar size={14} className="text-primary" /> {new Date(post.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                <Calendar size={14} className="text-[#C2410C] dark:text-[#FB923C]" /> {new Date(post.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
               </span>
-              <span className="mx-3 text-gray-600">•</span>
+              <span className="mx-3 text-gray-400">•</span>
               <span className="flex items-center gap-2">
-                <Clock size={14} className="text-primary" /> {post.readTime}
+                <Clock size={14} className="text-[#C2410C] dark:text-[#FB923C]" /> {post.readTime}
               </span>
             </div>
           </div>
@@ -252,7 +252,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           <article className="w-full lg:w-[70%] max-w-4xl">
             {post.affiliates && <AffiliateDisclaimer />}
             
-            <div className="prose prose-invert prose-lg max-w-none prose-headings:font-bold prose-a:text-[#FFD700] prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl">
+            <div className="prose prose-neutral dark:prose-invert prose-lg max-w-none prose-headings:font-serif prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white prose-p:text-gray-800 dark:prose-p:text-gray-300 prose-p:leading-relaxed prose-a:text-[#C2410C] dark:prose-a:text-[#FB923C] hover:prose-a:underline prose-strong:text-gray-900 dark:prose-strong:text-white prose-img:rounded-2xl">
               <ReactMarkdown 
                 remarkPlugins={[remarkGfm]}
                 components={{
@@ -288,7 +288,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                       }
                     }
                     return (
-                      <a href={href} className="text-[#FFD700] no-underline hover:underline" target="_blank" rel="noopener noreferrer" {...props}>
+                      <a href={href} className="text-[#C2410C] dark:text-[#FB923C] hover:underline" target="_blank" rel="noopener noreferrer" {...props}>
                         {children}
                       </a>
                     )
@@ -296,12 +296,12 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                   h2: ({ children, ...props }) => {
                     const text = getFlattenedText(children)
                     const id = text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')
-                    return <h2 id={id} {...props}>{children}</h2>
+                    return <h2 id={id} className="text-gray-900 dark:text-white font-serif font-bold text-2xl sm:text-3xl mt-10 mb-4" {...props}>{children}</h2>
                   },
                   h3: ({ children, ...props }) => {
                     const text = getFlattenedText(children)
                     const id = text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')
-                    return <h3 id={id} {...props}>{children}</h3>
+                    return <h3 id={id} className="text-gray-900 dark:text-white font-serif font-bold text-xl sm:text-2xl mt-8 mb-3" {...props}>{children}</h3>
                   }
                 }}
               >
@@ -329,12 +329,14 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           <aside className="w-full lg:w-[30%] space-y-8 relative">
             {/* Recent Posts Thumbnail List */}
             {recentPosts && recentPosts.length > 0 && (
-              <div className="bg-[#141414] border border-[#222222] p-6 rounded-xl space-y-6">
-                <h3 className="text-white font-bold uppercase tracking-wider text-sm border-b border-[#222222] pb-2">Recent Posts</h3>
+              <div className="bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] p-6 rounded-2xl shadow-xs space-y-6">
+                <h3 className="text-gray-900 dark:text-white font-bold uppercase tracking-wider text-xs border-b border-gray-100 dark:border-[#222225] pb-2.5">
+                  Recent Guides
+                </h3>
                 <div className="space-y-4">
                   {recentPosts.map((rPost) => (
                     <a key={rPost.id} href={`/blog/${rPost.slug}`} className="flex gap-4 group">
-                      <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 border border-[#222222]">
+                      <div className="relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border border-gray-200 dark:border-[#26262A]">
                         <Image 
                           src={rPost.coverImage || "https://images.unsplash.com/photo-1544735716-392fe2449fee?auto=format&fit=crop&q=80"}
                           alt={rPost.title}
@@ -343,10 +345,10 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                         />
                       </div>
                       <div className="flex flex-col justify-center min-w-0">
-                        <span className="text-xs text-[#A0A0A0] mb-1">
+                        <span className="text-[11px] text-gray-400 mb-1">
                           {new Date(rPost.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                         </span>
-                        <h4 className="text-sm font-bold text-white group-hover:text-primary transition-colors line-clamp-2 leading-snug">
+                        <h4 className="text-xs font-bold text-gray-900 dark:text-white group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors line-clamp-2 leading-snug">
                           {rPost.title}
                         </h4>
                       </div>
@@ -365,26 +367,28 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
               {/* Post Navigation - Always visible below Table of Contents */}
               {(prevPost || nextPost) && (
-                <div className="bg-[#141414] border border-[#222222] p-6 rounded-xl space-y-4">
-                  <h3 className="text-white font-bold uppercase tracking-wider text-sm border-b border-[#222222] pb-2">Post Navigation</h3>
+                <div className="bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] p-6 rounded-2xl shadow-xs space-y-4">
+                  <h3 className="text-gray-900 dark:text-white font-bold uppercase tracking-wider text-xs border-b border-gray-100 dark:border-[#222225] pb-2.5">
+                    Post Navigation
+                  </h3>
                   <div className="grid grid-cols-1 gap-4">
                     {prevPost && (
                       <a href={`/blog/${prevPost.slug}`} className="group block space-y-1">
-                        <span className="text-xs text-[#A0A0A0] group-hover:text-primary transition-colors flex items-center gap-1 font-semibold uppercase">
+                        <span className="text-[11px] text-gray-400 group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors flex items-center gap-1 font-semibold uppercase">
                           ← Previous Post
                         </span>
-                        <span className="text-sm font-bold text-white group-hover:text-primary transition-colors line-clamp-2">
+                        <span className="text-xs font-bold text-gray-900 dark:text-white group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors line-clamp-2">
                           {prevPost.title}
                         </span>
                       </a>
                     )}
-                    {prevPost && nextPost && <div className="border-t border-[#222222]" />}
+                    {prevPost && nextPost && <div className="border-t border-gray-100 dark:border-[#222225]" />}
                     {nextPost && (
                       <a href={`/blog/${nextPost.slug}`} className="group block space-y-1 text-right">
-                        <span className="text-xs text-[#A0A0A0] group-hover:text-primary transition-colors flex items-center justify-end gap-1 font-semibold uppercase">
+                        <span className="text-[11px] text-gray-400 group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors flex items-center justify-end gap-1 font-semibold uppercase">
                           Next Post →
                         </span>
-                        <span className="text-sm font-bold text-white group-hover:text-primary transition-colors line-clamp-2">
+                        <span className="text-xs font-bold text-gray-900 dark:text-white group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors line-clamp-2">
                           {nextPost.title}
                         </span>
                       </a>

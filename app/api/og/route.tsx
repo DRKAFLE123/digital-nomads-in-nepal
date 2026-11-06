@@ -27,14 +27,14 @@ export async function GET(req: NextRequest) {
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: '#0B0B0B',
-            border: '20px solid #FFD700',
+            border: '20px solid #C2410C',
             fontFamily: 'sans-serif',
           }}
         >
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 80px', textAlign: 'center' }}>
             <span style={{ 
-              color: '#0B0B0B', 
-              backgroundColor: '#FFD700',
+              color: '#FFFFFF', 
+              backgroundColor: '#C2410C',
               padding: '10px 30px', 
               borderRadius: '50px', 
               fontSize: 32, 

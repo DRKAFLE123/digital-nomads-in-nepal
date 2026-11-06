@@ -138,7 +138,7 @@ export default function UTMBuilderPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#1e1e1e] pb-6">
         <div>
-          <div className="flex items-center gap-2 text-[#FFD700] text-xs font-black uppercase tracking-widest mb-1">
+          <div className="flex items-center gap-2 text-[#FB923C] text-xs font-black uppercase tracking-widest mb-1">
             <Zap className="w-4 h-4" /> Marketing & Analytics Suite
           </div>
           <h1 className="text-3xl font-extrabold text-white tracking-tight">
@@ -156,7 +156,7 @@ export default function UTMBuilderPage() {
           {/* Step 1: Target URL */}
           <div className="bg-[#111111] border border-[#1e1e1e] rounded-2xl p-6 shadow-xl space-y-4">
             <h2 className="text-lg font-extrabold text-white flex items-center gap-2">
-              <LinkIcon className="w-5 h-5 text-[#FFD700]" /> 1. Target Website Path
+              <LinkIcon className="w-5 h-5 text-[#FB923C]" /> 1. Target Website Path
             </h2>
 
             <div>
@@ -166,7 +166,7 @@ export default function UTMBuilderPage() {
               <select
                 value={selectedPath}
                 onChange={(e) => setSelectedPath(e.target.value)}
-                className="w-full bg-[#0b0b0b] border border-[#222222] text-white px-4 py-3 rounded-xl focus:outline-none focus:border-[#FFD700] text-sm"
+                className="w-full bg-[#0b0b0b] border border-[#222222] text-white px-4 py-3 rounded-xl focus:outline-none focus:border-[#C2410C] text-sm"
               >
                 {PRESET_PATHS.map((preset) => (
                   <option key={preset.path} value={preset.path}>
@@ -186,7 +186,7 @@ export default function UTMBuilderPage() {
                   placeholder="/blog/your-custom-article-slug"
                   value={customPath}
                   onChange={(e) => setCustomPath(e.target.value)}
-                  className="w-full bg-[#0b0b0b] border border-[#222222] text-white px-4 py-3 rounded-xl focus:outline-none focus:border-[#FFD700] text-sm"
+                  className="w-full bg-[#0b0b0b] border border-[#222222] text-white px-4 py-3 rounded-xl focus:outline-none focus:border-[#C2410C] text-sm"
                 />
               </div>
             )}
@@ -195,14 +195,14 @@ export default function UTMBuilderPage() {
           {/* Step 2: Campaign Parameters */}
           <div className="bg-[#111111] border border-[#1e1e1e] rounded-2xl p-6 shadow-xl space-y-6">
             <h2 className="text-lg font-extrabold text-white flex items-center gap-2">
-              <Zap className="w-5 h-5 text-[#FFD700]" /> 2. Campaign Tracking Parameters
+              <Zap className="w-5 h-5 text-[#FB923C]" /> 2. Campaign Tracking Parameters
             </h2>
 
             {/* Campaign Source */}
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <label className="text-xs font-bold text-gray-300 uppercase tracking-wider">
-                  Campaign Source (<span className="text-[#FFD700]">utm_source</span>) *
+                  Campaign Source (<span className="text-[#FB923C]">utm_source</span>) *
                 </label>
                 <span className="text-[11px] text-gray-500">e.g. newsletter, google, facebook</span>
               </div>
@@ -212,7 +212,7 @@ export default function UTMBuilderPage() {
                 placeholder="newsletter"
                 value={utmSource}
                 onChange={(e) => setUtmSource(e.target.value)}
-                className="w-full bg-[#0b0b0b] border border-[#222222] text-white px-4 py-3 rounded-xl focus:outline-none focus:border-[#FFD700] text-sm"
+                className="w-full bg-[#0b0b0b] border border-[#222222] text-white px-4 py-3 rounded-xl focus:outline-none focus:border-[#C2410C] text-sm"
               />
               <div className="flex flex-wrap gap-1.5 pt-1">
                 <span className="text-[11px] text-gray-500 self-center mr-1">Presets:</span>
@@ -223,8 +223,8 @@ export default function UTMBuilderPage() {
                     onClick={() => setUtmSource(preset)}
                     className={`px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all ${
                       utmSource === preset
-                        ? "bg-[#FFD700] text-black border-[#FFD700]"
-                        : "bg-[#181818] text-gray-400 border-[#2b2b2b] hover:text-white hover:border-[#FFD700]"
+                        ? "bg-[#C2410C] text-white border-[#C2410C]"
+                        : "bg-[#181818] text-gray-400 border-[#2b2b2b] hover:text-white hover:border-[#C2410C]"
                     }`}
                   >
                     {preset}
@@ -237,7 +237,7 @@ export default function UTMBuilderPage() {
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <label className="text-xs font-bold text-gray-300 uppercase tracking-wider">
-                  Campaign Medium (<span className="text-[#FFD700]">utm_medium</span>) *
+                  Campaign Medium (<span className="text-[#FB923C]">utm_medium</span>) *
                 </label>
                 <span className="text-[11px] text-gray-500">e.g. email, cpc, social, banner</span>
               </div>
@@ -247,7 +247,7 @@ export default function UTMBuilderPage() {
                 placeholder="email"
                 value={utmMedium}
                 onChange={(e) => setUtmMedium(e.target.value)}
-                className="w-full bg-[#0b0b0b] border border-[#222222] text-white px-4 py-3 rounded-xl focus:outline-none focus:border-[#FFD700] text-sm"
+                className="w-full bg-[#0b0b0b] border border-[#222222] text-white px-4 py-3 rounded-xl focus:outline-none focus:border-[#C2410C] text-sm"
               />
               <div className="flex flex-wrap gap-1.5 pt-1">
                 <span className="text-[11px] text-gray-500 self-center mr-1">Presets:</span>
@@ -258,8 +258,8 @@ export default function UTMBuilderPage() {
                     onClick={() => setUtmMedium(preset)}
                     className={`px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all ${
                       utmMedium === preset
-                        ? "bg-[#FFD700] text-black border-[#FFD700]"
-                        : "bg-[#181818] text-gray-400 border-[#2b2b2b] hover:text-white hover:border-[#FFD700]"
+                        ? "bg-[#C2410C] text-white border-[#C2410C]"
+                        : "bg-[#181818] text-gray-400 border-[#2b2b2b] hover:text-white hover:border-[#C2410C]"
                     }`}
                   >
                     {preset}
@@ -272,7 +272,7 @@ export default function UTMBuilderPage() {
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <label className="text-xs font-bold text-gray-300 uppercase tracking-wider">
-                  Campaign Name (<span className="text-[#FFD700]">utm_campaign</span>) *
+                  Campaign Name (<span className="text-[#FB923C]">utm_campaign</span>) *
                 </label>
                 <span className="text-[11px] text-gray-500">e.g. spring_nomad_kit_2026</span>
               </div>
@@ -282,7 +282,7 @@ export default function UTMBuilderPage() {
                 placeholder="spring_nomad_kit_2026"
                 value={utmCampaign}
                 onChange={(e) => setUtmCampaign(e.target.value)}
-                className="w-full bg-[#0b0b0b] border border-[#222222] text-white px-4 py-3 rounded-xl focus:outline-none focus:border-[#FFD700] text-sm"
+                className="w-full bg-[#0b0b0b] border border-[#222222] text-white px-4 py-3 rounded-xl focus:outline-none focus:border-[#C2410C] text-sm"
               />
             </div>
 
@@ -297,7 +297,7 @@ export default function UTMBuilderPage() {
                   placeholder="nepal_visa_keywords"
                   value={utmTerm}
                   onChange={(e) => setUtmTerm(e.target.value)}
-                  className="w-full bg-[#0b0b0b] border border-[#222222] text-white px-4 py-2.5 rounded-xl focus:outline-none focus:border-[#FFD700] text-sm"
+                  className="w-full bg-[#0b0b0b] border border-[#222222] text-white px-4 py-2.5 rounded-xl focus:outline-none focus:border-[#C2410C] text-sm"
                 />
               </div>
 
@@ -310,7 +310,7 @@ export default function UTMBuilderPage() {
                   placeholder="blue_cta_button"
                   value={utmContent}
                   onChange={(e) => setUtmContent(e.target.value)}
-                  className="w-full bg-[#0b0b0b] border border-[#222222] text-white px-4 py-2.5 rounded-xl focus:outline-none focus:border-[#FFD700] text-sm"
+                  className="w-full bg-[#0b0b0b] border border-[#222222] text-white px-4 py-2.5 rounded-xl focus:outline-none focus:border-[#C2410C] text-sm"
                 />
               </div>
             </div>
@@ -322,10 +322,10 @@ export default function UTMBuilderPage() {
           {/* Live Generated URL Card */}
           <div className="bg-[#111111] border border-[#1e1e1e] rounded-2xl p-6 shadow-xl space-y-5 sticky top-6">
             <h3 className="text-sm font-black text-gray-300 uppercase tracking-widest flex items-center gap-2">
-              <Share2 className="w-4 h-4 text-[#FFD700]" /> Live Campaign Link
+              <Share2 className="w-4 h-4 text-[#FB923C]" /> Live Campaign Link
             </h3>
 
-            <div className="bg-[#070707] border border-[#222222] p-4 rounded-xl break-all font-mono text-xs text-[#FFD700] leading-relaxed select-all">
+            <div className="bg-[#070707] border border-[#222222] p-4 rounded-xl break-all font-mono text-xs text-[#FB923C] leading-relaxed select-all">
               {finalUrl}
             </div>
 
@@ -336,7 +336,7 @@ export default function UTMBuilderPage() {
                 className={`flex-1 py-3 px-4 rounded-xl font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
                   copied
                     ? "bg-green-500 text-black shadow-lg shadow-green-500/20"
-                    : "bg-[#FFD700] text-black hover:bg-white shadow-lg shadow-yellow-500/10"
+                    : "bg-[#C2410C] text-white hover:bg-[#9A3412] shadow-lg shadow-[#C2410C]/20"
                 }`}
               >
                 {copied ? (
@@ -403,7 +403,7 @@ export default function UTMBuilderPage() {
                   {history.map((item) => (
                     <div
                       key={item.id}
-                      className="p-3 bg-[#080808] border border-[#1e1e1e] rounded-xl hover:border-[#FFD700]/40 transition-all text-xs group"
+                      className="p-3 bg-[#080808] border border-[#1e1e1e] rounded-xl hover:border-[#C2410C]/40 transition-all text-xs group"
                     >
                       <div className="flex justify-between items-start mb-1">
                         <span className="font-bold text-white truncate max-w-[170px]">
@@ -418,7 +418,7 @@ export default function UTMBuilderPage() {
                         onClick={() => {
                           navigator.clipboard.writeText(item.url);
                         }}
-                        className="text-[10px] font-bold text-[#FFD700] hover:underline flex items-center gap-1"
+                        className="text-[10px] font-bold text-[#C2410C] dark:text-[#FB923C] hover:underline flex items-center gap-1"
                       >
                         <Copy className="w-3 h-3" /> Copy again
                       </button>

@@ -24,12 +24,12 @@ export default function BlogCard({ title, slug, excerpt, coverImage, category, r
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
-          <span className="absolute top-3 left-3 bg-[#FFD700] text-black text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
+          <span className="absolute top-3 left-3 bg-[#C2410C] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-sm">
             {category}
           </span>
         </div>
         <div className="p-5 flex flex-col flex-grow">
-          <h3 className="text-xl font-bold text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors leading-snug">
+          <h3 className="text-xl font-bold text-foreground mb-2 line-clamp-2 group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors leading-snug">
             {title}
           </h3>
           <p className="text-muted-foreground text-sm mb-4 line-clamp-3 flex-grow">

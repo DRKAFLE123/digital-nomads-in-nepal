@@ -149,7 +149,7 @@ export default function InternalLinkingEngine({
       >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#242424] pb-5">
           <div>
-            <span className="text-[#FFD400] text-xs font-black uppercase tracking-wider block mb-1">
+            <span className="text-[#C2410C] dark:text-[#FB923C] text-xs font-black uppercase tracking-wider block mb-1">
               Connected Nomad Ecosystem
             </span>
             <h3 className="text-xl sm:text-2xl font-black text-white">
@@ -161,7 +161,7 @@ export default function InternalLinkingEngine({
           </div>
           <Link
             href={`/destinations/${citySlug}`}
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#FFD400] hover:text-[#FFE033] hover:underline flex-shrink-0"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#C2410C] dark:text-[#FB923C] hover:underline flex-shrink-0"
           >
             Visit {cityName} Hub <ArrowRight size={14} />
           </Link>
@@ -174,25 +174,25 @@ export default function InternalLinkingEngine({
               <Link
                 key={idx}
                 href={item.href}
-                className="group p-4 bg-[#171717] border border-[#242424] hover:border-[#FFD400]/60 rounded-2xl transition-all flex flex-col justify-between hover:bg-[#1a1a1a]"
+                className="group p-4 bg-[#171717] border border-[#242424] hover:border-[#C2410C]/60 rounded-2xl transition-all flex flex-col justify-between hover:bg-[#1a1a1a]"
               >
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <div className="w-8 h-8 rounded-lg bg-[#FFD400]/10 text-[#FFD400] flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <div className="w-8 h-8 rounded-lg bg-[#C2410C]/15 text-[#FB923C] flex items-center justify-center group-hover:scale-110 transition-transform">
                       <Icon size={16} />
                     </div>
                     <span className="text-[10px] font-bold text-[#A1A1AA] uppercase tracking-wider bg-[#222] px-2 py-0.5 rounded-full">
                       {item.badge}
                     </span>
                   </div>
-                  <h4 className="text-sm font-bold text-white group-hover:text-[#FFD400] transition-colors leading-snug">
+                  <h4 className="text-sm font-bold text-white group-hover:text-[#FB923C] transition-colors leading-snug">
                     {item.title}
                   </h4>
                   <p className="text-xs text-[#A1A1AA] leading-relaxed line-clamp-2">
                     {item.desc}
                   </p>
                 </div>
-                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#FFD400] mt-3 group-hover:translate-x-1 transition-transform">
+                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#FB923C] mt-3 group-hover:translate-x-1 transition-transform">
                   Explore <ArrowRight size={12} />
                 </span>
               </Link>
@@ -257,7 +257,7 @@ export default function InternalLinkingEngine({
       >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#242424] pb-5">
           <div>
-            <span className="text-[#FFD400] text-xs font-black uppercase tracking-wider block mb-1">
+            <span className="text-[#C2410C] dark:text-[#FB923C] text-xs font-black uppercase tracking-wider block mb-1">
               Connected Stay & Work Network
             </span>
             <h3 className="text-xl sm:text-2xl font-black text-white">
@@ -269,7 +269,7 @@ export default function InternalLinkingEngine({
           </div>
           <Link
             href={`/resources/coworking?city=${encodeURIComponent(cityName)}`}
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#FFD400] hover:text-[#FFE033] hover:underline flex-shrink-0"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#C2410C] dark:text-[#FB923C] hover:underline flex-shrink-0"
           >
             Find Nearby Desks <ArrowRight size={14} />
           </Link>
@@ -282,25 +282,25 @@ export default function InternalLinkingEngine({
               <Link
                 key={idx}
                 href={item.href}
-                className="group p-4 bg-[#171717] border border-[#242424] hover:border-[#FFD400]/60 rounded-2xl transition-all flex flex-col justify-between hover:bg-[#1a1a1a]"
+                className="group p-4 bg-[#171717] border border-[#242424] hover:border-[#C2410C]/60 rounded-2xl transition-all flex flex-col justify-between hover:bg-[#1a1a1a]"
               >
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <div className="w-8 h-8 rounded-lg bg-[#FFD400]/10 text-[#FFD400] flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <div className="w-8 h-8 rounded-lg bg-[#C2410C]/15 text-[#FB923C] flex items-center justify-center group-hover:scale-110 transition-transform">
                       <Icon size={16} />
                     </div>
                     <span className="text-[10px] font-bold text-[#A1A1AA] uppercase tracking-wider bg-[#222] px-2 py-0.5 rounded-full">
                       {item.badge}
                     </span>
                   </div>
-                  <h4 className="text-sm font-bold text-white group-hover:text-[#FFD400] transition-colors leading-snug">
+                  <h4 className="text-sm font-bold text-white group-hover:text-[#FB923C] transition-colors leading-snug">
                     {item.title}
                   </h4>
                   <p className="text-xs text-[#A1A1AA] leading-relaxed line-clamp-2">
                     {item.desc}
                   </p>
                 </div>
-                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#FFD400] mt-3 group-hover:translate-x-1 transition-transform">
+                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#FB923C] mt-3 group-hover:translate-x-1 transition-transform">
                   Explore <ArrowRight size={12} />
                 </span>
               </Link>
@@ -360,17 +360,17 @@ export default function InternalLinkingEngine({
   return (
     <section 
       aria-label="Connected Nepal Digital Nomad Resources" 
-      className={`bg-[#141414] border border-[#222222] rounded-2xl p-6 sm:p-8 space-y-6 shadow-xl my-10 ${className}`}
+      className={`bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs my-10 ${className}`}
     >
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#222222] pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-100 dark:border-[#222225] pb-4">
         <div>
-          <span className="text-[#FFD400] text-xs font-black uppercase tracking-wider block mb-1">
+          <span className="text-[#C2410C] dark:text-[#FB923C] text-xs font-black uppercase tracking-wider block mb-1">
             Topic Ecosystem & Next Steps
           </span>
-          <h3 className="text-xl font-black text-white">
+          <h3 className="font-serif text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
             Plan Your Nepal Remote Work Journey
           </h3>
-          <p className="text-xs text-[#A0A0A0] mt-1">
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
             Explore verified destinations, workspaces, stays, and local experts related to this guide.
           </p>
         </div>
@@ -383,25 +383,25 @@ export default function InternalLinkingEngine({
             <Link
               key={idx}
               href={item.href}
-              className="group p-4 bg-[#181818] border border-[#262626] hover:border-[#FFD400]/60 rounded-xl transition-all flex flex-col justify-between hover:bg-[#1d1d1d]"
+              className="group p-4 bg-gray-50 dark:bg-[#18181A] border border-gray-200 dark:border-[#26262A] hover:border-[#C2410C]/60 rounded-xl transition-all flex flex-col justify-between hover:bg-white dark:hover:bg-[#1E1E22]"
             >
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <div className="w-8 h-8 rounded-lg bg-[#FFD400]/10 text-[#FFD400] flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <div className="w-8 h-8 rounded-lg bg-[#C2410C]/10 dark:bg-[#FB923C]/15 text-[#C2410C] dark:text-[#FB923C] flex items-center justify-center group-hover:scale-110 transition-transform">
                     <Icon size={16} />
                   </div>
-                  <span className="text-[10px] font-bold text-[#A0A0A0] uppercase tracking-wider bg-[#222] px-2 py-0.5 rounded-full">
+                  <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider bg-gray-200/60 dark:bg-[#252528] px-2 py-0.5 rounded-full">
                     {item.badge}
                   </span>
                 </div>
-                <h4 className="text-sm font-bold text-white group-hover:text-[#FFD400] transition-colors leading-snug">
+                <h4 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors leading-snug">
                   {item.title}
                 </h4>
-                <p className="text-xs text-[#A0A0A0] leading-relaxed line-clamp-2">
+                <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-2">
                   {item.desc}
                 </p>
               </div>
-              <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#FFD400] mt-3 group-hover:translate-x-1 transition-transform">
+              <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#C2410C] dark:text-[#FB923C] mt-3 group-hover:translate-x-1 transition-transform">
                 Explore <ArrowRight size={12} />
               </span>
             </Link>

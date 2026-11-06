@@ -113,7 +113,7 @@ export default function NewsletterSignup() {
             <button
               type="submit"
               disabled={status === "loading"}
-              className="bg-primary hover:bg-yellow-400 text-black font-black px-8 py-4 transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap rounded-2xl shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 text-sm uppercase tracking-wider flex items-center justify-center gap-2"
+              className="bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold px-8 py-4 transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap rounded-2xl shadow-lg shadow-[#C2410C]/20 hover:scale-[1.02] active:scale-95 text-sm uppercase tracking-wider flex items-center justify-center gap-2"
             >
               <Send size={15} />
               <span>{status === "loading" ? "Sending Kit..." : "Get Free Kit"}</span>

@@ -62,7 +62,7 @@ export default function PartnersClient({ partners }: { partners: Partner[] }) {
               onClick={() => setActiveTag(activeTag === tag ? null : tag)}
               className={`text-xs px-3 py-1 rounded-md transition-all ${
                 activeTag === tag 
-                  ? "bg-[#FFD700] text-black font-bold scale-110" 
+                  ? "bg-[#C2410C] text-white font-bold scale-110 shadow-sm" 
                   : "bg-muted/10 text-muted hover:bg-muted/20"
               }`}
             >
@@ -128,8 +128,8 @@ export default function PartnersClient({ partners }: { partners: Partner[] }) {
                     onClick={() => setActiveTag(tag)}
                     className={`text-[10px] font-semibold uppercase px-2 py-0.5 rounded border transition-colors ${
                       activeTag === tag 
-                        ? "bg-[#FFD700] text-black border-[#FFD700]" 
-                        : "bg-background border-border text-muted hover:border-primary/50"
+                        ? "bg-[#C2410C] text-white border-[#C2410C] shadow-xs" 
+                        : "bg-background border-border text-muted hover:border-[#C2410C]/50"
                     }`}
                   >
                     #{tag}

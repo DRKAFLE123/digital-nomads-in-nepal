@@ -152,7 +152,7 @@ export default function EnquiryModalCard({ isOpen, onClose, hub }: EnquiryModalC
                 <button
                   type="button"
                   onClick={onClose}
-                  className="bg-amber-400 hover:bg-yellow-300 text-black font-black px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider transition-all"
+                  className="bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider transition-all"
                 >
                   Close & Return
                 </button>
@@ -229,14 +229,14 @@ export default function EnquiryModalCard({ isOpen, onClose, hub }: EnquiryModalC
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Ask about speed tests, quiet call booths, long-term group rates, or schedule a physical tour..."
-                  className="w-full bg-[#181818] border border-[#282828] rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-amber-400 transition-colors resize-none leading-relaxed"
+                  className="w-full bg-[#181818] border border-[#282828] rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#C2410C] transition-colors resize-none leading-relaxed"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full bg-amber-400 hover:bg-yellow-300 disabled:opacity-50 text-black font-black py-3.5 rounded-xl text-xs uppercase tracking-wider transition-all shadow-lg shadow-amber-400/20 flex items-center justify-center gap-2 active:scale-[0.99] cursor-pointer"
+                className="w-full bg-[#C2410C] hover:bg-[#9A3412] disabled:opacity-50 text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider transition-all shadow-lg shadow-[#C2410C]/20 flex items-center justify-center gap-2 active:scale-[0.99] cursor-pointer"
               >
                 {submitting ? (
                   <Loader2 size={16} className="animate-spin" />

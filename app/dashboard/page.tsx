@@ -43,7 +43,7 @@ export default function SmartRoleDashboardPage() {
       <Navbar />
 
       <main className="flex-1 max-w-4xl mx-auto px-4 py-20 flex flex-col items-center justify-center text-center">
-        <div className="w-16 h-16 rounded-2xl bg-[#FFD400]/10 border border-[#FFD400]/30 flex items-center justify-center text-[#FFD400] mb-6 animate-pulse">
+        <div className="w-16 h-16 rounded-2xl bg-[#C2410C]/10 border border-[#C2410C]/30 flex items-center justify-center text-[#C2410C] dark:text-[#FB923C] mb-6 animate-pulse">
           <RefreshCw className="w-8 h-8 animate-spin" />
         </div>
 

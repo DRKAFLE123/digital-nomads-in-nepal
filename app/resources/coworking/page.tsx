@@ -133,15 +133,15 @@ export default function CoworkingMarketplacePage() {
             <div className="pt-1 flex flex-wrap items-center justify-center gap-3">
               <a
                 href="#marketplace"
-                className="px-5 py-2 bg-[#FFD400] hover:bg-[#FFE033] text-black font-extrabold text-xs sm:text-sm rounded-xl transition-all shadow-md shadow-amber-400/15 text-center active:scale-95"
+                className="px-5 py-2 bg-[#C2410C] hover:bg-[#9A3412] text-white font-extrabold text-xs sm:text-sm rounded-xl transition-all shadow-md shadow-[#C2410C]/20 text-center active:scale-95"
               >
                 Browse Workspaces ↓
               </a>
               <Link
                 href="/resources/coworking/register"
-                className="px-5 py-2 bg-[#141414] hover:bg-[#1c1c1c] border border-[#2e2e2e] text-white font-bold text-xs sm:text-sm rounded-xl transition-all flex items-center justify-center gap-2 text-center"
+                className="px-5 py-2 bg-[#141416] hover:bg-[#1c1c1f] border border-[#2e2e32] text-white font-bold text-xs sm:text-sm rounded-xl transition-all flex items-center justify-center gap-2 text-center"
               >
-                <PlusCircle size={15} className="text-amber-400" />
+                <PlusCircle size={15} className="text-[#FB923C]" />
                 Register Your Space
               </Link>
             </div>
@@ -151,7 +151,7 @@ export default function CoworkingMarketplacePage() {
         {/* MARKETPLACE MAIN SECTION (E-Commerce Style Layout) */}
         <section id="marketplace" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-5">
           {/* SEARCH & FILTERS BOX: Search Bar on TOP, Filter Buttons BELOW in small letters */}
-          <div className="bg-[#0F0F0F] border border-[#242424] rounded-2xl p-3 sm:p-4 shadow-lg space-y-2.5">
+          <div className="bg-[#0F0F11] border border-[#242428] rounded-2xl p-3 sm:p-4 shadow-lg space-y-2.5">
             {/* 1. TOP: Full-Width Search Bar */}
             <div className="relative w-full">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#71717A] w-4 h-4 pointer-events-none" />
@@ -160,7 +160,7 @@ export default function CoworkingMarketplacePage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="search space name, city, area, address, or amenities..."
-                className="w-full bg-[#141414] border border-[#242424] hover:border-[#383838] focus:border-[#FFD400] focus:ring-1 focus:ring-[#FFD400]/40 rounded-xl pl-10 pr-9 py-2.5 text-xs sm:text-sm text-[#F5F5F5] placeholder-[#71717A] focus:outline-none transition-all shadow-inner"
+                className="w-full bg-[#141416] border border-[#26262A] hover:border-[#38383E] focus:border-[#C2410C] focus:ring-1 focus:ring-[#C2410C]/40 rounded-xl pl-10 pr-9 py-2.5 text-xs sm:text-sm text-[#F5F5F5] placeholder-[#71717A] focus:outline-none transition-all shadow-inner"
               />
               {search && (
                 <button
@@ -181,13 +181,13 @@ export default function CoworkingMarketplacePage() {
                 <button
                   type="button"
                   onClick={() => setMobileFilterOpen(true)}
-                  className="lg:hidden flex items-center justify-center gap-1.5 px-2.5 py-2 bg-[#161616] hover:bg-[#202020] border border-[#282828] hover:border-[#FFD400]/60 rounded-xl text-xs font-semibold text-white transition-all cursor-pointer active:scale-95 shadow-xs"
+                  className="lg:hidden flex items-center justify-center gap-1.5 px-2.5 py-2 bg-[#161618] hover:bg-[#202024] border border-[#28282D] hover:border-[#C2410C]/60 rounded-xl text-xs font-semibold text-white transition-all cursor-pointer active:scale-95 shadow-xs"
                   aria-label="Open Filters Drawer"
                 >
-                  <SlidersHorizontal size={13} className="text-[#FFD400] shrink-0" />
+                  <SlidersHorizontal size={13} className="text-[#FB923C] shrink-0" />
                   <span className="truncate lowercase">filters</span>
                   {activeFilterCount > 0 && (
-                    <span className="bg-[#FFD400] text-black text-[9px] font-black px-1.5 py-0.2 rounded-full shrink-0">
+                    <span className="bg-[#C2410C] text-white text-[9px] font-black px-1.5 py-0.2 rounded-full shrink-0">
                       {activeFilterCount}
                     </span>
                   )}
@@ -195,44 +195,44 @@ export default function CoworkingMarketplacePage() {
 
                 {/* City Dropdown */}
                 <div className="group/city relative w-full sm:w-44 md:w-48">
-                  <div className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#FFD400] pointer-events-none transition-transform duration-200 group-hover/city:scale-110">
+                  <div className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#FB923C] pointer-events-none transition-transform duration-200 group-hover/city:scale-110">
                     <MapPin size={12} />
                   </div>
                   <select
                     value={selectedCity}
                     onChange={(e) => setSelectedCity(e.target.value)}
                     aria-label="Filter workspaces by city"
-                    className="w-full bg-[#161616] border border-[#282828] hover:border-[#FFD400] hover:bg-[#1c1809] hover:text-[#FFD400] hover:shadow-[0_0_15px_rgba(255,212,0,0.18)] rounded-xl pl-7 pr-6 py-2 text-xs font-semibold text-[#F5F5F5] focus:outline-none focus:border-[#FFD400] focus:ring-1 focus:ring-[#FFD400] cursor-pointer appearance-none transition-all duration-200 truncate shadow-xs"
+                    className="w-full bg-[#161618] border border-[#28282D] hover:border-[#C2410C] hover:bg-[#1f1917] hover:text-[#FB923C] hover:shadow-[0_0_15px_rgba(194,65,12,0.18)] rounded-xl pl-7 pr-6 py-2 text-xs font-semibold text-[#F5F5F5] focus:outline-none focus:border-[#C2410C] focus:ring-1 focus:ring-[#C2410C] cursor-pointer appearance-none transition-all duration-200 truncate shadow-xs"
                   >
                     {NEPAL_CITIES.map((c) => (
-                      <option key={c.id} value={c.id} className="bg-[#141414] text-white">
+                      <option key={c.id} value={c.id} className="bg-[#141416] text-white">
                         {c.name} ({c.count})
                       </option>
                     ))}
                   </select>
-                  <div className="absolute right-2 top-1/2 -translate-y-1/2 text-[#71717A] group-hover/city:text-[#FFD400] group-hover/city:translate-y-[-40%] pointer-events-none transition-all duration-200">
+                  <div className="absolute right-2 top-1/2 -translate-y-1/2 text-[#71717A] group-hover/city:text-[#FB923C] group-hover/city:translate-y-[-40%] pointer-events-none transition-all duration-200">
                     <ChevronDown size={12} />
                   </div>
                 </div>
 
                 {/* Sort Dropdown */}
                 <div className="group/sort relative w-full sm:w-44 md:w-48">
-                  <div className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#71717A] group-hover/sort:text-[#FFD400] pointer-events-none transition-colors duration-200">
+                  <div className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#71717A] group-hover/sort:text-[#FB923C] pointer-events-none transition-colors duration-200">
                     <ArrowUpDown size={12} />
                   </div>
                   <select
                     value={sort}
                     onChange={(e) => setSort(e.target.value)}
                     aria-label="Sort Workspaces"
-                    className="w-full bg-[#161616] border border-[#282828] hover:border-[#FFD400] hover:bg-[#1c1809] hover:text-[#FFD400] hover:shadow-[0_0_15px_rgba(255,212,0,0.18)] rounded-xl pl-7 pr-6 py-2 text-xs font-semibold text-[#F5F5F5] focus:outline-none focus:border-[#FFD400] focus:ring-1 focus:ring-[#FFD400] cursor-pointer appearance-none transition-all duration-200 truncate shadow-xs"
+                    className="w-full bg-[#161618] border border-[#28282D] hover:border-[#C2410C] hover:bg-[#1f1917] hover:text-[#FB923C] hover:shadow-[0_0_15px_rgba(194,65,12,0.18)] rounded-xl pl-7 pr-6 py-2 text-xs font-semibold text-[#F5F5F5] focus:outline-none focus:border-[#C2410C] focus:ring-1 focus:ring-[#C2410C] cursor-pointer appearance-none transition-all duration-200 truncate shadow-xs"
                   >
                     {SORT_OPTIONS.map((so) => (
-                      <option key={so.id} value={so.id} className="bg-[#141414] text-white">
+                      <option key={so.id} value={so.id} className="bg-[#141416] text-white">
                         {so.label}
                       </option>
                     ))}
                   </select>
-                  <div className="absolute right-2 top-1/2 -translate-y-1/2 text-[#71717A] group-hover/sort:text-[#FFD400] group-hover/sort:translate-y-[-40%] pointer-events-none transition-all duration-200">
+                  <div className="absolute right-2 top-1/2 -translate-y-1/2 text-[#71717A] group-hover/sort:text-[#FB923C] group-hover/sort:translate-y-[-40%] pointer-events-none transition-all duration-200">
                     <ChevronDown size={12} />
                   </div>
                 </div>
@@ -270,8 +270,8 @@ export default function CoworkingMarketplacePage() {
                       }}
                       className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all duration-200 border shrink-0 cursor-pointer ${
                         isActive
-                          ? "bg-[#FFD400] text-black border-[#FFD400] font-bold shadow-xs -translate-y-0.5"
-                          : "bg-[#141414] border-[#262626] text-[#A1A1AA] hover:border-[#FFD400] hover:text-[#FFD400] hover:bg-[#1c1809] hover:-translate-y-0.5 hover:shadow-[0_0_10px_rgba(255,212,0,0.15)]"
+                          ? "bg-[#C2410C] text-white border-[#C2410C] font-bold shadow-xs -translate-y-0.5"
+                          : "bg-[#141416] border-[#26262A] text-[#A1A1AA] hover:border-[#C2410C] hover:text-[#FB923C] hover:bg-[#1f1917] hover:-translate-y-0.5 hover:shadow-[0_0_10px_rgba(194,65,12,0.15)]"
                       }`}
                     >
                       <span>{kw}</span>
@@ -285,7 +285,7 @@ export default function CoworkingMarketplacePage() {
           {/* MAIN 2-COLUMN E-COMMERCE LAYOUT */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             {/* LEFT COLUMN: DESKTOP STICKY FILTER SIDEBAR (Width: 3/12 cols) */}
-            <div className="hidden lg:block lg:col-span-3 sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto overscroll-contain bg-[#0F0F0F] border border-[#242424] rounded-3xl p-5 shadow-xl custom-scrollbar">
+            <div className="hidden lg:block lg:col-span-3 sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto overscroll-contain bg-[#0F0F11] border border-[#242428] rounded-3xl p-5 shadow-xl custom-scrollbar">
               <WorkspaceSidebarFilter
                 category={category}
                 onSelectCategory={setCategory}
@@ -307,24 +307,24 @@ export default function CoworkingMarketplacePage() {
                     {hubs.length} {hubs.length === 1 ? "Space" : "Spaces"} Available
                   </span>
                   {selectedCity !== "All Cities" && (
-                    <span className="text-xs text-[#FFD400] font-bold">
+                    <span className="text-xs text-[#FB923C] font-bold">
                       in {selectedCity}
                     </span>
                   )}
                   {category !== "All" && (
-                    <span className="text-[11px] text-[#A1A1AA] bg-[#1a1a1a] px-2 py-0.5 rounded-full border border-[#242424]">
+                    <span className="text-[11px] text-[#A1A1AA] bg-[#1a1a1c] px-2 py-0.5 rounded-full border border-[#26262A]">
                       {CATEGORY_OPTIONS.find((c) => c.id === category)?.label}
                     </span>
                   )}
                 </div>
 
                 {/* Grid vs Map Toggle */}
-                <div className="flex items-center gap-1 bg-[#121212] p-1 rounded-xl border border-[#242424]">
+                <div className="flex items-center gap-1 bg-[#121214] p-1 rounded-xl border border-[#26262A]">
                   <button
                     onClick={() => setViewMode("grid")}
                     className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
                       viewMode === "grid"
-                        ? "bg-[#FFD400] text-black shadow-xs"
+                        ? "bg-[#C2410C] text-white shadow-xs"
                         : "text-[#71717A] hover:text-white"
                     }`}
                     title="Grid View"
@@ -335,7 +335,7 @@ export default function CoworkingMarketplacePage() {
                     onClick={() => setViewMode("split")}
                     className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
                       viewMode === "split"
-                        ? "bg-[#FFD400] text-black shadow-xs"
+                        ? "bg-[#C2410C] text-white shadow-xs"
                         : "text-[#71717A] hover:text-white"
                     }`}
                     title="Split Map View"
@@ -351,17 +351,17 @@ export default function CoworkingMarketplacePage() {
                   {[1, 2, 3, 4, 5, 6].map((i) => (
                     <div
                       key={i}
-                      className="h-[440px] bg-[#121212] border border-[#242424] rounded-3xl p-5 space-y-4 animate-pulse"
+                      className="h-[440px] bg-[#121214] border border-[#26262A] rounded-3xl p-5 space-y-4 animate-pulse"
                     >
-                      <div className="h-44 bg-[#1a1a1a] rounded-2xl" />
-                      <div className="h-6 w-3/4 bg-[#1a1a1a] rounded" />
-                      <div className="h-4 w-1/2 bg-[#1a1a1a] rounded" />
-                      <div className="h-10 bg-[#1a1a1a] rounded-xl" />
+                      <div className="h-44 bg-[#1a1a1c] rounded-2xl" />
+                      <div className="h-6 w-3/4 bg-[#1a1a1c] rounded" />
+                      <div className="h-4 w-1/2 bg-[#1a1a1c] rounded" />
+                      <div className="h-10 bg-[#1a1a1c] rounded-xl" />
                     </div>
                   ))}
                 </div>
               ) : hubs.length === 0 ? (
-                <div className="bg-[#0F0F0F] border border-[#242424] rounded-3xl p-10 text-center space-y-4 my-4">
+                <div className="bg-[#0F0F11] border border-[#242428] rounded-3xl p-10 text-center space-y-4 my-4">
                   <Building size={42} className="mx-auto text-[#71717A]" />
                   <h3 className="text-lg font-bold text-white">No workspaces found</h3>
                   <p className="text-xs text-[#A1A1AA] max-w-md mx-auto">
@@ -369,7 +369,7 @@ export default function CoworkingMarketplacePage() {
                   </p>
                   <button
                     onClick={handleClearFilters}
-                    className="px-5 py-2.5 bg-[#FFD400] text-black font-extrabold text-xs rounded-xl hover:bg-[#FFE033] transition-all inline-flex items-center gap-1.5 shadow-md shadow-amber-400/20 cursor-pointer"
+                    className="px-5 py-2.5 bg-[#C2410C] text-white font-extrabold text-xs rounded-xl hover:bg-[#9A3412] transition-all inline-flex items-center gap-1.5 shadow-md shadow-[#C2410C]/20 cursor-pointer"
                   >
                     <RotateCcw size={13} /> Reset All Filters
                   </button>
@@ -398,7 +398,7 @@ export default function CoworkingMarketplacePage() {
           </div>
 
           {/* VERIFICATION PROOF BANNER */}
-          <div className="bg-gradient-to-r from-[#121212] via-[#161616] to-[#121212] border border-[#242424] rounded-3xl p-6 sm:p-8 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl mt-8">
+          <div className="bg-gradient-to-r from-[#121214] via-[#161618] to-[#121214] border border-[#26262A] rounded-3xl p-6 sm:p-8 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl mt-8">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 flex-shrink-0">
                 <ShieldCheck size={26} />
@@ -412,7 +412,7 @@ export default function CoworkingMarketplacePage() {
             </div>
             <Link
               href="/resources/coworking/register"
-              className="px-5 py-2.5 bg-[#FFD400] text-black font-extrabold text-xs rounded-xl hover:bg-[#FFE033] transition-all whitespace-nowrap shadow-md shadow-amber-400/20"
+              className="px-5 py-2.5 bg-[#C2410C] text-white font-extrabold text-xs rounded-xl hover:bg-[#9A3412] transition-all whitespace-nowrap shadow-md shadow-[#C2410C]/20"
             >
               Get Your Space Verified →
             </Link>
@@ -429,11 +429,11 @@ export default function CoworkingMarketplacePage() {
             />
 
             {/* Slide-In Drawer from Left */}
-            <div className="relative w-4/5 max-w-xs sm:max-w-sm h-full bg-[#0F0F0F] border-r border-[#242424] shadow-2xl z-10 flex flex-col p-5 overflow-y-auto animate-in slide-in-from-left duration-200">
+            <div className="relative w-4/5 max-w-xs sm:max-w-sm h-full bg-[#0F0F11] border-r border-[#242428] shadow-2xl z-10 flex flex-col p-5 overflow-y-auto animate-in slide-in-from-left duration-200">
               {/* Drawer Top Header */}
-              <div className="flex items-center justify-between pb-3 border-b border-[#242424] mb-3">
+              <div className="flex items-center justify-between pb-3 border-b border-[#242428] mb-3">
                 <span className="font-black text-xs uppercase tracking-wider text-white flex items-center gap-2">
-                  <SlidersHorizontal size={14} className="text-[#FFD400]" /> Filter Workspaces
+                  <SlidersHorizontal size={14} className="text-[#FB923C]" /> Filter Workspaces
                 </span>
                 <button
                   type="button"

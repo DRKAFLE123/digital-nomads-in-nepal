@@ -342,7 +342,7 @@ export default async function DestinationPage({ params }: { params: { slug: stri
                                 {hub.city}
                               </span>
                               <div className="flex gap-1">
-                                {hub.isPartner && <Award size={14} className="text-[#FFD700]" />}
+                                {hub.isPartner && <Award size={14} className="text-[#C2410C] dark:text-[#FB923C]" />}
                                 {hub.isVerified && <CheckCircle size={14} className="text-green-500" />}
                               </div>
                             </div>

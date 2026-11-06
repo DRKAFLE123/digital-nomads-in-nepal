@@ -66,10 +66,10 @@ export default function BlogListClient({ posts }: { posts: BlogPost[] }) {
           <button
             key={cat}
             onClick={() => setCategory(cat)}
-            className={`px-4 py-2 text-sm font-medium transition-colors border ${
+            className={`px-4 py-2 text-xs sm:text-sm font-semibold transition-all border ${
               category === cat 
-                ? "bg-[#FFD700] text-black border-[#FFD700]" 
-                : "bg-transparent text-[#A0A0A0] border-[#222222] hover:border-[#FFD700] hover:text-[#FFD700]"
+                ? "bg-[#C2410C] text-white border-[#C2410C] shadow-sm" 
+                : "bg-white dark:bg-[#141416] text-gray-700 dark:text-gray-300 border-gray-200 dark:border-[#26262A] hover:border-[#C2410C] hover:text-[#C2410C] dark:hover:text-[#FB923C]"
             } rounded-full`}
           >
             {cat}

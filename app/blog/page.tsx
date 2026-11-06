@@ -49,13 +49,13 @@ export default async function BlogPage() {
           {/* Heading Content */}
           <div className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 md:pb-16 pt-28">
             <div className="max-w-3xl">
-              <span className="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-black bg-primary text-black uppercase tracking-wider mb-4 shadow-lg shadow-primary/10">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-[#C2410C] text-white uppercase tracking-wider mb-4 shadow-sm">
                 Explore Nepal
               </span>
               <h1 className="text-4xl md:text-6xl font-black text-white mb-6 drop-shadow-md">
                 Latest Blog Posts
               </h1>
-              <p className="text-lg md:text-xl text-gray-200 max-w-2xl border-l-4 border-primary pl-4 drop-shadow-sm leading-relaxed">
+              <p className="text-lg md:text-xl text-gray-200 max-w-2xl border-l-4 border-[#C2410C] pl-4 drop-shadow-sm leading-relaxed">
                 Insights, guides, and stories from digital nomads living and working across Nepal.
               </p>
             </div>

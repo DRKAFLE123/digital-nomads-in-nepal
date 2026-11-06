@@ -293,7 +293,7 @@ export default function SpaceRegisterPage() {
               <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center max-w-sm mx-auto">
                 <Link
                   href="/auth/signin?callbackUrl=/resources/coworking/register"
-                  className="flex items-center justify-center gap-2 bg-[#F5B301] hover:bg-[#E0A200] text-[#1A1A1C] font-bold px-6 py-3 rounded-xl text-xs sm:text-sm transition-all shadow-md"
+                  className="flex items-center justify-center gap-2 bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold px-6 py-3 rounded-xl text-xs sm:text-sm transition-all shadow-md"
                 >
                   <LogIn size={15} /> Sign In
                 </Link>

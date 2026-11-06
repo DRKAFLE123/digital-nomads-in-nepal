@@ -40,7 +40,7 @@ export default function StickyCommunityCTA() {
         {/* Book Space Primary Action Button */}
         <Link
           href="/resources/coworking#book"
-          className="flex-1 flex items-center justify-center gap-1.5 bg-[#FFD400] hover:bg-[#FFE033] text-black font-extrabold py-2.5 px-3 rounded-full text-xs shadow-md shadow-[#FFD400]/20 active:scale-95 transition-all whitespace-nowrap"
+          className="flex-1 flex items-center justify-center gap-1.5 bg-[#C2410C] hover:bg-[#9A3412] text-white font-extrabold py-2.5 px-3 rounded-full text-xs shadow-md shadow-[#C2410C]/20 active:scale-95 transition-all whitespace-nowrap"
         >
           <Building size={14} className="shrink-0" />
           <span>Book Space</span>
@@ -53,12 +53,12 @@ export default function StickyCommunityCTA() {
         >
           {session ? (
             <>
-              <MessageSquare size={14} className="text-[#FFD400] shrink-0" />
+              <MessageSquare size={14} className="text-[#FB923C] shrink-0" />
               <span>Community</span>
             </>
           ) : (
             <>
-              <Users size={14} className="text-[#FFD400] shrink-0" />
+              <Users size={14} className="text-[#FB923C] shrink-0" />
               <span>Join Nomads</span>
             </>
           )}

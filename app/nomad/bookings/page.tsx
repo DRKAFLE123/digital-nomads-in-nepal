@@ -149,7 +149,7 @@ export default function NomadBookingsPage() {
         <div className="max-w-6xl mx-[#auto] px-4 sm:px-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFD400]/10 text-[#FFD400] border border-[#FFD400]/30 mb-3">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-[#C2410C]/10 text-[#C2410C] dark:text-[#FB923C] border border-[#C2410C]/30 mb-3">
                 <ShieldCheck className="w-3.5 h-3.5" />
                 Nomad Reservation Portal
               </div>
@@ -164,7 +164,7 @@ export default function NomadBookingsPage() {
             {/* Email Finder Bar */}
             <form onSubmit={handleSearchSubmit} className="flex items-center gap-2 bg-[#181818] p-1.5 rounded-xl border border-gray-800">
               <div className="flex items-center gap-2 px-3 text-gray-400">
-                <Mail className="w-4 h-4 text-[#FFD400]" />
+                <Mail className="w-4 h-4 text-[#FB923C]" />
                 <input
                   type="email"
                   value={userEmail}
@@ -177,7 +177,7 @@ export default function NomadBookingsPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="px-4 py-2 bg-[#FFD400] text-black text-xs font-bold rounded-lg hover:bg-yellow-400 transition-colors flex items-center gap-1.5"
+                className="px-4 py-2 bg-[#C2410C] text-white text-xs font-bold rounded-lg hover:bg-[#9A3412] transition-colors flex items-center gap-1.5"
               >
                 <Search className="w-3.5 h-3.5" />
                 {loading ? "Loading..." : "Find Bookings"}
@@ -198,13 +198,13 @@ export default function NomadBookingsPage() {
                 onClick={() => setStatusFilter(tab.id as any)}
                 className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-2 border ${
                   statusFilter === tab.id
-                    ? "bg-[#FFD400] text-black border-[#FFD400] font-bold shadow-md shadow-yellow-500/10"
+                    ? "bg-[#C2410C] text-white border-[#C2410C] font-bold shadow-md shadow-[#C2410C]/10"
                     : "bg-[#141414] text-gray-400 border-gray-800 hover:text-white hover:border-gray-700"
                 }`}
               >
                 <span>{tab.label}</span>
                 <span className={`px-1.5 py-0.5 rounded-full text-[10px] ${
-                  statusFilter === tab.id ? "bg-black/20 text-black font-bold" : "bg-gray-800 text-gray-300"
+                  statusFilter === tab.id ? "bg-white/20 text-white font-bold" : "bg-gray-800 text-gray-300"
                 }`}>
                   {tab.count}
                 </span>
@@ -221,12 +221,12 @@ export default function NomadBookingsPage() {
             <Building2 className="w-12 h-12 text-gray-600 mx-auto mb-4" />
             <h3 className="text-xl font-bold text-white mb-1">No Bookings Yet</h3>
             <p className="text-gray-400 text-sm max-w-md mx-auto mb-6">
-              You haven't made any workspace or coliving reservations under <span className="text-[#FFD400] font-medium">{userEmail || "your account"}</span>.
+              You haven't made any workspace or coliving reservations under <span className="text-[#FB923C] font-medium">{userEmail || "your account"}</span>.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3">
               <Link
                 href="/resources/coworking"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#FFD400] text-black text-xs font-bold rounded-xl hover:bg-yellow-400 transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#C2410C] text-white text-xs font-bold rounded-xl hover:bg-[#9A3412] transition-colors"
               >
                 Explore Workspaces & Desks
               </Link>
@@ -250,7 +250,7 @@ export default function NomadBookingsPage() {
                   key={booking.id}
                   className={`bg-[#121212] border rounded-2xl transition-all overflow-hidden ${
                     isExpanded 
-                      ? "border-[#FFD400]/40 shadow-xl shadow-yellow-500/5 bg-[#141414]" 
+                      ? "border-[#C2410C]/40 shadow-xl shadow-[#C2410C]/5 bg-[#141416]" 
                       : "border-gray-800/80 hover:border-gray-700"
                   }`}
                 >
@@ -300,7 +300,7 @@ export default function NomadBookingsPage() {
                             </span>
                           )}
 
-                          <span className="text-xs font-mono font-bold text-[#FFD400] bg-[#1A1A1A] px-2 py-0.5 rounded border border-gray-800">
+                          <span className="text-xs font-mono font-bold text-[#C2410C] dark:text-[#FB923C] bg-[#1A1A1A] px-2 py-0.5 rounded border border-gray-800">
                             Booking ID: #{booking.id}
                           </span>
                         </div>
@@ -311,14 +311,14 @@ export default function NomadBookingsPage() {
 
                         <div className="flex flex-wrap items-center gap-4 text-xs text-gray-400 mt-1.5">
                           <span className="flex items-center gap-1 text-gray-300">
-                            <MapPin className="w-3.5 h-3.5 text-[#FFD400]" />
+                            <MapPin className="w-3.5 h-3.5 text-[#FB923C]" />
                             {booking.hub.city}, Nepal
                           </span>
                           <span className="flex items-center gap-1 font-medium text-white bg-gray-900 px-2 py-0.5 rounded border border-gray-800">
-                            <Calendar className="w-3.5 h-3.5 text-[#FFD400]" />
+                            <Calendar className="w-3.5 h-3.5 text-[#FB923C]" />
                             {startFormatted} → {endFormatted}
                           </span>
-                          <span className="px-2 py-0.5 bg-yellow-500/10 text-[#FFD400] rounded font-semibold text-[11px]">
+                          <span className="px-2 py-0.5 bg-[#C2410C]/10 text-[#C2410C] dark:text-[#FB923C] rounded font-semibold text-[11px]">
                             {diffDays} {diffDays === 1 ? "Day" : "Days"} Stay
                           </span>
                         </div>
@@ -331,7 +331,7 @@ export default function NomadBookingsPage() {
                         onClick={() => toggleExpand(booking.id)}
                         className={`px-4 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-2 border ${
                           isExpanded
-                            ? "bg-[#FFD400] text-black border-[#FFD400]"
+                            ? "bg-[#C2410C] text-white border-[#C2410C]"
                             : "bg-[#1A1A1A] text-gray-200 border-gray-700 hover:border-gray-600 hover:text-white"
                         }`}
                       >
@@ -343,7 +343,7 @@ export default function NomadBookingsPage() {
                         ) : (
                           <>
                             <span>View Full Booking Details</span>
-                            <ChevronDown className="w-4 h-4 text-[#FFD400]" />
+                            <ChevronDown className="w-4 h-4 text-[#FB923C]" />
                           </>
                         )}
                       </button>
@@ -356,8 +356,8 @@ export default function NomadBookingsPage() {
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         
                         {/* Column 1: Booked Space & Amenities */}
-                        <div className="bg-[#141414] p-4 rounded-xl border border-gray-800/80 space-y-3">
-                          <div className="flex items-center gap-2 text-xs font-bold text-[#FFD400] uppercase tracking-wider">
+                        <div className="bg-[#141416] p-4 rounded-xl border border-gray-800/80 space-y-3">
+                          <div className="flex items-center gap-2 text-xs font-bold text-[#FB923C] uppercase tracking-wider">
                             <Building2 className="w-4 h-4" /> Reserved Space & Items
                           </div>
                           <div>
@@ -377,7 +377,7 @@ export default function NomadBookingsPage() {
                             <div className="flex flex-wrap gap-1.5">
                               {Array.isArray(booking.hub.facilities) ? (
                                 booking.hub.facilities.map((fac: string, idx: number) => (
-                                  <span key={idx} className="px-2 py-0.5 bg-[#1C1C1C] text-gray-300 text-[10px] rounded border border-gray-800">
+                                  <span key={idx} className="px-2 py-0.5 bg-[#1C1C1E] text-gray-300 text-[10px] rounded border border-gray-800">
                                     ✓ {fac}
                                   </span>
                                 ))
@@ -389,13 +389,13 @@ export default function NomadBookingsPage() {
                         </div>
 
                         {/* Column 2: Nomad Pass Wi-Fi & Check-in Info */}
-                        <div className="bg-[#141414] p-4 rounded-xl border border-gray-800/80 space-y-3">
-                          <div className="flex items-center gap-2 text-xs font-bold text-[#FFD400] uppercase tracking-wider">
+                        <div className="bg-[#141416] p-4 rounded-xl border border-gray-800/80 space-y-3">
+                          <div className="flex items-center gap-2 text-xs font-bold text-[#FB923C] uppercase tracking-wider">
                             <Wifi className="w-4 h-4" /> Wi-Fi & Check-in Pass
                           </div>
 
                           {booking.status === "CONFIRMED" ? (
-                            <div className="bg-[#1A1A1A] p-3 rounded-lg border border-emerald-500/30 space-y-2">
+                            <div className="bg-[#1A1A1C] p-3 rounded-lg border border-emerald-500/30 space-y-2">
                               <div className="flex items-center justify-between text-xs">
                                 <span className="text-gray-400">Hub Wi-Fi SSID:</span>
                                 <span className="font-mono font-bold text-white bg-black px-2 py-0.5 rounded border border-gray-800">
@@ -404,7 +404,7 @@ export default function NomadBookingsPage() {
                               </div>
                               <div className="flex items-center justify-between text-xs">
                                 <span className="text-gray-400">Passcode Key:</span>
-                                <span className="font-mono font-bold text-[#FFD400] bg-black px-2 py-0.5 rounded border border-gray-800">
+                                <span className="font-mono font-bold text-[#FB923C] bg-black px-2 py-0.5 rounded border border-gray-800">
                                   NOMAD_NEPAL_2026!
                                 </span>
                               </div>
@@ -413,7 +413,7 @@ export default function NomadBookingsPage() {
                               </p>
                             </div>
                           ) : (
-                            <div className="bg-[#1A1A1A] p-3 rounded-lg border border-amber-500/30 text-xs text-amber-300">
+                            <div className="bg-[#1A1A1C] p-3 rounded-lg border border-amber-500/30 text-xs text-amber-300">
                               Wi-Fi Passcode & Check-in QR code will be activated automatically once property owner confirms this booking.
                             </div>
                           )}
@@ -431,9 +431,9 @@ export default function NomadBookingsPage() {
                         </div>
 
                         {/* Column 3: Property Host & Action Support */}
-                        <div className="bg-[#141414] p-4 rounded-xl border border-gray-800/80 space-y-3 flex flex-col justify-between">
+                        <div className="bg-[#141416] p-4 rounded-xl border border-gray-800/80 space-y-3 flex flex-col justify-between">
                           <div>
-                            <div className="flex items-center gap-2 text-xs font-bold text-[#FFD400] uppercase tracking-wider mb-2">
+                            <div className="flex items-center gap-2 text-xs font-bold text-[#FB923C] uppercase tracking-wider mb-2">
                               <User className="w-4 h-4" /> Host & Property Contact
                             </div>
                             <p className="text-sm font-semibold text-white">
@@ -441,7 +441,7 @@ export default function NomadBookingsPage() {
                             </p>
                             <p className="text-xs text-gray-400 flex items-center gap-1.5 mt-1">
                               <Mail className="w-3.5 h-3.5 text-gray-500" />
-                              <a href={`mailto:${booking.hub.contactEmail}`} className="hover:text-[#FFD400] transition-colors underline">
+                              <a href={`mailto:${booking.hub.contactEmail}`} className="hover:text-[#FB923C] transition-colors underline">
                                 {booking.hub.contactEmail}
                               </a>
                             </p>
@@ -454,7 +454,7 @@ export default function NomadBookingsPage() {
                                 href={`mailto:${booking.hub.contactEmail}?subject=Question regarding booking #${booking.id}`}
                                 className="flex-1 px-3 py-2 bg-[#222] text-gray-200 text-xs font-semibold rounded-lg hover:bg-gray-800 transition-colors text-center flex items-center justify-center gap-1.5"
                               >
-                                <Mail className="w-3.5 h-3.5 text-[#FFD400]" /> Contact Host
+                                <Mail className="w-3.5 h-3.5 text-[#FB923C]" /> Contact Host
                               </a>
                               <a
                                 href={`https://maps.google.com/?q=${encodeURIComponent(booking.hub.name + " " + booking.hub.city)}`}
@@ -462,7 +462,7 @@ export default function NomadBookingsPage() {
                                 rel="noreferrer"
                                 className="flex-1 px-3 py-2 bg-[#222] text-gray-200 text-xs font-semibold rounded-lg hover:bg-gray-800 transition-colors text-center flex items-center justify-center gap-1.5"
                               >
-                                <MapPin className="w-3.5 h-3.5 text-[#FFD400]" /> Map Directions
+                                <MapPin className="w-3.5 h-3.5 text-[#FB923C]" /> Map Directions
                               </a>
                             </div>
 
@@ -483,8 +483,8 @@ export default function NomadBookingsPage() {
 
                       {/* Guest Request Notes if present */}
                       {booking.notes && (
-                        <div className="bg-[#161616] p-3.5 rounded-xl border border-gray-800 text-xs">
-                          <span className="font-semibold text-[#FFD400] mr-2">Nomad Special Request:</span>
+                        <div className="bg-[#161618] p-3.5 rounded-xl border border-gray-800 text-xs">
+                          <span className="font-semibold text-[#FB923C] mr-2">Nomad Special Request:</span>
                           <span className="text-gray-300 italic">"{booking.notes}"</span>
                         </div>
                       )}

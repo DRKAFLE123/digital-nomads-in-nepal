@@ -149,7 +149,7 @@ export default async function GuideProfilePage({ params }: { params: { id: strin
                     href={guide.website.startsWith("http") ? guide.website : `https://${guide.website}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-[#FFD400]/10 text-[#FFD400] border border-[#FFD400]/30 hover:bg-[#FFD400] hover:text-black transition-all shadow-sm"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-[#C2410C]/10 text-[#C2410C] dark:text-[#FB923C] border border-[#C2410C]/30 hover:bg-[#C2410C] hover:text-white transition-all shadow-sm"
                   >
                     <Globe className="w-3.5 h-3.5" />
                     Visit Official Website / Portfolio ↗

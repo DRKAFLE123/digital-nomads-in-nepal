@@ -307,7 +307,7 @@ function UnifiedAuthForm() {
                   onChange={(e) => setName(e.target.value)}
                   required
                   placeholder="e.g. Maya Sharma"
-                  className="w-full bg-[#FAF7F2] dark:bg-[#0B0B0C] border border-[#E8E2D8] dark:border-[#26262A] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-gray-900 dark:text-white focus:outline-none focus:border-[#B45309] dark:focus:border-[#F5B301] transition-colors"
+                  className="w-full bg-[#FAF7F2] dark:bg-[#0B0B0C] border border-[#E8E2D8] dark:border-[#26262A] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-gray-900 dark:text-white focus:outline-none focus:border-[#C2410C] dark:focus:border-[#FB923C] transition-colors"
                 />
               </div>
             )}

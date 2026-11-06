@@ -21,8 +21,8 @@ export default function TopPartnerRibbon({ isScrolled = false }: TopPartnerRibbo
         {/* Left: Indicator & Hook */}
         <div className="flex items-center gap-1.5 sm:gap-2 text-zinc-300 min-w-0 truncate">
           <span className="relative flex h-2 w-2 shrink-0">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#F5B301] opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#F5B301]"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FB923C] opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FB923C]"></span>
           </span>
           <span className="hidden md:inline font-medium text-zinc-300 truncate">
             Host a workspace, coliving stay, or guide nomads in Nepal?

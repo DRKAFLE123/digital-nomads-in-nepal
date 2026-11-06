@@ -38,14 +38,14 @@ export default function TableOfContents({ source }: { source: string }) {
   if (toc.length === 0) return null
 
   return (
-    <div className="bg-[#141414] border border-[#222222] p-6 rounded-xl">
-      <h3 className="text-white font-bold mb-4 uppercase tracking-wider text-sm border-b border-[#222222] pb-2">Table of Contents</h3>
+    <div className="bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] p-6 rounded-2xl shadow-xs">
+      <h3 className="text-gray-900 dark:text-white font-bold mb-4 uppercase tracking-wider text-xs border-b border-gray-100 dark:border-[#222225] pb-2.5">Table of Contents</h3>
       <ul className="space-y-3">
         {toc.map((item, index) => (
           <li key={index} className={`${item.level === 3 ? "ml-4" : ""}`}>
             <a 
               href={`#${item.id}`} 
-              className={`text-sm transition-colors block ${activeId === item.id ? "text-[#FFD700] font-medium" : "text-[#A0A0A0] hover:text-white"}`}
+              className={`text-sm transition-colors block ${activeId === item.id ? "text-[#C2410C] dark:text-[#FB923C] font-bold" : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"}`}
               onClick={(e) => {
                 e.preventDefault()
                 document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth" })
