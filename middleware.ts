@@ -14,8 +14,8 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/", req.url), 301)
   }
 
-  // 1. Protect Owner Dashboard (/owner/dashboard)
-  if (pathname.startsWith("/owner/dashboard")) {
+  // 1. Protect Owner / Hosting Dashboard (/owner/dashboard, /hosting)
+  if (pathname.startsWith("/owner/dashboard") || pathname.startsWith("/hosting")) {
     const token = await getToken({ req })
     if (!token) {
       const loginUrl = new URL("/auth/signin", req.url)
