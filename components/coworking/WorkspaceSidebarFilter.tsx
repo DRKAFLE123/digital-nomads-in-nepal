@@ -72,10 +72,10 @@ export default function WorkspaceSidebarFilter({
   return (
     <aside className="w-full flex flex-col space-y-5 text-sm">
       {/* Header / Clear All */}
-      <div className="flex items-center justify-between pb-3 border-b border-[#242424]">
+      <div className="flex items-center justify-between pb-3 border-b border-[#E8E2D8] dark:border-[#242424]">
         <div className="flex items-center gap-2">
           <SlidersHorizontal size={15} className="text-[#C2410C] dark:text-[#FB923C]" />
-          <span className="font-extrabold uppercase tracking-wider text-xs text-white">
+          <span className="font-extrabold uppercase tracking-wider text-xs text-gray-900 dark:text-white">
             Filters
           </span>
           {hasActiveFilters && (
@@ -97,7 +97,7 @@ export default function WorkspaceSidebarFilter({
 
       {/* 1. Category / Space Type (E-commerce Radio List) */}
       <div className="space-y-2.5">
-        <span className="text-[11px] font-black uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
+        <span className="text-[11px] font-black uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
           <Building size={12} className="text-[#C2410C] dark:text-[#FB923C]" /> Space Type
         </span>
         <div className="space-y-1">
@@ -111,7 +111,7 @@ export default function WorkspaceSidebarFilter({
                 className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all text-left cursor-pointer ${
                   isSelected
                     ? "bg-[#C2410C] text-white font-extrabold shadow-sm"
-                    : "text-gray-300 hover:text-white hover:bg-[#161616]"
+                    : "text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#161616]"
                 }`}
               >
                 <span>{opt.label}</span>
@@ -123,8 +123,8 @@ export default function WorkspaceSidebarFilter({
       </div>
 
       {/* 2. Destination / City */}
-      <div className="space-y-2.5 pt-2 border-t border-[#242424]">
-        <span className="text-[11px] font-black uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
+      <div className="space-y-2.5 pt-2 border-t border-[#E8E2D8] dark:border-[#242424]">
+        <span className="text-[11px] font-black uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
           <MapPin size={12} className="text-[#C2410C] dark:text-[#FB923C]" /> Location &amp; City
         </span>
         <div className="space-y-1">
@@ -138,7 +138,7 @@ export default function WorkspaceSidebarFilter({
                 className={`group/city w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 text-left cursor-pointer border ${
                   isSelected
                     ? "bg-[#C2410C] text-white border-[#C2410C] font-extrabold shadow-sm"
-                    : "text-gray-300 border-transparent hover:text-white hover:bg-[#C2410C]/10 hover:border-[#C2410C]/50 hover:translate-x-1.5"
+                    : "text-gray-700 dark:text-gray-300 border-transparent hover:text-[#C2410C] dark:hover:text-white hover:bg-[#C2410C]/5 dark:hover:bg-[#C2410C]/10 hover:border-[#C2410C]/30 hover:translate-x-1.5"
                 }`}
               >
                 <span className="truncate flex items-center gap-1.5">
@@ -147,7 +147,7 @@ export default function WorkspaceSidebarFilter({
                     className={`shrink-0 transition-transform duration-200 ${
                       isSelected
                         ? "text-white"
-                        : "text-[#71717A] group-hover/city:text-[#FB923C] group-hover/city:scale-110"
+                        : "text-gray-400 dark:text-[#71717A] group-hover/city:text-[#C2410C] dark:group-hover/city:text-[#FB923C] group-hover/city:scale-110"
                     }`}
                   />
                   <span>{c.label}</span>
@@ -156,7 +156,7 @@ export default function WorkspaceSidebarFilter({
                   className={`text-[10px] font-mono px-1.5 py-0.2 rounded shrink-0 transition-colors duration-200 ${
                     isSelected
                       ? "bg-white/20 text-white font-bold"
-                      : "text-[#71717A] bg-[#1a1a1a] group-hover/city:text-white group-hover/city:bg-[#C2410C]/20"
+                      : "text-gray-500 dark:text-[#71717A] bg-gray-100 dark:bg-[#1a1a1a] group-hover/city:text-[#C2410C] dark:group-hover/city:text-white group-hover/city:bg-[#C2410C]/10"
                   }`}
                 >
                   {c.count}
@@ -168,9 +168,9 @@ export default function WorkspaceSidebarFilter({
       </div>
 
       {/* 3. Amenities Checkbox List */}
-      <div className="space-y-2.5 pt-2 border-t border-[#242424]">
+      <div className="space-y-2.5 pt-2 border-t border-[#E8E2D8] dark:border-[#242424]">
         <div className="flex items-center justify-between">
-          <span className="text-[11px] font-black uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
+          <span className="text-[11px] font-black uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
             <Zap size={12} className="text-[#C2410C] dark:text-[#FB923C]" /> Key Amenities
           </span>
           {selectedFacilities.length > 0 && (
@@ -188,8 +188,8 @@ export default function WorkspaceSidebarFilter({
                 onClick={() => onToggleFacility(amenity.id)}
                 className={`flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs cursor-pointer select-none transition-all ${
                   isChecked
-                    ? "bg-[#C2410C]/15 border border-[#C2410C]/50 text-white font-bold shadow-xs"
-                    : "hover:bg-[#161616] hover:border-[#282828] text-gray-300 border border-transparent hover:text-white"
+                    ? "bg-[#C2410C]/10 border border-[#C2410C]/40 text-gray-900 dark:text-white font-bold shadow-xs"
+                    : "hover:bg-gray-100 dark:hover:bg-[#161616] text-gray-700 dark:text-gray-300 border border-transparent hover:border-gray-200 dark:hover:border-[#282828] hover:text-gray-900 dark:hover:text-white"
                 }`}
               >
                 <div className="flex items-center gap-2">
@@ -197,7 +197,7 @@ export default function WorkspaceSidebarFilter({
                     className={`w-4 h-4 rounded-md flex items-center justify-center border transition-all ${
                       isChecked
                         ? "bg-[#C2410C] border-[#C2410C] text-white"
-                        : "border-[#3a3a3a] bg-[#141414]"
+                        : "border-gray-300 dark:border-[#3a3a3a] bg-white dark:bg-[#141414]"
                     }`}
                   >
                     {isChecked && <Check size={11} className="stroke-[3] text-white" />}
@@ -211,22 +211,22 @@ export default function WorkspaceSidebarFilter({
       </div>
 
       {/* Coliving / Stay Shortcut Promotion Card */}
-      <div className="p-3 rounded-2xl bg-gradient-to-br from-[#1c1809] to-[#121212] border border-[#C2410C]/30 text-xs space-y-1.5">
+      <div className="p-3 rounded-2xl bg-[#FBF9F5] dark:bg-gradient-to-br dark:from-[#1c1809] dark:to-[#121212] border border-[#E8E2D8] dark:border-[#C2410C]/30 text-xs space-y-1.5 shadow-xs">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-black uppercase tracking-wider text-[#FB923C]">
+          <span className="text-[10px] font-black uppercase tracking-wider text-[#C2410C] dark:text-[#FB923C]">
             🛌 Work + Coliving
           </span>
           <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#C2410C] text-white font-bold">
             Live &amp; Work
           </span>
         </div>
-        <p className="text-[11px] text-gray-300 leading-snug">
+        <p className="text-[11px] text-gray-600 dark:text-gray-300 leading-snug">
           Looking for rooms with ergonomic desks &amp; Starlink?
         </p>
         <button
           type="button"
           onClick={() => onSelectCategory("coliving")}
-          className="w-full mt-1 py-1.5 rounded-lg bg-[#C2410C] hover:bg-[#9A3412] text-white font-extrabold text-[11px] transition-all text-center block cursor-pointer"
+          className="w-full mt-1 py-1.5 rounded-lg bg-[#C2410C] hover:bg-[#9A3412] text-white font-extrabold text-[11px] transition-all text-center block cursor-pointer shadow-xs"
         >
           Filter Coliving Workhubs →
         </button>
@@ -234,12 +234,12 @@ export default function WorkspaceSidebarFilter({
 
       {/* Mobile Drawer Footer Actions */}
       {isMobileDrawer && (
-        <div className="sticky bottom-0 pt-4 pb-2 bg-[#0F0F0F] border-t border-[#242424] flex items-center gap-2 mt-auto">
+        <div className="sticky bottom-0 pt-4 pb-2 bg-white dark:bg-[#0F0F0F] border-t border-[#E8E2D8] dark:border-[#242424] flex items-center gap-2 mt-auto">
           {hasActiveFilters && (
             <button
               type="button"
               onClick={onClearAll}
-              className="flex-1 py-3 bg-[#1a1a1a] hover:bg-[#252525] text-white font-bold text-xs rounded-xl transition-all text-center"
+              className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 dark:bg-[#1a1a1a] dark:hover:bg-[#252525] text-gray-800 dark:text-white font-bold text-xs rounded-xl transition-all text-center"
             >
               Reset All
             </button>
