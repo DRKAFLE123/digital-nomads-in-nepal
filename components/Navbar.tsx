@@ -385,7 +385,14 @@ export default function Navbar() {
             {/* Logo Image (no popover on hover) - Proportional size & seamless spacing */}
             <Link
               href="/"
-              className="relative h-[29px] sm:h-10 md:h-11 w-[70px] sm:w-[96px] md:w-[105px] overflow-hidden flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C2410C] rounded-xl flex items-center transition-transform hover:scale-105 active:scale-95 duration-200"
+              onClick={(e) => {
+                setActiveDropdown(null)
+                if (pathname === "/") {
+                  e.preventDefault()
+                  window.scrollTo({ top: 0, behavior: "smooth" })
+                }
+              }}
+              className="relative h-[29px] sm:h-10 md:h-11 w-[70px] sm:w-[96px] md:w-[105px] overflow-hidden flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C2410C] rounded-xl flex items-center transition-transform hover:scale-105 active:scale-95 duration-200 cursor-pointer"
               aria-label="Digital Nomads in Nepal Home"
             >
               <Image src="/webisteofficiallogo-removebg-preview.png" alt="Digital Nomads in Nepal Logo" fill className="object-contain object-center" priority unoptimized />
@@ -395,7 +402,14 @@ export default function Navbar() {
             <div className={`relative group/name items-center h-full ${mounted && session ? "hidden md:flex" : "flex"}`}>
               <Link
                 href="/"
-                className="flex flex-col items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C2410C] rounded-xl py-1 text-center select-none"
+                onClick={(e) => {
+                  setActiveDropdown(null)
+                  if (pathname === "/") {
+                    e.preventDefault()
+                    window.scrollTo({ top: 0, behavior: "smooth" })
+                  }
+                }}
+                className="flex flex-col items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C2410C] rounded-xl py-1 text-center select-none cursor-pointer"
               >
                 <span className={`font-black text-xs sm:text-[15px] md:text-[17px] tracking-normal leading-tight uppercase transition-colors text-center ${
                   isSolid
@@ -563,9 +577,9 @@ export default function Navbar() {
                   onMouseLeave={() => hasDropdown && handleMouseLeaveNav()}
                 >
                   {hasDropdown ? (
-                    <button
-                      type="button"
-                      onClick={() => setActiveDropdown(isOpen ? null : cat.name)}
+                    <Link
+                      href={cat.href || "#"}
+                      onClick={() => setActiveDropdown(null)}
                       aria-expanded={isOpen}
                       aria-haspopup="true"
                       className={`flex items-center gap-1 text-[13px] font-semibold px-3 py-2 rounded-xl transition-all duration-150 ${
@@ -581,7 +595,7 @@ export default function Navbar() {
                         size={13}
                         className={`transition-transform duration-200 ${isOpen ? "rotate-180 text-[#C2410C] dark:text-[#FB923C]" : "opacity-60"}`}
                       />
-                    </button>
+                    </Link>
                   ) : (
                     <Link
                       href={cat.href || "#"}
