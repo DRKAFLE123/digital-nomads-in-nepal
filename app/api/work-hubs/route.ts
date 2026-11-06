@@ -75,11 +75,21 @@ export async function GET(req: NextRequest) {
         if (h.city.toLowerCase() !== city.toLowerCase()) return false
       }
 
-      // Category check (Hot Desks, Dedicated Desks, Private Offices, Meeting Halls, 24/7 Access)
-      if (category && category !== "All" && category !== "All Spaces") {
+      // Category / Space Type check
+      if (
+        category &&
+        category !== "All" &&
+        category !== "All Spaces" &&
+        category !== "All Space Types" &&
+        category !== "All Workspaces" &&
+        category !== "All Nomad Stays" &&
+        category !== "All Work + Stay Packages"
+      ) {
         const catLower = category.toLowerCase()
         const facs = Array.isArray(h.facilities) ? (h.facilities as string[]) : []
         const u = Array.isArray(h.units) ? (h.units as Array<{ type?: string; name?: string }>) : []
+        const hubName = h.name.toLowerCase()
+        const spaceType = (h.spaceType || "").toLowerCase()
 
         if (catLower.includes("hot") || catLower.includes("flex")) {
           const hasHot = u.some(unit => (unit.type || unit.name || "").toLowerCase().includes("hot"))
@@ -89,19 +99,44 @@ export async function GET(req: NextRequest) {
           const hasDed = u.some(unit => (unit.type || unit.name || "").toLowerCase().includes("dedicated"))
           const hasDedFac = facs.some(f => f.toLowerCase().includes("dedicated"))
           if (!hasDed && !hasDedFac) return false
-        } else if (catLower.includes("private") || catLower.includes("office") || catLower.includes("room")) {
-          const hasPriv = u.some(unit => (unit.type || unit.name || "").toLowerCase().includes("private") || (unit.type || unit.name || "").toLowerCase().includes("room") || (unit.type || unit.name || "").toLowerCase().includes("office"))
-          const hasPrivFac = facs.some(f => f.toLowerCase().includes("private") || f.toLowerCase().includes("office") || f.toLowerCase().includes("room"))
+        } else if (catLower.includes("private_office") || (catLower.includes("private") && !catLower.includes("room"))) {
+          const hasPriv = u.some(unit => (unit.type || unit.name || "").toLowerCase().includes("private") || (unit.type || unit.name || "").toLowerCase().includes("office"))
+          const hasPrivFac = facs.some(f => f.toLowerCase().includes("private office") || f.toLowerCase().includes("office"))
           if (!hasPriv && !hasPrivFac) return false
         } else if (catLower.includes("meeting") || catLower.includes("hall") || catLower.includes("conference")) {
           const hasMeet = u.some(unit => (unit.type || unit.name || "").toLowerCase().includes("meeting") || (unit.type || unit.name || "").toLowerCase().includes("hall"))
           const hasMeetFac = facs.some(f => f.toLowerCase().includes("meeting") || f.toLowerCase().includes("hall") || f.toLowerCase().includes("booth"))
           if (!hasMeet && !hasMeetFac) return false
-        } else if (catLower.includes("coliving") || catLower.includes("stay") || catLower.includes("hotel") || catLower.includes("hostel") || catLower.includes("suite")) {
-          const hasColiving = u.some(unit => (unit.type || unit.name || "").toLowerCase().includes("coliving") || (unit.type || unit.name || "").toLowerCase().includes("suite") || (unit.type || unit.name || "").toLowerCase().includes("stay") || (unit.type || unit.name || "").toLowerCase().includes("room"))
-          const hasColivingFac = facs.some(f => f.toLowerCase().includes("coliving") || f.toLowerCase().includes("accommodation") || f.toLowerCase().includes("stay") || f.toLowerCase().includes("room"))
-          const isColivingType = h.name.toLowerCase().includes("coliving") || h.name.toLowerCase().includes("resort") || h.name.toLowerCase().includes("stay") || h.name.toLowerCase().includes("hostel") || h.name.toLowerCase().includes("hotel")
-          if (!hasColiving && !hasColivingFac && !isColivingType) return false
+        } else if (catLower.includes("cafe")) {
+          const isCafe = hubName.includes("cafe") || spaceType.includes("cafe") || facs.some(f => f.toLowerCase().includes("cafe") || f.toLowerCase().includes("coffee"))
+          if (!isCafe) return false
+        } else if (catLower.includes("apartment")) {
+          const isApt = hubName.includes("apartment") || hubName.includes("studio") || spaceType.includes("apartment") || u.some(unit => (unit.type || unit.name || "").toLowerCase().includes("apartment") || (unit.type || unit.name || "").toLowerCase().includes("studio"))
+          if (!isApt) return false
+        } else if (catLower.includes("hostel")) {
+          const isHostel = hubName.includes("hostel") || hubName.includes("pod") || spaceType.includes("hostel") || u.some(unit => (unit.type || unit.name || "").toLowerCase().includes("hostel") || (unit.type || unit.name || "").toLowerCase().includes("dorm") || (unit.type || unit.name || "").toLowerCase().includes("pod"))
+          if (!isHostel) return false
+        } else if (catLower.includes("lodge")) {
+          const isLodge = hubName.includes("lodge") || hubName.includes("guesthouse") || hubName.includes("inn") || spaceType.includes("lodge")
+          if (!isLodge) return false
+        } else if (catLower.includes("hotel")) {
+          const isHotel = hubName.includes("hotel") || hubName.includes("resort") || spaceType.includes("hotel")
+          if (!isHotel) return false
+        } else if (catLower.includes("villa")) {
+          const isVilla = hubName.includes("villa") || hubName.includes("homestay") || spaceType.includes("villa")
+          if (!isVilla) return false
+        } else if (catLower.includes("coliving")) {
+          const hasColiving = u.some(unit => (unit.type || unit.name || "").toLowerCase().includes("coliving")) || facs.some(f => f.toLowerCase().includes("coliving")) || hubName.includes("coliving") || spaceType.includes("coliving")
+          if (!hasColiving) return false
+        } else if (catLower.includes("room_desk")) {
+          const hasRoomDesk = u.some(unit => (unit.type || unit.name || "").toLowerCase().includes("suite") || (unit.type || unit.name || "").toLowerCase().includes("room")) || facs.some(f => f.toLowerCase().includes("room + workstation") || f.toLowerCase().includes("coliving"))
+          if (!hasRoomDesk) return false
+        } else if (catLower.includes("workation")) {
+          const isWorkation = hubName.includes("workation") || hubName.includes("retreat") || spaceType.includes("hybrid")
+          if (!isWorkation) return false
+        } else if (catLower.includes("long_stay")) {
+          const isLongStay = facs.some(f => f.toLowerCase().includes("long-term") || f.toLowerCase().includes("monthly")) || hubName.includes("residence") || hubName.includes("stay")
+          if (!isLongStay) return false
         } else if (catLower.includes("24/7") || catLower.includes("night")) {
           const is247 = (h.openingHours || "").includes("24/7") || facs.some(f => f.includes("24/7"))
           if (!is247) return false

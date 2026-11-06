@@ -3,15 +3,49 @@
 import React from "react"
 import { Filter, X, RotateCcw, Check, SlidersHorizontal, MapPin, Building, DollarSign, Wifi, Zap } from "lucide-react"
 
-export const CATEGORY_OPTIONS = [
-  { id: "All", label: "All Spaces" },
-  { id: "hot_desk", label: "Hot Desks" },
-  { id: "dedicated_desk", label: "Dedicated Desks" },
-  { id: "private_office", label: "Private Offices" },
-  { id: "meeting_hall", label: "Meeting Rooms" },
-  { id: "coliving", label: "Coliving & Work" },
-  { id: "virtual_office", label: "Virtual Offices" },
-]
+export const SPACE_TYPES_BY_OFFERING: Record<string, Array<{ id: string; label: string }>> = {
+  all: [
+    { id: "All", label: "All Space Types" },
+    { id: "hot_desk", label: "Hot Desks" },
+    { id: "dedicated_desk", label: "Dedicated Desks" },
+    { id: "private_office", label: "Private Offices" },
+    { id: "coliving", label: "Coliving & Work" },
+    { id: "apartment", label: "Nomad Apartments" },
+    { id: "hostel", label: "Hostels & Pods" },
+    { id: "lodge", label: "Lodges & Homestays" },
+  ],
+  work: [
+    { id: "All", label: "All Workspaces" },
+    { id: "hot_desk", label: "Hot Desks" },
+    { id: "dedicated_desk", label: "Dedicated Desks" },
+    { id: "private_office", label: "Private Offices" },
+    { id: "meeting_hall", label: "Meeting Rooms" },
+    { id: "work_cafe", label: "Work-Friendly Cafes" },
+  ],
+  stay: [
+    { id: "All", label: "All Nomad Stays" },
+    { id: "apartment", label: "Nomad Apartments & Studios" },
+    { id: "hostel", label: "Hostels & Nomad Pods" },
+    { id: "lodge", label: "Guesthouses & Mountain Lodges" },
+    { id: "hotel", label: "Boutique Nomad Hotels" },
+    { id: "villa", label: "Homestays & Villas" },
+  ],
+  work_and_stay: [
+    { id: "All", label: "All Work + Stay Packages" },
+    { id: "coliving", label: "Coliving Communities" },
+    { id: "room_desk", label: "Room + Dedicated Desk" },
+    { id: "workation_hub", label: "Workation Retreats" },
+    { id: "long_stay", label: "Monthly Live & Work" },
+  ],
+}
+
+// Flattened list for label lookups and backward compatibility
+export const CATEGORY_OPTIONS: Array<{ id: string; label: string }> = [
+  ...SPACE_TYPES_BY_OFFERING.all,
+  ...SPACE_TYPES_BY_OFFERING.work,
+  ...SPACE_TYPES_BY_OFFERING.stay,
+  ...SPACE_TYPES_BY_OFFERING.work_and_stay,
+].filter((item, index, self) => index === self.findIndex((t) => t.id === item.id))
 
 export const POPULAR_AMENITIES = [
   { id: "24/7 Access", label: "24/7 Access", icon: Zap },
@@ -81,6 +115,22 @@ export default function WorkspaceSidebarFilter({
     selectedCity !== "All Cities" ||
     selectedFacilities.length > 0
 
+  const currentSpaceTypes =
+    SPACE_TYPES_BY_OFFERING[offeringType] || SPACE_TYPES_BY_OFFERING.all
+
+  const getSpaceTypeActiveClasses = () => {
+    if (offeringType === "work_and_stay") {
+      return "bg-[#C2410C] text-white border-[#C2410C] font-extrabold shadow-sm"
+    }
+    if (offeringType === "stay") {
+      return "bg-sky-700 text-white border-sky-700 font-extrabold shadow-sm"
+    }
+    if (offeringType === "work") {
+      return "bg-[#1B4332] text-white border-[#1B4332] font-extrabold shadow-sm"
+    }
+    return "bg-gray-900 dark:bg-white text-white dark:text-gray-900 border-gray-900 dark:border-white font-extrabold shadow-sm"
+  }
+
   return (
     <aside className="w-full flex flex-col space-y-5 text-sm">
       {/* Header / Clear All */}
@@ -120,14 +170,19 @@ export default function WorkspaceSidebarFilter({
                 <button
                   key={opt.id}
                   type="button"
-                  onClick={() => onSelectOfferingType(opt.id)}
+                  onClick={() => {
+                    onSelectOfferingType(opt.id)
+                    onSelectCategory("All")
+                  }}
                   className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all text-left cursor-pointer border ${
                     isSelected
                       ? opt.id === "work_and_stay"
                         ? "bg-[#C2410C] text-white border-[#C2410C] font-extrabold shadow-sm"
                         : opt.id === "stay"
                         ? "bg-sky-700 text-white border-sky-700 font-extrabold shadow-sm"
-                        : "bg-[#1B4332] text-white border-[#1B4332] font-extrabold shadow-sm"
+                        : opt.id === "work"
+                        ? "bg-[#1B4332] text-white border-[#1B4332] font-extrabold shadow-sm"
+                        : "bg-gray-900 dark:bg-white text-white dark:text-gray-900 border-gray-900 dark:border-white font-extrabold shadow-sm"
                       : "bg-[#F8F6F0] dark:bg-[#161618] border-[#E8E2D8] dark:border-[#28282D] text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:border-gray-400"
                   }`}
                 >
@@ -143,23 +198,44 @@ export default function WorkspaceSidebarFilter({
         </div>
       )}
 
-      {/* 1. Category / Space Type (E-commerce Radio List) */}
-      <div className="space-y-2.5">
-        <span className="text-[11px] font-black uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
-          <Building size={12} className="text-[#C2410C] dark:text-[#FB923C]" /> Space Type
-        </span>
+      {/* 1. Dynamic Space Type by Marketplace Mode */}
+      <div className="space-y-2.5 pt-2 border-t border-[#E8E2D8] dark:border-[#242424]">
+        <div className="flex items-center justify-between">
+          <span className="text-[11px] font-black uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
+            <Building size={12} className="text-[#C2410C] dark:text-[#FB923C]" />
+            <span>
+              {offeringType === "stay"
+                ? "Stay Type"
+                : offeringType === "work"
+                ? "Workspace Type"
+                : offeringType === "work_and_stay"
+                ? "Package Type"
+                : "Space Type"}
+            </span>
+          </span>
+          {category !== "All" && (
+            <button
+              type="button"
+              onClick={() => onSelectCategory("All")}
+              className="text-[10px] font-semibold text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer"
+            >
+              Reset
+            </button>
+          )}
+        </div>
+
         <div className="space-y-1">
-          {CATEGORY_OPTIONS.map((opt) => {
+          {currentSpaceTypes.map((opt) => {
             const isSelected = category === opt.id
             return (
               <button
                 key={opt.id}
                 type="button"
                 onClick={() => onSelectCategory(opt.id)}
-                className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all text-left cursor-pointer ${
+                className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all text-left cursor-pointer border ${
                   isSelected
-                    ? "bg-[#C2410C] text-white font-extrabold shadow-sm"
-                    : "text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#161616]"
+                    ? getSpaceTypeActiveClasses()
+                    : "bg-[#F8F6F0] dark:bg-[#161618] border-[#E8E2D8] dark:border-[#28282D] text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:border-gray-400"
                 }`}
               >
                 <span>{opt.label}</span>
