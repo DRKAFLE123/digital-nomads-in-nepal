@@ -3,11 +3,53 @@ import { prisma } from "@/lib/prisma"
 
 export const dynamic = "force-dynamic"
 
+function classifyHub(h: { spaceType?: string | null; name: string; facilities?: any; units?: any }): "work" | "stay" | "work_and_stay" {
+  const type = (h.spaceType || "").toLowerCase()
+  const name = (h.name || "").toLowerCase()
+  const facs = (Array.isArray(h.facilities) ? (h.facilities as string[]) : []).map(f => f.toLowerCase())
+  const units = (Array.isArray(h.units) ? (h.units as Array<{ type?: string; name?: string }>) : []).map(u => (u.type || u.name || "").toLowerCase())
+
+  // Work + Stay: Coliving, live & work, hybrid with on-site accommodation + workspace
+  if (
+    type.includes("coliving") ||
+    type.includes("live & work") ||
+    type.includes("hybrid") ||
+    name.includes("coliving") ||
+    name.includes("workation") ||
+    units.some(u => u.includes("coliving") || u.includes("suite") || (u.includes("room") && u.includes("work"))) ||
+    facs.some(f => f.includes("coliving") || f.includes("room + workstation") || f.includes("coliving suite") || f.includes("room included"))
+  ) {
+    return "work_and_stay"
+  }
+
+  // Stay: Nomad-friendly apartments, hotels, guesthouses, villas
+  if (
+    type.includes("apartment") ||
+    type.includes("hotel") ||
+    type.includes("hostel") ||
+    type.includes("villa") ||
+    type.includes("stay") ||
+    type.includes("residence") ||
+    name.includes("apartment") ||
+    name.includes("residence") ||
+    name.includes("hotel") ||
+    name.includes("hostel") ||
+    name.includes("villa") ||
+    name.includes("lodge")
+  ) {
+    return "stay"
+  }
+
+  // Work: Pure coworking, flex hot desks, dedicated desks, meeting rooms, private office hubs
+  return "work"
+}
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url)
     const city = searchParams.get("city")
     const category = searchParams.get("category")
+    const offeringType = searchParams.get("offeringType") || searchParams.get("mode") // "all" | "work" | "stay" | "work_and_stay"
     const facility = searchParams.get("facility")
     const search = searchParams.get("search")
     const sort = searchParams.get("sort") || "rating"
@@ -22,7 +64,13 @@ export async function GET(req: NextRequest) {
 
     // In-memory filtering for flexible JSON & unit support
     let filtered = hubs.filter(h => {
-      // City check
+      // 1. Offering Type filter ("work", "stay", "work_and_stay")
+      if (offeringType && offeringType !== "all" && offeringType !== "All") {
+        const hubType = classifyHub(h)
+        if (hubType !== offeringType) return false
+      }
+
+      // 2. City check
       if (city && city !== "All Cities" && city !== "All") {
         if (h.city.toLowerCase() !== city.toLowerCase()) return false
       }

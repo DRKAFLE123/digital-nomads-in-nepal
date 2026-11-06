@@ -55,6 +55,7 @@ export default function CoworkingMarketplacePage() {
   const [loading, setLoading] = useState(true);
 
   // Filter States
+  const [offeringType, setOfferingType] = useState<"all" | "work" | "stay" | "work_and_stay">("all");
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [selectedCity, setSelectedCity] = useState("All Cities");
@@ -63,10 +64,21 @@ export default function CoworkingMarketplacePage() {
   const [viewMode, setViewMode] = useState<"grid" | "split">("grid");
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
+  // Sync URL search params if navigated via /workspaces?type=stay etc.
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const q = new URLSearchParams(window.location.search).get("type") || new URLSearchParams(window.location.search).get("offeringType");
+      if (q === "work" || q === "stay" || q === "work_and_stay") {
+        setOfferingType(q);
+      }
+    }
+  }, []);
+
   const loadHubs = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
+      if (offeringType !== "all") params.append("offeringType", offeringType);
       if (selectedCity !== "All Cities") params.append("city", selectedCity);
       if (category !== "All") params.append("category", category);
       if (selectedFacilities.length > 0)
@@ -84,7 +96,7 @@ export default function CoworkingMarketplacePage() {
     } finally {
       setLoading(false);
     }
-  }, [selectedCity, category, selectedFacilities, search, sort]);
+  }, [offeringType, selectedCity, category, selectedFacilities, search, sort]);
 
   useEffect(() => {
     loadHubs();
@@ -97,6 +109,7 @@ export default function CoworkingMarketplacePage() {
   }
 
   function handleClearFilters() {
+    setOfferingType("all");
     setSearch("");
     setCategory("All");
     setSelectedCity("All Cities");
@@ -105,6 +118,7 @@ export default function CoworkingMarketplacePage() {
   }
 
   const activeFilterCount =
+    (offeringType !== "all" ? 1 : 0) +
     (category !== "All" ? 1 : 0) +
     (selectedCity !== "All Cities" ? 1 : 0) +
     selectedFacilities.length +
@@ -151,8 +165,60 @@ export default function CoworkingMarketplacePage() {
         {/* MARKETPLACE MAIN SECTION (E-Commerce Style Layout) */}
         <section id="marketplace" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-5">
           {/* SEARCH & FILTERS BOX: Search Bar on TOP, Filter Buttons BELOW in small letters */}
-          <div className="bg-white dark:bg-[#0F0F11] border border-[#E8E2D8] dark:border-[#242428] rounded-2xl p-3 sm:p-4 shadow-sm space-y-2.5">
-            {/* 1. TOP: Full-Width Search Bar */}
+          <div className="bg-white dark:bg-[#0F0F11] border border-[#E8E2D8] dark:border-[#242428] rounded-2xl p-3 sm:p-4 shadow-sm space-y-3">
+            {/* 0. MARKETPLACE MODE SWITCHER (All Spaces | Work | Stay | Work + Stay) */}
+            <div className="flex items-center gap-1.5 p-1 bg-[#F5F2EB] dark:bg-[#161618] rounded-xl border border-[#E8E2D8] dark:border-[#26262A] overflow-x-auto scrollbar-none">
+              <button
+                type="button"
+                onClick={() => setOfferingType("all")}
+                className={`flex-1 min-w-[90px] py-2 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  offeringType === "all"
+                    ? "bg-white dark:bg-[#202024] text-gray-900 dark:text-white shadow-xs border border-black/5 dark:border-white/10 font-extrabold"
+                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                }`}
+              >
+                <span>✨</span>
+                <span>All Spaces</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setOfferingType("work")}
+                className={`flex-1 min-w-[90px] py-2 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  offeringType === "work"
+                    ? "bg-[#1B4332] text-white shadow-sm font-extrabold"
+                    : "text-gray-600 dark:text-gray-400 hover:text-[#1B4332] dark:hover:text-white"
+                }`}
+              >
+                <span>💻</span>
+                <span>Work</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setOfferingType("stay")}
+                className={`flex-1 min-w-[90px] py-2 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  offeringType === "stay"
+                    ? "bg-sky-700 text-white shadow-sm font-extrabold"
+                    : "text-gray-600 dark:text-gray-400 hover:text-sky-700 dark:hover:text-white"
+                }`}
+              >
+                <span>🛌</span>
+                <span>Stay</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setOfferingType("work_and_stay")}
+                className={`flex-1 min-w-[110px] py-2 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  offeringType === "work_and_stay"
+                    ? "bg-[#C2410C] text-white shadow-sm font-extrabold"
+                    : "text-gray-600 dark:text-gray-400 hover:text-[#C2410C] dark:hover:text-white"
+                }`}
+              >
+                <span>⚡</span>
+                <span>Work + Stay</span>
+              </button>
+            </div>
+
+            {/* 1. Full-Width Search Bar */}
             <div className="relative w-full">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-[#71717A] w-4 h-4 pointer-events-none" />
               <input
@@ -287,6 +353,8 @@ export default function CoworkingMarketplacePage() {
             {/* LEFT COLUMN: DESKTOP STICKY FILTER SIDEBAR (Width: 3/12 cols) */}
             <div className="hidden lg:block lg:col-span-3 sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto overscroll-contain bg-white dark:bg-[#0F0F11] border border-[#E8E2D8] dark:border-[#242428] rounded-3xl p-5 shadow-sm custom-scrollbar">
               <WorkspaceSidebarFilter
+                offeringType={offeringType}
+                onSelectOfferingType={setOfferingType}
                 category={category}
                 onSelectCategory={setCategory}
                 selectedCity={selectedCity}
@@ -302,10 +370,27 @@ export default function CoworkingMarketplacePage() {
             <div className="col-span-1 lg:col-span-9 space-y-4">
               {/* Results Meta Bar: Counts & View Switcher */}
               <div className="flex items-center justify-between pb-1 px-1">
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <span className="text-xs sm:text-sm font-extrabold text-gray-900 dark:text-white">
                     {hubs.length} {hubs.length === 1 ? "Space" : "Spaces"} Available
                   </span>
+                  {offeringType !== "all" && (
+                    <span
+                      className={`text-[11px] font-extrabold px-2 py-0.5 rounded-full text-white ${
+                        offeringType === "work_and_stay"
+                          ? "bg-[#C2410C]"
+                          : offeringType === "stay"
+                          ? "bg-sky-700"
+                          : "bg-[#1B4332]"
+                      }`}
+                    >
+                      {offeringType === "work_and_stay"
+                        ? "⚡ Work + Stay"
+                        : offeringType === "stay"
+                        ? "🛌 Stay"
+                        : "💻 Work"}
+                    </span>
+                  )}
                   {selectedCity !== "All Cities" && (
                     <span className="text-xs text-[#C2410C] dark:text-[#FB923C] font-bold">
                       in {selectedCity}
@@ -447,6 +532,11 @@ export default function CoworkingMarketplacePage() {
 
               {/* Sidebar Filters Inside Mobile Drawer */}
               <WorkspaceSidebarFilter
+                offeringType={offeringType}
+                onSelectOfferingType={(type) => {
+                  setOfferingType(type);
+                  setMobileFilterOpen(false);
+                }}
                 category={category}
                 onSelectCategory={setCategory}
                 selectedCity={selectedCity}

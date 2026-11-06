@@ -39,7 +39,16 @@ export const SIDEBAR_CITIES = [
   { id: "Chitwan", label: "Chitwan", count: 1 },
 ]
 
+export const OFFERING_TYPES = [
+  { id: "all", label: "All Spaces", icon: "✨" },
+  { id: "work", label: "Work", sub: "Coworking & Desks", icon: "💻" },
+  { id: "stay", label: "Stay", sub: "Nomad Living & Rooms", icon: "🛌" },
+  { id: "work_and_stay", label: "Work + Stay", sub: "Coliving & Packages", icon: "⚡" },
+] as const
+
 interface WorkspaceSidebarFilterProps {
+  offeringType?: "all" | "work" | "stay" | "work_and_stay"
+  onSelectOfferingType?: (type: "all" | "work" | "stay" | "work_and_stay") => void
   category: string
   onSelectCategory: (cat: string) => void
   selectedCity: string
@@ -53,6 +62,8 @@ interface WorkspaceSidebarFilterProps {
 }
 
 export default function WorkspaceSidebarFilter({
+  offeringType = "all",
+  onSelectOfferingType,
   category,
   onSelectCategory,
   selectedCity,
@@ -65,6 +76,7 @@ export default function WorkspaceSidebarFilter({
   onCloseMobile,
 }: WorkspaceSidebarFilterProps) {
   const hasActiveFilters =
+    offeringType !== "all" ||
     category !== "All" ||
     selectedCity !== "All Cities" ||
     selectedFacilities.length > 0
@@ -94,6 +106,42 @@ export default function WorkspaceSidebarFilter({
           </button>
         )}
       </div>
+
+      {/* 0. Primary Marketplace Mode (Work / Stay / Work + Stay) */}
+      {onSelectOfferingType && (
+        <div className="space-y-2">
+          <span className="text-[11px] font-black uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
+            <span className="text-[#1B4332] dark:text-[#8FB89A]">◈</span> Marketplace Mode
+          </span>
+          <div className="grid grid-cols-1 gap-1.5">
+            {OFFERING_TYPES.map((opt) => {
+              const isSelected = offeringType === opt.id
+              return (
+                <button
+                  key={opt.id}
+                  type="button"
+                  onClick={() => onSelectOfferingType(opt.id)}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all text-left cursor-pointer border ${
+                    isSelected
+                      ? opt.id === "work_and_stay"
+                        ? "bg-[#C2410C] text-white border-[#C2410C] font-extrabold shadow-sm"
+                        : opt.id === "stay"
+                        ? "bg-sky-700 text-white border-sky-700 font-extrabold shadow-sm"
+                        : "bg-[#1B4332] text-white border-[#1B4332] font-extrabold shadow-sm"
+                      : "bg-[#F8F6F0] dark:bg-[#161618] border-[#E8E2D8] dark:border-[#28282D] text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:border-gray-400"
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="text-sm">{opt.icon}</span>
+                    <span>{opt.label}</span>
+                  </span>
+                  {isSelected && <Check size={13} className="stroke-[3]" />}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
 
       {/* 1. Category / Space Type (E-commerce Radio List) */}
       <div className="space-y-2.5">
