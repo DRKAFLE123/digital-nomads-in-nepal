@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react"
 import Link from "next/link"
-import { MapPin, Wifi, Zap, Building, ArrowRight, ShieldCheck, Star } from "lucide-react"
+import { MapPin, Zap, ArrowRight, ShieldCheck, Star } from "lucide-react"
 
 export type NearbyHub = {
   id: string

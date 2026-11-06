@@ -1,6 +1,6 @@
 import Image from "./ImageWithFallback"
 import Link from "next/link"
-import { ArrowRight, MapPin } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 
 interface DestinationCardProps {
   name: string
@@ -17,7 +17,7 @@ const DEFAULT_COUNTS: Record<string, string> = {
   bandipur: "3 workspaces · 6 stays",
 }
 
-export default function DestinationCard({ name, description, image, slug, counts }: DestinationCardProps) {
+export default function DestinationCard({ name, image, slug, counts }: DestinationCardProps) {
   const displayCounts = counts || DEFAULT_COUNTS[slug.toLowerCase()] || "Verified nomad hub"
 
   return (

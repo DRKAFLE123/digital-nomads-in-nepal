@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react"
 import { createPortal } from "react-dom"
 import Link from "next/link"
-import Image from "next/image"
 import { signOut } from "next-auth/react"
 import { Session } from "next-auth"
 import { useTheme } from "next-themes"
@@ -21,14 +20,12 @@ import {
   Moon,
   Sun,
   ChevronRight,
-  ExternalLink,
   Repeat,
   MapPin,
   CheckCircle2,
   Sparkles,
   Home,
   HelpCircle,
-  Users,
   LogIn
 } from "lucide-react"
 

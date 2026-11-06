@@ -20,7 +20,6 @@ import {
   Phone,
   Sparkles,
   Zap,
-  Ticket,
 } from "lucide-react"
 
 export type Unit = {

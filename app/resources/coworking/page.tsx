@@ -18,7 +18,6 @@ import {
   SlidersHorizontal,
   MapPin,
   X,
-  Zap,
 } from "lucide-react";
 import WorkspaceCard, { Hub } from "@/components/coworking/WorkspaceCard";
 import WorkspaceSidebarFilter, {
@@ -35,19 +34,6 @@ const SORT_OPTIONS = [
   { id: "highest_speed", label: "speed: fast to slow" },
   { id: "most_reviewed", label: "most reviewed" },
   { id: "newest", label: "newest added" },
-];
-
-const QUICK_SEARCH_TAGS = [
-  "Pokhara",
-  "Kathmandu",
-  "Lalitpur",
-  "Mustang",
-  "24/7",
-  "Coliving",
-  "Starlink",
-  "Quiet Focus",
-  "Hot Desks",
-  "Private Offices",
 ];
 
 export default function CoworkingMarketplacePage() {

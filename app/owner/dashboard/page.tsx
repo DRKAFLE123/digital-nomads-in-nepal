@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import Link from "next/link"
 import { useSession, signOut } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -58,7 +58,7 @@ interface HubData {
   bookings: any[]
 }
 
-export default function OwnerDashboardPage() {
+function OwnerDashboardContent() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -1105,5 +1105,22 @@ export default function OwnerDashboardPage() {
 
       <Footer />
     </div>
+  )
+}
+
+export default function OwnerDashboardPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#FAF7F2] dark:bg-[#080808] flex items-center justify-center">
+          <div className="flex items-center gap-3 text-sm font-semibold text-gray-500">
+            <div className="w-5 h-5 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+            Loading Host Console...
+          </div>
+        </div>
+      }
+    >
+      <OwnerDashboardContent />
+    </Suspense>
   )
 }

@@ -3,7 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState } from "react"
 import Link from "next/link"
-import { MapPin, Star, Heart, Building, Wifi, Zap } from "lucide-react"
+import { MapPin, Star, Heart, Wifi, Zap } from "lucide-react"
 
 export type Unit = {
   type: string

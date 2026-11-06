@@ -2,7 +2,7 @@
 
 import React from "react"
 import Link from "next/link"
-import { Building2, Compass, ArrowRight, Sparkles } from "lucide-react"
+import { Building2, Compass } from "lucide-react"
 
 interface TopPartnerRibbonProps {
   isScrolled?: boolean

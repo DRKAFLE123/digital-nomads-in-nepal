@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { ChevronDown, ArrowRight, HelpCircle } from "lucide-react"
+import { ChevronDown, ArrowRight } from "lucide-react"
 import { ALL_FAQS, FaqItem } from "@/lib/faqs"
 
 // Show the top high-volume search questions on the homepage (matching Google PAA trends)
