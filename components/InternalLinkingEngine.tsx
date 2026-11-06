@@ -145,17 +145,17 @@ export default function InternalLinkingEngine({
     return (
       <section 
         aria-label={`Explore ${cityName} Remote Work Ecosystem`} 
-        className={`bg-[#121212] border border-[#242424] rounded-3xl p-6 sm:p-8 space-y-6 shadow-xl ${className}`}
+        className={`bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm ${className}`}
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#242424] pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E8E2D8] dark:border-[#242424] pb-5">
           <div>
             <span className="text-[#C2410C] dark:text-[#FB923C] text-xs font-black uppercase tracking-wider block mb-1">
               Connected Nomad Ecosystem
             </span>
-            <h3 className="text-xl sm:text-2xl font-black text-white">
+            <h3 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white">
               Explore More in {cityName}
             </h3>
-            <p className="text-xs sm:text-sm text-[#A1A1AA] mt-1">
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-[#A1A1AA] mt-1">
               Seamlessly navigate stays, city guides, internet info, and local experts around {entityName || "this workspace"}.
             </p>
           </div>
@@ -174,25 +174,25 @@ export default function InternalLinkingEngine({
               <Link
                 key={idx}
                 href={item.href}
-                className="group p-4 bg-[#171717] border border-[#242424] hover:border-[#C2410C]/60 rounded-2xl transition-all flex flex-col justify-between hover:bg-[#1a1a1a]"
+                className="group p-4 bg-[#FBF9F5] dark:bg-[#1A1A1E] border border-[#E8E2D8] dark:border-[#26262A] hover:border-[#C2410C]/60 dark:hover:border-[#C2410C]/60 rounded-2xl transition-all flex flex-col justify-between hover:bg-white dark:hover:bg-[#202024] shadow-xs"
               >
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <div className="w-8 h-8 rounded-lg bg-[#C2410C]/15 text-[#FB923C] flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <div className="w-8 h-8 rounded-lg bg-[#C2410C]/10 text-[#C2410C] dark:bg-[#FB923C]/15 dark:text-[#FB923C] flex items-center justify-center group-hover:scale-110 transition-transform">
                       <Icon size={16} />
                     </div>
-                    <span className="text-[10px] font-bold text-[#A1A1AA] uppercase tracking-wider bg-[#222] px-2 py-0.5 rounded-full">
+                    <span className="text-[10px] font-bold text-gray-600 dark:text-[#A1A1AA] uppercase tracking-wider bg-white dark:bg-[#26262A] border border-[#E8E2D8] dark:border-[#333] px-2 py-0.5 rounded-full">
                       {item.badge}
                     </span>
                   </div>
-                  <h4 className="text-sm font-bold text-white group-hover:text-[#FB923C] transition-colors leading-snug">
+                  <h4 className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors leading-snug">
                     {item.title}
                   </h4>
-                  <p className="text-xs text-[#A1A1AA] leading-relaxed line-clamp-2">
+                  <p className="text-xs text-gray-600 dark:text-[#A1A1AA] leading-relaxed line-clamp-2">
                     {item.desc}
                   </p>
                 </div>
-                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#FB923C] mt-3 group-hover:translate-x-1 transition-transform">
+                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#C2410C] dark:text-[#FB923C] mt-3 group-hover:translate-x-1 transition-transform">
                   Explore <ArrowRight size={12} />
                 </span>
               </Link>
@@ -253,17 +253,17 @@ export default function InternalLinkingEngine({
     return (
       <section 
         aria-label={`Explore ${cityName} Workation Connections`} 
-        className={`bg-[#121212] border border-[#242424] rounded-3xl p-6 sm:p-8 space-y-6 shadow-xl ${className}`}
+        className={`bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm ${className}`}
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#242424] pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E8E2D8] dark:border-[#242424] pb-5">
           <div>
             <span className="text-[#C2410C] dark:text-[#FB923C] text-xs font-black uppercase tracking-wider block mb-1">
               Connected Stay & Work Network
             </span>
-            <h3 className="text-xl sm:text-2xl font-black text-white">
+            <h3 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white">
               Connect Your Stay in {cityName}
             </h3>
-            <p className="text-xs sm:text-sm text-[#A1A1AA] mt-1">
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-[#A1A1AA] mt-1">
               Direct links to vetted workspaces, budget guides, internet setup, and local community.
             </p>
           </div>
@@ -282,25 +282,25 @@ export default function InternalLinkingEngine({
               <Link
                 key={idx}
                 href={item.href}
-                className="group p-4 bg-[#171717] border border-[#242424] hover:border-[#C2410C]/60 rounded-2xl transition-all flex flex-col justify-between hover:bg-[#1a1a1a]"
+                className="group p-4 bg-[#FBF9F5] dark:bg-[#1A1A1E] border border-[#E8E2D8] dark:border-[#26262A] hover:border-[#C2410C]/60 dark:hover:border-[#C2410C]/60 rounded-2xl transition-all flex flex-col justify-between hover:bg-white dark:hover:bg-[#202024] shadow-xs"
               >
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <div className="w-8 h-8 rounded-lg bg-[#C2410C]/15 text-[#FB923C] flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <div className="w-8 h-8 rounded-lg bg-[#C2410C]/10 text-[#C2410C] dark:bg-[#FB923C]/15 dark:text-[#FB923C] flex items-center justify-center group-hover:scale-110 transition-transform">
                       <Icon size={16} />
                     </div>
-                    <span className="text-[10px] font-bold text-[#A1A1AA] uppercase tracking-wider bg-[#222] px-2 py-0.5 rounded-full">
+                    <span className="text-[10px] font-bold text-gray-600 dark:text-[#A1A1AA] uppercase tracking-wider bg-white dark:bg-[#26262A] border border-[#E8E2D8] dark:border-[#333] px-2 py-0.5 rounded-full">
                       {item.badge}
                     </span>
                   </div>
-                  <h4 className="text-sm font-bold text-white group-hover:text-[#FB923C] transition-colors leading-snug">
+                  <h4 className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors leading-snug">
                     {item.title}
                   </h4>
-                  <p className="text-xs text-[#A1A1AA] leading-relaxed line-clamp-2">
+                  <p className="text-xs text-gray-600 dark:text-[#A1A1AA] leading-relaxed line-clamp-2">
                     {item.desc}
                   </p>
                 </div>
-                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#FB923C] mt-3 group-hover:translate-x-1 transition-transform">
+                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#C2410C] dark:text-[#FB923C] mt-3 group-hover:translate-x-1 transition-transform">
                   Explore <ArrowRight size={12} />
                 </span>
               </Link>

@@ -141,43 +141,43 @@ export default function NomadBookingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-gray-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#FAF7F2] dark:bg-[#0A0A0A] text-gray-900 dark:text-gray-100 flex flex-col font-sans transition-colors duration-200">
       <Navbar />
 
       {/* Header Banner */}
-      <div className="relative border-b border-gray-800/80 bg-gradient-to-b from-[#121212] to-[#0A0A0A] py-10">
-        <div className="max-w-6xl mx-[#auto] px-4 sm:px-6">
+      <div className="relative border-b border-[#E8E2D8] dark:border-gray-800/80 bg-white dark:bg-[#121212] py-10 shadow-xs">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-[#C2410C]/10 text-[#C2410C] dark:text-[#FB923C] border border-[#C2410C]/30 mb-3">
                 <ShieldCheck className="w-3.5 h-3.5" />
                 Nomad Reservation Portal
               </div>
-              <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
-                My Workspace & Coliving Passes
+              <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+                My Workspace &amp; Coliving Passes
               </h1>
-              <p className="text-gray-400 text-sm md:text-base mt-1">
+              <p className="text-gray-600 dark:text-gray-400 text-sm md:text-base mt-1">
                 View detailed booking info, check-in dates, Wi-Fi credentials, host contacts, and manage active reservations.
               </p>
             </div>
 
             {/* Email Finder Bar */}
-            <form onSubmit={handleSearchSubmit} className="flex items-center gap-2 bg-[#181818] p-1.5 rounded-xl border border-gray-800">
+            <form onSubmit={handleSearchSubmit} className="flex items-center gap-2 bg-[#FBF9F5] dark:bg-[#181818] p-1.5 rounded-xl border border-[#E8E2D8] dark:border-gray-800 shadow-xs">
               <div className="flex items-center gap-2 px-3 text-gray-400">
-                <Mail className="w-4 h-4 text-[#FB923C]" />
+                <Mail className="w-4 h-4 text-[#C2410C] dark:text-[#FB923C]" />
                 <input
                   type="email"
                   value={userEmail}
                   onChange={e => setUserEmail(e.target.value)}
                   placeholder="Enter your email to load passes..."
-                  className="bg-transparent text-xs sm:text-sm text-white focus:outline-none w-48 sm:w-60"
+                  className="bg-transparent text-xs sm:text-sm text-gray-900 dark:text-white focus:outline-none w-48 sm:w-60"
                   required
                 />
               </div>
               <button
                 type="submit"
                 disabled={loading}
-                className="px-4 py-2 bg-[#C2410C] text-white text-xs font-bold rounded-lg hover:bg-[#9A3412] transition-colors flex items-center gap-1.5"
+                className="px-4 py-2 bg-[#C2410C] text-white text-xs font-bold rounded-lg hover:bg-[#9A3412] transition-colors flex items-center gap-1.5 cursor-pointer"
               >
                 <Search className="w-3.5 h-3.5" />
                 {loading ? "Loading..." : "Find Bookings"}
@@ -196,15 +196,15 @@ export default function NomadBookingsPage() {
               <button
                 key={tab.id}
                 onClick={() => setStatusFilter(tab.id as any)}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-2 border ${
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-2 border cursor-pointer ${
                   statusFilter === tab.id
                     ? "bg-[#C2410C] text-white border-[#C2410C] font-bold shadow-md shadow-[#C2410C]/10"
-                    : "bg-[#141414] text-gray-400 border-gray-800 hover:text-white hover:border-gray-700"
+                    : "bg-white dark:bg-[#141414] text-gray-700 dark:text-gray-400 border-[#E8E2D8] dark:border-gray-800 hover:text-gray-900 dark:hover:text-white"
                 }`}
               >
                 <span>{tab.label}</span>
                 <span className={`px-1.5 py-0.5 rounded-full text-[10px] ${
-                  statusFilter === tab.id ? "bg-white/20 text-white font-bold" : "bg-gray-800 text-gray-300"
+                  statusFilter === tab.id ? "bg-white/20 text-white font-bold" : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300"
                 }`}>
                   {tab.count}
                 </span>
@@ -217,22 +217,22 @@ export default function NomadBookingsPage() {
       {/* Main Content Area */}
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full">
         {filteredBookings.length === 0 ? (
-          <div className="text-center py-16 bg-[#121212] rounded-2xl border border-gray-800 p-8">
-            <Building2 className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-white mb-1">No Bookings Yet</h3>
-            <p className="text-gray-400 text-sm max-w-md mx-auto mb-6">
-              You haven't made any workspace or coliving reservations under <span className="text-[#FB923C] font-medium">{userEmail || "your account"}</span>.
+          <div className="text-center py-16 bg-white dark:bg-[#121212] rounded-2xl border border-[#E8E2D8] dark:border-gray-800 p-8 shadow-xs">
+            <Building2 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">No Bookings Yet</h3>
+            <p className="text-gray-600 dark:text-gray-400 text-sm max-w-md mx-auto mb-6">
+              You haven't made any workspace or coliving reservations under <span className="text-[#C2410C] dark:text-[#FB923C] font-semibold">{userEmail || "your account"}</span>.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3">
               <Link
                 href="/resources/coworking"
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#C2410C] text-white text-xs font-bold rounded-xl hover:bg-[#9A3412] transition-colors"
               >
-                Explore Workspaces & Desks
+                Explore Workspaces &amp; Desks
               </Link>
               <Link
                 href="/stay"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#1C1C1C] text-gray-200 border border-gray-700 text-xs font-bold rounded-xl hover:bg-gray-800 transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 dark:bg-[#1C1C1C] text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-700 text-xs font-bold rounded-xl hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
               >
                 Explore Nomad Coliving Stays
               </Link>
@@ -248,17 +248,17 @@ export default function NomadBookingsPage() {
               return (
                 <div
                   key={booking.id}
-                  className={`bg-[#121212] border rounded-2xl transition-all overflow-hidden ${
+                  className={`bg-white dark:bg-[#121212] border rounded-2xl transition-all overflow-hidden shadow-xs ${
                     isExpanded 
-                      ? "border-[#C2410C]/40 shadow-xl shadow-[#C2410C]/5 bg-[#141416]" 
-                      : "border-gray-800/80 hover:border-gray-700"
+                      ? "border-[#C2410C] shadow-lg shadow-[#C2410C]/5" 
+                      : "border-[#E8E2D8] dark:border-gray-800 hover:border-gray-400 dark:hover:border-gray-700"
                   }`}
                 >
                   {/* Card Compact Header (Always Visible) */}
                   <div className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="flex items-start gap-4">
                       {/* Hub Image Thumbnail */}
-                      <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden bg-gray-900 border border-gray-800 flex-shrink-0">
+                      <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 flex-shrink-0">
                         <Image
                           src={booking.hub.photoUrl || "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=600&q=80"}
                           alt={booking.hub.name}
@@ -274,48 +274,48 @@ export default function NomadBookingsPage() {
                         <div className="flex flex-wrap items-center gap-2 mb-1">
                           {/* Status Badge */}
                           {booking.status === "CONFIRMED" && (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30">
                               <CheckCircle2 className="w-3 h-3" /> CONFIRMED PASS
                             </span>
                           )}
                           {booking.status === "PENDING" && (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-amber-500/10 text-amber-400 border border-amber-500/30">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/30">
                               <Clock className="w-3 h-3" /> PENDING OWNER APPROVAL
                             </span>
                           )}
                           {booking.status === "CANCELLED" && (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-red-500/10 text-red-400 border border-red-500/30">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/30">
                               <XCircle className="w-3 h-3" /> CANCELLED
                             </span>
                           )}
 
                           {/* Space Type Badge */}
                           {isColiving ? (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
-                              <BedDouble className="w-3 h-3" /> Live & Work Coliving
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-[#C2410C]/10 text-[#C2410C] dark:text-[#FB923C] border border-[#C2410C]/20">
+                              <BedDouble className="w-3 h-3" /> Live &amp; Work Coliving
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-blue-500/10 text-blue-300 border border-blue-500/20">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-sky-50 dark:bg-sky-950/20 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800/30">
                               <Building2 className="w-3 h-3" /> Work Hub Pass
                             </span>
                           )}
 
-                          <span className="text-xs font-mono font-bold text-[#C2410C] dark:text-[#FB923C] bg-[#1A1A1A] px-2 py-0.5 rounded border border-gray-800">
+                          <span className="text-xs font-mono font-bold text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-[#1A1A1A] px-2 py-0.5 rounded border border-gray-200 dark:border-gray-800">
                             Booking ID: #{booking.id}
                           </span>
                         </div>
 
-                        <h2 className="text-lg font-bold text-white leading-snug">
+                        <h2 className="text-lg font-bold text-gray-900 dark:text-white leading-snug">
                           {booking.hub.name}
                         </h2>
 
-                        <div className="flex flex-wrap items-center gap-4 text-xs text-gray-400 mt-1.5">
-                          <span className="flex items-center gap-1 text-gray-300">
-                            <MapPin className="w-3.5 h-3.5 text-[#FB923C]" />
+                        <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500 dark:text-gray-400 mt-1.5">
+                          <span className="flex items-center gap-1 text-gray-700 dark:text-gray-300">
+                            <MapPin className="w-3.5 h-3.5 text-[#C2410C] dark:text-[#FB923C]" />
                             {booking.hub.city}, Nepal
                           </span>
-                          <span className="flex items-center gap-1 font-medium text-white bg-gray-900 px-2 py-0.5 rounded border border-gray-800">
-                            <Calendar className="w-3.5 h-3.5 text-[#FB923C]" />
+                          <span className="flex items-center gap-1 font-medium text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-900 px-2 py-0.5 rounded border border-gray-200 dark:border-gray-800">
+                            <Calendar className="w-3.5 h-3.5 text-[#C2410C] dark:text-[#FB923C]" />
                             {startFormatted} → {endFormatted}
                           </span>
                           <span className="px-2 py-0.5 bg-[#C2410C]/10 text-[#C2410C] dark:text-[#FB923C] rounded font-semibold text-[11px]">
@@ -329,10 +329,10 @@ export default function NomadBookingsPage() {
                     <div className="flex items-center gap-3 self-end md:self-center">
                       <button
                         onClick={() => toggleExpand(booking.id)}
-                        className={`px-4 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-2 border ${
+                        className={`px-4 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-2 border cursor-pointer ${
                           isExpanded
                             ? "bg-[#C2410C] text-white border-[#C2410C]"
-                            : "bg-[#1A1A1A] text-gray-200 border-gray-700 hover:border-gray-600 hover:text-white"
+                            : "bg-gray-100 dark:bg-[#1A1A1A] text-gray-800 dark:text-gray-200 border-gray-200 dark:border-gray-700 hover:border-gray-400"
                         }`}
                       >
                         {isExpanded ? (
@@ -343,7 +343,7 @@ export default function NomadBookingsPage() {
                         ) : (
                           <>
                             <span>View Full Booking Details</span>
-                            <ChevronDown className="w-4 h-4 text-[#FB923C]" />
+                            <ChevronDown className="w-4 h-4 text-[#C2410C] dark:text-[#FB923C]" />
                           </>
                         )}
                       </button>
@@ -352,32 +352,32 @@ export default function NomadBookingsPage() {
 
                   {/* Expanded Detailed View (Accordion Panel) */}
                   {isExpanded && (
-                    <div className="border-t border-gray-800 bg-[#0E0E0E] p-5 sm:p-6 space-y-6">
+                    <div className="border-t border-[#E8E2D8] dark:border-gray-800 bg-[#FAF7F2] dark:bg-[#0E0E0E] p-5 sm:p-6 space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         
                         {/* Column 1: Booked Space & Amenities */}
-                        <div className="bg-[#141416] p-4 rounded-xl border border-gray-800/80 space-y-3">
-                          <div className="flex items-center gap-2 text-xs font-bold text-[#FB923C] uppercase tracking-wider">
-                            <Building2 className="w-4 h-4" /> Reserved Space & Items
+                        <div className="bg-white dark:bg-[#141416] p-4 rounded-xl border border-[#E8E2D8] dark:border-gray-800/80 space-y-3 shadow-xs">
+                          <div className="flex items-center gap-2 text-xs font-bold text-[#C2410C] dark:text-[#FB923C] uppercase tracking-wider">
+                            <Building2 className="w-4 h-4" /> Reserved Space &amp; Items
                           </div>
                           <div>
-                            <p className="text-sm font-semibold text-white">
-                              {isColiving ? "Coliving Workcation Suite + Dedicated Desk" : "High-Speed Hot Desk & Lounge Pass"}
+                            <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                              {isColiving ? "Coliving Workation Suite + Dedicated Desk" : "High-Speed Hot Desk & Lounge Pass"}
                             </p>
-                            <p className="text-xs text-gray-400 mt-1">
-                              Address: <span className="text-gray-200">{booking.hub.address}</span>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                              Address: <span className="text-gray-900 dark:text-gray-200 font-medium">{booking.hub.address}</span>
                             </p>
-                            <p className="text-xs text-gray-400 mt-0.5">
-                              Access Hours: <span className="text-emerald-400 font-medium">{booking.hub.openingHours || "24/7 Unlimited Access"}</span>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">
+                              Access Hours: <span className="text-emerald-700 dark:text-emerald-400 font-medium">{booking.hub.openingHours || "24/7 Unlimited Access"}</span>
                             </p>
                           </div>
 
-                          <div className="pt-2 border-t border-gray-800">
-                            <p className="text-[11px] font-semibold text-gray-400 mb-2">Guaranteed Hub Facilities:</p>
+                          <div className="pt-2 border-t border-[#E8E2D8] dark:border-gray-800">
+                            <p className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-2">Guaranteed Hub Facilities:</p>
                             <div className="flex flex-wrap gap-1.5">
                               {Array.isArray(booking.hub.facilities) ? (
                                 booking.hub.facilities.map((fac: string, idx: number) => (
-                                  <span key={idx} className="px-2 py-0.5 bg-[#1C1C1E] text-gray-300 text-[10px] rounded border border-gray-800">
+                                  <span key={idx} className="px-2 py-0.5 bg-gray-100 dark:bg-[#1C1C1E] text-gray-700 dark:text-gray-300 text-[10px] rounded border border-gray-200 dark:border-gray-800">
                                     ✓ {fac}
                                   </span>
                                 ))
@@ -389,80 +389,80 @@ export default function NomadBookingsPage() {
                         </div>
 
                         {/* Column 2: Nomad Pass Wi-Fi & Check-in Info */}
-                        <div className="bg-[#141416] p-4 rounded-xl border border-gray-800/80 space-y-3">
-                          <div className="flex items-center gap-2 text-xs font-bold text-[#FB923C] uppercase tracking-wider">
-                            <Wifi className="w-4 h-4" /> Wi-Fi & Check-in Pass
+                        <div className="bg-white dark:bg-[#141416] p-4 rounded-xl border border-[#E8E2D8] dark:border-gray-800/80 space-y-3 shadow-xs">
+                          <div className="flex items-center gap-2 text-xs font-bold text-[#C2410C] dark:text-[#FB923C] uppercase tracking-wider">
+                            <Wifi className="w-4 h-4" /> Wi-Fi &amp; Check-in Pass
                           </div>
 
                           {booking.status === "CONFIRMED" ? (
-                            <div className="bg-[#1A1A1C] p-3 rounded-lg border border-emerald-500/30 space-y-2">
+                            <div className="bg-emerald-50 dark:bg-[#1A1A1C] p-3 rounded-lg border border-emerald-300 dark:border-emerald-500/30 space-y-2">
                               <div className="flex items-center justify-between text-xs">
-                                <span className="text-gray-400">Hub Wi-Fi SSID:</span>
-                                <span className="font-mono font-bold text-white bg-black px-2 py-0.5 rounded border border-gray-800">
+                                <span className="text-gray-600 dark:text-gray-400">Hub Wi-Fi SSID:</span>
+                                <span className="font-mono font-bold text-gray-900 dark:text-white bg-white dark:bg-black px-2 py-0.5 rounded border border-gray-200 dark:border-gray-800">
                                   {booking.hub.name.split(" ")[0]}_Starlink_Nomad
                                 </span>
                               </div>
                               <div className="flex items-center justify-between text-xs">
-                                <span className="text-gray-400">Passcode Key:</span>
-                                <span className="font-mono font-bold text-[#FB923C] bg-black px-2 py-0.5 rounded border border-gray-800">
+                                <span className="text-gray-600 dark:text-gray-400">Passcode Key:</span>
+                                <span className="font-mono font-bold text-[#C2410C] dark:text-[#FB923C] bg-white dark:bg-black px-2 py-0.5 rounded border border-gray-200 dark:border-gray-800">
                                   NOMAD_NEPAL_2026!
                                 </span>
                               </div>
-                              <p className="text-[10px] text-emerald-400 mt-1 flex items-center gap-1">
+                              <p className="text-[10px] text-emerald-700 dark:text-emerald-400 mt-1 flex items-center gap-1 font-medium">
                                 <ShieldCheck className="w-3 h-3" /> Starlink 200+ Mbps Active Guarantee
                               </p>
                             </div>
                           ) : (
-                            <div className="bg-[#1A1A1C] p-3 rounded-lg border border-amber-500/30 text-xs text-amber-300">
-                              Wi-Fi Passcode & Check-in QR code will be activated automatically once property owner confirms this booking.
+                            <div className="bg-amber-50 dark:bg-[#1A1A1C] p-3 rounded-lg border border-amber-300 dark:border-amber-500/30 text-xs text-amber-800 dark:text-amber-300">
+                              Wi-Fi Passcode &amp; Check-in QR code will be activated automatically once property owner confirms this booking.
                             </div>
                           )}
 
-                          <div className="pt-2 border-t border-gray-800 text-xs text-gray-400 space-y-1">
+                          <div className="pt-2 border-t border-[#E8E2D8] dark:border-gray-800 text-xs text-gray-500 dark:text-gray-400 space-y-1">
                             <div className="flex justify-between">
                               <span>Guest Name:</span>
-                              <span className="text-white font-medium">{booking.nomadName}</span>
+                              <span className="text-gray-900 dark:text-white font-medium">{booking.nomadName}</span>
                             </div>
                             <div className="flex justify-between">
                               <span>Guest Email:</span>
-                              <span className="text-gray-300 font-mono">{booking.nomadEmail}</span>
+                              <span className="text-gray-700 dark:text-gray-300 font-mono">{booking.nomadEmail}</span>
                             </div>
                           </div>
                         </div>
 
                         {/* Column 3: Property Host & Action Support */}
-                        <div className="bg-[#141416] p-4 rounded-xl border border-gray-800/80 space-y-3 flex flex-col justify-between">
+                        <div className="bg-white dark:bg-[#141416] p-4 rounded-xl border border-[#E8E2D8] dark:border-gray-800/80 space-y-3 flex flex-col justify-between shadow-xs">
                           <div>
-                            <div className="flex items-center gap-2 text-xs font-bold text-[#FB923C] uppercase tracking-wider mb-2">
-                              <User className="w-4 h-4" /> Host & Property Contact
+                            <div className="flex items-center gap-2 text-xs font-bold text-[#C2410C] dark:text-[#FB923C] uppercase tracking-wider mb-2">
+                              <User className="w-4 h-4" /> Host &amp; Property Contact
                             </div>
-                            <p className="text-sm font-semibold text-white">
+                            <p className="text-sm font-semibold text-gray-900 dark:text-white">
                               {booking.hub.ownerName || "Property Operations Team"}
                             </p>
-                            <p className="text-xs text-gray-400 flex items-center gap-1.5 mt-1">
-                              <Mail className="w-3.5 h-3.5 text-gray-500" />
-                              <a href={`mailto:${booking.hub.contactEmail}`} className="hover:text-[#FB923C] transition-colors underline">
+                            <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1.5 mt-1">
+                              <Mail className="w-3.5 h-3.5 text-gray-400" />
+                              <a href={`mailto:${booking.hub.contactEmail}`} className="hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-colors underline">
                                 {booking.hub.contactEmail}
                               </a>
                             </p>
                           </div>
 
                           {/* Quick Action Links */}
-                          <div className="pt-3 border-t border-gray-800 space-y-2">
+                          <div className="pt-3 border-t border-[#E8E2D8] dark:border-gray-800 space-y-2">
                             <div className="flex gap-2">
                               <a
                                 href={`mailto:${booking.hub.contactEmail}?subject=Question regarding booking #${booking.id}`}
-                                className="flex-1 px-3 py-2 bg-[#222] text-gray-200 text-xs font-semibold rounded-lg hover:bg-gray-800 transition-colors text-center flex items-center justify-center gap-1.5"
+                                className="flex-1 px-3 py-2 bg-gray-100 dark:bg-[#222] text-gray-800 dark:text-gray-200 text-xs font-semibold rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors text-center flex items-center justify-center gap-1.5"
                               >
-                                <Mail className="w-3.5 h-3.5 text-[#FB923C]" /> Contact Host
+                                <Mail className="w-3.5 h-3.5 text-[#C2410C] dark:text-[#FB923C]" /> Contact Host
                               </a>
                               <a
                                 href={`https://maps.google.com/?q=${encodeURIComponent(booking.hub.name + " " + booking.hub.city)}`}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="flex-1 px-3 py-2 bg-[#222] text-gray-200 text-xs font-semibold rounded-lg hover:bg-gray-800 transition-colors text-center flex items-center justify-center gap-1.5"
+                                className="flex-1 px-3 py-2 bg-gray-100 dark:bg-[#222] text-gray-800 dark:text-gray-200 text-xs font-semibold rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors text-center flex items-center justify-center gap-1.5"
                               >
-                                <MapPin className="w-3.5 h-3.5 text-[#FB923C]" /> Map Directions
+                                <MapPin className="w-3.5 h-3.5 text-[#C2410C] dark:text-[#FB923C]" /> Map Directions
                               </a>
                             </div>
 
@@ -470,7 +470,7 @@ export default function NomadBookingsPage() {
                               <button
                                 onClick={() => handleCancelBooking(booking.id)}
                                 disabled={cancellingId === booking.id}
-                                className="w-full px-3 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5"
+                                className="w-full px-3 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/30 text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                               >
                                 <XCircle className="w-3.5 h-3.5" />
                                 {cancellingId === booking.id ? "Cancelling..." : "Cancel Reservation"}
@@ -483,9 +483,9 @@ export default function NomadBookingsPage() {
 
                       {/* Guest Request Notes if present */}
                       {booking.notes && (
-                        <div className="bg-[#161618] p-3.5 rounded-xl border border-gray-800 text-xs">
-                          <span className="font-semibold text-[#FB923C] mr-2">Nomad Special Request:</span>
-                          <span className="text-gray-300 italic">"{booking.notes}"</span>
+                        <div className="bg-white dark:bg-[#161618] p-3.5 rounded-xl border border-[#E8E2D8] dark:border-gray-800 text-xs shadow-2xs">
+                          <span className="font-semibold text-[#C2410C] dark:text-[#FB923C] mr-2">Nomad Special Request:</span>
+                          <span className="text-gray-700 dark:text-gray-300 italic">"{booking.notes}"</span>
                         </div>
                       )}
                     </div>
