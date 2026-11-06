@@ -123,7 +123,7 @@ export default function WorkspaceReviewsSection({
       <div className="bg-[#121212] border border-[#242424] rounded-3xl p-6 sm:p-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#242424] pb-6">
           <div>
-            <span className="text-xs font-bold text-amber-400 uppercase tracking-widest flex items-center gap-1.5 mb-1">
+            <span className="text-xs font-bold text-[#C2410C] dark:text-[#FB923C] uppercase tracking-widest flex items-center gap-1.5 mb-1">
               <ShieldCheck size={14} /> Verified Nomad Feedback
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-white">
@@ -132,7 +132,7 @@ export default function WorkspaceReviewsSection({
           </div>
           <button
             onClick={() => setShowReviewModal(true)}
-            className="flex items-center gap-2 px-5 py-3 bg-amber-400 text-black font-extrabold text-xs rounded-xl hover:bg-yellow-300 transition-all shadow-md shadow-amber-400/20 active:scale-95"
+            className="flex items-center gap-2 px-5 py-3 bg-[#C2410C] hover:bg-[#9A3412] text-white font-extrabold text-xs rounded-xl transition-all shadow-md active:scale-95"
           >
             <MessageSquarePlus size={15} /> Write a Review
           </button>
@@ -143,9 +143,9 @@ export default function WorkspaceReviewsSection({
           {/* Overall Rating Box */}
           <div className="bg-[#161616] border border-[#262626] rounded-2xl p-6 text-center flex flex-col items-center justify-center space-y-2">
             <span className="text-5xl font-black text-white font-mono">{avgRating.toFixed(1)}</span>
-            <div className="flex text-amber-400 gap-1">
+            <div className="flex text-[#EA580C] gap-1">
               {[1, 2, 3, 4, 5].map(i => (
-                <Star key={i} size={16} className="fill-amber-400" />
+                <Star key={i} size={16} className="fill-[#EA580C]" />
               ))}
             </div>
             <p className="text-xs text-gray-400">Based on {totalReviews} verified nomad stays</p>
@@ -164,10 +164,10 @@ export default function WorkspaceReviewsSection({
               <div key={cat.name} className="bg-[#161616] border border-[#222] rounded-xl p-3 space-y-1">
                 <div className="flex items-center justify-between text-xs text-gray-300">
                   <span>{cat.name}</span>
-                  <span className="font-bold text-amber-400">{cat.score}</span>
+                  <span className="font-bold text-[#FB923C]">{cat.score}</span>
                 </div>
                 <div className="w-full bg-[#222] h-1.5 rounded-full overflow-hidden">
-                  <div className="bg-amber-400 h-full rounded-full w-[95%]" />
+                  <div className="bg-[#C2410C] h-full rounded-full w-[95%]" />
                 </div>
               </div>
             ))}
@@ -179,14 +179,14 @@ export default function WorkspaceReviewsSection({
       <div className="bg-[#121212] border border-[#242424] rounded-3xl p-6 space-y-4">
         <div className="flex items-center justify-between border-b border-[#242424] pb-3">
           <div className="flex items-center gap-2">
-            <Camera size={16} className="text-amber-400" />
+            <Camera size={16} className="text-[#C2410C] dark:text-[#FB923C]" />
             <h3 className="text-base font-bold text-white">Community Photo Gallery</h3>
           </div>
           <div className="flex items-center gap-1 bg-[#1a1a1a] p-1 rounded-xl border border-[#2a2a2a] text-xs">
             <button
               onClick={() => setActivePhotoTab("nomad")}
               className={`px-3 py-1 rounded-lg font-bold transition-all ${
-                activePhotoTab === "nomad" ? "bg-amber-400 text-black" : "text-gray-400 hover:text-white"
+                activePhotoTab === "nomad" ? "bg-[#C2410C] text-white" : "text-gray-400 hover:text-white"
               }`}
             >
               Nomad Photos (12)
@@ -194,7 +194,7 @@ export default function WorkspaceReviewsSection({
             <button
               onClick={() => setActivePhotoTab("owner")}
               className={`px-3 py-1 rounded-lg font-bold transition-all ${
-                activePhotoTab === "owner" ? "bg-amber-400 text-black" : "text-gray-400 hover:text-white"
+                activePhotoTab === "owner" ? "bg-[#C2410C] text-white" : "text-gray-400 hover:text-white"
               }`}
             >
               Owner Photos (8)
@@ -234,7 +234,7 @@ export default function WorkspaceReviewsSection({
             <button
               onClick={() => setFilterTab("verified")}
               className={`px-3 py-1 rounded-lg text-xs font-bold transition-all border ${
-                filterTab === "verified" ? "bg-amber-400 text-black border-amber-400" : "bg-[#141414] border-[#242424] text-gray-300"
+                filterTab === "verified" ? "bg-[#C2410C] text-white border-[#C2410C]" : "bg-[#141414] border-[#242424] text-gray-300"
               }`}
             >
               Verified Nomad Bookings Only
@@ -248,7 +248,7 @@ export default function WorkspaceReviewsSection({
             <div key={r.id} className="bg-[#121212] border border-[#242424] rounded-2xl p-5 space-y-3">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#1e1e1e] pb-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-amber-400/20 text-amber-400 font-extrabold flex items-center justify-center text-sm border border-amber-400/30">
+                  <div className="w-10 h-10 rounded-full bg-[#C2410C]/20 text-[#FB923C] font-extrabold flex items-center justify-center text-sm border border-[#C2410C]/30">
                     {r.reviewerName[0]}
                   </div>
                   <div>
@@ -264,9 +264,9 @@ export default function WorkspaceReviewsSection({
                     <span className="text-[11px] text-gray-500">Stayed: {r.stayDuration} • {new Date(r.createdAt).toLocaleDateString()}</span>
                   </div>
                 </div>
-                <div className="flex text-amber-400 gap-0.5">
+                <div className="flex text-[#EA580C] gap-0.5">
                   {[1, 2, 3, 4, 5].map((s) => (
-                    <Star key={s} size={14} className={s <= r.rating ? "fill-amber-400" : "text-gray-600"} />
+                    <Star key={s} size={14} className={s <= r.rating ? "fill-[#EA580C]" : "text-gray-600"} />
                   ))}
                 </div>
               </div>
@@ -284,7 +284,7 @@ export default function WorkspaceReviewsSection({
               <div className="flex items-center justify-between pt-2 border-t border-[#1e1e1e] text-xs">
                 <button
                   onClick={() => handleHelpful(r.id)}
-                  className="flex items-center gap-1.5 text-gray-400 hover:text-amber-400 transition-colors"
+                  className="flex items-center gap-1.5 text-gray-400 hover:text-[#FB923C] transition-colors"
                 >
                   <ThumbsUp size={13} />
                   <span>Helpful ({r.helpfulCount})</span>
@@ -317,7 +317,7 @@ export default function WorkspaceReviewsSection({
                   value={newReviewerName}
                   onChange={(e) => setNewReviewerName(e.target.value)}
                   placeholder="e.g. Alex (Berlin)"
-                  className="w-full bg-[#181818] border border-[#262626] rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
+                  className="w-full bg-[#181818] border border-[#262626] rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#C2410C]"
                 />
               </div>
 
@@ -325,7 +325,7 @@ export default function WorkspaceReviewsSection({
                 <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
                   Overall Star Rating
                 </label>
-                <div className="flex text-amber-400 gap-2">
+                <div className="flex text-[#EA580C] gap-2">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
                       key={star}
@@ -333,7 +333,7 @@ export default function WorkspaceReviewsSection({
                       onClick={() => setNewRating(star)}
                       className="p-1 hover:scale-110 transition-transform"
                     >
-                      <Star size={24} className={star <= newRating ? "fill-amber-400" : "text-gray-600"} />
+                      <Star size={24} className={star <= newRating ? "fill-[#EA580C]" : "text-gray-600"} />
                     </button>
                   ))}
                 </div>
@@ -349,7 +349,7 @@ export default function WorkspaceReviewsSection({
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
                   placeholder="Share details about fiber speeds, generator backup, noise level, and staff..."
-                  className="w-full bg-[#181818] border border-[#262626] rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 resize-none leading-relaxed"
+                  className="w-full bg-[#181818] border border-[#262626] rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#C2410C] resize-none leading-relaxed"
                 />
               </div>
 
@@ -363,7 +363,7 @@ export default function WorkspaceReviewsSection({
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-3 px-4 rounded-xl bg-amber-400 text-black font-black text-xs hover:bg-yellow-300 shadow-md shadow-amber-400/20"
+                  className="flex-1 py-3 px-4 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-black text-xs shadow-md"
                 >
                   Submit Verified Review ✓
                 </button>

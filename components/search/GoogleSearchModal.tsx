@@ -318,7 +318,7 @@ export default function GoogleSearchModal({ isOpen, onClose }: GoogleSearchModal
           />
 
           {loading && (
-            <div className="w-5 h-5 border-2 border-[#FFD400] border-t-transparent rounded-full animate-spin flex-shrink-0" />
+            <div className="w-5 h-5 border-2 border-[#C2410C] border-t-transparent rounded-full animate-spin flex-shrink-0" />
           )}
 
           {query && !loading && (
@@ -362,7 +362,7 @@ export default function GoogleSearchModal({ isOpen, onClose }: GoogleSearchModal
                 }}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
                   isActive
-                    ? "bg-[#FFD400] text-black shadow-xs font-bold"
+                    ? "bg-[#C2410C] text-white shadow-xs font-bold"
                     : "text-gray-600 dark:text-gray-300 hover:bg-gray-200/60 dark:hover:bg-[#222222]"
                 }`}
               >
@@ -385,7 +385,7 @@ export default function GoogleSearchModal({ isOpen, onClose }: GoogleSearchModal
                 <div>
                   <div className="flex items-center justify-between pb-2 mb-2 border-b border-gray-100 dark:border-[#222222]">
                     <span className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
-                      <Building size={14} className="text-[#FFD400]" /> Workspaces & Coworking Hubs
+                      <Building size={14} className="text-[#C2410C] dark:text-[#FB923C]" /> Workspaces & Coworking Hubs
                     </span>
                     <Link
                       href={`/resources/coworking?search=${encodeURIComponent(query)}`}
@@ -594,7 +594,7 @@ export default function GoogleSearchModal({ isOpen, onClose }: GoogleSearchModal
               {/* Quick Action Navigation Cards (Find Workspace, Find Guide, Stays) */}
               <div>
                 <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3 flex items-center gap-1.5">
-                  <Compass size={14} className="text-[#FFD400]" /> Fast Explorer Shortcuts
+                  <Compass size={14} className="text-[#C2410C] dark:text-[#FB923C]" /> Fast Explorer Shortcuts
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <Link
@@ -693,7 +693,7 @@ export default function GoogleSearchModal({ isOpen, onClose }: GoogleSearchModal
                         className="flex items-center justify-between px-3.5 py-2.5 hover:bg-gray-50 dark:hover:bg-[#181818] transition-colors cursor-pointer group"
                       >
                         <div className="flex items-center gap-2.5 text-xs text-gray-800 dark:text-gray-200">
-                          <Clock size={13} className="text-gray-400 group-hover:text-[#FFD400] transition-colors" />
+                          <Clock size={13} className="text-gray-400 group-hover:text-[#C2410C] dark:group-hover:text-[#FB923C] transition-colors" />
                           <span>{term}</span>
                         </div>
                         <button

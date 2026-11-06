@@ -37,12 +37,12 @@ export default function CityDiscoveryChips({
       {/* Compact Header Line */}
       <div className="flex items-center justify-between gap-2.5 border-b border-[#242424] pb-2.5">
         <div className="flex items-center gap-2 min-w-0">
-          <MapPin size={16} className="text-[#FFD400] shrink-0" />
+          <MapPin size={16} className="text-[#C2410C] dark:text-[#FB923C] shrink-0" />
           <h2 className="text-sm sm:text-base font-black text-white tracking-tight truncate">
             {selectedCity === "All Cities" ? (
               "Workspaces in Nepal"
             ) : (
-              <>Spaces in <span className="text-[#FFD400]">{selectedCity}</span></>
+              <>Spaces in <span className="text-[#C2410C] dark:text-[#FB923C]">{selectedCity}</span></>
             )}
           </h2>
           <span className="bg-[#141414] border border-[#242424] text-[#A1A1AA] font-mono text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full shrink-0">
@@ -52,14 +52,14 @@ export default function CityDiscoveryChips({
 
         {/* City Select Dropdown Filter (Compact) */}
         <div className="relative min-w-[140px] sm:min-w-[190px] shrink-0">
-          <div className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#FFD400] pointer-events-none">
+          <div className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#C2410C] dark:text-[#FB923C] pointer-events-none">
             <MapPin size={12} />
           </div>
           <select
             value={selectedCity}
             aria-label="Filter workspaces by city"
             onChange={(e) => onSelectCity(e.target.value)}
-            className="w-full bg-[#141414] border border-[#242424] hover:border-[#FFD400] hover:bg-[#1c1809] hover:text-[#FFD400] hover:shadow-[0_0_12px_rgba(255,212,0,0.15)] rounded-xl pl-7 pr-7 py-1.5 text-xs font-bold text-white focus:outline-none focus:border-[#FFD400] cursor-pointer appearance-none transition-all duration-200 shadow-xs"
+            className="w-full bg-[#141414] border border-[#242424] hover:border-[#C2410C] hover:bg-[#1a1a1a] rounded-xl pl-7 pr-7 py-1.5 text-xs font-bold text-white focus:outline-none focus:border-[#C2410C] cursor-pointer appearance-none transition-all duration-200 shadow-xs"
           >
             {NEPAL_CITIES.map((c) => (
               <option key={c.id} value={c.id} className="bg-[#141414] text-white">
@@ -87,14 +87,14 @@ export default function CityDiscoveryChips({
               onClick={() => onSelectCity(c.id)}
               className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-bold transition-all duration-200 border whitespace-nowrap shrink-0 cursor-pointer ${
                 isSelected
-                  ? "bg-[#FFD400] text-black border-[#FFD400] shadow-sm font-extrabold -translate-y-0.5"
-                  : "bg-[#141414] border-[#242424] text-[#A1A1AA] hover:border-[#FFD400] hover:text-[#FFD400] hover:bg-[#1c1809] hover:-translate-y-0.5 hover:shadow-[0_0_10px_rgba(255,212,0,0.15)]"
+                  ? "bg-[#C2410C] text-white border-[#C2410C] shadow-sm font-extrabold -translate-y-0.5"
+                  : "bg-[#141414] border-[#242424] text-[#A1A1AA] hover:border-[#C2410C]/50 hover:text-white hover:bg-[#C2410C]/10 hover:-translate-y-0.5"
               }`}
             >
               <span>{c.name}</span>
               <span
                 className={`text-[9px] font-mono px-1 py-0.1 rounded ${
-                  isSelected ? "bg-black/20 text-black font-extrabold" : "bg-[#1f1f1f] text-[#71717A]"
+                  isSelected ? "bg-white/20 text-white font-extrabold" : "bg-[#1f1f1f] text-[#71717A]"
                 }`}
               >
                 {c.count}

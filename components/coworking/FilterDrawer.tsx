@@ -94,12 +94,12 @@ export default function FilterDrawer({
       <div className="block lg:hidden">
         <button
           onClick={() => setMobileOpen(true)}
-          className="w-full flex items-center justify-center gap-2 px-3.5 py-2 bg-[#141414] border border-[#262626] rounded-xl text-xs font-bold text-white hover:border-[#FFD400]/50 transition-all cursor-pointer"
+          className="w-full flex items-center justify-center gap-2 px-3.5 py-2 bg-[#141414] border border-[#262626] rounded-xl text-xs font-bold text-white hover:border-[#C2410C]/50 transition-all cursor-pointer"
         >
-          <Filter size={13} className="text-[#FFD400]" />
+          <Filter size={13} className="text-[#C2410C] dark:text-[#FB923C]" />
           <span>Filter Amenities</span>
           {activeCount > 0 ? (
-            <span className="bg-[#FFD400] text-black text-[10px] font-black px-1.5 py-0.2 rounded-full">
+            <span className="bg-[#C2410C] text-white text-[10px] font-black px-1.5 py-0.2 rounded-full">
               {activeCount} active
             </span>
           ) : (
@@ -116,7 +116,7 @@ export default function FilterDrawer({
               {/* Modal Header */}
               <div className="flex items-center justify-between border-b border-[#242424] pb-4">
                 <div className="flex items-center gap-2">
-                  <SlidersHorizontal size={18} className="text-amber-400" />
+                  <SlidersHorizontal size={18} className="text-[#C2410C] dark:text-[#FB923C]" />
                   <h3 className="text-lg font-bold text-white">Work-Friendly Amenities</h3>
                 </div>
                 <button
@@ -142,7 +142,7 @@ export default function FilterDrawer({
                         onClick={() => onToggleFacility(item)}
                         className={`px-3.5 py-2 rounded-xl text-xs font-bold border transition-all ${
                           isSelected
-                            ? "bg-amber-400 text-black border-amber-400 shadow-md"
+                            ? "bg-[#C2410C] text-white border-[#C2410C] shadow-md"
                             : "bg-[#161616] border-[#282828] text-gray-300 hover:border-gray-500"
                         }`}
                       >
@@ -167,7 +167,7 @@ export default function FilterDrawer({
               </button>
               <button
                 onClick={() => setMobileOpen(false)}
-                className="flex-1 py-3 px-4 rounded-xl bg-amber-400 text-black font-black text-xs hover:bg-yellow-300 transition-all shadow-md shadow-amber-400/20"
+                className="flex-1 py-3 px-4 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-black text-xs transition-all shadow-md"
               >
                 Apply Filters ({activeCount})
               </button>

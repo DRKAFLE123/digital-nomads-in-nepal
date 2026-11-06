@@ -55,10 +55,23 @@ function parsePhotos(photoUrl: string | null): string[] {
   return [photoUrl]
 }
 
+const CURATED_WORKSPACE_COVERS = [
+  "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80",
+  "https://images.unsplash.com/photo-1527192491265-7e15c55b1ed2?auto=format&fit=crop&w=1200&q=80",
+  "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80",
+  "https://images.unsplash.com/photo-1517502884422-41eaead166d4?auto=format&fit=crop&w=1200&q=80",
+  "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80",
+]
+
 export default function WorkspaceCard({ hub }: WorkspaceCardProps) {
   const [favorited, setFavorited] = useState(false)
   const photos = parsePhotos(hub.photoUrl)
-  const photo = photos[0] || null
+  
+  // Deterministic curated fallback based on workspace slug
+  const fallbackCover = CURATED_WORKSPACE_COVERS[
+    Math.abs(hub.slug.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0)) % CURATED_WORKSPACE_COVERS.length
+  ]
+  const [imgSrc, setImgSrc] = useState<string>(photos[0] || fallbackCover)
 
   const facs = Array.isArray(hub.facilities) ? (hub.facilities as string[]) : []
 
@@ -114,19 +127,15 @@ export default function WorkspaceCard({ hub }: WorkspaceCardProps) {
     >
       {/* 4:3 Aspect Ratio Photo Crop */}
       <div className="relative aspect-[4/3] w-full bg-[#1A1A1C] overflow-hidden">
-        {photo ? (
-          <img
-            src={photo}
-            alt={hub.name}
-            loading="lazy"
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
-        ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center text-gray-500 bg-gradient-to-br from-[#1A1A1C] to-[#121214]">
-            <Building size={32} className="opacity-40" />
-            <span className="text-[11px] font-medium mt-1 text-gray-400">Workspace in {hub.city}</span>
-          </div>
-        )}
+        <img
+          src={imgSrc}
+          alt={hub.name}
+          loading="lazy"
+          onError={() => {
+            if (imgSrc !== fallbackCover) setImgSrc(fallbackCover)
+          }}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        />
 
         {/* Top-Left Single Badge (Verified or Partner) */}
         {(hub.isVerified || hub.isPartner) && (
