@@ -202,7 +202,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       <Navbar />
       <main className="min-h-screen bg-background pb-20">
         {/* Editorial Masthead Header */}
-        <header className="pt-28 sm:pt-32 pb-8 sm:pb-10 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+        <header className="pt-28 sm:pt-32 pb-8 sm:pb-10 px-5 sm:px-8 lg:px-10 max-w-5xl mx-auto">
           {/* Breadcrumb Navigation */}
           <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-muted-foreground mb-6 overflow-x-auto scrollbar-none py-0.5">
             <Link href="/" className="hover:text-foreground transition-colors shrink-0">Home</Link>
@@ -264,7 +264,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         </header>
 
         {/* Cinematic Cover Image (Full Resolution, 16:9 / 21:9 Aspect Ratio, NO blur, NO foggy gradient, NO overlapping card) */}
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 sm:mb-12">
+        <div className="max-w-5xl mx-auto px-5 sm:px-8 lg:px-10 mb-10 sm:mb-12">
           <div className="relative aspect-[16/10] sm:aspect-[21/10] w-full rounded-2xl sm:rounded-3xl overflow-hidden border border-[#E8E2D8] dark:border-[#26262A] shadow-xl bg-[#141416]">
             <Image 
               src={post.coverImage || "https://images.unsplash.com/photo-1544735716-392fe2449fee?auto=format&fit=crop&q=80"}
@@ -280,12 +280,12 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           </p>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-12">
-          {/* Main Content */}
-          <article className="w-full lg:w-[70%] max-w-4xl">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 lg:px-10 flex flex-col lg:flex-row justify-between items-start gap-10 xl:gap-14">
+          {/* Main Focused Reading Column (Thin-Long Measure, ~720px for optimal reading cadence) */}
+          <article className="w-full lg:max-w-[720px] xl:max-w-[740px] shrink-0 mx-auto lg:mx-0">
             {post.affiliates && <AffiliateDisclaimer />}
             
-            <div className="prose prose-neutral dark:prose-invert prose-lg max-w-none prose-headings:font-serif prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white prose-p:text-gray-800 dark:prose-p:text-gray-300 prose-p:leading-relaxed prose-a:text-[#C2410C] dark:prose-a:text-[#FB923C] hover:prose-a:underline prose-strong:text-gray-900 dark:prose-strong:text-white prose-img:rounded-2xl">
+            <div className="prose prose-neutral dark:prose-invert prose-lg max-w-none text-[17.5px] sm:text-[18px] leading-[1.85] tracking-normal text-gray-800 dark:text-gray-300 prose-headings:font-serif prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-gray-950 dark:prose-headings:text-gray-50 prose-p:text-gray-800 dark:prose-p:text-gray-300 prose-p:leading-[1.85] prose-p:mb-8 prose-a:text-[#C2410C] dark:prose-a:text-[#FB923C] hover:prose-a:underline prose-strong:text-gray-950 dark:prose-strong:text-white prose-strong:font-bold prose-img:rounded-2xl prose-img:shadow-md prose-blockquote:border-l-4 prose-blockquote:border-[#C2410C] prose-blockquote:italic prose-blockquote:font-serif prose-blockquote:text-lg sm:prose-blockquote:text-xl prose-blockquote:text-gray-700 dark:prose-blockquote:text-gray-300 prose-blockquote:my-8 prose-blockquote:pl-6 [&>p:first-of-type]:first-letter:float-left [&>p:first-of-type]:first-letter:text-5xl [&>p:first-of-type]:first-letter:sm:text-6xl [&>p:first-of-type]:first-letter:font-serif [&>p:first-of-type]:first-letter:font-bold [&>p:first-of-type]:first-letter:mr-3.5 [&>p:first-of-type]:first-letter:leading-none [&>p:first-of-type]:first-letter:text-gray-950 dark:[&>p:first-of-type]:first-letter:text-white">
               <ReactMarkdown 
                 remarkPlugins={[remarkGfm]}
                 components={{
@@ -329,12 +329,12 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                   h2: ({ children, ...props }) => {
                     const text = getFlattenedText(children)
                     const id = text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')
-                    return <h2 id={id} className="text-gray-900 dark:text-white font-serif font-bold text-2xl sm:text-3xl mt-10 mb-4" {...props}>{children}</h2>
+                    return <h2 id={id} className="text-gray-900 dark:text-white font-serif font-bold text-2xl sm:text-3xl mt-12 mb-5 pt-6 border-t border-gray-100 dark:border-[#222225] first:border-t-0 first:pt-0" {...props}>{children}</h2>
                   },
                   h3: ({ children, ...props }) => {
                     const text = getFlattenedText(children)
                     const id = text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')
-                    return <h3 id={id} className="text-gray-900 dark:text-white font-serif font-bold text-xl sm:text-2xl mt-8 mb-3" {...props}>{children}</h3>
+                    return <h3 id={id} className="text-gray-900 dark:text-white font-serif font-bold text-xl sm:text-2xl mt-9 mb-3.5" {...props}>{children}</h3>
                   }
                 }}
               >
@@ -358,8 +358,8 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
             </div>
           </article>
 
-          {/* Sidebar */}
-          <aside className="w-full lg:w-[30%] space-y-8 relative">
+          {/* Sticky Editorial Sidebar */}
+          <aside className="w-full lg:w-72 xl:w-80 shrink-0 space-y-8 relative">
             {/* Recent Posts Thumbnail List */}
             {recentPosts && recentPosts.length > 0 && (
               <div className="bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] p-6 rounded-2xl shadow-xs space-y-6">
