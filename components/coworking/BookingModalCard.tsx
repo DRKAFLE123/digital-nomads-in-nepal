@@ -18,6 +18,9 @@ import {
   Plus,
   Minus,
   Phone,
+  Sparkles,
+  Zap,
+  Ticket,
 } from "lucide-react"
 
 export type Unit = {
@@ -47,6 +50,40 @@ interface BookingModalCardProps {
   initialUnitType?: string
 }
 
+export type PackageTier = "desk_only" | "workation_all_inclusive" | "stay_coworking_voucher"
+
+export const PACKAGE_TIERS: Array<{
+  id: PackageTier
+  tag: string
+  title: string
+  desc: string
+  icon: string
+  highlight?: boolean
+}> = [
+  {
+    id: "desk_only",
+    tag: "Option A",
+    title: "💻 Desk Only",
+    desc: "Dedicated workspace seat with verified fiber Wi-Fi & backup power.",
+    icon: "💻",
+  },
+  {
+    id: "workation_all_inclusive",
+    tag: "Option B • Popular",
+    title: "⚡ Room + Desk Workation",
+    desc: "Private room + guaranteed dedicated desk with backup power & breakfast.",
+    icon: "⚡",
+    highlight: true,
+  },
+  {
+    id: "stay_coworking_voucher",
+    tag: "Option C",
+    title: "🎟️ Stay + Coworking Pass",
+    desc: "Nomad room stay with multi-day passes to walk to nearby verified coworking hubs.",
+    icon: "🎟️",
+  },
+]
+
 export const UNIT_OPTIONS = [
   { id: "hot_desk", label: "Hot Desk / Flexi Seat", defaultMonthly: 80, defaultDaily: 5 },
   { id: "dedicated_desk", label: "Dedicated Fixed Desk", defaultMonthly: 120, defaultDaily: 8 },
@@ -63,6 +100,7 @@ export default function BookingModalCard({
 }: BookingModalCardProps) {
   const { data: session } = useSession()
 
+  const [selectedPackage, setSelectedPackage] = useState<PackageTier>("desk_only")
   const [selectedUnit, setSelectedUnit] = useState<string>("hot_desk")
   const [nomadName, setNomadName] = useState("")
   const [nomadEmail, setNomadEmail] = useState("")
@@ -81,6 +119,9 @@ export default function BookingModalCard({
   useEffect(() => {
     if (initialUnitType) {
       setSelectedUnit(initialUnitType)
+      if (initialUnitType === "coliving_room") {
+        setSelectedPackage("workation_all_inclusive")
+      }
     }
   }, [initialUnitType])
 
@@ -134,8 +175,16 @@ export default function BookingModalCard({
       const timeDiff = end.getTime() - start.getTime()
       daysDifference = Math.ceil(timeDiff / (1000 * 3600 * 24))
 
-      const dailyRate = hub.priceDaily || activeUnitConfig.defaultDaily
-      const monthlyRate = hub.priceMonthly || activeUnitConfig.defaultMonthly
+      let dailyRate = hub.priceDaily || activeUnitConfig.defaultDaily
+      let monthlyRate = hub.priceMonthly || activeUnitConfig.defaultMonthly
+
+      if (selectedPackage === "workation_all_inclusive") {
+        dailyRate = hub.priceDaily ? Math.round(hub.priceDaily * 3.2) : 28
+        monthlyRate = hub.priceMonthly ? Math.max(420, Math.round(hub.priceMonthly * 3.2)) : 450
+      } else if (selectedPackage === "stay_coworking_voucher") {
+        dailyRate = hub.priceDaily ? Math.round(hub.priceDaily * 2.5) : 22
+        monthlyRate = hub.priceMonthly ? Math.max(350, Math.round(hub.priceMonthly * 2.8)) : 380
+      }
 
       const unDiscountedDailyCost = daysDifference * dailyRate * quantity
 
@@ -201,13 +250,13 @@ export default function BookingModalCard({
           nomadEmail,
           startDate,
           endDate,
-          notes: `Unit: ${selectedUnit.toUpperCase()} | Quantity: ${quantity} | Phone/WhatsApp: ${nomadPhone} | ${notes}`.trim(),
+          notes: `PACKAGE: ${selectedPackage.toUpperCase()} | UNIT: ${selectedUnit.toUpperCase()} | Quantity: ${quantity} | Phone: ${nomadPhone} | ${notes}`.trim(),
         }),
       })
 
       if (res.ok) {
         const data = await res.json()
-        setBookingRef(data.id || `HUB-${Math.floor(100000 + Math.random() * 900000)}`)
+        setBookingRef(data.id || `NEPAL-WS-${Math.floor(100000 + Math.random() * 900000)}`)
         setSuccess(true)
       } else {
         const errData = await res.json()
@@ -261,39 +310,96 @@ export default function BookingModalCard({
         {/* Modal Body */}
         <div className="p-5 sm:p-6 overflow-y-auto custom-scrollbar flex-1">
           {success ? (
-            /* SUCCESS STATE */
-            <div className="text-center py-10 space-y-4 animate-in zoom-in-95 duration-200">
-              <div className="w-16 h-16 bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center mx-auto shadow-lg">
-                <CheckCircle size={36} />
+            /* COMBINED WORK + STAY SUCCESS CONFIRMATION VIEW */
+            <div className="text-center py-6 sm:py-8 space-y-5 animate-in zoom-in-95 duration-200">
+              <div className="w-14 h-14 bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center mx-auto shadow-md">
+                <CheckCircle size={32} />
               </div>
 
-              <div className="space-y-2 max-w-md mx-auto">
-                <h3 className="text-2xl font-black text-gray-900 dark:text-white">Reservation Request Confirmed!</h3>
-                <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
-                  Thank you <strong className="text-gray-900 dark:text-white">{nomadName}</strong>! Your seat reservation request for{" "}
-                  <strong className="text-gray-900 dark:text-white">{hub.name}</strong> has been logged.
-                </p>
-              </div>
-
-              <div className="bg-[#FBF9F5] dark:bg-[#181818] border border-[#E8E2D8] dark:border-[#282828] rounded-2xl p-5 max-w-sm mx-auto space-y-1">
-                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block">
-                  Reservation Reference Code
+              <div className="space-y-1.5 max-w-lg mx-auto">
+                <span className="text-[10px] font-black uppercase tracking-widest text-[#C2410C] dark:text-[#FB923C] bg-[#C2410C]/10 dark:bg-[#C2410C]/20 px-3 py-1 rounded-full">
+                  COMBINED WORKATION CONFIRMATION
                 </span>
-                <p className="font-mono text-lg font-black text-[#C2410C] dark:text-[#FB923C] tracking-wider">
-                  {bookingRef}
-                </p>
-                <p className="text-[11px] text-gray-600 dark:text-gray-400 pt-1">
-                  We sent confirmation details to <span className="text-gray-900 dark:text-white font-medium">{nomadEmail}</span>.
+                <h3 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white pt-1">
+                  Reservation Confirmed!
+                </h3>
+                <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                  Thank you <strong className="text-gray-900 dark:text-white">{nomadName}</strong>! Your combined reservation request for{" "}
+                  <strong className="text-gray-900 dark:text-white">{hub.name}</strong> is logged.
                 </p>
               </div>
 
-              <div className="pt-4">
+              {/* Reference Banner */}
+              <div className="bg-[#FBF9F5] dark:bg-[#181818] border border-[#E8E2D8] dark:border-[#282828] rounded-2xl p-4 max-w-md mx-auto flex items-center justify-between shadow-2xs">
+                <div className="text-left">
+                  <span className="text-[9.5px] font-bold text-gray-500 uppercase tracking-wider block">
+                    Combined Reference Code
+                  </span>
+                  <p className="font-mono text-base sm:text-lg font-black text-[#C2410C] dark:text-[#FB923C] tracking-wider">
+                    {bookingRef}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <span className="text-[9.5px] font-bold text-gray-500 uppercase tracking-wider block">
+                    Package Tier
+                  </span>
+                  <span className="text-xs font-extrabold text-gray-900 dark:text-white">
+                    {PACKAGE_TIERS.find((p) => p.id === selectedPackage)?.title}
+                  </span>
+                </div>
+              </div>
+
+              {/* Single Combined Instructions Dual-Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-w-2xl mx-auto text-left pt-1">
+                {/* 1. Check-in Instructions */}
+                <div className="bg-[#FAF7F2] dark:bg-[#1A1A1E] border border-[#E8E2D8] dark:border-[#2A2A2E] rounded-2xl p-4 space-y-2 shadow-xs">
+                  <div className="flex items-center gap-1.5 text-xs font-black uppercase text-gray-900 dark:text-white">
+                    <MapPin size={13} className="text-[#C2410C]" />
+                    <span>Check-in Instructions</span>
+                  </div>
+                  <div className="text-[11px] text-gray-600 dark:text-[#A1A1AA] space-y-1">
+                    <p>
+                      <strong>Address:</strong> {hub.address}, {hub.city}
+                    </p>
+                    <p>
+                      <strong>Check-in:</strong> 2:00 PM onwards
+                    </p>
+                    <p className="text-emerald-700 dark:text-emerald-400 font-semibold pt-0.5">
+                      ✓ Host keycard &amp; arrival notes sent to {nomadEmail}.
+                    </p>
+                  </div>
+                </div>
+
+                {/* 2. Desk Access Pass */}
+                <div className="bg-[#FAF7F2] dark:bg-[#1A1A1E] border border-[#E8E2D8] dark:border-[#2A2A2E] rounded-2xl p-4 space-y-2 shadow-xs">
+                  <div className="flex items-center gap-1.5 text-xs font-black uppercase text-gray-900 dark:text-white">
+                    <Zap size={13} className="text-emerald-600" />
+                    <span>Desk Access &amp; Wi-Fi Pass</span>
+                  </div>
+                  <div className="text-[11px] text-gray-600 dark:text-[#A1A1AA] space-y-1">
+                    <p>
+                      <strong>Digital Pass:</strong>{" "}
+                      <code className="bg-white dark:bg-black/40 border border-gray-200 dark:border-gray-800 px-1.5 py-0.5 rounded font-mono font-bold text-gray-900 dark:text-white">
+                        PASS-{bookingRef.slice(-6)}
+                      </code>
+                    </p>
+                    <p>
+                      <strong>Power Guarantee:</strong> Dual-WAN Fiber &amp; Generator
+                    </p>
+                    <p>
+                      <strong>Access Hours:</strong> {hub.openingHours || "24/7 Access"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-2">
                 <button
                   type="button"
                   onClick={onClose}
                   className="bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold px-8 py-3 rounded-xl text-xs uppercase tracking-wider transition-all shadow-md shadow-[#C2410C]/20 cursor-pointer"
                 >
-                  Done & Close ✓
+                  Done &amp; Close ✓
                 </button>
               </div>
             </div>
@@ -309,6 +415,58 @@ export default function BookingModalCard({
                     {error}
                   </div>
                 )}
+
+                {/* 0. PACKAGE TIER SELECTION */}
+                <div className="space-y-1.5">
+                  <label className="block text-[10px] font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider flex items-center justify-between">
+                    <span className="flex items-center gap-1">
+                      <Sparkles size={12} className="text-[#C2410C] dark:text-[#FB923C]" />
+                      Package Tier *
+                    </span>
+                    <span className="text-[10px] text-gray-400 font-normal">Workation Bundles</span>
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    {PACKAGE_TIERS.map((pkg) => {
+                      const isSelected = selectedPackage === pkg.id
+                      return (
+                        <button
+                          key={pkg.id}
+                          type="button"
+                          onClick={() => {
+                            setSelectedPackage(pkg.id)
+                            if (pkg.id === "workation_all_inclusive") {
+                              setSelectedUnit("coliving_room")
+                            } else if (pkg.id === "desk_only") {
+                              setSelectedUnit("hot_desk")
+                            } else {
+                              setSelectedUnit("dedicated_desk")
+                            }
+                          }}
+                          className={`p-3 rounded-2xl border text-left transition-all duration-200 cursor-pointer flex flex-col justify-between space-y-1.5 ${
+                            isSelected
+                              ? "bg-[#C2410C]/8 dark:bg-[#C2410C]/15 border-[#C2410C] shadow-xs ring-1 ring-[#C2410C]"
+                              : "bg-[#FBF9F5] dark:bg-[#181818] border-[#E8E2D8] dark:border-[#282828] hover:border-gray-400"
+                          }`}
+                        >
+                          <div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-[9px] font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                                {pkg.tag}
+                              </span>
+                              {isSelected && <CheckCircle size={13} className="text-[#C2410C] dark:text-[#FB923C]" />}
+                            </div>
+                            <span className="font-bold text-xs text-gray-900 dark:text-white block mt-0.5">
+                              {pkg.title}
+                            </span>
+                          </div>
+                          <p className="text-[10px] text-gray-500 dark:text-[#A1A1AA] leading-snug line-clamp-2">
+                            {pkg.desc}
+                          </p>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
 
                 {/* 1. SEAT TYPE DROPDOWN */}
                 <div>
@@ -491,13 +649,28 @@ export default function BookingModalCard({
                     </span>
                   </div>
 
+                  {/* Selected Package Breakdown */}
+                  <div className="bg-white dark:bg-[#121212] border border-[#E8E2D8] dark:border-[#282828] rounded-xl p-3 flex justify-between items-center text-xs shadow-xs">
+                    <div>
+                      <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block">
+                        Package Tier
+                      </span>
+                      <span className="font-bold text-[#C2410C] dark:text-[#FB923C]">
+                        {PACKAGE_TIERS.find((p) => p.id === selectedPackage)?.title}
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-bold bg-[#C2410C]/10 text-[#C2410C] dark:text-[#FB923C] px-2 py-0.5 rounded-full">
+                      {PACKAGE_TIERS.find((p) => p.id === selectedPackage)?.tag}
+                    </span>
+                  </div>
+
                   {/* Selected Seat Breakdown */}
                   <div className="bg-white dark:bg-[#121212] border border-[#E8E2D8] dark:border-[#282828] rounded-xl p-3 flex justify-between items-center text-xs shadow-xs">
                     <div>
                       <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block">
                         Selected Unit
                       </span>
-                      <span className="font-bold text-[#C2410C] dark:text-[#FB923C]">
+                      <span className="font-bold text-gray-900 dark:text-white">
                         {quantity} × {activeUnitConfig.label}
                       </span>
                     </div>

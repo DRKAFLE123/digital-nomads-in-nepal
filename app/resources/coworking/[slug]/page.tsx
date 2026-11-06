@@ -12,6 +12,7 @@ import { ArrowLeft, MapPin, CheckCircle, Star, Loader2, Calendar, Info, Building
 
 import BookingModalCard from "@/components/coworking/BookingModalCard"
 import EnquiryModalCard from "@/components/coworking/EnquiryModalCard"
+import NearbySpacesWidget from "@/components/coworking/NearbySpacesWidget"
 import InternalLinkingEngine from "@/components/InternalLinkingEngine"
 
 type Hub = {
@@ -33,6 +34,7 @@ type Hub = {
   ownerEmail?: string | null
   website: string | null
   updatedAt?: string
+  spaceType?: string | null
 }
 
 function parsePhotos(photoUrl: string | null): string[] {
@@ -510,21 +512,45 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                 avgRating={hub.rating}
                 totalReviews={hub.totalReviews}
               />
+
+              {/* Phase 2: Mutual Discovery & Cross-Linking ("Work Nearby" & "Stay Nearby") */}
+              <NearbySpacesWidget
+                currentHubId={hub.id}
+                currentCity={hub.city}
+                currentSpaceType={hub.spaceType}
+                currentHubName={hub.name}
+              />
             </div>
 
-            {/* Right Sticky Sidebar: Desk Rates & Reserve Now / Send Enquiry CTAs */}
+            {/* Right Sticky Sidebar: Rates & Reserve Now / Send Enquiry CTAs */}
             <div className="space-y-6 lg:sticky lg:top-28">
               <div className="bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-3xl p-6 sm:p-8 space-y-6 shadow-xl relative overflow-hidden">
                 {/* Visual Top Bar Accent */}
-                <div className="absolute top-0 inset-x-0 h-1.5 bg-[#C2410C]"></div>
+                <div
+                  className={`absolute top-0 inset-x-0 h-1.5 ${
+                    (hub.spaceType || "").toLowerCase().includes("stay") || (hub.spaceType || "").toLowerCase().includes("apartment")
+                      ? "bg-sky-700"
+                      : (hub.spaceType || "").toLowerCase().includes("coliving")
+                      ? "bg-[#C2410C]"
+                      : "bg-[#1B4332]"
+                  }`}
+                />
 
                 <div className="space-y-1">
                   <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
                     <Calendar size={16} className="text-[#C2410C] dark:text-[#FB923C]" />
-                    Desk Rates & Membership
+                    {(hub.spaceType || "").toLowerCase().includes("coliving")
+                      ? "Workation Package Rates"
+                      : (hub.spaceType || "").toLowerCase().includes("stay") || (hub.spaceType || "").toLowerCase().includes("apartment")
+                      ? "Nightly & Monthly Rates"
+                      : "Desk Rates & Membership"}
                   </h3>
                   <p className="text-[11px] text-gray-500 dark:text-[#A1A1AA]">
-                    Vetted workspace seats with guaranteed internet & power backup.
+                    {(hub.spaceType || "").toLowerCase().includes("coliving")
+                      ? "Private room + dedicated desk with guaranteed fiber Wi-Fi & backup power."
+                      : (hub.spaceType || "").toLowerCase().includes("stay") || (hub.spaceType || "").toLowerCase().includes("apartment")
+                      ? "Vetted nomad accommodation with verified fiber internet & generator."
+                      : "Vetted workspace seats with guaranteed internet & power backup."}
                   </p>
                 </div>
 
@@ -532,7 +558,13 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                 <div className="space-y-3">
                   {hub.priceDaily && (
                     <div className="flex justify-between items-center p-3.5 bg-[#FBF9F5] dark:bg-[#1A1A1E] border border-[#E8E2D8] dark:border-[#2A2A2E] rounded-2xl">
-                      <span className="text-xs text-gray-600 dark:text-[#A1A1AA] font-medium">Daily Hot Desk</span>
+                      <span className="text-xs text-gray-600 dark:text-[#A1A1AA] font-medium">
+                        {(hub.spaceType || "").toLowerCase().includes("stay") || (hub.spaceType || "").toLowerCase().includes("apartment")
+                          ? "Nightly Stay"
+                          : (hub.spaceType || "").toLowerCase().includes("coliving")
+                          ? "Daily Workation"
+                          : "Daily Hot Desk"}
+                      </span>
                       <span className="text-base font-black text-[#C2410C] dark:text-[#FB923C] font-mono">
                         ${hub.priceDaily} <span className="text-[10px] text-gray-500 dark:text-[#A1A1AA] font-normal">/ day</span>
                       </span>
@@ -540,7 +572,13 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                   )}
                   {hub.priceMonthly && (
                     <div className="flex justify-between items-center p-3.5 bg-[#FBF9F5] dark:bg-[#1A1A1E] border border-[#E8E2D8] dark:border-[#2A2A2E] rounded-2xl">
-                      <span className="text-xs text-gray-600 dark:text-[#A1A1AA] font-medium">Monthly Unlimited</span>
+                      <span className="text-xs text-gray-600 dark:text-[#A1A1AA] font-medium">
+                        {(hub.spaceType || "").toLowerCase().includes("stay") || (hub.spaceType || "").toLowerCase().includes("apartment")
+                          ? "Monthly Stay"
+                          : (hub.spaceType || "").toLowerCase().includes("coliving")
+                          ? "Monthly Live & Work"
+                          : "Monthly Unlimited"}
+                      </span>
                       <span className="text-base font-black text-[#C2410C] dark:text-[#FB923C] font-mono">
                         ${hub.priceMonthly} <span className="text-[10px] text-gray-500 dark:text-[#A1A1AA] font-normal">/ mo</span>
                       </span>

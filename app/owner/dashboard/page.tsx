@@ -205,6 +205,24 @@ export default function OwnerDashboardPage() {
   const pendingBookings = allBookings.filter(b => b.status === "PENDING")
   const confirmedBookings = allBookings.filter(b => b.status === "CONFIRMED")
   
+  // Split Analytics by Booking Type (Work, Stay, Work + Stay)
+  const workBookingsCount = allBookings.filter(b => {
+    const n = (b.notes || "").toLowerCase()
+    return n.includes("desk_only") || n.includes("hot_desk") || n.includes("dedicated_desk") || (!n.includes("stay") && !n.includes("coliving") && !n.includes("package") && !n.includes("room"))
+  }).length
+
+  const stayBookingsCount = allBookings.filter(b => {
+    const n = (b.notes || "").toLowerCase()
+    return n.includes("stay_coworking") || n.includes("stay") || n.includes("apartment") || n.includes("hostel") || n.includes("hotel") || n.includes("room")
+  }).length
+
+  const workAndStayBookingsCount = allBookings.filter(b => {
+    const n = (b.notes || "").toLowerCase()
+    return n.includes("workation") || n.includes("coliving") || n.includes("work_and_stay") || n.includes("package")
+  }).length
+
+  const totalBookingsCount = allBookings.length
+
   // Today's Bookings
   const todayDateStr = new Date().toISOString().slice(0, 10)
   const todayBookings = allBookings.filter(b => {
@@ -473,7 +491,109 @@ export default function OwnerDashboardPage() {
       {/* ─────────────────────────────────────────────────────────────
           3. MAIN HOST CONTENT AREA
          ───────────────────────────────────────────────────────────── */}
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 w-full flex-1 py-6">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 w-full flex-1 py-6 space-y-6">
+
+        {/* Phase 4: Host Split Analytics & Nomad Pass Network Section */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-4">
+          {/* Split Analytics by Booking Type (8 cols) */}
+          <div className="md:col-span-8 bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] rounded-2xl p-5 shadow-xs space-y-4">
+            <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3">
+              <div>
+                <span className="text-[10px] font-black uppercase tracking-wider text-gray-400 block">
+                  Bookings Breakdown
+                </span>
+                <h3 className="text-sm font-bold text-gray-900 dark:text-white">
+                  Reservations by Offering Type
+                </h3>
+              </div>
+              <span className="text-xs font-bold text-gray-500 font-mono">
+                {totalBookingsCount} Total Bookings
+              </span>
+            </div>
+
+            {/* Split Metrics */}
+            <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
+              <div className="p-3 rounded-xl bg-[#1B4332]/5 border border-[#1B4332]/20">
+                <div className="flex items-center gap-1.5 text-[#1B4332] dark:text-[#8FB89A] text-xs font-bold">
+                  <span>💻</span> Work
+                </div>
+                <div className="text-xl font-black text-gray-900 dark:text-white mt-1 font-mono">
+                  {workBookingsCount}
+                </div>
+                <div className="text-[10px] text-gray-500 mt-0.5">Hot &amp; Dedicated Desks</div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-sky-50 dark:bg-sky-950/20 border border-sky-200 dark:border-sky-800/40">
+                <div className="flex items-center gap-1.5 text-sky-700 dark:text-sky-400 text-xs font-bold">
+                  <span>🛌</span> Stay
+                </div>
+                <div className="text-xl font-black text-gray-900 dark:text-white mt-1 font-mono">
+                  {stayBookingsCount}
+                </div>
+                <div className="text-[10px] text-gray-500 mt-0.5">Rooms &amp; Apartments</div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-[#C2410C]/5 border border-[#C2410C]/20">
+                <div className="flex items-center gap-1.5 text-[#C2410C] dark:text-[#FB923C] text-xs font-bold">
+                  <span>⚡</span> Work + Stay
+                </div>
+                <div className="text-xl font-black text-gray-900 dark:text-white mt-1 font-mono">
+                  {workAndStayBookingsCount}
+                </div>
+                <div className="text-[10px] text-gray-500 mt-0.5">All-Inclusive Packages</div>
+              </div>
+            </div>
+
+            {/* Visual Ratio Bar */}
+            <div className="space-y-1.5 pt-0.5">
+              <div className="h-2 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden flex">
+                <div
+                  style={{ width: `${totalBookingsCount > 0 ? (workBookingsCount / totalBookingsCount) * 100 : 33.3}%` }}
+                  className="bg-[#1B4332] h-full transition-all duration-300"
+                  title="Work Bookings"
+                />
+                <div
+                  style={{ width: `${totalBookingsCount > 0 ? (stayBookingsCount / totalBookingsCount) * 100 : 33.3}%` }}
+                  className="bg-sky-600 h-full transition-all duration-300"
+                  title="Stay Bookings"
+                />
+                <div
+                  style={{ width: `${totalBookingsCount > 0 ? (workAndStayBookingsCount / totalBookingsCount) * 100 : 33.4}%` }}
+                  className="bg-[#C2410C] h-full transition-all duration-300"
+                  title="Work + Stay Packages"
+                />
+              </div>
+              <div className="flex items-center justify-between text-[10px] text-gray-400 font-medium">
+                <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-[#1B4332]" /> Work</span>
+                <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-sky-600" /> Stay</span>
+                <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-[#C2410C]" /> Packages</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Nomad Pass Multi-Hub Partner Network Card (4 cols) */}
+          <div className="md:col-span-4 bg-gradient-to-br from-[#17251E] to-[#0D1812] text-white rounded-2xl p-5 shadow-xs flex flex-col justify-between space-y-4">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[9.5px] font-black uppercase tracking-widest text-[#D6A06A] bg-white/10 px-2 py-0.5 rounded-full border border-white/10">
+                  NETWORK PARTNER
+                </span>
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              </div>
+              <h4 className="text-sm font-black text-[#F5F5F0]">
+                All-Nepal Nomad Pass
+              </h4>
+              <p className="text-[11px] text-gray-300 leading-relaxed">
+                Your spaces are enabled for cross-city nomad passes in Kathmandu, Pokhara, Mustang &amp; Bandipur.
+              </p>
+            </div>
+
+            <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[11px]">
+              <span className="text-gray-300 font-medium">Redemption:</span>
+              <span className="font-bold text-[#8FB89A]">Auto-Settled</span>
+            </div>
+          </div>
+        </section>
 
         {/* ═════════════════════════════════════════════════════════════
             TAB 1: TODAY (Exact Airbnb Reference Screen)
