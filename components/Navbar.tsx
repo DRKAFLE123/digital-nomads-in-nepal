@@ -472,16 +472,24 @@ export default function Navbar() {
                       aria-haspopup="true"
                       className={`flex items-center gap-1 text-[13px] font-semibold px-3 py-2 rounded-xl transition-all duration-150 ${
                         isOpen
-                          ? "text-[#C2410C] dark:text-[#FB923C] bg-[#C2410C]/10"
+                          ? isSolid
+                            ? "text-[#C2410C] dark:text-[#FB923C] bg-[#C2410C]/10 dark:bg-[#FB923C]/15"
+                            : "text-white bg-white/20 backdrop-blur-md border border-white/25 shadow-xs"
                           : isSolid
                           ? "text-gray-700 hover:text-[#C2410C] hover:bg-gray-100 dark:text-[#F5F5F5] dark:hover:text-[#FB923C] dark:hover:bg-[#141414]"
-                          : "text-white/90 hover:text-[#FB923C] hover:bg-white/10"
+                          : "text-white/90 hover:text-white hover:bg-white/15"
                       }`}
                     >
                       <span>{cat.name}</span>
                       <ChevronDown
                         size={13}
-                        className={`transition-transform duration-200 ${isOpen ? "rotate-180 text-[#C2410C] dark:text-[#FB923C]" : "opacity-60"}`}
+                        className={`transition-transform duration-200 ${
+                          isOpen
+                            ? isSolid
+                              ? "rotate-180 text-[#C2410C] dark:text-[#FB923C]"
+                              : "rotate-180 text-white"
+                            : "opacity-60"
+                        }`}
                       />
                     </Link>
                   ) : (
@@ -490,7 +498,7 @@ export default function Navbar() {
                       className={`flex items-center gap-1 text-[13px] font-semibold px-3 py-2 rounded-xl transition-all duration-150 ${
                         isSolid
                           ? "text-gray-700 hover:text-[#C2410C] hover:bg-gray-100 dark:text-[#F5F5F5] dark:hover:text-[#FB923C] dark:hover:bg-[#141414]"
-                          : "text-white/90 hover:text-[#FB923C] hover:bg-white/10"
+                          : "text-white/90 hover:text-white hover:bg-white/15"
                       }`}
                     >
                       {cat.name}
@@ -767,7 +775,11 @@ export default function Navbar() {
               ) : (
                 <Link
                   href="/register/space"
-                  className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#1E1E22] transition-colors"
+                  className={`hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                    isSolid
+                      ? "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#1E1E22]"
+                      : "text-white/90 hover:text-white hover:bg-white/15"
+                  }`}
                   title="List your workspace or nomad stay in Nepal"
                 >
                   <span>List a space</span>
