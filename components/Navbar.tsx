@@ -833,32 +833,33 @@ export default function Navbar() {
               </div>
             )}
 
-            {/* Airbnb-Style Mode Switcher (Switch to Hosting <-> Switch to Traveling) */}
+            {/* Airbnb-Style Mode Switcher (Switch to Hosting <-> Switch to Listing) */}
             {mounted && pathname.startsWith("/owner") ? (
               <Link
-                href="/"
-                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all bg-[#1C1C1F] hover:bg-[#28282D] text-white border border-white/15 hover:border-[#FB923C] shadow-xs group"
-                title="Switch back to traveling view on the live site"
+                href="/workspaces"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-blue-50/80 hover:bg-blue-100/90 dark:bg-blue-950/40 dark:hover:bg-blue-900/50 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 border border-blue-200/80 dark:border-blue-800/50 shadow-xs group"
+                title="Switch back to live listings"
               >
-                <Compass size={13} className="text-[#FB923C] group-hover:rotate-45 transition-transform" />
-                <span>Switch to traveling</span>
+                <Compass size={13} className="text-blue-600 dark:text-blue-400 group-hover:rotate-45 transition-transform" />
+                <span>Switch to listing</span>
               </Link>
             ) : mounted ? (
               roleInfo.isOwner ? (
                 <Link
                   href="/owner/dashboard"
-                  className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all bg-white/10 dark:bg-white/5 hover:bg-[#C2410C]/10 text-gray-900 dark:text-white border border-gray-300 dark:border-white/15 hover:border-[#C2410C] dark:hover:border-[#FB923C] shadow-xs group"
-                  title="Switch to your Airbnb-style Host Dashboard"
+                  className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-blue-50/80 hover:bg-blue-100/90 dark:bg-blue-950/40 dark:hover:bg-blue-900/50 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 border border-blue-200/80 dark:border-blue-800/50 shadow-xs group"
+                  title="Switch to your Host Dashboard"
                 >
-                  <Building2 size={13} className="text-[#C2410C] dark:text-[#FB923C]" />
+                  <Building2 size={13} className="text-blue-600 dark:text-blue-400" />
                   <span>Switch to hosting</span>
                 </Link>
               ) : (
                 <Link
                   href="/register/space"
-                  className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all text-gray-700 dark:text-gray-300 hover:text-[#C2410C] dark:hover:text-[#FB923C] hover:bg-black/5 dark:hover:bg-white/5"
+                  className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-blue-50/80 hover:bg-blue-100/90 dark:bg-blue-950/40 dark:hover:bg-blue-900/50 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 border border-blue-200/80 dark:border-blue-800/50 shadow-xs group"
                   title="List your workspace or nomad stay in Nepal"
                 >
+                  <Building2 size={13} className="text-blue-600 dark:text-blue-400" />
                   <span>Switch to hosting</span>
                 </Link>
               )

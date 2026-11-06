@@ -368,13 +368,15 @@ export default function OwnerDashboardPage() {
               })}
             </nav>
 
-            {/* Right: Switch to Traveling + Avatar Menu */}
+            {/* Right: Switch to Listing + Avatar Menu */}
             <div className="flex items-center gap-3">
               <Link
-                href="/"
-                className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1A1A1D] rounded-full transition-colors"
+                href="/workspaces"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50/80 hover:bg-blue-100/90 dark:bg-blue-950/40 dark:hover:bg-blue-900/50 border border-blue-200/80 dark:border-blue-800/50 rounded-full transition-all shadow-xs group"
+                title="Switch back to live listings"
               >
-                <span>Switch to traveling</span>
+                <Compass size={13} className="text-blue-600 dark:text-blue-400 group-hover:rotate-45 transition-transform" />
+                <span>Switch to listing</span>
               </Link>
 
               {/* Host Avatar & Dropdown Menu Button */}
@@ -401,11 +403,11 @@ export default function OwnerDashboardPage() {
                     </div>
 
                     <Link
-                      href="/"
+                      href="/workspaces"
                       onClick={() => setMenuOpen(false)}
-                      className="block px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-[#1F1F23] font-medium text-gray-700 dark:text-gray-200"
+                      className="block px-4 py-2.5 hover:bg-blue-50 dark:hover:bg-blue-950/30 font-semibold text-blue-600 dark:text-blue-400"
                     >
-                      Switch to traveling (Live Site)
+                      Switch to listing (Live Site)
                     </Link>
 
                     <Link
