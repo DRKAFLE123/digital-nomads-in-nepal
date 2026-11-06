@@ -102,27 +102,27 @@ export default function EnquiryModalCard({ isOpen, onClose, hub }: EnquiryModalC
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-200">
       <div
-        className="relative w-full max-w-lg bg-[#121212] border border-[#242424] rounded-3xl shadow-2xl overflow-hidden my-auto text-[#F5F5F5] transition-all"
+        className="relative w-full max-w-lg bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-3xl shadow-2xl overflow-hidden my-auto text-gray-900 dark:text-[#F5F5F5] transition-all"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Top Gold Bar Accent */}
-        <div className="h-1.5 w-full bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-300" />
+        {/* Top Accent Bar */}
+        <div className="h-1.5 w-full bg-[#C2410C]" />
 
         {/* Modal Header */}
-        <div className="p-6 pb-4 border-b border-[#242424] flex items-center justify-between">
+        <div className="p-6 pb-4 border-b border-[#E8E2D8] dark:border-[#26262A] flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-amber-400/10 border border-amber-400/30 rounded-2xl flex items-center justify-center text-amber-400">
+            <div className="w-10 h-10 bg-[#C2410C]/10 border border-[#C2410C]/30 rounded-2xl flex items-center justify-center text-[#C2410C] dark:text-[#FB923C]">
               <MessageSquare size={20} />
             </div>
             <div>
-              <span className="text-[10px] font-black uppercase tracking-widest text-amber-400 flex items-center gap-1">
+              <span className="text-[10px] font-black uppercase tracking-widest text-[#C2410C] dark:text-[#FB923C] flex items-center gap-1">
                 <HelpCircle size={11} /> Workspace Manager Inquiry
               </span>
-              <h2 className="text-lg font-black text-white line-clamp-1">{hub.name}</h2>
-              <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
-                <MapPin size={11} className="text-amber-400" /> {hub.city}, Nepal
+              <h2 className="text-lg font-black text-gray-900 dark:text-white line-clamp-1">{hub.name}</h2>
+              <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1 mt-0.5">
+                <MapPin size={11} className="text-[#C2410C] dark:text-[#FB923C]" /> {hub.city}, Nepal
               </p>
             </div>
           </div>
@@ -130,7 +130,7 @@ export default function EnquiryModalCard({ isOpen, onClose, hub }: EnquiryModalC
           <button
             type="button"
             onClick={onClose}
-            className="text-gray-400 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors"
+            className="text-gray-400 hover:text-gray-900 dark:hover:text-white p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
           >
             <X size={20} />
           </button>
@@ -140,19 +140,19 @@ export default function EnquiryModalCard({ isOpen, onClose, hub }: EnquiryModalC
         <div className="p-6 sm:p-8">
           {success ? (
             <div className="text-center py-6 space-y-4 animate-in zoom-in-95 duration-200">
-              <div className="w-16 h-16 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-full flex items-center justify-center mx-auto shadow-lg">
+              <div className="w-16 h-16 bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center mx-auto shadow-lg">
                 <CheckCircle size={36} />
               </div>
-              <h3 className="text-xl font-black text-white">Inquiry Sent Successfully!</h3>
-              <p className="text-xs text-gray-400 leading-relaxed max-w-sm mx-auto">
-                Thank you <strong className="text-white">{nomadName}</strong>! Your message regarding{" "}
-                <strong className="text-amber-400">{topic}</strong> has been delivered to the community manager for <strong className="text-white">{hub.name}</strong>.
+              <h3 className="text-xl font-black text-gray-900 dark:text-white">Inquiry Sent Successfully!</h3>
+              <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed max-w-sm mx-auto">
+                Thank you <strong className="text-gray-900 dark:text-white">{nomadName}</strong>! Your message regarding{" "}
+                <strong className="text-[#C2410C] dark:text-[#FB923C]">{topic}</strong> has been delivered to the community manager for <strong className="text-gray-900 dark:text-white">{hub.name}</strong>.
               </p>
               <div className="pt-2">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider transition-all"
+                  className="bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider transition-all shadow-md shadow-[#C2410C]/20"
                 >
                   Close & Return
                 </button>
@@ -161,58 +161,58 @@ export default function EnquiryModalCard({ isOpen, onClose, hub }: EnquiryModalC
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
-                <div className="p-3 bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs rounded-xl">
+                <div className="p-3 bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs rounded-xl">
                   {error}
                 </div>
               )}
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                  <label className="block text-[10px] font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">
                     Your Name *
                   </label>
                   <div className="relative">
-                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 w-4 h-4" />
+                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
                     <input
                       type="text"
                       required
                       value={nomadName}
                       onChange={(e) => setNomadName(e.target.value)}
                       placeholder="Damodar K."
-                      className="w-full bg-[#181818] border border-[#282828] rounded-xl pl-10 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400 transition-colors"
+                      className="w-full bg-[#FBF9F5] dark:bg-[#181818] border border-[#E8E2D8] dark:border-[#282828] rounded-xl pl-10 pr-4 py-2.5 text-xs text-gray-900 dark:text-white focus:outline-none focus:border-[#C2410C] transition-colors"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                  <label className="block text-[10px] font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">
                     Your Email *
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 w-4 h-4" />
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
                     <input
                       type="email"
                       required
                       value={nomadEmail}
                       onChange={(e) => setNomadEmail(e.target.value)}
                       placeholder="nomad@example.com"
-                      className="w-full bg-[#181818] border border-[#282828] rounded-xl pl-10 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400 transition-colors"
+                      className="w-full bg-[#FBF9F5] dark:bg-[#181818] border border-[#E8E2D8] dark:border-[#282828] rounded-xl pl-10 pr-4 py-2.5 text-xs text-gray-900 dark:text-white focus:outline-none focus:border-[#C2410C] transition-colors"
                     />
                   </div>
                 </div>
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                  <HelpCircle size={12} className="text-amber-400" /> Inquiry Topic
+                <label className="block text-[10px] font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+                  <HelpCircle size={12} className="text-[#C2410C] dark:text-[#FB923C]" /> Inquiry Topic
                 </label>
                 <select
                   value={topic}
                   onChange={(e) => setTopic(e.target.value)}
-                  className="w-full bg-[#181818] border border-[#282828] rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400 transition-colors cursor-pointer"
+                  className="w-full bg-[#FBF9F5] dark:bg-[#181818] border border-[#E8E2D8] dark:border-[#282828] rounded-xl px-4 py-2.5 text-xs text-gray-900 dark:text-white focus:outline-none focus:border-[#C2410C] transition-colors cursor-pointer"
                 >
                   {ENQUIRY_TOPICS.map((t) => (
-                    <option key={t} value={t}>
+                    <option key={t} value={t} className="bg-white dark:bg-[#181818] text-gray-900 dark:text-white">
                       {t}
                     </option>
                   ))}
@@ -220,7 +220,7 @@ export default function EnquiryModalCard({ isOpen, onClose, hub }: EnquiryModalC
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                <label className="block text-[10px] font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">
                   Your Inquiry Details *
                 </label>
                 <textarea
@@ -229,7 +229,7 @@ export default function EnquiryModalCard({ isOpen, onClose, hub }: EnquiryModalC
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Ask about speed tests, quiet call booths, long-term group rates, or schedule a physical tour..."
-                  className="w-full bg-[#181818] border border-[#282828] rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#C2410C] transition-colors resize-none leading-relaxed"
+                  className="w-full bg-[#FBF9F5] dark:bg-[#181818] border border-[#E8E2D8] dark:border-[#282828] rounded-xl px-4 py-3 text-xs text-gray-900 dark:text-white focus:outline-none focus:border-[#C2410C] transition-colors resize-none leading-relaxed"
                 />
               </div>
 

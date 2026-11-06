@@ -95,24 +95,24 @@ export default function WorkabilityScoreBadge({
         </button>
 
         {showTooltip && (
-          <div className="absolute left-0 bottom-full mb-2 w-64 bg-[#141414] border border-[#282828] rounded-xl p-3 shadow-2xl z-50 text-left pointer-events-none">
-            <div className="flex items-center justify-between border-b border-[#242424] pb-2 mb-2">
-              <span className="text-xs font-bold text-white flex items-center gap-1">
-                <ShieldCheck size={13} className="text-emerald-400" /> Workability Score
+          <div className="absolute left-0 bottom-full mb-2 w-64 bg-white dark:bg-[#141414] border border-[#E8E2D8] dark:border-[#282828] rounded-xl p-3 shadow-2xl z-50 text-left pointer-events-none">
+            <div className="flex items-center justify-between border-b border-[#E8E2D8] dark:border-[#242424] pb-2 mb-2">
+              <span className="text-xs font-bold text-gray-900 dark:text-white flex items-center gap-1">
+                <ShieldCheck size={13} className="text-emerald-600 dark:text-emerald-400" /> Workability Score
               </span>
-              <span className="text-xs font-black text-emerald-400">{finalScore}/100</span>
+              <span className="text-xs font-black text-emerald-600 dark:text-emerald-400">{finalScore}/100</span>
             </div>
             <div className="space-y-1.5 text-[11px]">
               {breakdown.slice(0, 4).map(({ label, score, icon: Icon }) => (
-                <div key={label} className="flex items-center justify-between text-gray-300">
+                <div key={label} className="flex items-center justify-between text-gray-700 dark:text-gray-300">
                   <span className="flex items-center gap-1">
-                    <Icon size={11} className="text-amber-400" /> {label}
+                    <Icon size={11} className="text-[#C2410C] dark:text-[#FB923C]" /> {label}
                   </span>
-                  <span className="font-mono text-[10px] text-emerald-400 font-bold">{score}</span>
+                  <span className="font-mono text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">{score}</span>
                 </div>
               ))}
             </div>
-            <p className="text-[10px] text-gray-500 mt-2 border-t border-[#242424] pt-1.5 italic">
+            <p className="text-[10px] text-gray-500 mt-2 border-t border-[#E8E2D8] dark:border-[#242424] pt-1.5 italic">
               Evaluated based on verified remote work signals in Nepal.
             </p>
           </div>
@@ -122,27 +122,27 @@ export default function WorkabilityScoreBadge({
   }
 
   return (
-    <div className="bg-[#121212] border border-[#242424] rounded-2xl p-5 shadow-lg relative overflow-hidden">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#242424] pb-4 mb-4">
+    <div className="bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-3xl p-6 sm:p-8 shadow-xs relative overflow-hidden">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E8E2D8] dark:border-[#26262A] pb-4 mb-4">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-black text-xl">
+          <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-black text-xl">
             {finalScore}
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="font-extrabold text-white text-base">Nomad Workability Score</h3>
-              <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">
+              <h3 className="font-extrabold text-gray-900 dark:text-white text-base">Nomad Workability Score</h3>
+              <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">
                 Verified
               </span>
             </div>
-            <p className="text-xs text-gray-400 mt-0.5">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
               Comprehensive remote work suitability evaluation for digital nomads.
             </p>
           </div>
         </div>
         <div className="text-right flex sm:flex-col items-center sm:items-end justify-between">
-          <span className="text-xs text-gray-400">Based on {reviewsCount} verified reviews</span>
-          <span className="text-xs font-bold text-amber-400 flex items-center gap-1">
+          <span className="text-xs text-gray-500 dark:text-gray-400">Based on {reviewsCount} verified reviews</span>
+          <span className="text-xs font-bold text-[#C2410C] dark:text-[#FB923C] flex items-center gap-1">
             <Info size={12} /> 8 Nomad Suitability Metrics
           </span>
         </div>
@@ -151,14 +151,14 @@ export default function WorkabilityScoreBadge({
       {/* Factor Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
         {breakdown.map(({ label, score, icon: Icon, text }) => (
-          <div key={label} className="bg-[#161616] border border-[#222] rounded-xl p-3 space-y-1">
-            <div className="flex items-center justify-between text-xs font-semibold text-gray-300">
+          <div key={label} className="bg-[#FBF9F5] dark:bg-[#1A1A1E] border border-[#E8E2D8] dark:border-[#2A2A2E] rounded-2xl p-3.5 space-y-1 shadow-xs">
+            <div className="flex items-center justify-between text-xs font-semibold text-gray-800 dark:text-gray-200">
               <span className="flex items-center gap-1.5">
-                <Icon size={13} className="text-amber-400" /> {label}
+                <Icon size={13} className="text-[#C2410C] dark:text-[#FB923C]" /> {label}
               </span>
-              <span className="font-mono text-xs font-bold text-emerald-400">{score}</span>
+              <span className="font-mono text-xs font-bold text-emerald-600 dark:text-emerald-400">{score}</span>
             </div>
-            <p className="text-[11px] text-gray-400 truncate">{text}</p>
+            <p className="text-[11px] text-gray-500 dark:text-gray-400 truncate">{text}</p>
           </div>
         ))}
       </div>

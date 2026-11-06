@@ -103,8 +103,8 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0A0A0A] flex justify-center items-center">
-        <Loader2 className="w-12 h-12 text-[#FB923C] animate-spin" />
+      <div className="min-h-screen bg-[#FBF9F5] dark:bg-[#0A0A0B] flex justify-center items-center">
+        <Loader2 className="w-12 h-12 text-[#C2410C] animate-spin" />
       </div>
     )
   }
@@ -113,11 +113,11 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
     return (
       <>
         <Navbar />
-        <main className="min-h-screen bg-[#0A0A0A] pt-32 pb-24 px-4 sm:px-6">
-          <div className="max-w-xl mx-auto text-center py-20 bg-[#121212] border border-[#242424] rounded-3xl">
-            <Info className="w-12 h-12 text-red-400 mx-auto mb-4" />
-            <h2 className="text-xl font-bold text-white mb-2">{error || "Work Hub Not Found"}</h2>
-            <Link href="/resources/coworking" className="text-[#FB923C] hover:underline text-sm font-semibold flex items-center justify-center gap-1.5 mt-4">
+        <main className="min-h-screen bg-[#FBF9F5] dark:bg-[#0A0A0B] pt-32 pb-24 px-4 sm:px-6">
+          <div className="max-w-xl mx-auto text-center py-20 bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-3xl shadow-sm">
+            <Info className="w-12 h-12 text-rose-500 mx-auto mb-4" />
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{error || "Work Hub Not Found"}</h2>
+            <Link href="/resources/coworking" className="text-[#C2410C] hover:underline text-sm font-semibold flex items-center justify-center gap-1.5 mt-4">
               <ArrowLeft size={16} /> Back to Coworking Directory
             </Link>
           </div>
@@ -134,13 +134,13 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#0A0A0A] text-[#F5F5F5] pt-28 pb-24 px-4 sm:px-6 lg:px-8">
+      <main className="min-h-screen bg-[#FBF9F5] dark:bg-[#0A0A0B] text-gray-900 dark:text-[#F5F5F4] pt-28 pb-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto space-y-8">
           
           {/* Top Breadcrumb & Navigation + Host Switcher */}
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex flex-wrap items-center gap-3">
-              <Link href="/resources/coworking" className="inline-flex items-center gap-2 text-[#FB923C] hover:text-white transition-colors text-xs font-bold uppercase tracking-wider bg-[#121212] px-3.5 py-2 rounded-xl border border-[#242424]">
+              <Link href="/resources/coworking" className="inline-flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-[#C2410C] dark:hover:text-white transition-colors text-xs font-bold uppercase tracking-wider bg-white dark:bg-[#141416] px-3.5 py-2 rounded-xl border border-[#E8E2D8] dark:border-[#26262A] shadow-xs">
                 <ArrowLeft size={14} /> Back to Workspaces
               </Link>
               {isOwner && (
@@ -154,12 +154,12 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                 </Link>
               )}
             </div>
-            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-[#A1A1AA]">
-              <Link href="/resources/coworking" className="hover:text-white transition-colors">Nepal Workspaces</Link>
+            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-gray-500 dark:text-[#A1A1AA]">
+              <Link href="/resources/coworking" className="hover:text-gray-900 dark:hover:text-white transition-colors">Nepal Workspaces</Link>
               <span>/</span>
-              <span className="text-[#FB923C] font-semibold">{hub.city}</span>
+              <span className="text-[#C2410C] dark:text-[#FB923C] font-semibold">{hub.city}</span>
               <span>/</span>
-              <span className="text-white font-bold">{hub.name}</span>
+              <span className="text-gray-900 dark:text-white font-bold">{hub.name}</span>
             </nav>
           </div>
 
@@ -171,11 +171,11 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
               
               {/* Photo Gallery Banner with Badges & Thumbnail Strip */}
               <div className="space-y-3">
-                <div className="h-96 md:h-[440px] bg-[#121212] border border-[#242424] rounded-3xl overflow-hidden relative shadow-2xl flex items-center justify-center group">
+                <div className="h-96 md:h-[440px] bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-3xl overflow-hidden relative shadow-md flex items-center justify-center group">
                   {activePhoto ? (
                     <img src={activePhoto} alt={`${hub.name} Coworking Space in ${hub.city}, Nepal`} className="w-full h-full object-cover transition-all duration-300" />
                   ) : (
-                    <Building className="w-24 h-24 text-[#333]" />
+                    <Building className="w-24 h-24 text-gray-300 dark:text-[#333]" />
                   )}
 
                   {/* Expand Lightbox Button */}
@@ -183,7 +183,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                     <button
                       type="button"
                       onClick={() => setLightboxOpen(true)}
-                      className="absolute top-6 right-6 bg-black/70 hover:bg-[#C2410C] text-white p-2.5 rounded-full transition-all backdrop-blur z-20 shadow-lg"
+                      className="absolute top-6 right-6 bg-black/60 hover:bg-[#C2410C] text-white p-2.5 rounded-full transition-all backdrop-blur z-20 shadow-lg"
                       title="View full screen gallery"
                     >
                       <Maximize2 size={16} />
@@ -197,8 +197,8 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                       </span>
                     )}
                     {hub.isVerified && (
-                      <span className="flex items-center gap-1.5 bg-[#22C55E] text-black text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full shadow-lg">
-                        <CheckCircle size={13} className="fill-black" /> Verified WorkHub
+                      <span className="flex items-center gap-1.5 bg-emerald-600 text-white text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full shadow-lg">
+                        <CheckCircle size={13} className="fill-white" /> Verified WorkHub
                       </span>
                     )}
                   </div>
@@ -214,7 +214,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                   </div>
                 </div>
 
-                {/* Clickable Thumbnail Gallery Row (Daraj / Amazon Style) */}
+                {/* Clickable Thumbnail Gallery Row */}
                 {photos.length > 1 && (
                   <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-none">
                     {photos.map((imgUrl, i) => (
@@ -222,10 +222,10 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                         key={i}
                         type="button"
                         onClick={() => setSelectedImgIdx(i)}
-                        className={`relative w-24 h-16 rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 ${
+                        className={`relative w-24 h-16 rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 bg-white dark:bg-[#141416] ${
                           selectedImgIdx === i
                             ? "border-[#C2410C] ring-2 ring-[#C2410C]/30 scale-105"
-                            : "border-[#242424] opacity-60 hover:opacity-100 hover:border-gray-500"
+                            : "border-[#E8E2D8] dark:border-[#242424] opacity-70 hover:opacity-100 hover:border-gray-400"
                         }`}
                       >
                         <img src={imgUrl} alt={`Thumbnail ${i + 1}`} className="w-full h-full object-cover" />
@@ -236,15 +236,15 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
               </div>
 
               {/* Header Title & Rating Box */}
-              <div className="bg-[#121212] border border-[#242424] rounded-3xl p-6 sm:p-8 space-y-5 shadow-lg">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#242424] pb-5">
+              <div className="bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-3xl p-6 sm:p-8 space-y-5 shadow-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E8E2D8] dark:border-[#26262A] pb-5">
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-xs text-[#FB923C] font-bold uppercase tracking-wider">
+                    <div className="flex items-center gap-2 text-xs text-[#C2410C] dark:text-[#FB923C] font-bold uppercase tracking-wider">
                       <MapPin size={14} />
                       {hub.city}, Nepal
                     </div>
-                    <h1 className="text-3xl sm:text-4xl font-black text-white">{hub.name}</h1>
-                    <p className="text-[#A1A1AA] text-sm flex items-center gap-1.5">📍 {hub.address}</p>
+                    <h1 className="text-3xl sm:text-4xl font-black text-gray-900 dark:text-white">{hub.name}</h1>
+                    <p className="text-gray-500 dark:text-[#A1A1AA] text-sm flex items-center gap-1.5">📍 {hub.address}</p>
                   </div>
                   
                   {hub.website && (
@@ -252,24 +252,24 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                       href={hub.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-xs font-extrabold text-[#FB923C] bg-[#C2410C]/10 hover:bg-[#C2410C]/20 border border-[#C2410C]/30 px-4 py-2.5 rounded-xl transition-all self-start sm:self-center"
+                      className="inline-flex items-center gap-2 text-xs font-extrabold text-[#C2410C] dark:text-[#FB923C] bg-[#C2410C]/5 dark:bg-[#C2410C]/10 hover:bg-[#C2410C]/15 dark:hover:bg-[#C2410C]/20 border border-[#C2410C]/30 px-4 py-2.5 rounded-xl transition-all self-start sm:self-center"
                     >
                       Visit Space Website <ExternalLink size={13} />
                     </a>
                   )}
                 </div>
 
-                <div className="flex items-center flex-wrap gap-6 text-sm text-[#A1A1AA]">
-                  <div className="flex items-center gap-2 text-white font-bold">
-                    <Star className="w-5 h-5 text-[#FB923C] fill-[#FB923C]" />
+                <div className="flex items-center flex-wrap gap-6 text-sm text-gray-500 dark:text-[#A1A1AA]">
+                  <div className="flex items-center gap-2 text-gray-900 dark:text-white font-bold">
+                    <Star className="w-5 h-5 text-[#EA580C] fill-[#EA580C]" />
                     <span className="text-lg font-mono">{hub.rating.toFixed(1)}</span>
-                    <span className="text-xs text-[#A1A1AA] font-normal">({hub.totalReviews} verified nomad reviews)</span>
+                    <span className="text-xs text-gray-500 dark:text-[#A1A1AA] font-normal">({hub.totalReviews} verified nomad reviews)</span>
                   </div>
-                  <div className="flex items-center gap-2 text-xs font-semibold text-[#22C55E] bg-[#22C55E]/10 px-3 py-1 rounded-full border border-[#22C55E]/20">
+                  <div className="flex items-center gap-2 text-xs font-semibold text-emerald-700 dark:text-[#22C55E] bg-emerald-50 dark:bg-[#22C55E]/10 px-3 py-1 rounded-full border border-emerald-200 dark:border-[#22C55E]/20">
                     <ShieldCheck size={14} /> Vetted Remote Work Ready
                   </div>
                   {hub.updatedAt && (
-                    <div className="text-xs text-[#A1A1AA] flex items-center gap-1 font-medium">
+                    <div className="text-xs text-gray-500 dark:text-[#A1A1AA] flex items-center gap-1 font-medium">
                       <span>•</span>
                       <span>Verified {new Date(hub.updatedAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
                     </div>
@@ -278,28 +278,28 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
               </div>
 
               {/* Verified Checklist Banner */}
-              <div className="bg-[#121212] border border-[#242424] rounded-3xl p-6 space-y-4">
-                <h3 className="text-xs font-extrabold text-[#FB923C] uppercase tracking-wider flex items-center gap-2">
+              <div className="bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-3xl p-6 space-y-4 shadow-xs">
+                <h3 className="text-xs font-extrabold text-[#C2410C] dark:text-[#FB923C] uppercase tracking-wider flex items-center gap-2">
                   <ShieldCheck size={16} /> Verified Remote Work Checklist
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div className="bg-[#171717] border border-[#242424] rounded-2xl p-4 space-y-1">
-                    <div className="flex items-center gap-2 text-xs font-bold text-white">
-                      <Wifi size={14} className="text-[#FB923C]" /> High-Speed Fiber
+                  <div className="bg-[#F8F6F0] dark:bg-[#1C1C20] border border-[#E8E2D8] dark:border-[#2A2A2E] rounded-2xl p-4 space-y-1">
+                    <div className="flex items-center gap-2 text-xs font-bold text-gray-900 dark:text-white">
+                      <Wifi size={14} className="text-[#C2410C] dark:text-[#FB923C]" /> High-Speed Fiber
                     </div>
-                    <p className="text-[11px] text-[#A1A1AA]">100+ Mbps dual-WAN backup line</p>
+                    <p className="text-[11px] text-gray-500 dark:text-[#A1A1AA]">100+ Mbps dual-WAN backup line</p>
                   </div>
-                  <div className="bg-[#171717] border border-[#242424] rounded-2xl p-4 space-y-1">
-                    <div className="flex items-center gap-2 text-xs font-bold text-white">
-                      <Zap size={14} className="text-[#FB923C]" /> 24/7 Power Backup
+                  <div className="bg-[#F8F6F0] dark:bg-[#1C1C20] border border-[#E8E2D8] dark:border-[#2A2A2E] rounded-2xl p-4 space-y-1">
+                    <div className="flex items-center gap-2 text-xs font-bold text-gray-900 dark:text-white">
+                      <Zap size={14} className="text-[#C2410C] dark:text-[#FB923C]" /> 24/7 Power Backup
                     </div>
-                    <p className="text-[11px] text-[#A1A1AA]">Auto Generator + UPS Inverter</p>
+                    <p className="text-[11px] text-gray-500 dark:text-[#A1A1AA]">Auto Generator + UPS Inverter</p>
                   </div>
-                  <div className="bg-[#171717] border border-[#242424] rounded-2xl p-4 space-y-1">
-                    <div className="flex items-center gap-2 text-xs font-bold text-white">
-                      <CheckCircle size={14} className="text-[#22C55E]" /> Verified Seat Access
+                  <div className="bg-[#F8F6F0] dark:bg-[#1C1C20] border border-[#E8E2D8] dark:border-[#2A2A2E] rounded-2xl p-4 space-y-1">
+                    <div className="flex items-center gap-2 text-xs font-bold text-gray-900 dark:text-white">
+                      <CheckCircle size={14} className="text-emerald-600 dark:text-[#22C55E]" /> Verified Seat Access
                     </div>
-                    <p className="text-[11px] text-[#A1A1AA]">Guaranteed hot desk availability</p>
+                    <p className="text-[11px] text-gray-500 dark:text-[#A1A1AA]">Guaranteed hot desk availability</p>
                   </div>
                 </div>
               </div>
@@ -315,46 +315,46 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
               />
 
               {/* Description */}
-              <div className="bg-[#121212] border border-[#242424] rounded-3xl p-6 sm:p-8 space-y-4 shadow-lg">
-                <h2 className="text-lg font-black text-white uppercase tracking-wider border-b border-[#242424] pb-3">
+              <div className="bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-3xl p-6 sm:p-8 space-y-4 shadow-xs">
+                <h2 className="text-lg font-black text-gray-900 dark:text-white uppercase tracking-wider border-b border-[#E8E2D8] dark:border-[#26262A] pb-3">
                   About this Workspace
                 </h2>
-                <p className="text-[#A1A1AA] text-sm leading-relaxed whitespace-pre-line">
+                <p className="text-gray-600 dark:text-[#A1A1AA] text-sm leading-relaxed whitespace-pre-line">
                   {hub.description}
                 </p>
               </div>
 
               {/* Available Seat Types & Room Options Section */}
-              <div className="bg-[#121212] border border-[#242424] rounded-3xl p-6 sm:p-8 space-y-5 shadow-lg">
-                <div className="flex items-center justify-between border-b border-[#242424] pb-4 flex-wrap gap-2">
+              <div className="bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-3xl p-6 sm:p-8 space-y-5 shadow-xs">
+                <div className="flex items-center justify-between border-b border-[#E8E2D8] dark:border-[#26262A] pb-4 flex-wrap gap-2">
                   <div>
-                    <span className="text-[10px] font-black uppercase tracking-widest text-[#FB923C] flex items-center gap-1.5">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-[#C2410C] dark:text-[#FB923C] flex items-center gap-1.5">
                       <Layers size={13} /> Building Inventory & Room Options
                     </span>
-                    <h2 className="text-xl font-black text-white mt-1">Available Seat Types & Rooms</h2>
+                    <h2 className="text-xl font-black text-gray-900 dark:text-white mt-1">Available Seat Types & Rooms</h2>
                   </div>
-                  <span className="text-xs text-[#A1A1AA]">
+                  <span className="text-xs text-gray-500 dark:text-[#A1A1AA]">
                     Vetted Ergonomic Desks • 24/7 Access
                   </span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
                   {/* Hot Desks */}
-                  <div className="bg-[#171717] border border-[#242424] hover:border-[#C2410C]/40 rounded-2xl p-5 space-y-3 transition-all flex flex-col justify-between group">
+                  <div className="bg-[#FBF9F5] dark:bg-[#1A1A1E] border border-[#E8E2D8] dark:border-[#2A2A2E] hover:border-[#C2410C]/50 rounded-2xl p-5 space-y-3 transition-all flex flex-col justify-between group shadow-xs">
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-black text-white uppercase tracking-wider">Hot Desks / Flexi Seats</span>
-                        <span className="text-xs font-black text-[#FB923C] font-mono">
+                        <span className="text-xs font-black text-gray-900 dark:text-white uppercase tracking-wider">Hot Desks / Flexi Seats</span>
+                        <span className="text-xs font-black text-[#C2410C] dark:text-[#FB923C] font-mono">
                           ${hub.priceDaily || 5}/day
                         </span>
                       </div>
                       <div className="flex items-center justify-between text-[10px]">
-                        <span className="text-[#22C55E] font-extrabold bg-[#22C55E]/10 border border-[#22C55E]/20 px-2 py-0.5 rounded-full flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-pulse" /> 12 Seats Available
+                        <span className="text-emerald-700 dark:text-[#22C55E] font-extrabold bg-emerald-50 dark:bg-[#22C55E]/10 border border-emerald-200 dark:border-[#22C55E]/20 px-2 py-0.5 rounded-full flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" /> 12 Seats Available
                         </span>
-                        <span className="text-[#A1A1AA]">Open Seating</span>
+                        <span className="text-gray-500 dark:text-[#A1A1AA]">Open Seating</span>
                       </div>
-                      <p className="text-[11px] text-[#A1A1AA] leading-relaxed">
+                      <p className="text-[11px] text-gray-600 dark:text-[#A1A1AA] leading-relaxed">
                         Flexible desk seating in open collaborative hub with high-speed fiber WiFi and power outlets.
                       </p>
                     </div>
@@ -365,28 +365,28 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                         setSelectedUnitType("hot_desk")
                         setBookingModalOpen(true)
                       }}
-                      className="w-full bg-[#222] hover:bg-[#C2410C] text-white font-bold text-xs py-2.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer"
+                      className="w-full bg-gray-900 hover:bg-[#C2410C] dark:bg-[#26262A] dark:hover:bg-[#C2410C] text-white font-bold text-xs py-2.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer shadow-xs"
                     >
                       <Calendar size={13} /> Reserve Hot Desk
                     </button>
                   </div>
 
                   {/* Dedicated Fixed Desks */}
-                  <div className="bg-[#171717] border border-[#242424] hover:border-[#C2410C]/40 rounded-2xl p-5 space-y-3 transition-all flex flex-col justify-between group">
+                  <div className="bg-[#FBF9F5] dark:bg-[#1A1A1E] border border-[#E8E2D8] dark:border-[#2A2A2E] hover:border-[#C2410C]/50 rounded-2xl p-5 space-y-3 transition-all flex flex-col justify-between group shadow-xs">
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-black text-white uppercase tracking-wider">Dedicated Fixed Desks</span>
-                        <span className="text-xs font-black text-[#FB923C] font-mono">
+                        <span className="text-xs font-black text-gray-900 dark:text-white uppercase tracking-wider">Dedicated Fixed Desks</span>
+                        <span className="text-xs font-black text-[#C2410C] dark:text-[#FB923C] font-mono">
                           ${hub.priceMonthly || 120}/mo
                         </span>
                       </div>
                       <div className="flex items-center justify-between text-[10px]">
-                        <span className="text-[#22C55E] font-extrabold bg-[#22C55E]/10 border border-[#22C55E]/20 px-2 py-0.5 rounded-full flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-pulse" /> 5 Desks Available
+                        <span className="text-emerald-700 dark:text-[#22C55E] font-extrabold bg-emerald-50 dark:bg-[#22C55E]/10 border border-emerald-200 dark:border-[#22C55E]/20 px-2 py-0.5 rounded-full flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" /> 5 Desks Available
                         </span>
-                        <span className="text-[#A1A1AA]">Personal Locker</span>
+                        <span className="text-gray-500 dark:text-[#A1A1AA]">Personal Locker</span>
                       </div>
-                      <p className="text-[11px] text-[#A1A1AA] leading-relaxed">
+                      <p className="text-[11px] text-gray-600 dark:text-[#A1A1AA] leading-relaxed">
                         Reserved personal desk space with ergonomic chair, lockable storage cabinet, and monitor mount.
                       </p>
                     </div>
@@ -397,28 +397,28 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                         setSelectedUnitType("dedicated_desk")
                         setBookingModalOpen(true)
                       }}
-                      className="w-full bg-[#222] hover:bg-[#C2410C] text-white font-bold text-xs py-2.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer"
+                      className="w-full bg-gray-900 hover:bg-[#C2410C] dark:bg-[#26262A] dark:hover:bg-[#C2410C] text-white font-bold text-xs py-2.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer shadow-xs"
                     >
                       <Calendar size={13} /> Reserve Fixed Desk
                     </button>
                   </div>
 
                   {/* Executive Private Offices */}
-                  <div className="bg-[#171717] border border-[#242424] hover:border-[#C2410C]/40 rounded-2xl p-5 space-y-3 transition-all flex flex-col justify-between group">
+                  <div className="bg-[#FBF9F5] dark:bg-[#1A1A1E] border border-[#E8E2D8] dark:border-[#2A2A2E] hover:border-[#C2410C]/50 rounded-2xl p-5 space-y-3 transition-all flex flex-col justify-between group shadow-xs">
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-black text-white uppercase tracking-wider">Private Executive Rooms</span>
-                        <span className="text-xs font-black text-[#FB923C] font-mono">
+                        <span className="text-xs font-black text-gray-900 dark:text-white uppercase tracking-wider">Private Executive Rooms</span>
+                        <span className="text-xs font-black text-[#C2410C] dark:text-[#FB923C] font-mono">
                           From $350/mo
                         </span>
                       </div>
                       <div className="flex items-center justify-between text-[10px]">
-                        <span className="text-[#22C55E] font-extrabold bg-[#22C55E]/10 border border-[#22C55E]/20 px-2 py-0.5 rounded-full flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-pulse" /> 2 Rooms Available
+                        <span className="text-emerald-700 dark:text-[#22C55E] font-extrabold bg-emerald-50 dark:bg-[#22C55E]/10 border border-emerald-200 dark:border-[#22C55E]/20 px-2 py-0.5 rounded-full flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" /> 2 Rooms Available
                         </span>
-                        <span className="text-[#A1A1AA]">2-8 Team Capacity</span>
+                        <span className="text-gray-500 dark:text-[#A1A1AA]">2-8 Team Capacity</span>
                       </div>
-                      <p className="text-[11px] text-[#A1A1AA] leading-relaxed">
+                      <p className="text-[11px] text-gray-600 dark:text-[#A1A1AA] leading-relaxed">
                         Private lockable office rooms for teams of 2 to 8 members with dedicated AC and keycard security.
                       </p>
                     </div>
@@ -429,31 +429,31 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                         setSelectedUnitType("private_room")
                         setBookingModalOpen(true)
                       }}
-                      className="w-full bg-[#222] hover:bg-[#C2410C] text-white font-bold text-xs py-2.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer"
+                      className="w-full bg-gray-900 hover:bg-[#C2410C] dark:bg-[#26262A] dark:hover:bg-[#C2410C] text-white font-bold text-xs py-2.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer shadow-xs"
                     >
                       <Calendar size={13} /> Reserve Private Room
                     </button>
                   </div>
 
                   {/* Coliving Work & Stay Suite */}
-                  <div className="bg-[#171717] border border-[#C2410C]/30 hover:border-[#C2410C] rounded-2xl p-5 space-y-3 transition-all flex flex-col justify-between group relative overflow-hidden">
+                  <div className="bg-[#FBF9F5] dark:bg-[#1A1A1E] border border-[#C2410C]/40 hover:border-[#C2410C] rounded-2xl p-5 space-y-3 transition-all flex flex-col justify-between group relative overflow-hidden shadow-xs">
                     <div className="absolute top-0 right-0 bg-[#C2410C] text-white text-[9px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-bl-lg">
                       ROOM + WORKSTATION
                     </div>
                     <div className="space-y-2 pt-1">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-black text-white uppercase tracking-wider">🛌 Coliving Work & Stay</span>
-                        <span className="text-xs font-black text-[#FB923C] font-mono">
+                        <span className="text-xs font-black text-gray-900 dark:text-white uppercase tracking-wider">🛌 Coliving Work & Stay</span>
+                        <span className="text-xs font-black text-[#C2410C] dark:text-[#FB923C] font-mono">
                           From $450/mo
                         </span>
                       </div>
                       <div className="flex items-center justify-between text-[10px]">
-                        <span className="text-[#22C55E] font-extrabold bg-[#22C55E]/10 border border-[#22C55E]/20 px-2 py-0.5 rounded-full flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-pulse" /> 3 Suites Available
+                        <span className="text-emerald-700 dark:text-[#22C55E] font-extrabold bg-emerald-50 dark:bg-[#22C55E]/10 border border-emerald-200 dark:border-[#22C55E]/20 px-2 py-0.5 rounded-full flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" /> 3 Suites Available
                         </span>
-                        <span className="text-[#FB923C] font-semibold">Room Included</span>
+                        <span className="text-[#C2410C] dark:text-[#FB923C] font-semibold">Room Included</span>
                       </div>
-                      <p className="text-[11px] text-[#A1A1AA] leading-relaxed">
+                      <p className="text-[11px] text-gray-600 dark:text-[#A1A1AA] leading-relaxed">
                         Private accommodation room + dedicated ergonomic desk with Starlink Wi-Fi, 24/7 solar power & breakfast.
                       </p>
                     </div>
@@ -464,28 +464,28 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                         setSelectedUnitType("coliving_room")
                         setBookingModalOpen(true)
                       }}
-                      className="w-full bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold text-xs py-2.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer shadow-md shadow-[#C2410C]/10"
+                      className="w-full bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold text-xs py-2.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer shadow-md shadow-[#C2410C]/20"
                     >
                       <Calendar size={13} /> Reserve Coliving Suite
                     </button>
                   </div>
 
                   {/* Meeting Halls & Conference */}
-                  <div className="bg-[#171717] border border-[#242424] hover:border-[#C2410C]/40 rounded-2xl p-5 space-y-3 transition-all flex flex-col justify-between group sm:col-span-2">
+                  <div className="bg-[#FBF9F5] dark:bg-[#1A1A1E] border border-[#E8E2D8] dark:border-[#2A2A2E] hover:border-[#C2410C]/50 rounded-2xl p-5 space-y-3 transition-all flex flex-col justify-between group sm:col-span-2 shadow-xs">
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-black text-white uppercase tracking-wider">Meeting Halls & Event Space</span>
-                        <span className="text-xs font-black text-[#FB923C] font-mono">
+                        <span className="text-xs font-black text-gray-900 dark:text-white uppercase tracking-wider">Meeting Halls & Event Space</span>
+                        <span className="text-xs font-black text-[#C2410C] dark:text-[#FB923C] font-mono">
                           From $40/day
                         </span>
                       </div>
                       <div className="flex items-center justify-between text-[10px]">
-                        <span className="text-[#22C55E] font-extrabold bg-[#22C55E]/10 border border-[#22C55E]/20 px-2 py-0.5 rounded-full flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-pulse" /> 1 Hall Available
+                        <span className="text-emerald-700 dark:text-[#22C55E] font-extrabold bg-emerald-50 dark:bg-[#22C55E]/10 border border-emerald-200 dark:border-[#22C55E]/20 px-2 py-0.5 rounded-full flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" /> 1 Hall Available
                         </span>
-                        <span className="text-[#A1A1AA]">4K Projector & Video Call Setup</span>
+                        <span className="text-gray-500 dark:text-[#A1A1AA]">4K Projector & Video Call Setup</span>
                       </div>
-                      <p className="text-[11px] text-[#A1A1AA] leading-relaxed">
+                      <p className="text-[11px] text-gray-600 dark:text-[#A1A1AA] leading-relaxed">
                         Fully equipped conference room with 4K projector, whiteboard, video call setup, and tea service.
                       </p>
                     </div>
@@ -496,7 +496,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                         setSelectedUnitType("meeting_hall")
                         setBookingModalOpen(true)
                       }}
-                      className="w-full bg-[#222] hover:bg-[#C2410C] text-white font-bold text-xs py-2.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer"
+                      className="w-full bg-gray-900 hover:bg-[#C2410C] dark:bg-[#26262A] dark:hover:bg-[#C2410C] text-white font-bold text-xs py-2.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer shadow-xs"
                     >
                       <Calendar size={13} /> Book Meeting Room
                     </button>
@@ -514,16 +514,16 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
 
             {/* Right Sticky Sidebar: Desk Rates & Reserve Now / Send Enquiry CTAs */}
             <div className="space-y-6 lg:sticky lg:top-28">
-              <div className="bg-[#121212] border border-[#242424] rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative overflow-hidden">
+              <div className="bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-3xl p-6 sm:p-8 space-y-6 shadow-xl relative overflow-hidden">
                 {/* Visual Top Bar Accent */}
                 <div className="absolute top-0 inset-x-0 h-1.5 bg-[#C2410C]"></div>
 
                 <div className="space-y-1">
-                  <h3 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
-                    <Calendar size={16} className="text-[#FB923C]" />
+                  <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                    <Calendar size={16} className="text-[#C2410C] dark:text-[#FB923C]" />
                     Desk Rates & Membership
                   </h3>
-                  <p className="text-[11px] text-[#A1A1AA]">
+                  <p className="text-[11px] text-gray-500 dark:text-[#A1A1AA]">
                     Vetted workspace seats with guaranteed internet & power backup.
                   </p>
                 </div>
@@ -531,26 +531,26 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                 {/* Rates List */}
                 <div className="space-y-3">
                   {hub.priceDaily && (
-                    <div className="flex justify-between items-center p-3.5 bg-[#171717] border border-[#242424] rounded-2xl">
-                      <span className="text-xs text-[#A1A1AA] font-medium">Daily Hot Desk</span>
-                      <span className="text-base font-black text-[#FB923C] font-mono">
-                        ${hub.priceDaily} <span className="text-[10px] text-[#A1A1AA] font-normal">/ day</span>
+                    <div className="flex justify-between items-center p-3.5 bg-[#FBF9F5] dark:bg-[#1A1A1E] border border-[#E8E2D8] dark:border-[#2A2A2E] rounded-2xl">
+                      <span className="text-xs text-gray-600 dark:text-[#A1A1AA] font-medium">Daily Hot Desk</span>
+                      <span className="text-base font-black text-[#C2410C] dark:text-[#FB923C] font-mono">
+                        ${hub.priceDaily} <span className="text-[10px] text-gray-500 dark:text-[#A1A1AA] font-normal">/ day</span>
                       </span>
                     </div>
                   )}
                   {hub.priceMonthly && (
-                    <div className="flex justify-between items-center p-3.5 bg-[#171717] border border-[#242424] rounded-2xl">
-                      <span className="text-xs text-[#A1A1AA] font-medium">Monthly Unlimited</span>
-                      <span className="text-base font-black text-[#FB923C] font-mono">
-                        ${hub.priceMonthly} <span className="text-[10px] text-[#A1A1AA] font-normal">/ mo</span>
+                    <div className="flex justify-between items-center p-3.5 bg-[#FBF9F5] dark:bg-[#1A1A1E] border border-[#E8E2D8] dark:border-[#2A2A2E] rounded-2xl">
+                      <span className="text-xs text-gray-600 dark:text-[#A1A1AA] font-medium">Monthly Unlimited</span>
+                      <span className="text-base font-black text-[#C2410C] dark:text-[#FB923C] font-mono">
+                        ${hub.priceMonthly} <span className="text-[10px] text-gray-500 dark:text-[#A1A1AA] font-normal">/ mo</span>
                       </span>
                     </div>
                   )}
 
                   {/* Included Perks */}
-                  <div className="p-3.5 bg-[#171717]/70 border border-[#242424] rounded-2xl text-[11px] text-[#A1A1AA] space-y-1.5">
-                    <p className="flex items-center gap-1.5 font-bold text-white">
-                      <CheckCircle size={13} className="text-[#22C55E]" /> Included in Membership:
+                  <div className="p-3.5 bg-emerald-50/70 dark:bg-emerald-950/20 border border-emerald-200/80 dark:border-emerald-800/40 rounded-2xl text-[11px] text-emerald-900 dark:text-emerald-300 space-y-1.5">
+                    <p className="flex items-center gap-1.5 font-bold text-emerald-950 dark:text-emerald-200">
+                      <CheckCircle size={13} className="text-emerald-600 dark:text-[#22C55E]" /> Included in Membership:
                     </p>
                     <p className="leading-relaxed">
                       Unlimited high-speed WiFi, tea/coffee access, generator power backup, ergonomic seating.
@@ -571,13 +571,13 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                   <button
                     type="button"
                     onClick={() => setEnquiryModalOpen(true)}
-                    className="w-full bg-[#1A1A1A] hover:bg-[#242424] border border-[#333] hover:border-[#555] text-white font-bold text-xs py-3.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
+                    className="w-full bg-[#F8F6F0] hover:bg-gray-100 dark:bg-[#1E1E22] dark:hover:bg-[#25252A] border border-[#E8E2D8] dark:border-[#333] hover:border-[#C2410C]/40 text-gray-800 dark:text-white font-bold text-xs py-3.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
                   >
-                    <MessageSquare size={14} className="text-[#FB923C]" /> Send Enquiry
+                    <MessageSquare size={14} className="text-[#C2410C] dark:text-[#FB923C]" /> Send Enquiry
                   </button>
                 </div>
 
-                <p className="text-[10px] text-center text-[#71717A] font-semibold">
+                <p className="text-[10px] text-center text-gray-500 dark:text-[#71717A] font-semibold">
                   ⚡ Instant Seat Request — No Upfront Payment Required
                 </p>
               </div>
@@ -595,10 +595,10 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
       </main>
 
       {/* MOBILE STICKY FLOATING CTA BAR */}
-      <div className="fixed bottom-0 inset-x-0 z-40 bg-[#121212]/95 border-t border-[#242424] p-3.5 sm:hidden backdrop-blur-md flex items-center justify-between gap-4 shadow-2xl">
+      <div className="fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-[#121212]/95 border-t border-[#E8E2D8] dark:border-[#242424] p-3.5 sm:hidden backdrop-blur-md flex items-center justify-between gap-4 shadow-2xl">
         <div>
-          <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">Desk Rate</span>
-          <span className="text-sm font-black text-[#FB923C] font-mono">
+          <span className="text-[10px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider block">Desk Rate</span>
+          <span className="text-sm font-black text-[#C2410C] dark:text-[#FB923C] font-mono">
             {hub.priceMonthly ? `$${hub.priceMonthly}/mo` : hub.priceDaily ? `$${hub.priceDaily}/day` : "Vetted Seat"}
           </span>
         </div>
@@ -606,10 +606,10 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
           <button
             type="button"
             onClick={() => setEnquiryModalOpen(true)}
-            className="bg-[#1F1F1F] border border-[#333] text-white font-bold text-xs px-3.5 py-3 rounded-xl uppercase tracking-wider transition-all flex items-center gap-1 active:scale-95"
+            className="bg-[#F8F6F0] dark:bg-[#1F1F1F] border border-[#E8E2D8] dark:border-[#333] text-gray-700 dark:text-white font-bold text-xs px-3.5 py-3 rounded-xl uppercase tracking-wider transition-all flex items-center gap-1 active:scale-95"
             title="Send enquiry"
           >
-            <MessageSquare size={14} className="text-[#FB923C]" />
+            <MessageSquare size={14} className="text-[#C2410C] dark:text-[#FB923C]" />
           </button>
           <button
             type="button"
