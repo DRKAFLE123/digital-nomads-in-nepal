@@ -9,7 +9,8 @@ import TableOfContents from "@/components/TableOfContents"
 import NewsletterSignup from "@/components/NewsletterSignup"
 import RelatedPosts from "@/components/RelatedPosts"
 import InternalLinkingEngine from "@/components/InternalLinkingEngine"
-import { Calendar, Clock, User } from "lucide-react"
+import { Calendar, Clock, User, ChevronRight, Camera } from "lucide-react"
+import Link from "next/link"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import type { Metadata } from "next"
@@ -200,54 +201,86 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       <ReadingProgressBar />
       <Navbar />
       <main className="min-h-screen bg-background pb-20">
-        {/* Full-width Hero Banner with bright mountain details (40% overlay) */}
-        <div className="relative w-full h-[45vh] md:h-[55vh] min-h-[350px]">
-          {/* Background Cover Image */}
-          <div className="absolute inset-0 z-0">
+        {/* Editorial Masthead Header */}
+        <header className="pt-28 sm:pt-32 pb-8 sm:pb-10 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+          {/* Breadcrumb Navigation */}
+          <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-muted-foreground mb-6 overflow-x-auto scrollbar-none py-0.5">
+            <Link href="/" className="hover:text-foreground transition-colors shrink-0">Home</Link>
+            <ChevronRight size={12} className="opacity-50 shrink-0" />
+            <Link href="/blog" className="hover:text-foreground transition-colors shrink-0">Field Guides</Link>
+            <ChevronRight size={12} className="opacity-50 shrink-0" />
+            <span className="text-[#C2410C] dark:text-[#FB923C] font-semibold truncate max-w-[220px] sm:max-w-sm">
+              {post.category || "Guide"}
+            </span>
+          </nav>
+
+          {/* Category Badge */}
+          <div className="mb-4">
+            <span className="inline-flex items-center px-3.5 py-1 rounded-full text-[11px] font-bold bg-[#C2410C] text-white uppercase tracking-wider shadow-xs">
+              {post.category}
+            </span>
+          </div>
+
+          {/* Majestic Editorial Title */}
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-[52px] font-bold text-gray-900 dark:text-[#F5F5F4] leading-[1.14] tracking-tight mb-6">
+            {post.title}
+          </h1>
+
+          {/* Optional Excerpt / Lede Subtitle */}
+          {post.excerpt && (
+            <p className="font-serif italic text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed mb-6 max-w-3xl">
+              {post.excerpt}
+            </p>
+          )}
+
+          {/* Author Byline & Publishing Metadata Row */}
+          <div className="flex flex-wrap items-center justify-between gap-4 py-4 border-y border-[#E8E2D8] dark:border-[#26262A] text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#C2410C] to-[#9A3412] text-white flex items-center justify-center font-black text-xs shadow-xs select-none ring-2 ring-[#C2410C]/20">
+                {post.author?.[0]?.toUpperCase() || "D"}
+              </div>
+              <div>
+                <span className="font-bold text-gray-900 dark:text-white block leading-tight">
+                  {post.author}
+                </span>
+                <span className="text-[11px] text-gray-500 dark:text-gray-400">
+                  Nepal Field Correspondent
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+              <span className="flex items-center gap-1.5">
+                <Calendar size={13} className="text-[#C2410C] dark:text-[#FB923C]" />
+                {new Date(post.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+              </span>
+              <span className="opacity-40">•</span>
+              <span className="flex items-center gap-1.5">
+                <Clock size={13} className="text-[#C2410C] dark:text-[#FB923C]" />
+                {post.readTime}
+              </span>
+            </div>
+          </div>
+        </header>
+
+        {/* Cinematic Cover Image (Full Resolution, 16:9 / 21:9 Aspect Ratio, NO blur, NO foggy gradient, NO overlapping card) */}
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 sm:mb-12">
+          <div className="relative aspect-[16/10] sm:aspect-[21/10] w-full rounded-2xl sm:rounded-3xl overflow-hidden border border-[#E8E2D8] dark:border-[#26262A] shadow-xl bg-[#141416]">
             <Image 
               src={post.coverImage || "https://images.unsplash.com/photo-1544735716-392fe2449fee?auto=format&fit=crop&q=80"}
               alt={post.title}
               fill
-              className="object-cover"
+              className="object-cover object-center"
               priority
             />
-            {/* Lighter overlay to show bright mountain details */}
-            <div className="absolute inset-0 bg-black/40 z-10" />
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-black/10 z-10" />
           </div>
+          <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-2.5 px-1 flex items-center gap-1.5 italic">
+            <Camera size={12} className="opacity-60 shrink-0" />
+            Field photography • {post.category || "Nomad Guide"} in Nepal
+          </p>
         </div>
 
-        {/* Text Area Card with a slight blur behind it (Glassmorphic) */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 -mt-20 md:-mt-28">
-          <div className="max-w-4xl bg-white/95 dark:bg-[#141416]/90 backdrop-blur-lg border border-gray-200 dark:border-[#222222] p-8 md:p-10 rounded-2xl shadow-xl">
-            {/* Category */}
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-[#C2410C] text-white uppercase tracking-wider mb-4 shadow-sm">
-              {post.category}
-            </span>
-            
-            {/* Title */}
-            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight tracking-tight">
-              {post.title}
-            </h1>
-            
-            {/* Meta information: Author • Date • Reading Time */}
-            <div className="flex flex-wrap items-center text-gray-600 dark:text-gray-300 text-sm font-semibold">
-              <span className="flex items-center gap-2">
-                <User size={14} className="text-[#C2410C] dark:text-[#FB923C]" /> {post.author}
-              </span>
-              <span className="mx-3 text-gray-400">•</span>
-              <span className="flex items-center gap-2">
-                <Calendar size={14} className="text-[#C2410C] dark:text-[#FB923C]" /> {new Date(post.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-              </span>
-              <span className="mx-3 text-gray-400">•</span>
-              <span className="flex items-center gap-2">
-                <Clock size={14} className="text-[#C2410C] dark:text-[#FB923C]" /> {post.readTime}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 flex flex-col lg:flex-row gap-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-12">
           {/* Main Content */}
           <article className="w-full lg:w-[70%] max-w-4xl">
             {post.affiliates && <AffiliateDisclaimer />}
