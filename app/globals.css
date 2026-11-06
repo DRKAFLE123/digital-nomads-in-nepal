@@ -5,35 +5,59 @@
 @layer base {
   :root {
     --background: #FAF7F2;
-    --foreground: #1A1A1C;
+    --foreground: #191F2D;
     --card: #FFFFFF;
-    --border: #E8E2D8;
-    --muted: #5E5A54;
-    --muted-foreground: #5E5A54;
-    --accent: #C2410C;
-    --accent-hover: #9A3412;
-    --primary: #C2410C;
+    --secondary-surface: #F3F1EB;
+    --input-bg: #F8F6F0;
+    --border: #E8E5DF;
+    --border-input: #8A8A84;
+    --muted: #525252;
+    --muted-foreground: #6B6B6B;
+    --primary: #1B4332;
+    --primary-hover: #143528;
+    --primary-soft: #E8F0E9;
     --primary-foreground: #FFFFFF;
+    --accent: #1B4332;
+    --accent-hover: #143528;
+    --accent-earth: #C58B55;
+    --accent-earth-text: #8A5A2B;
+    --accent-earth-soft: #F3E9DC;
     --on-accent: #FFFFFF;
-    --ok: #15803D;
-    --accent-link: #C2410C;
+    --ok: #166534;
+    --star: #B45309;
+    --warning: #A16207;
+    --error: #B42318;
+    --ribbon: #17251E;
+    --ribbon-foreground: #F5F5F0;
     --radius: 16px;
   }
 
   .dark {
-    --background: #0B0B0C;
-    --foreground: #F5F5F4;
-    --card: #141416;
-    --border: #26262A;
-    --muted: #A8A8B0;
-    --muted-foreground: #A8A8B0;
-    --accent: #FB923C;
-    --accent-hover: #FDBA74;
-    --primary: #EA580C;
-    --primary-foreground: #FFFFFF;
-    --on-accent: #FFFFFF;
+    --background: #0B0F0D;
+    --foreground: #F5F5F0;
+    --card: #141A16;
+    --secondary-surface: #1B221E;
+    --input-bg: #1A221D;
+    --border: #26332A;
+    --border-input: #3A4C40;
+    --muted: #A3B8AA;
+    --muted-foreground: #8FA697;
+    --primary: #8FB89A;
+    --primary-hover: #A5CBB0;
+    --primary-soft: #1E2D23;
+    --primary-foreground: #14251B;
+    --accent: #8FB89A;
+    --accent-hover: #A5CBB0;
+    --accent-earth: #D6A06A;
+    --accent-earth-text: #E5B483;
+    --accent-earth-soft: #2A2117;
+    --on-accent: #14251B;
     --ok: #34D399;
-    --accent-link: #FB923C;
+    --star: #F59E0B;
+    --warning: #FBBF24;
+    --error: #F87171;
+    --ribbon: #111A15;
+    --ribbon-foreground: #F5F5F0;
     --radius: 16px;
   }
 }
@@ -64,16 +88,16 @@
     border-radius: 9999px;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #C2410C;
+    background: #1B4332;
   }
   .custom-scrollbar {
     scrollbar-width: thin;
     scrollbar-color: #2c2c2c transparent;
   }
 
-  /* Editorial Himalayan Terracotta Text Highlights & Accents (Accessible on Light & Dark) */
+  /* Editorial Alpine Pine & Earth Text Highlights & Accents (Accessible on Light & Dark) */
   .highlight-marker {
-    background-color: rgba(194, 65, 12, 0.12);
+    background-color: rgba(27, 67, 50, 0.12);
     color: inherit;
     padding: 0.12em 0.4em;
     border-radius: 4px;
@@ -83,13 +107,13 @@
 
   .highlight-underline {
     text-decoration: underline;
-    text-decoration-color: #C2410C;
+    text-decoration-color: #1B4332;
     text-decoration-thickness: 2.5px;
     text-underline-offset: 4px;
   }
 
   .highlight-pill {
-    background-color: #C2410C;
+    background-color: #1B4332;
     color: #FFFFFF;
     font-weight: 700;
     padding: 0.2em 0.65em;

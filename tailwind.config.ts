@@ -15,12 +15,27 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        primary: "var(--primary)",
-        accent: "var(--accent)",
+        primary: {
+          DEFAULT: "var(--primary)",
+          hover: "var(--primary-hover)",
+          soft: "var(--primary-soft)",
+          foreground: "var(--primary-foreground)",
+        },
+        accent: {
+          DEFAULT: "var(--accent)",
+          hover: "var(--accent-hover)",
+          earth: "var(--accent-earth)",
+          "earth-text": "var(--accent-earth-text)",
+          "earth-soft": "var(--accent-earth-soft)",
+        },
         card: "var(--card)",
         border: "var(--border)",
         muted: "var(--muted)",
-        "muted-foreground": "var(--muted-foreground)"
+        "muted-foreground": "var(--muted-foreground)",
+        ribbon: {
+          DEFAULT: "var(--ribbon)",
+          foreground: "var(--ribbon-foreground)",
+        },
       },
     },
   },
