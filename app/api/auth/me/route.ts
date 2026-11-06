@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
       }
     })
 
-    const isOwner = ownedHubs.length > 0 || user?.role === "OWNER"
+    const isOwner = ownedHubs.length > 0
     const pendingOwnerBookings = ownedHubs.reduce((acc, h) => acc + (h.bookings ? h.bookings.length : 0), 0)
 
     // 3. Check Guide profile by contactEmail
@@ -62,19 +62,15 @@ export async function GET(req: NextRequest) {
       where: { contactEmail: email }
     })
 
-    const isGuide = !!guideProfile || user?.role === "GUIDE"
+    const isGuide = !!guideProfile
 
-    // If user's role in DB is NOMAD but they registered property/guide, auto update User role in DB
-    if (user && user.role === "NOMAD") {
-      if (isOwner) {
+    // Sync User role in DB based on actual verified registrations
+    if (user) {
+      const correctRole = isOwner ? "OWNER" : isGuide ? "GUIDE" : "NOMAD"
+      if (user.role !== correctRole && user.role !== "ADMIN") {
         await prisma.user.update({
           where: { id: user.id },
-          data: { role: "OWNER" }
-        })
-      } else if (isGuide) {
-        await prisma.user.update({
-          where: { id: user.id },
-          data: { role: "GUIDE" }
+          data: { role: correctRole }
         })
       }
     }

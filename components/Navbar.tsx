@@ -680,13 +680,17 @@ export default function Navbar() {
 
           {/* Right: Actions (Sign In, Join Free, Mode Switcher, Bell, Dashboard/Book Now) */}
           <div className="hidden lg:flex items-center gap-2.5 flex-shrink-0">
-            {/* Notification Bell Icon for Owners & Guides */}
+            {/* Notification Bell Icon for Owners & Guides (Light/Dark Theme Consistent) */}
             {(roleInfo.isOwner || roleInfo.isGuide) && (
               <div className="relative">
                 <button
                   type="button"
                   onClick={() => setNotificationsOpen(!notificationsOpen)}
-                  className="relative p-2 rounded-xl bg-[#141414] border border-gray-800 hover:border-gray-700 text-gray-300 hover:text-white transition-all"
+                  className={`relative p-2 rounded-xl border transition-all cursor-pointer ${
+                    isSolid
+                      ? "bg-gray-100/90 hover:bg-gray-200 dark:bg-[#161616] dark:hover:bg-[#202020] border-gray-200 dark:border-[#2A2A2A] text-gray-700 dark:text-gray-200 hover:text-[#C2410C] dark:hover:text-[#FB923C] shadow-xs"
+                      : "bg-white/10 hover:bg-white/20 border-white/20 text-white hover:text-[#FB923C] backdrop-blur-sm"
+                  }`}
                   aria-label="Notifications"
                 >
                   <Bell size={16} />
@@ -697,29 +701,29 @@ export default function Navbar() {
                   )}
                 </button>
 
-                {/* Notifications Quick Dropdown Drawer */}
+                {/* Notifications Quick Dropdown Drawer (Light & Dark Mode Support) */}
                 {notificationsOpen && (
-                  <div className="absolute top-full right-0 mt-2 w-72 bg-[#121212] border border-gray-800 rounded-2xl shadow-2xl p-3 z-50 text-left space-y-2">
-                    <div className="flex items-center justify-between border-b border-gray-800 pb-2 px-1">
-                      <span className="text-xs font-bold text-white flex items-center gap-1.5">
-                        <Bell size={13} className="text-[#FB923C]" /> Notifications
+                  <div className="absolute top-full right-0 mt-2 w-72 bg-white dark:bg-[#121212] border border-gray-200 dark:border-gray-800 rounded-2xl shadow-2xl p-3 z-50 text-left space-y-2">
+                    <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-2 px-1">
+                      <span className="text-xs font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
+                        <Bell size={13} className="text-[#C2410C] dark:text-[#FB923C]" /> Notifications
                       </span>
-                      <span className="text-[10px] text-gray-400">Live Alerts</span>
+                      <span className="text-[10px] text-gray-500 dark:text-gray-400">Live Alerts</span>
                     </div>
 
                     {roleInfo.isOwner && (
                       <Link
                         href="/owner/dashboard?tab=BOOKINGS"
                         onClick={() => setNotificationsOpen(false)}
-                        className="block p-2.5 rounded-xl bg-[#161616] hover:bg-[#1C1C1C] border border-gray-800 transition-colors"
+                        className="block p-2.5 rounded-xl bg-[#FBF9F5] hover:bg-[#F3EFE6] dark:bg-[#161616] dark:hover:bg-[#1C1C1C] border border-[#E8E2D8] dark:border-gray-800 transition-colors"
                       >
-                        <div className="flex items-center justify-between text-xs font-bold text-[#FB923C]">
+                        <div className="flex items-center justify-between text-xs font-bold text-[#C2410C] dark:text-[#FB923C]">
                           <span>Pending Guest Requests</span>
-                          <span className="px-1.5 py-0.5 rounded bg-[#C2410C]/20 text-[#FB923C] text-[10px]">
+                          <span className="px-1.5 py-0.5 rounded bg-[#C2410C]/15 text-[#C2410C] dark:text-[#FB923C] text-[10px] font-bold">
                             {roleInfo.pendingOwnerBookings} New
                           </span>
                         </div>
-                        <p className="text-[11px] text-gray-400 mt-1">Review guest stay dates & confirm pass</p>
+                        <p className="text-[11px] text-gray-600 dark:text-gray-400 mt-1">Review guest stay dates & confirm pass</p>
                       </Link>
                     )}
 
@@ -727,15 +731,15 @@ export default function Navbar() {
                       <Link
                         href="/guides/dashboard"
                         onClick={() => setNotificationsOpen(false)}
-                        className="block p-2.5 rounded-xl bg-[#161616] hover:bg-[#1C1C1C] border border-gray-800 transition-colors"
+                        className="block p-2.5 rounded-xl bg-[#FBF9F5] hover:bg-[#F3EFE6] dark:bg-[#161616] dark:hover:bg-[#1C1C1C] border border-[#E8E2D8] dark:border-gray-800 transition-colors"
                       >
-                        <div className="flex items-center justify-between text-xs font-bold text-indigo-400">
+                        <div className="flex items-center justify-between text-xs font-bold text-indigo-600 dark:text-indigo-400">
                           <span>Trek & Tour Inquiries</span>
-                          <span className="px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 text-[10px]">
+                          <span className="px-1.5 py-0.5 rounded bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 text-[10px] font-bold">
                             {roleInfo.pendingGuideInquiries} New
                           </span>
                         </div>
-                        <p className="text-[11px] text-gray-400 mt-1">View requested dates and reply</p>
+                        <p className="text-[11px] text-gray-600 dark:text-gray-400 mt-1">View requested dates and reply</p>
                       </Link>
                     )}
                   </div>
@@ -743,7 +747,7 @@ export default function Navbar() {
               </div>
             )}
 
-            {/* Airbnb-Style Mode Switcher (Switch to Hosting <-> Switch to Listing) */}
+            {/* Mode Switcher: Only shown if user actually added a hosting space or registered as a local expert */}
             {mounted && pathname.startsWith("/owner") ? (
               <Link
                 href="/workspaces"
@@ -753,38 +757,24 @@ export default function Navbar() {
                 <Compass size={13} className="text-blue-600 dark:text-blue-400 group-hover:rotate-45 transition-transform" />
                 <span>Switch to listing</span>
               </Link>
-            ) : mounted ? (
-              roleInfo.isOwner ? (
-                <Link
-                  href="/owner/dashboard"
-                  className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-blue-50/80 hover:bg-blue-100/90 dark:bg-blue-950/40 dark:hover:bg-blue-900/50 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 border border-blue-200/80 dark:border-blue-800/50 shadow-xs group"
-                  title="Switch to your Host Dashboard"
-                >
-                  <Building2 size={13} className="text-blue-600 dark:text-blue-400" />
-                  <span>Switch to hosting</span>
-                </Link>
-              ) : roleInfo.isGuide ? (
-                <Link
-                  href="/guides/dashboard"
-                  className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-emerald-50/80 hover:bg-emerald-100/90 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/50 shadow-xs group"
-                  title="Switch to Guide Console"
-                >
-                  <Compass size={13} className="text-emerald-600 dark:text-emerald-400" />
-                  <span>Guide Console</span>
-                </Link>
-              ) : (
-                <Link
-                  href="/register/space"
-                  className={`hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                    isSolid
-                      ? "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#1E1E22]"
-                      : "text-white/90 hover:text-white hover:bg-white/15"
-                  }`}
-                  title="List your workspace or nomad stay in Nepal"
-                >
-                  <span>List a space</span>
-                </Link>
-              )
+            ) : mounted && roleInfo.isOwner ? (
+              <Link
+                href="/owner/dashboard"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-blue-50/80 hover:bg-blue-100/90 dark:bg-blue-950/40 dark:hover:bg-blue-900/50 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 border border-blue-200/80 dark:border-blue-800/50 shadow-xs group"
+                title="Switch to your Host Dashboard"
+              >
+                <Building2 size={13} className="text-blue-600 dark:text-blue-400" />
+                <span>Switch to hosting</span>
+              </Link>
+            ) : mounted && roleInfo.isGuide ? (
+              <Link
+                href="/guides/dashboard"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-emerald-50/80 hover:bg-emerald-100/90 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/50 shadow-xs group"
+                title="Switch to Guide Console"
+              >
+                <Compass size={13} className="text-emerald-600 dark:text-emerald-400" />
+                <span>Guide Console</span>
+              </Link>
             ) : null}
 
             {mounted && session ? (
