@@ -242,6 +242,33 @@ export default function ProfileSlider({
                 )}
               </div>
 
+              {/* Superuser Admin Banner (Only for ADMIN role) */}
+              {userRole === "ADMIN" && (
+                <Link
+                  href="/admin"
+                  onClick={onClose}
+                  className="p-3 rounded-2xl bg-amber-500/10 hover:bg-amber-500/15 border border-amber-500/30 transition-all group/admin flex items-center justify-between shadow-xs"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-xl bg-amber-500 text-black flex items-center justify-center font-bold shadow-xs group-hover/admin:scale-105 transition-transform">
+                      <ShieldCheck size={18} />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-gray-900 dark:text-white flex items-center gap-1.5 leading-tight">
+                        Superuser Admin Portal
+                        <span className="px-1.5 py-0.5 rounded text-[9px] font-black bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30">
+                          ALL ACCESS
+                        </span>
+                      </h4>
+                      <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">
+                        Manage work hubs, users, guides, posts & settings
+                      </p>
+                    </div>
+                  </div>
+                  <ChevronRight size={15} className="text-amber-500 group-hover/admin:translate-x-0.5 transition-transform" />
+                </Link>
+              )}
+
               {/* Role-Specific Notifications Banner (if pending items) */}
               {(roleInfo.pendingOwnerBookings > 0 || roleInfo.pendingGuideInquiries > 0) && (
                 <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-500 flex items-center justify-between">
