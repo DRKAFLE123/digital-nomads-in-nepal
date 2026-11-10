@@ -12,12 +12,12 @@ export const metadata: Metadata = {
   title: "Local Experts & Guides in Nepal | Verified Himalayan Guides & Fixers",
   description: "Connect with verified local experts and licensed human guides in Nepal: Himalayan trekking leaders, cultural insiders, city fixers, and local advisors.",
   alternates: {
-    canonical: "https://digitalnomadsinnepal.com/guides",
+    canonical: "https://digitalnomadsinnepal.com/local-guides",
   },
   openGraph: {
     title: "Local Experts & Guides in Nepal | Verified Himalayan Guides & Fixers",
     description: "Connect with verified local experts and licensed human guides in Nepal: Himalayan trekking leaders, cultural insiders, city fixers, and local advisors.",
-    url: "https://digitalnomadsinnepal.com/guides",
+    url: "https://digitalnomadsinnepal.com/local-guides",
     siteName: "Digital Nomads in Nepal",
     locale: "en_US",
     type: "website",

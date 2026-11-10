@@ -9,12 +9,12 @@ export const metadata: Metadata = {
   title: "Practical Guides & Remote Work Resources for Nepal | Digital Nomads in Nepal",
   description: "Comprehensive guides and curated tools for digital nomads in Nepal: SIM cards, high-speed fiber internet, ride-hailing, visa extensions, and remote work setups.",
   alternates: {
-    canonical: "https://digitalnomadsinnepal.com/resources",
+    canonical: "https://digitalnomadsinnepal.com/practical-guides",
   },
   openGraph: {
     title: "Practical Guides & Remote Work Resources for Nepal | Digital Nomads in Nepal",
     description: "Comprehensive guides and curated tools for digital nomads in Nepal: SIM cards, high-speed fiber internet, ride-hailing, visa extensions, and remote work setups.",
-    url: "https://digitalnomadsinnepal.com/resources",
+    url: "https://digitalnomadsinnepal.com/practical-guides",
     siteName: "Digital Nomads in Nepal",
     locale: "en_US",
     type: "website",

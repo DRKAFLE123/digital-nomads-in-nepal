@@ -17,12 +17,12 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
     title: `${guide.name} | Verified Local Guide in ${guide.location}, Nepal`,
     description: `${guide.bio.slice(0, 150)}...`,
     alternates: {
-      canonical: `https://digitalnomadsinnepal.com/guides/${params.id}`,
+      canonical: `https://digitalnomadsinnepal.com/local-guides/${params.id}`,
     },
     openGraph: {
       title: `${guide.name} | Local Guide in ${guide.location}, Nepal`,
       description: `${guide.bio.slice(0, 150)}...`,
-      url: `https://digitalnomadsinnepal.com/guides/${params.id}`,
+      url: `https://digitalnomadsinnepal.com/local-guides/${params.id}`,
       siteName: "Digital Nomads in Nepal",
       locale: "en_US",
       type: "profile",

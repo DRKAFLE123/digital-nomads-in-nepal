@@ -127,7 +127,7 @@ export interface CoworkingJsonLdProps {
  * Validates aggregateRating only if genuine reviews and ratings exist.
  */
 export function generateCoworkingJsonLd(hub: CoworkingJsonLdProps) {
-  const hubUrl = `${SITE_URL}/resources/coworking/${hub.slug}`;
+  const hubUrl = `${SITE_URL}/workspaces/${hub.slug}`;
   let imageUrl = `${SITE_URL}/hero-bg.png`;
   if (hub.photoUrl) {
     try {
@@ -272,7 +272,7 @@ export interface GuideJsonLdProps {
  * Avoids keyword stuffing and reflects the individual entity accurately.
  */
 export function generateGuideJsonLd(guide: GuideJsonLdProps) {
-  const guideUrl = `${SITE_URL}/guides/${guide.id}`;
+  const guideUrl = `${SITE_URL}/local-guides/${guide.id}`;
   const imageUrl = guide.photoUrl ? (guide.photoUrl.startsWith("http") ? guide.photoUrl : `${SITE_URL}${guide.photoUrl}`) : `${SITE_URL}/hero-bg.png`;
 
   const schema: Record<string, unknown> = {
