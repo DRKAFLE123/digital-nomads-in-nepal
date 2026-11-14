@@ -372,17 +372,38 @@ function GuideDashboardContent() {
       `}>
         {/* Top: Brand Logo */}
         <div className="flex flex-col flex-1 overflow-hidden">
-          <div className="h-16 px-6 border-b border-slate-100 flex items-center justify-between shrink-0">
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded-lg bg-[#023629] flex items-center justify-center text-white font-black text-sm shadow-xs">
-                <Mountain size={16} />
+          <div className="h-16 px-5 border-b border-slate-100 flex items-center justify-between shrink-0">
+            <Link href="/" className="flex items-center gap-2 group cursor-pointer" title="Digital Nomads in Nepal">
+              {/* Official Mountain & Wi-Fi Mark */}
+              <div className="relative h-8 w-12 overflow-hidden flex-shrink-0">
+                <Image
+                  src="/branding/logo-mark.svg"
+                  alt="Digital Nomads in Nepal Logo"
+                  fill
+                  className="object-contain object-left dark:hidden"
+                  priority
+                  unoptimized
+                />
+                <Image
+                  src="/branding/logo-mark-white.svg"
+                  alt="Digital Nomads in Nepal Logo"
+                  fill
+                  className="object-contain object-left hidden dark:block"
+                  priority
+                  unoptimized
+                />
               </div>
-              <div className="flex flex-col">
-                <span className="font-extrabold text-sm tracking-tight text-slate-900 leading-none">
-                  Digital Nomads <span className="text-[#CD6003]">in Nepal</span>
+
+              {/* Official Name & Subtitle */}
+              <div className="flex flex-col items-start text-left">
+                <span className="font-black text-xs tracking-tight uppercase text-slate-900 leading-tight">
+                  DIGITAL NOMADS
                 </span>
-                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
-                  Local Guide Console
+                <span className="font-bold text-[9px] tracking-widest uppercase text-[#CD6003] leading-none mt-0.5">
+                  IN NEPAL
+                </span>
+                <span className="text-[8px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">
+                  LOCAL GUIDE CONSOLE
                 </span>
               </div>
             </Link>
