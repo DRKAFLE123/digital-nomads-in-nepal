@@ -201,18 +201,18 @@ export default function GuidesClient({ guides }: { guides: Guide[] }) {
           <button
             type="button"
             onClick={() => setSortOpen(!sortOpen)}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500 text-blue-600 bg-white hover:bg-blue-50/50 text-xs font-bold transition-all shadow-xs"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-900 hover:border-[#023629] dark:hover:border-[#FB923C] text-xs font-bold transition-all shadow-xs cursor-pointer"
             aria-expanded={sortOpen}
           >
-            <ArrowUpDown size={13} className="text-blue-600" />
+            <ArrowUpDown size={13} className="text-[#C2410C] dark:text-[#FB923C]" />
             <span>
-              Sort by: <strong className="font-extrabold text-slate-900">{SORT_LABELS[sortBy]}</strong>
+              Sort by: <strong className="font-extrabold text-slate-900 dark:text-white">{SORT_LABELS[sortBy]}</strong>
             </span>
-            {sortOpen ? <ChevronUp size={13} className="text-blue-600" /> : <ChevronDown size={13} className="text-blue-600" />}
+            {sortOpen ? <ChevronUp size={13} className="text-slate-500" /> : <ChevronDown size={13} className="text-slate-500" />}
           </button>
 
           {sortOpen && (
-            <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-slate-200 rounded-2xl shadow-xl py-2 z-30 animate-in fade-in zoom-in-95">
+            <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl py-2 z-30 animate-in fade-in zoom-in-95">
               {(["recent", "top-rated", "experienced"] as SortOption[]).map((opt) => {
                 const isSelected = sortBy === opt
                 return (
@@ -223,13 +223,13 @@ export default function GuidesClient({ guides }: { guides: Guide[] }) {
                       setSortBy(opt)
                       setSortOpen(false)
                     }}
-                    className={`w-full flex items-center gap-2.5 px-4 py-2.5 text-xs text-left transition-colors font-semibold ${
+                    className={`w-full flex items-center gap-2.5 px-4 py-2.5 text-xs text-left transition-colors font-semibold cursor-pointer ${
                       isSelected
-                        ? "text-blue-600 font-bold bg-blue-50/60"
-                        : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                        ? "text-[#023629] dark:text-[#FB923C] font-bold bg-[#023629]/5 dark:bg-[#FB923C]/10"
+                        : "text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white"
                     }`}
                   >
-                    <span className={`w-2 h-2 rounded-full ${isSelected ? "bg-blue-600" : "bg-transparent border border-slate-300"}`} />
+                    <span className={`w-2 h-2 rounded-full ${isSelected ? "bg-[#023629] dark:bg-[#FB923C]" : "bg-transparent border border-slate-300 dark:border-slate-600"}`} />
                     <span>{SORT_LABELS[opt]}</span>
                   </button>
                 )
@@ -277,12 +277,12 @@ export default function GuidesClient({ guides }: { guides: Guide[] }) {
               <Link
                 key={guide.id}
                 href={`/guides/${guide.id}`}
-                className="bg-white border border-slate-200/90 rounded-2xl overflow-hidden hover:border-blue-400 hover:shadow-lg hover:shadow-blue-500/5 transition-all duration-200 group flex flex-col justify-between"
+                className="bg-white dark:bg-[#141416] border border-slate-200/90 dark:border-slate-800 rounded-2xl overflow-hidden hover:border-[#023629] dark:hover:border-[#FB923C]/60 hover:shadow-lg transition-all duration-200 group flex flex-col justify-between"
               >
                 {/* Soft top banner with centered circular avatar + Nepal flag badge */}
-                <div className="pt-6 pb-2 px-5 bg-gradient-to-b from-slate-100/90 via-slate-50/50 to-white text-center">
+                <div className="pt-6 pb-2 px-5 bg-gradient-to-b from-slate-100/90 via-slate-50/50 to-white dark:from-slate-800/40 dark:via-slate-800/20 dark:to-transparent text-center">
                   <div className="relative w-20 h-20 mx-auto mb-3">
-                    <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-white shadow-sm bg-slate-200">
+                    <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-white dark:border-slate-800 shadow-sm bg-slate-200 dark:bg-slate-700">
                       {guide.photoUrl ? (
                         <img
                           src={guide.photoUrl}
@@ -290,13 +290,13 @@ export default function GuidesClient({ guides }: { guides: Guide[] }) {
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center font-black text-2xl text-slate-600">
+                        <div className="w-full h-full flex items-center justify-center font-black text-2xl text-slate-600 dark:text-slate-300">
                           {guide.name.charAt(0)}
                         </div>
                       )}
                     </div>
                     {/* Authentic Nepal Flag Badge on bottom-right of avatar */}
-                    <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-white shadow-xs border border-slate-100 flex items-center justify-center overflow-hidden">
+                    <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-white dark:bg-slate-900 shadow-xs border border-slate-100 dark:border-slate-800 flex items-center justify-center overflow-hidden">
                       <svg viewBox="0 0 24 28" className="w-3.5 h-3.5" fill="none">
                         <path d="M2 2L16 11L7 12L20 22H2V2Z" fill="#DC2626" stroke="#003893" strokeWidth="1.5" />
                         <circle cx="6" cy="8" r="1.5" fill="white" />
@@ -307,31 +307,31 @@ export default function GuidesClient({ guides }: { guides: Guide[] }) {
 
                   {/* Guide Name & Verified Check */}
                   <div className="flex items-center justify-center gap-1.5">
-                    <h3 className="font-extrabold text-slate-900 text-base group-hover:text-blue-600 transition-colors line-clamp-1">
+                    <h3 className="font-extrabold text-slate-900 dark:text-white text-base group-hover:text-[#023629] dark:group-hover:text-[#FB923C] transition-colors line-clamp-1">
                       {guide.name}
                     </h3>
                     {guide.isVerified && (
-                      <span className="w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] flex-shrink-0" title="Verified Local Guide">
+                      <span className="w-4 h-4 rounded-full bg-[#023629] dark:bg-[#FB923C] text-white dark:text-slate-950 flex items-center justify-center text-[10px] flex-shrink-0" title="Verified Local Guide">
                         ✓
                       </span>
                     )}
                   </div>
 
                   {/* Tagline / Headline */}
-                  <p className="text-xs text-slate-500 line-clamp-1 mt-1 font-medium min-h-[18px]">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 mt-1 font-medium min-h-[18px]">
                     {guide.tagline || `Licensed Trekking Guide in ${guide.location}`}
                   </p>
 
                   {/* Rating */}
-                  <div className="flex items-center justify-center gap-1.5 text-xs text-slate-700 mt-2">
+                  <div className="flex items-center justify-center gap-1.5 text-xs text-slate-700 dark:text-slate-300 mt-2">
                     <span className="text-amber-500 font-bold">★ {guide.avgRating ? guide.avgRating.toFixed(1) : "5.0"}</span>
-                    <span className="text-slate-500 text-[11px]">({guide.totalReviews || 0} Reviews)</span>
+                    <span className="text-slate-500 dark:text-slate-400 text-[11px]">({guide.totalReviews || 0} Reviews)</span>
                   </div>
                 </div>
 
                 {/* Info Rows */}
                 <div className="px-5 pb-5 pt-2 space-y-2.5">
-                  <div className="pt-3 border-t border-slate-100 space-y-2 text-xs text-slate-600">
+                  <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2 text-xs text-slate-600 dark:text-slate-400">
                     {/* Spoken Languages */}
                     <div className="flex items-center gap-2">
                       <Globe size={13} className="text-slate-400 flex-shrink-0" />
@@ -349,25 +349,25 @@ export default function GuidesClient({ guides }: { guides: Guide[] }) {
                     {guide.specialties.slice(0, 2).map((s) => (
                       <span
                         key={s}
-                        className="text-[10px] font-semibold px-2 py-0.5 bg-slate-100 text-slate-700 rounded-md"
+                        className="text-[10px] font-semibold px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-md"
                       >
                         #{s}
                       </span>
                     ))}
                     {guide.specialties.length > 2 && (
-                      <span className="text-[10px] font-semibold px-1.5 py-0.5 bg-slate-100 text-slate-500 rounded-md">
+                      <span className="text-[10px] font-semibold px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-md">
                         +{guide.specialties.length - 2}
                       </span>
                     )}
                   </div>
 
                   {/* Bottom Card Action */}
-                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                    <span className="text-[11px] text-slate-500 font-medium flex items-center gap-1">
+                  <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1">
                       <MapPin size={11} className="text-slate-400" />
                       {guide.location}
                     </span>
-                    <span className="font-bold text-blue-600 group-hover:translate-x-0.5 transition-transform inline-flex items-center gap-1">
+                    <span className="font-bold text-[#C2410C] dark:text-[#FB923C] group-hover:translate-x-0.5 transition-transform inline-flex items-center gap-1">
                       <span>View Profile</span>
                       <span>→</span>
                     </span>

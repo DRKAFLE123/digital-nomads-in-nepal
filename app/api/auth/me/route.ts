@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
       }
     })
 
-    const isOwner = ownedHubs.length > 0
+    const isOwner = ownedHubs.length > 0 || user?.role === "OWNER"
     const pendingOwnerBookings = ownedHubs.reduce((acc, h) => acc + (h.bookings ? h.bookings.length : 0), 0)
 
     // 3. Check Guide profile by contactEmail or userId
@@ -67,29 +67,33 @@ export async function GET(req: NextRequest) {
       }
     })
 
-    const isGuide = !!guideProfile
+    const isGuide = !!guideProfile || user?.role === "GUIDE"
 
-    // Sync User role in DB based on actual verified registrations
-    if (user) {
-      const correctRole = isOwner ? "OWNER" : isGuide ? "GUIDE" : "NOMAD"
-      if (user.role !== correctRole && user.role !== "ADMIN") {
+    // Sync User role in DB if they have active guide profile or listed space
+    if (user && user.role !== "ADMIN") {
+      if (isGuide && user.role !== "GUIDE") {
         await prisma.user.update({
           where: { id: user.id },
-          data: { role: correctRole }
+          data: { role: "GUIDE" }
+        })
+      } else if (isOwner && user.role !== "OWNER") {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { role: "OWNER" }
         })
       }
     }
 
     return NextResponse.json({
       isLoggedIn: true,
-      user: user ? { id: user.id, name: user.name, email: user.email, role: user.role } : null,
-      role: isOwner ? "OWNER" : isGuide ? "GUIDE" : user?.role || "NOMAD",
+      user: user ? { id: user.id, name: user.name, email: user.email, role: isGuide ? "GUIDE" : isOwner ? "OWNER" : user.role } : null,
+      role: isGuide ? "GUIDE" : isOwner ? "OWNER" : user?.role || "NOMAD",
       isOwner,
       isGuide,
       ownerHubsCount: ownedHubs.length,
       guideId: guideProfile?.id || null,
       pendingOwnerBookings,
-      pendingGuideInquiries: 1 // sample pending inquiry count for demonstration
+      pendingGuideInquiries: isGuide ? 1 : 0
     })
   } catch (err) {
     console.error("GET /api/auth/me error:", err)

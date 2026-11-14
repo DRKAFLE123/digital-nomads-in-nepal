@@ -6,7 +6,7 @@ import { signIn } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
-import { Eye, EyeOff, AlertCircle, CheckCircle2, ArrowRight, Mountain, ShieldCheck, Wifi, Users } from "lucide-react"
+import { Eye, EyeOff, AlertCircle, CheckCircle2, ArrowRight, Mountain, ShieldCheck, Wifi, Users, Laptop, Compass, Building2 } from "lucide-react"
 
 function GoogleIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
@@ -31,13 +31,52 @@ function GoogleIcon({ className = "w-4 h-4" }: { className?: string }) {
   )
 }
 
+const PURPOSE_CONTENT = {
+  NOMAD: {
+    headline: "Work from the Himalayas & connect with local experts",
+    highlight: "local experts",
+    description: "Discover verified high-speed fiber coliving, verified coworking desks, and hire trusted Nepalese mountain & cultural guides with 0% platform commission.",
+    badges: [
+      { icon: ShieldCheck, text: "0% Commission Direct Guide Hiring", color: "text-emerald-600" },
+      { icon: Wifi, text: "Verified 100+ Mbps Fiber Stays", color: "text-[#C2410C]" },
+      { icon: Users, text: "Nomad Community Meetups", color: "text-[#023629] dark:text-[#FB923C]" },
+    ]
+  },
+  GUIDE: {
+    headline: "Share your Himalayan expertise with global travelers",
+    highlight: "global travelers",
+    description: "Create your verified local guide profile, showcase your mountain trek photos, and get hired directly by international digital nomads with 0% platform commission.",
+    badges: [
+      { icon: ShieldCheck, text: "0% Commission Direct Booking", color: "text-emerald-600" },
+      { icon: Mountain, text: "Verified Local Guide Badge", color: "text-[#023629] dark:text-[#FB923C]" },
+      { icon: Users, text: "Direct WhatsApp Client Chat", color: "text-[#C2410C]" },
+    ]
+  },
+  OWNER: {
+    headline: "Host digital nomads & remote workers across Nepal",
+    highlight: "across Nepal",
+    description: "List your coworking space, coliving rooms, or workstation villa. Welcome remote workers year-round and manage desks directly from your Host Console.",
+    badges: [
+      { icon: Building2, text: "Verified Host Console", color: "text-[#023629] dark:text-[#FB923C]" },
+      { icon: Wifi, text: "24/7 Power & Fiber Verification", color: "text-[#C2410C]" },
+      { icon: ShieldCheck, text: "Direct Nomad Booking Inquiries", color: "text-emerald-600" },
+    ]
+  }
+}
+
 function UnifiedAuthForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get("callbackUrl") ?? "/"
   const initialMode = searchParams.get("mode") === "register" ? "register" : "signin"
+  
+  const initialPurposeParam = searchParams.get("purpose")
+  const initialPurpose: "NOMAD" | "GUIDE" | "OWNER" = 
+    initialPurposeParam === "guide" ? "GUIDE" : 
+    (initialPurposeParam === "host" || initialPurposeParam === "owner") ? "OWNER" : "NOMAD"
 
   const [mode, setMode] = useState<"signin" | "register">(initialMode)
+  const [purpose, setPurpose] = useState<"NOMAD" | "GUIDE" | "OWNER">(initialPurpose)
 
   // Sign In Form States
   const [email, setEmail] = useState("")
@@ -71,7 +110,7 @@ function UnifiedAuthForm() {
     if (mode === "signin") {
       // Sign In Flow
       const result = await signIn("credentials", {
-        email,
+        email: email.trim().toLowerCase(),
         password,
         redirect: false,
       })
@@ -102,7 +141,12 @@ function UnifiedAuthForm() {
         const res = await fetch("/api/auth/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, email, password }),
+          body: JSON.stringify({ 
+            name: name.trim(), 
+            email: email.trim().toLowerCase(), 
+            password,
+            role: purpose 
+          }),
         })
 
         const data = await res.json()
@@ -113,7 +157,7 @@ function UnifiedAuthForm() {
         } else {
           setSuccess("Account created successfully! Signing you in...")
           const signInRes = await signIn("credentials", {
-            email,
+            email: email.trim().toLowerCase(),
             password,
             redirect: false,
           })
@@ -121,7 +165,14 @@ function UnifiedAuthForm() {
           setLoading(false)
 
           if (signInRes?.ok) {
-            router.push(callbackUrl)
+            // Smart post-registration destination based on role
+            if (purpose === "GUIDE") {
+              router.push("/guides/dashboard")
+            } else if (purpose === "OWNER") {
+              router.push("/owner/dashboard")
+            } else {
+              router.push(callbackUrl !== "/" ? callbackUrl : "/workspaces")
+            }
             router.refresh()
           } else {
             setMode("signin")
@@ -151,7 +202,7 @@ function UnifiedAuthForm() {
           </Link>
         </div>
 
-        {/* Two-Column Card Container (GuideMeet Screenshot Benchmark) */}
+        {/* Two-Column Card Container */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           
           {/* Left Column: Hero & Community Highlights (Visible on lg+) */}
@@ -172,64 +223,85 @@ function UnifiedAuthForm() {
               </Link>
 
               <h1 className="text-3xl xl:text-4xl font-black text-slate-900 dark:text-white tracking-tight leading-snug">
-                Continue your journey and reconnect with <span className="text-blue-600">explorers</span>
+                {mode === "signin" ? (
+                  <>
+                    Continue your journey and reconnect with{" "}
+                    <span className="text-[#C2410C]">explorers</span>
+                  </>
+                ) : (
+                  <>
+                    {PURPOSE_CONTENT[purpose].headline.replace(
+                      PURPOSE_CONTENT[purpose].highlight,
+                      ""
+                    )}
+                    <span className="text-[#C2410C]">
+                      {PURPOSE_CONTENT[purpose].highlight}
+                    </span>
+                  </>
+                )}
               </h1>
               <p className="text-sm text-slate-600 dark:text-slate-400 mt-3 leading-relaxed max-w-md">
-                Connect with licensed mountain guides, verified fiber workspaces, and fellow digital nomads to create meaningful travel & work experiences across Nepal.
+                {mode === "signin"
+                  ? "Connect with verified fiber workspaces, licensed Nepalese mountain experts, and fellow digital nomads across Nepal."
+                  : PURPOSE_CONTENT[purpose].description}
               </p>
             </div>
 
-            {/* Nomad Community Avatars */}
+            {/* Community Proof */}
             <div className="space-y-3 pt-2">
               <div className="flex items-center gap-3">
                 <div className="flex -space-x-2 overflow-hidden">
                   <img
-                    className="inline-block h-10 w-10 rounded-full ring-2 ring-white object-cover"
+                    className="inline-block h-10 w-10 rounded-full ring-2 ring-white dark:ring-slate-800 object-cover"
                     src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80"
                     alt="Nomad"
                   />
                   <img
-                    className="inline-block h-10 w-10 rounded-full ring-2 ring-white object-cover"
+                    className="inline-block h-10 w-10 rounded-full ring-2 ring-white dark:ring-slate-800 object-cover"
                     src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80"
                     alt="Guide"
                   />
                   <img
-                    className="inline-block h-10 w-10 rounded-full ring-2 ring-white object-cover"
+                    className="inline-block h-10 w-10 rounded-full ring-2 ring-white dark:ring-slate-800 object-cover"
                     src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80"
                     alt="Nomad"
                   />
                   <img
-                    className="inline-block h-10 w-10 rounded-full ring-2 ring-white object-cover"
+                    className="inline-block h-10 w-10 rounded-full ring-2 ring-white dark:ring-slate-800 object-cover"
                     src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80"
                     alt="Host"
                   />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-slate-900 dark:text-white">1,200+ Remote Workers & Guides</p>
+                  <p className="text-xs font-bold text-slate-900 dark:text-white">1,200+ Remote Workers &amp; Guides</p>
                   <p className="text-[11px] text-slate-500">Kathmandu • Pokhara • Bandipur • Everest</p>
                 </div>
               </div>
 
-              {/* Feature Pills */}
+              {/* Dynamic Feature Badges */}
               <div className="flex flex-wrap gap-2 pt-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[11px] font-semibold text-slate-700 dark:text-slate-300 shadow-2xs">
-                  <ShieldCheck size={12} className="text-emerald-600" />
-                  <span>0% Commission Direct Guide Hiring</span>
-                </span>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[11px] font-semibold text-slate-700 dark:text-slate-300 shadow-2xs">
-                  <Wifi size={12} className="text-blue-600" />
-                  <span>Verified 100+ Mbps Fiber Stays</span>
-                </span>
+                {PURPOSE_CONTENT[purpose].badges.map((badge, idx) => {
+                  const Icon = badge.icon
+                  return (
+                    <span
+                      key={idx}
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[11px] font-semibold text-slate-700 dark:text-slate-300 shadow-2xs"
+                    >
+                      <Icon size={12} className={badge.color} />
+                      <span>{badge.text}</span>
+                    </span>
+                  )
+                })}
               </div>
             </div>
           </div>
 
-          {/* Right Column: Clean White Compact Auth Card */}
+          {/* Right Column: Clean Auth Card */}
           <div className="lg:col-span-6 w-full max-w-md mx-auto">
             <div className="bg-white dark:bg-[#141416] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xs">
               
               {/* Top Mode Switcher Pill */}
-              <div className="flex items-center p-1 bg-slate-100 dark:bg-slate-800/60 rounded-xl mb-6">
+              <div className="flex items-center p-1 bg-slate-100 dark:bg-slate-800/60 rounded-xl mb-5">
                 <button
                   type="button"
                   onClick={() => {
@@ -262,15 +334,75 @@ function UnifiedAuthForm() {
                 </button>
               </div>
 
+              {/* Purpose Selector (Registration only) */}
+              {mode === "register" && (
+                <div className="mb-4">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">
+                    Choose your purpose on our platform *
+                  </label>
+                  <div className="grid grid-cols-3 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setPurpose("NOMAD")}
+                      className={`p-2.5 rounded-xl border text-center transition-all flex flex-col items-center gap-1 cursor-pointer ${
+                        purpose === "NOMAD"
+                          ? "border-[#023629] dark:border-[#FB923C] bg-[#023629]/5 dark:bg-[#FB923C]/10 text-[#023629] dark:text-[#FB923C] font-bold shadow-2xs"
+                          : "border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300"
+                      }`}
+                    >
+                      <Laptop size={16} />
+                      <span className="text-[11px] leading-tight">I want to work</span>
+                      <span className="text-[9px] font-normal text-slate-400">Nomad</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPurpose("GUIDE")}
+                      className={`p-2.5 rounded-xl border text-center transition-all flex flex-col items-center gap-1 cursor-pointer ${
+                        purpose === "GUIDE"
+                          ? "border-[#023629] dark:border-[#FB923C] bg-[#023629]/5 dark:bg-[#FB923C]/10 text-[#023629] dark:text-[#FB923C] font-bold shadow-2xs"
+                          : "border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300"
+                      }`}
+                    >
+                      <Compass size={16} />
+                      <span className="text-[11px] leading-tight">I want to guide</span>
+                      <span className="text-[9px] font-normal text-slate-400">Local Expert</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPurpose("OWNER")}
+                      className={`p-2.5 rounded-xl border text-center transition-all flex flex-col items-center gap-1 cursor-pointer ${
+                        purpose === "OWNER"
+                          ? "border-[#023629] dark:border-[#FB923C] bg-[#023629]/5 dark:bg-[#FB923C]/10 text-[#023629] dark:text-[#FB923C] font-bold shadow-2xs"
+                          : "border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300"
+                      }`}
+                    >
+                      <Building2 size={16} />
+                      <span className="text-[11px] leading-tight">I want to host</span>
+                      <span className="text-[9px] font-normal text-slate-400">Space Owner</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* Header Title */}
-              <div className="mb-5">
+              <div className="mb-4">
                 <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-                  {mode === "signin" ? "Log in to Your Account" : "Create Your Account"}
+                  {mode === "signin" 
+                    ? "Log in to Your Account" 
+                    : purpose === "GUIDE"
+                    ? "Join as a Local Expert"
+                    : purpose === "OWNER"
+                    ? "List Your Space in Nepal"
+                    : "Create Your Nomad Account"}
                 </h2>
                 <p className="text-xs text-slate-500 mt-1">
                   {mode === "signin" 
                     ? "Enter your credentials to continue." 
-                    : "Fill in your details to start exploring and managing."}
+                    : purpose === "GUIDE"
+                    ? "Showcase your treks and get hired directly by remote workers."
+                    : purpose === "OWNER"
+                    ? "Reach digital nomads seeking verified desks & stays."
+                    : "Access verified workspaces, stays, and mountain experts."}
                 </p>
               </div>
 
@@ -289,16 +421,14 @@ function UnifiedAuthForm() {
                 </div>
               )}
 
-              {/* ─────────────────────────────────────────────────────────────
-                  INPUT BOXES IN UPPER SIDE (NO SCROLLING REQUIRED)
-                 ───────────────────────────────────────────────────────────── */}
+              {/* Input Form */}
               <form onSubmit={handleSubmit} className="space-y-3.5">
                 
                 {/* Full Name (Registration only) */}
                 {mode === "register" && (
                   <div>
                     <label className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 block">
-                      Full Name
+                      Full Name *
                     </label>
                     <input
                       type="text"
@@ -306,15 +436,15 @@ function UnifiedAuthForm() {
                       onChange={(e) => setName(e.target.value)}
                       required
                       placeholder="e.g. Maya Sharma"
-                      className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                      className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629]/20 focus:border-[#023629] dark:focus:ring-[#FB923C]/20 dark:focus:border-[#FB923C] transition-all"
                     />
                   </div>
                 )}
 
-                {/* Email Address (Upper Side) */}
+                {/* Email Address */}
                 <div>
                   <label className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 block">
-                    Email Address
+                    Email Address *
                   </label>
                   <input
                     type="email"
@@ -322,20 +452,20 @@ function UnifiedAuthForm() {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     placeholder="Enter your email"
-                    className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629]/20 focus:border-[#023629] dark:focus:ring-[#FB923C]/20 dark:focus:border-[#FB923C] transition-all"
                   />
                 </div>
 
-                {/* Password (Upper Side) */}
+                {/* Password */}
                 <div>
                   <div className="flex items-center justify-between mb-1">
                     <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                      Password
+                      Password *
                     </label>
                     {mode === "signin" && (
                       <Link
                         href="/auth/forgot-password"
-                        className="text-[11px] font-semibold text-blue-600 hover:underline"
+                        className="text-[11px] font-semibold text-[#C2410C] hover:underline"
                       >
                         Forgot password?
                       </Link>
@@ -349,13 +479,13 @@ function UnifiedAuthForm() {
                       required
                       minLength={6}
                       placeholder="Enter your password"
-                      className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl pl-3.5 pr-10 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                      className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl pl-3.5 pr-10 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629]/20 focus:border-[#023629] dark:focus:ring-[#FB923C]/20 dark:focus:border-[#FB923C] transition-all"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
                       aria-label={showPassword ? "Hide password" : "Show password"}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1 cursor-pointer"
                     >
                       {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                     </button>
@@ -366,7 +496,7 @@ function UnifiedAuthForm() {
                 {mode === "register" && (
                   <div>
                     <label className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 block">
-                      Confirm Password
+                      Confirm Password *
                     </label>
                     <div className="relative">
                       <input
@@ -376,13 +506,13 @@ function UnifiedAuthForm() {
                         required
                         minLength={6}
                         placeholder="Re-enter your password"
-                        className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl pl-3.5 pr-10 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                        className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl pl-3.5 pr-10 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629]/20 focus:border-[#023629] dark:focus:ring-[#FB923C]/20 dark:focus:border-[#FB923C] transition-all"
                       />
                       <button
                         type="button"
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                         aria-label={showConfirmPassword ? "Hide password" : "Show password"}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1 cursor-pointer"
                       >
                         {showConfirmPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                       </button>
@@ -394,13 +524,17 @@ function UnifiedAuthForm() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full mt-2 bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-bold text-xs sm:text-sm py-2.5 sm:py-3 rounded-xl transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full mt-2 bg-[#023629] hover:bg-[#034a38] text-white font-bold text-xs sm:text-sm py-2.5 sm:py-3 rounded-xl transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <span>
                     {loading 
                       ? "Processing..." 
                       : mode === "signin" 
                       ? "Log in" 
+                      : purpose === "GUIDE"
+                      ? "Create Guide Account & Go to Console"
+                      : purpose === "OWNER"
+                      ? "Create Host Account & Go to Console"
                       : "Create Account & Sign In"}
                   </span>
                   <ArrowRight size={14} />
@@ -420,7 +554,7 @@ function UnifiedAuthForm() {
               <button
                 type="button"
                 onClick={() => handleSocialLogin("google")}
-                className="w-full flex items-center justify-center gap-2.5 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-2xs"
+                className="w-full flex items-center justify-center gap-2.5 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-2xs cursor-pointer"
               >
                 <GoogleIcon className="w-4 h-4 shrink-0" />
                 <span>Continue with Google</span>
@@ -438,7 +572,7 @@ function UnifiedAuthForm() {
                         setError("")
                         setSuccess("")
                       }}
-                      className="font-bold text-blue-600 hover:underline cursor-pointer"
+                      className="font-bold text-[#C2410C] hover:underline cursor-pointer"
                     >
                       Sign up
                     </button>
@@ -453,7 +587,7 @@ function UnifiedAuthForm() {
                         setError("")
                         setSuccess("")
                       }}
-                      className="font-bold text-blue-600 hover:underline cursor-pointer"
+                      className="font-bold text-[#C2410C] hover:underline cursor-pointer"
                     >
                       Log in
                     </button>

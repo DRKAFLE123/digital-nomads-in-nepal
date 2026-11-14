@@ -101,14 +101,14 @@ export default async function GuidesPage() {
               <span className="text-sm shrink-0 mt-0.5 sm:mt-0">💡</span>
               <p className="text-[11px] sm:text-xs leading-normal">
                 Looking for tutorials on data, transit, or visas? Read our{" "}
-                <Link href="/resources/sim-cards" className="text-foreground font-semibold hover:text-blue-600 hover:underline">SIM Cards Guide</Link>,{" "}
-                <Link href="/resources/transportation" className="text-foreground font-semibold hover:text-blue-600 hover:underline">Transportation</Link>, or{" "}
-                <Link href="/resources/visa" className="text-foreground font-semibold hover:text-blue-600 hover:underline">Nomad Visa Guide</Link>.
+                <Link href="/resources/sim-cards" className="text-foreground font-semibold hover:text-[#C2410C] hover:underline">SIM Cards Guide</Link>,{" "}
+                <Link href="/resources/transportation" className="text-foreground font-semibold hover:text-[#C2410C] hover:underline">Transportation</Link>, or{" "}
+                <Link href="/resources/visa" className="text-foreground font-semibold hover:text-[#C2410C] hover:underline">Nomad Visa Guide</Link>.
               </p>
             </div>
             <Link
               href="/resources"
-              className="self-start sm:self-center shrink-0 text-foreground hover:text-blue-600 font-bold text-[11px] sm:text-xs inline-flex items-center gap-1 hover:underline"
+              className="self-start sm:self-center shrink-0 text-foreground hover:text-[#C2410C] font-bold text-[11px] sm:text-xs inline-flex items-center gap-1 hover:underline"
             >
               <span>View Practical Guides</span>
               <span>→</span>

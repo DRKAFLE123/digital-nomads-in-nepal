@@ -36,13 +36,42 @@ const LOCATIONS = [
   "Other Region",
 ]
 
-const SPACE_CATEGORIES = [
-  "Coliving & Coworking Hub (Work + Stay)",
-  "Coworking & Hot Desk Space",
-  "Digital Nomad Hostel & Coliving",
-  "Work-Friendly Hotel & Resort",
-  "Long-Term Nomad Villa & Apartment",
-  "Hybrid Cafe & Work Lounge",
+const SPACE_CATEGORY_GROUPS = [
+  {
+    group: "Work Only",
+    options: [
+      "Coworking & Hot Desk Space",
+      "Hybrid Cafe & Work Lounge",
+      "Private Dedicated Desk / Office",
+      "Meeting & Event Work Hub",
+    ]
+  },
+  {
+    group: "Work and Stay",
+    options: [
+      "Coliving & Coworking Hub (Work + Stay)",
+      "Digital Nomad Hostel & Coliving",
+      "Work-Friendly Hotel & Resort",
+      "Himalayan Workation Retreat",
+    ]
+  },
+  {
+    group: "Stay Only",
+    options: [
+      "Long-Term Nomad Villa & Apartment",
+      "Boutique Guesthouse & Homestay",
+      "Serviced Studio for Remote Workers",
+    ]
+  }
+]
+
+const KEY_FACILITIES = [
+  { id: "wifi", label: "100+ Mbps Fiber Wi-Fi", group: "Connectivity" },
+  { id: "backup", label: "24/7 Power & Inverter", group: "Connectivity" },
+  { id: "coffee", label: "Specialty Coffee / Tea", group: "Dining" },
+  { id: "lunch_dinner", label: "Snacks, Lunch & Dinner", group: "Dining" },
+  { id: "kitchen", label: "Shared Kitchen", group: "Dining" },
+  { id: "ergonomic", label: "Ergonomic Chairs & Desks", group: "Comfort" },
 ]
 
 export default function QuickRegisterSpacePage() {
@@ -332,20 +361,45 @@ export default function QuickRegisterSpacePage() {
 
                     <div>
                       <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
-                        Property Category *
+                        Property Category (3 Main Types) *
                       </label>
                       <select
                         value={spaceType}
                         onChange={(e) => setSpaceType(e.target.value)}
                         className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#18181C] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] text-sm transition-all"
                       >
-                        {SPACE_CATEGORIES.map((cat) => (
-                          <option key={cat} value={cat}>
-                            {cat}
-                          </option>
+                        {SPACE_CATEGORY_GROUPS.map((grp) => (
+                          <optgroup key={grp.group} label={`── ${grp.group.toUpperCase()} ──`} className="font-bold text-slate-900 dark:text-slate-100">
+                            {grp.options.map((opt) => (
+                              <option key={opt} value={opt} className="font-normal text-slate-700 dark:text-slate-300">
+                                {opt}
+                              </option>
+                            ))}
+                          </optgroup>
                         ))}
                       </select>
                     </div>
+                  </div>
+
+                  {/* Highlights & Available Facilities */}
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
+                      Key Facilities Available (Dining, Power &amp; Wi-Fi)
+                    </label>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                      {KEY_FACILITIES.map((fac) => (
+                        <div
+                          key={fac.id}
+                          className="flex items-center gap-2 p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 text-xs text-slate-700 dark:text-slate-300 font-medium"
+                        >
+                          <Check size={13} className="text-[#023629] dark:text-[#FB923C] shrink-0" />
+                          <span className="truncate">{fac.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-[11px] text-slate-400 mt-1.5">
+                      You can customize exact food menus (breakfast, lunch, dinner, snacks), Wi-Fi speed &amp; inverter power backup details in your Host Console after registration.
+                    </p>
                   </div>
 
                   {/* Terms note */}

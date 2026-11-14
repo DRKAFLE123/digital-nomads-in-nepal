@@ -353,7 +353,7 @@ function GuideDashboardContent() {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="text-center space-y-3">
-          <Loader2 className="w-9 h-9 animate-spin text-blue-600 mx-auto" />
+          <Loader2 className="w-9 h-9 animate-spin text-[#023629] mx-auto" />
           <p className="text-sm font-semibold text-slate-600">Loading your Guide Console...</p>
         </div>
       </div>
@@ -374,7 +374,7 @@ function GuideDashboardContent() {
         <div className="flex flex-col flex-1 overflow-hidden">
           <div className="h-16 px-6 border-b border-slate-100 flex items-center justify-between shrink-0">
             <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-black text-sm shadow-xs">
+              <div className="w-8 h-8 rounded-lg bg-[#023629] flex items-center justify-center text-white font-black text-sm shadow-xs">
                 <Mountain size={16} />
               </div>
               <div className="flex flex-col">
@@ -401,8 +401,8 @@ function GuideDashboardContent() {
               { id: "DASHBOARD", label: "Dashboard", icon: LayoutDashboard },
               { id: "MESSAGES", label: "Messages", icon: MessageSquare },
               { id: "INQUIRIES", label: "Inquiries", icon: FileText, badge: "New" },
-              { id: "PROFILE", label: "My Profile", icon: UserCircle },
-              { id: "EXPERIENCES", label: "My Experiences", icon: Compass },
+              { id: "PROFILE", label: "My Profile & Bio", icon: UserCircle },
+              { id: "EXPERIENCES", label: "Treks & Tours", icon: Compass },
               { id: "REVIEWS", label: `Reviews (${guide?.totalReviews || 0})`, icon: Star },
               { id: "SAVED", label: "Saved", icon: Bookmark },
               { id: "BILLING", label: "Plan & Billing", icon: CreditCard },
@@ -418,9 +418,9 @@ function GuideDashboardContent() {
                     setActiveTab(item.id as TabType)
                     setSidebarOpen(false)
                   }}
-                  className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
+                  className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                     active
-                      ? "bg-blue-600 text-white shadow-xs"
+                      ? "bg-[#023629] text-white shadow-xs"
                       : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                   }`}
                 >
@@ -474,7 +474,7 @@ function GuideDashboardContent() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="lg:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-100"
+              className="lg:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-100 cursor-pointer"
               aria-label="Toggle sidebar"
             >
               <Menu size={18} />
@@ -490,7 +490,7 @@ function GuideDashboardContent() {
               <Link
                 href={`/local-guides/${guide.id}`}
                 target="_blank"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-full transition-all shadow-xs"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-[#023629] bg-[#023629]/5 hover:bg-[#023629]/10 border border-[#023629]/20 rounded-full transition-all shadow-xs"
                 title="Preview your public profile live on the website"
               >
                 <Eye size={13} />
@@ -508,16 +508,16 @@ function GuideDashboardContent() {
 
             {/* Notification Bell */}
             <button 
-              className="p-2 text-slate-400 hover:text-slate-700 rounded-full hover:bg-slate-100 relative"
+              className="p-2 text-slate-400 hover:text-slate-700 rounded-full hover:bg-slate-100 relative cursor-pointer"
               title="Notifications"
             >
               <Bell size={16} />
-              <span className="w-1.5 h-1.5 bg-blue-600 rounded-full absolute top-2 right-2" />
+              <span className="w-1.5 h-1.5 bg-[#C2410C] rounded-full absolute top-2 right-2" />
             </button>
 
             {/* User Dropdown */}
             <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
-              <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
+              <div className="w-8 h-8 rounded-full bg-[#023629] text-white flex items-center justify-center font-bold text-xs shadow-xs">
                 {name ? name.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase() : "DA"}
               </div>
               <div className="hidden sm:block text-left">
@@ -582,10 +582,10 @@ function GuideDashboardContent() {
           {activeTab === "DASHBOARD" && (
             <div className="space-y-6">
               
-              {/* Top Video Learning Tutorials (GuideMeet Screenshot Benchmark) */}
+              {/* Top Video Learning Tutorials */}
               <div className="space-y-3">
                 <h2 className="text-sm font-extrabold text-slate-800 tracking-tight">
-                  Learn about GuideMeet & Local Guides
+                  Guide Resources &amp; Best Practices
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Video 1 */}
@@ -604,7 +604,7 @@ function GuideDashboardContent() {
                       </div>
                       <div>
                         <h3 className="text-sm sm:text-base font-black text-white leading-snug">
-                          Find a Trusted Local Guide for Your Next Trip | GuideMeet
+                          Find a Trusted Local Guide for Your Next Trip | Digital Nomads Nepal
                         </h3>
                         <p className="text-[11px] text-white/70 mt-1 line-clamp-1">
                           How remote workers connect and hire certified Himalayan guides directly.
@@ -614,15 +614,15 @@ function GuideDashboardContent() {
                   </div>
 
                   {/* Video 2 */}
-                  <div className="group relative bg-blue-900 rounded-2xl overflow-hidden aspect-16/9 sm:aspect-21/9 shadow-xs border border-slate-200">
+                  <div className="group relative bg-slate-900 rounded-2xl overflow-hidden aspect-16/9 sm:aspect-21/9 shadow-xs border border-slate-200">
                     <img
                       src="https://images.unsplash.com/photo-1517824806704-9040b037703b?auto=format&fit=crop&w=1200&q=80"
                       alt="Guide Profile Completion Video"
                       className="w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-blue-950/85 via-blue-950/30 to-blue-950/30 flex flex-col justify-between p-5">
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/30 to-slate-950/30 flex flex-col justify-between p-5">
                       <div className="flex items-center gap-2">
-                        <span className="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center text-white shadow-md">
+                        <span className="w-8 h-8 rounded-full bg-[#023629] flex items-center justify-center text-white shadow-md">
                           <Play size={14} className="fill-white translate-x-0.5" />
                         </span>
                         <span className="text-[11px] font-bold text-white/90">Guide Walkthrough</span>
@@ -640,21 +640,21 @@ function GuideDashboardContent() {
                 </div>
               </div>
 
-              {/* Welcome Hero Banner (GuideMeet Style with Initial Avatar) */}
+              {/* Welcome Hero Banner */}
               <div className="bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-full bg-blue-100 border-2 border-blue-200 overflow-hidden flex-shrink-0 relative shadow-2xs flex items-center justify-center">
+                  <div className="w-16 h-16 rounded-full bg-[#023629]/10 border-2 border-[#023629]/20 overflow-hidden flex-shrink-0 relative shadow-2xs flex items-center justify-center">
                     {photoUrl ? (
                       <img src={photoUrl} alt={name} className="w-full h-full object-cover" />
                     ) : (
-                      <span className="font-black text-xl text-blue-700">
+                      <span className="font-black text-xl text-[#023629]">
                         {name ? name.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase() : "DA"}
                       </span>
                     )}
                   </div>
                   <div>
                     <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                      Hi {name ? name.split(" ")[0] : "Guide"}, welcome to GuideMeet Console 👋
+                      Hi {name ? name.split(" ")[0] : "Guide"}, welcome to your Guide Console 👋
                     </h1>
                     <p className="text-xs sm:text-sm text-slate-500 mt-1">
                       Add your details, experience, languages, and photos to get verified and go live.
@@ -807,14 +807,14 @@ function GuideDashboardContent() {
                   </div>
                 </div>
 
-                {/* 1.5. Trek & Tour Photo Gallery (Bishnu KC 5-Photo Mosaic) */}
+                {/* 1.5. Trek & Tour Photo Gallery (Signature Showcase Mosaic) */}
                 <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-4">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/60 pb-3">
                     <div>
                       <div className="flex items-center gap-2">
-                        <Camera size={16} className="text-blue-600" />
+                        <Camera size={16} className="text-[#023629]" />
                         <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800">
-                          Trek & Tour Photo Gallery (Bishnu KC Mosaic Showcase)
+                          Trek &amp; Tour Photo Gallery (Signature Showcase Mosaic)
                         </h3>
                       </div>
                       <p className="text-[11px] text-slate-500 mt-0.5">
@@ -822,7 +822,7 @@ function GuideDashboardContent() {
                       </p>
                     </div>
 
-                    <label className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold cursor-pointer transition-colors shadow-2xs self-start sm:self-auto flex-shrink-0">
+                    <label className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#023629] hover:bg-[#034a38] text-white rounded-lg text-xs font-bold cursor-pointer transition-colors shadow-2xs self-start sm:self-auto flex-shrink-0">
                       {uploadingGallery ? (
                         <>
                           <Loader2 size={13} className="animate-spin" />
@@ -1359,19 +1359,19 @@ function GuideDashboardContent() {
                         <span>Verified badge eligibility</span>
                       </div>
                       <div className="flex items-center gap-2 font-medium">
-                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <Check size={14} className="text-emerald-600 flex-shrink-0" />
                         <span>Up to 3 experience packages</span>
                       </div>
                       <div className="flex items-center gap-2 font-medium">
-                        <Check size={14} className="text-blue-600 flex-shrink-0" />
-                        <span>GuideMeet messaging & inquiries</span>
+                        <Check size={14} className="text-emerald-600 flex-shrink-0" />
+                        <span>Direct client messaging &amp; WhatsApp inquiries</span>
                       </div>
                       <div className="flex items-center gap-2 font-medium">
-                        <Check size={14} className="text-blue-600 flex-shrink-0" />
-                        <span>4 Guide Insights per month</span>
+                        <Check size={14} className="text-emerald-600 flex-shrink-0" />
+                        <span>Himalayan trek insights &amp; articles</span>
                       </div>
                       <div className="flex items-center gap-2 font-medium">
-                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <Check size={14} className="text-emerald-600 flex-shrink-0" />
                         <span>Basic analytics</span>
                       </div>
                     </div>

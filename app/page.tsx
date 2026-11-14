@@ -110,11 +110,11 @@ export default async function Home() {
   // Fallback curated guides so Featured Guides always renders reliably
   const FEATURED_FALLBACK_GUIDES = [
     {
-      id: "bishnu-kc",
-      name: "Bishnu KC",
-      tagline: "Licensed Trekking Guide with High-Altitude First Aid Training",
-      bio: "Senior licensed mountain guide specializing in Manaslu, Annapurna Circuit, and hidden cultural heritage valley treks.",
-      location: "Panauti / Pokhara",
+      id: "pasang-nuru-sherpa",
+      name: "Pasang Nuru Sherpa",
+      tagline: "Licensed Mountain & High-Altitude Trekking Specialist",
+      bio: "Senior licensed mountain leader specializing in Everest, Manaslu, Annapurna Circuit, and hidden Himalayan passes.",
+      location: "Solukhumbu / Pokhara",
       specialties: ["Trekking", "Adventure", "Cultural"],
       languages: ["Nepali", "English", "Hindi"],
       experienceYears: 13,
@@ -366,7 +366,7 @@ export default async function Home() {
             {/* Section Header */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 sm:mb-12">
               <div>
-                <p className="text-xs font-semibold tracking-[0.08em] uppercase text-blue-600 dark:text-blue-400 mb-2">
+                <p className="text-xs font-bold tracking-[0.08em] uppercase text-[#C2410C] dark:text-[#FB923C] mb-2">
                   Verified Local Experts
                 </p>
                 <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight">
@@ -378,7 +378,7 @@ export default async function Home() {
               </div>
               <Link
                 href="/guides"
-                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline group"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#C2410C] dark:text-[#FB923C] hover:text-[#9A3412] hover:underline group"
               >
                 <span>Browse all guides marketplace</span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
@@ -400,7 +400,7 @@ export default async function Home() {
                   <Link
                     key={guide.id}
                     href={`/guides/${guide.id}`}
-                    className="group block bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-2xl overflow-hidden hover:-translate-y-1 hover:border-blue-400 hover:shadow-xl transition-all duration-200 flex flex-col justify-between"
+                    className="group block bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-2xl overflow-hidden hover:-translate-y-1 hover:border-[#023629] dark:hover:border-[#FB923C]/60 hover:shadow-xl transition-all duration-200 flex flex-col justify-between"
                   >
                     {/* Top Soft Gradient Banner with Circular Avatar & Flag */}
                     <div className="pt-6 pb-2 px-5 bg-gradient-to-b from-slate-100/80 via-slate-50/40 to-transparent dark:from-slate-800/40 dark:to-transparent text-center">
@@ -430,11 +430,11 @@ export default async function Home() {
 
                       {/* Name & Verified Check */}
                       <div className="flex items-center justify-center gap-1.5">
-                        <h3 className="font-extrabold text-gray-900 dark:text-[#F5F5F4] text-base group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1">
+                        <h3 className="font-extrabold text-gray-900 dark:text-[#F5F5F4] text-base group-hover:text-[#023629] dark:group-hover:text-[#FB923C] transition-colors line-clamp-1">
                           {guide.name}
                         </h3>
                         {guide.isVerified && (
-                          <span className="w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] flex-shrink-0" title="Verified Guide">
+                          <span className="w-4 h-4 rounded-full bg-[#023629] dark:bg-[#FB923C] text-white dark:text-slate-950 flex items-center justify-center text-[10px] flex-shrink-0" title="Verified Guide">
                             ✓
                           </span>
                         )}
@@ -485,7 +485,7 @@ export default async function Home() {
                           <MapPin size={11} className="text-gray-400" />
                           <span className="truncate max-w-[100px]">{guide.location}</span>
                         </span>
-                        <span className="text-blue-600 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5">
+                        <span className="text-[#C2410C] dark:text-[#FB923C] group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5">
                           View profile →
                         </span>
                       </div>
@@ -509,7 +509,7 @@ export default async function Home() {
                 </Link>
                 <Link
                   href="/guides"
-                  className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-all shadow-xs inline-flex items-center gap-1.5"
+                  className="px-5 py-2 bg-[#023629] hover:bg-[#034a38] text-white text-xs font-bold rounded-xl transition-all shadow-xs inline-flex items-center gap-1.5"
                 >
                   <span>Explore Guides Marketplace</span>
                   <ArrowRight size={13} />

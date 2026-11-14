@@ -238,6 +238,16 @@ export default function Navbar() {
 
   useEffect(() => {
     if (session?.user?.email) {
+      // Immediate seed from session user object if available
+      const sessionRole = (session.user as any)?.role
+      if (sessionRole === "GUIDE" || sessionRole === "OWNER") {
+        setRoleInfo(prev => ({
+          ...prev,
+          isGuide: prev.isGuide || sessionRole === "GUIDE",
+          isOwner: prev.isOwner || sessionRole === "OWNER"
+        }))
+      }
+
       // 1. Fetch community profile for avatar
       fetch(`/api/community/profile?email=${encodeURIComponent(session.user.email)}`)
         .then(res => res.json())
@@ -254,8 +264,8 @@ export default function Navbar() {
         .then(data => {
           if (data && !data.error) {
             setRoleInfo({
-              isOwner: !!data.isOwner,
-              isGuide: !!data.isGuide,
+              isOwner: Boolean(data.isOwner || sessionRole === "OWNER"),
+              isGuide: Boolean(data.isGuide || sessionRole === "GUIDE"),
               pendingOwnerBookings: data.pendingOwnerBookings || 0,
               pendingGuideInquiries: data.pendingGuideInquiries || 0
             })

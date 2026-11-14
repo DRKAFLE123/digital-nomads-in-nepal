@@ -234,7 +234,7 @@ export default function GuideQuickRegisterPage() {
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Bishnu KC"
+                      placeholder="e.g. Pasang Nuru Sherpa"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#18181C] text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] text-sm transition-all"
