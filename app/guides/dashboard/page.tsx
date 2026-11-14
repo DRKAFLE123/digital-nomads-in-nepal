@@ -6,7 +6,6 @@ import Link from "next/link"
 import { useSession, signOut } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Image from "next/image"
-import Footer from "@/components/Footer"
 import { 
   LayoutDashboard,
   MessageSquare,
@@ -40,7 +39,14 @@ import {
   X,
   Camera,
   Image as ImageIcon,
-  Play
+  Play,
+  Lock,
+  FileText,
+  Bookmark,
+  Headphones,
+  Bell,
+  PanelLeft,
+  ChevronDown
 } from "lucide-react"
 
 interface GuideReview {
@@ -98,7 +104,8 @@ function GuideDashboardContent() {
 
   const [guide, setGuide] = useState<GuideData | null>(null)
   const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState<"DASHBOARD" | "PROFILE" | "EXPERIENCES" | "INQUIRIES" | "REVIEWS" | "BILLING">("DASHBOARD")
+  type TabType = "DASHBOARD" | "MESSAGES" | "INQUIRIES" | "PROFILE" | "EXPERIENCES" | "REVIEWS" | "SAVED" | "BILLING" | "SUPPORT" | "SETTINGS"
+  const [activeTab, setActiveTab] = useState<TabType>("DASHBOARD")
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly")
 
@@ -346,7 +353,7 @@ function GuideDashboardContent() {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="text-center space-y-3">
-          <Loader2 className="w-9 h-9 animate-spin text-[#023629] mx-auto" />
+          <Loader2 className="w-9 h-9 animate-spin text-blue-600 mx-auto" />
           <p className="text-sm font-semibold text-slate-600">Loading your Guide Console...</p>
         </div>
       </div>
@@ -354,130 +361,53 @@ function GuideDashboardContent() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans">
+    <div className="flex h-screen overflow-hidden bg-slate-50 text-slate-900 font-sans">
       
       {/* ─────────────────────────────────────────────────────────────
-          TOP HEADER: Clean White Bar with Live Site Switcher
+          1. FIXED LEFT SIDEBAR (GuideMeet Stationary Benchmark)
          ───────────────────────────────────────────────────────────── */}
-      <header className="sticky top-0 z-30 bg-white border-b border-slate-200/80 px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between shadow-xs">
-        
-        {/* Left: Mobile hamburger & Brand */}
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="lg:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-100"
-            aria-label="Toggle sidebar"
-          >
-            {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
-
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-lg bg-[#023629] flex items-center justify-center text-white font-black text-sm shadow-xs">
-              <Mountain size={16} />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-extrabold text-sm tracking-tight text-slate-900 leading-none">
-                Digital Nomads <span className="text-[#CD6003]">in Nepal</span>
-              </span>
-              <span className="text-[10px] font-bold text-slate-600 uppercase tracking-widest mt-0.5">
-                Local Expert Console
-              </span>
-            </div>
-          </Link>
-        </div>
-
-        {/* Right: Switch to Live Site Pill + Avatar */}
-        <div className="flex items-center gap-3 sm:gap-4">
-          
-          {/* Switch to Live Public Listing */}
-          {guide && (
-            <Link
-              href={`/local-guides/${guide.id}`}
-              target="_blank"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-full transition-all shadow-xs"
-              title="Preview your public profile live on the website"
-            >
-              <Eye size={13} />
-              <span className="hidden sm:inline">Preview Live Profile</span>
-              <ExternalLink size={11} className="opacity-70" />
+      <aside className={`
+        fixed lg:sticky top-0 z-40 h-screen w-64 bg-white border-r border-slate-200/80 flex flex-col justify-between shrink-0 transition-transform duration-200
+        ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+      `}>
+        {/* Top: Brand Logo */}
+        <div className="flex flex-col flex-1 overflow-hidden">
+          <div className="h-16 px-6 border-b border-slate-100 flex items-center justify-between shrink-0">
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-black text-sm shadow-xs">
+                <Mountain size={16} />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-extrabold text-sm tracking-tight text-slate-900 leading-none">
+                  Digital Nomads <span className="text-[#CD6003]">in Nepal</span>
+                </span>
+                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
+                  Local Guide Console
+                </span>
+              </div>
             </Link>
-          )}
 
-          <Link
-            href="/local-guides"
-            className="hidden md:inline-flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-all"
-          >
-            <span>Guide Directory</span>
-          </Link>
-
-          {/* User avatar indicator */}
-          <div className="flex items-center gap-2.5 pl-2 border-l border-slate-200">
-            <div className="w-8 h-8 rounded-full bg-[#023629] text-white flex items-center justify-center font-bold text-xs shadow-xs">
-              {guide?.name?.charAt(0).toUpperCase() || "G"}
-            </div>
-            <div className="hidden sm:block text-left">
-              <p className="text-xs font-bold text-slate-800 leading-tight truncate max-w-[120px]">
-                {guide?.name || "Local Guide"}
-              </p>
-              <p className="text-[10px] text-emerald-600 font-semibold flex items-center gap-0.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
-                <span>Online</span>
-              </p>
-            </div>
             <button
-              onClick={() => signOut({ callbackUrl: "/" })}
-              className="p-1.5 text-slate-600 hover:text-red-600 rounded-lg transition-colors"
-              title="Sign out"
+              onClick={() => setSidebarOpen(false)}
+              className="lg:hidden p-1.5 text-slate-400 hover:text-slate-700 rounded-lg"
             >
-              <LogOut size={16} />
+              <X size={18} />
             </button>
           </div>
 
-        </div>
-      </header>
-
-      {/* ─────────────────────────────────────────────────────────────
-          EMAIL VERIFICATION ALERT BANNER
-         ───────────────────────────────────────────────────────────── */}
-      {!isEmailVerified && (
-        <div className="bg-amber-50 border-b border-amber-200/80 px-4 py-2.5 text-xs text-amber-900 flex items-center justify-between">
-          <div className="flex items-center gap-2 max-w-4xl mx-auto w-full">
-            <AlertCircle size={15} className="text-amber-600 flex-shrink-0" />
-            <p className="font-medium">
-              Please verify your email address (<strong>{session?.user?.email}</strong>) to activate full directory visibility.
-            </p>
-            <button
-              onClick={handleResendVerification}
-              disabled={resendingEmail}
-              className="ml-auto underline font-bold hover:text-amber-950 flex-shrink-0 disabled:opacity-50"
-            >
-              {resendingEmail ? "Sending link..." : resendStatus || "Resend Email Link"}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* ─────────────────────────────────────────────────────────────
-          MAIN BODY: Sidebar Navigation + Bright White Workspace
-         ───────────────────────────────────────────────────────────── */}
-      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex gap-8">
-        
-        {/* ─── LEFT SIDEBAR (GuideMeet Clean Style) ─── */}
-        <aside className={`
-          fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white border-r lg:border border-slate-200/80 lg:rounded-2xl shadow-xl lg:shadow-xs p-4 flex flex-col transition-transform duration-200
-          ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
-        `}>
-          <div className="space-y-1 mb-6">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-600 px-3 py-1">
-              Main Menu
-            </p>
+          {/* Navigation Items (Flat list matching GuideMeet) */}
+          <div className="p-3 space-y-1 overflow-y-auto flex-1 custom-scrollbar">
             {[
               { id: "DASHBOARD", label: "Dashboard", icon: LayoutDashboard },
-              { id: "PROFILE", label: "My Profile & Bio", icon: UserCircle },
-              { id: "EXPERIENCES", label: "Treks & Tours", icon: Compass },
-              { id: "INQUIRIES", label: "Nomad Inquiries", icon: MessageSquare, badge: "New" },
+              { id: "MESSAGES", label: "Messages", icon: MessageSquare },
+              { id: "INQUIRIES", label: "Inquiries", icon: FileText, badge: "New" },
+              { id: "PROFILE", label: "My Profile", icon: UserCircle },
+              { id: "EXPERIENCES", label: "My Experiences", icon: Compass },
               { id: "REVIEWS", label: `Reviews (${guide?.totalReviews || 0})`, icon: Star },
+              { id: "SAVED", label: "Saved", icon: Bookmark },
               { id: "BILLING", label: "Plan & Billing", icon: CreditCard },
+              { id: "SUPPORT", label: "Support", icon: Headphones },
+              { id: "SETTINGS", label: "Settings", icon: Settings },
             ].map((item) => {
               const Icon = item.icon
               const active = activeTab === item.id
@@ -485,13 +415,13 @@ function GuideDashboardContent() {
                 <button
                   key={item.id}
                   onClick={() => {
-                    setActiveTab(item.id as any)
+                    setActiveTab(item.id as TabType)
                     setSidebarOpen(false)
                   }}
                   className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
                     active
                       ? "bg-blue-600 text-white shadow-xs"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
@@ -499,7 +429,7 @@ function GuideDashboardContent() {
                     <span>{item.label}</span>
                   </div>
                   {item.badge && !active && (
-                    <span className="px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[9px] font-extrabold">
+                    <span className="px-1.5 py-0.2 rounded-full bg-emerald-100 text-emerald-800 text-[9px] font-extrabold">
                       {item.badge}
                     </span>
                   )}
@@ -507,27 +437,130 @@ function GuideDashboardContent() {
               )
             })}
           </div>
+        </div>
 
-          {/* Quick Guide Card in Sidebar */}
-          <div className="mt-auto pt-4 border-t border-slate-100">
-            <div className="p-3 bg-slate-50 rounded-xl border border-slate-100">
-              <div className="flex items-center gap-2 mb-1.5">
-                <ShieldCheck size={14} className="text-emerald-600" />
-                <span className="text-[11px] font-bold text-slate-800">
-                  {guide?.isVerified ? "Verified Expert" : "Application Pending"}
-                </span>
-              </div>
-              <p className="text-[10px] text-slate-500 leading-relaxed">
-                {guide?.isVerified 
-                  ? "Your profile is verified and active on Digital Nomads in Nepal."
-                  : "Complete 100% of your profile to qualify for fast-track verification."}
+        {/* Bottom Verification Status */}
+        <div className="p-4 border-t border-slate-100 shrink-0">
+          <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/60 flex items-center gap-2.5">
+            <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${guide?.isVerified ? "bg-emerald-500" : "bg-amber-500"}`} />
+            <div className="min-w-0">
+              <p className="text-[11px] font-bold text-slate-800 truncate">
+                {guide?.isVerified ? "Verified Expert" : "Application Pending"}
+              </p>
+              <p className="text-[10px] text-slate-500 truncate">
+                {guide?.isVerified ? "Live in Guide Directory" : "Complete profile to activate"}
               </p>
             </div>
           </div>
-        </aside>
+        </div>
+      </aside>
 
-        {/* ─── MAIN RIGHT CONTENT CANVAS (BRIGHT WHITE) ─── */}
-        <main className="flex-1 min-w-0">
+      {/* Mobile Drawer Backdrop */}
+      {sidebarOpen && (
+        <div
+          onClick={() => setSidebarOpen(false)}
+          className="fixed inset-0 bg-black/40 z-30 lg:hidden"
+        />
+      )}
+
+      {/* ─────────────────────────────────────────────────────────────
+          2. RIGHT MAIN WORKSPACE (INDEPENDENT SCROLL - SIDEBAR NEVER MOVES)
+         ───────────────────────────────────────────────────────────── */}
+      <div className="flex-1 flex flex-col h-screen overflow-y-auto min-w-0">
+        
+        {/* Sticky Top Header */}
+        <header className="sticky top-0 z-20 bg-white border-b border-slate-200/80 h-16 px-4 sm:px-6 lg:px-8 flex items-center justify-between shrink-0 shadow-2xs">
+          
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="lg:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-100"
+              aria-label="Toggle sidebar"
+            >
+              <Menu size={18} />
+            </button>
+            <span className="text-xs font-bold text-slate-400 hidden sm:inline">
+              Console / {activeTab === "DASHBOARD" ? "Overview" : activeTab.charAt(0) + activeTab.slice(1).toLowerCase()}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3 sm:gap-4">
+            {/* Live Preview Button */}
+            {guide && (
+              <Link
+                href={`/local-guides/${guide.id}`}
+                target="_blank"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-full transition-all shadow-xs"
+                title="Preview your public profile live on the website"
+              >
+                <Eye size={13} />
+                <span className="hidden sm:inline">Preview Live Profile</span>
+                <ExternalLink size={11} className="opacity-70" />
+              </Link>
+            )}
+
+            <Link
+              href="/local-guides"
+              className="hidden md:inline-flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-all"
+            >
+              <span>Guide Directory</span>
+            </Link>
+
+            {/* Notification Bell */}
+            <button 
+              className="p-2 text-slate-400 hover:text-slate-700 rounded-full hover:bg-slate-100 relative"
+              title="Notifications"
+            >
+              <Bell size={16} />
+              <span className="w-1.5 h-1.5 bg-blue-600 rounded-full absolute top-2 right-2" />
+            </button>
+
+            {/* User Dropdown */}
+            <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
+              <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                {name ? name.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase() : "DA"}
+              </div>
+              <div className="hidden sm:block text-left">
+                <p className="text-xs font-bold text-slate-800 leading-tight truncate max-w-[120px]">
+                  {name || "Local Guide"}
+                </p>
+                <p className="text-[10px] text-emerald-600 font-semibold flex items-center gap-0.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
+                  <span>Online</span>
+                </p>
+              </div>
+              <button
+                onClick={() => signOut({ callbackUrl: "/" })}
+                className="p-1.5 text-slate-400 hover:text-red-600 rounded-lg transition-colors ml-1"
+                title="Sign out"
+              >
+                <LogOut size={15} />
+              </button>
+            </div>
+          </div>
+        </header>
+
+        {/* Email verification alert */}
+        {!isEmailVerified && (
+          <div className="bg-amber-50 border-b border-amber-200/80 px-4 py-2.5 text-xs text-amber-900 flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-2 max-w-4xl mx-auto w-full">
+              <AlertCircle size={15} className="text-amber-600 flex-shrink-0" />
+              <p className="font-medium">
+                Please verify your email address (<strong>{session?.user?.email}</strong>) to activate full directory visibility.
+              </p>
+              <button
+                onClick={handleResendVerification}
+                disabled={resendingEmail}
+                className="ml-auto underline font-bold hover:text-amber-950 flex-shrink-0 disabled:opacity-50"
+              >
+                {resendingEmail ? "Sending link..." : resendStatus || "Resend Email Link"}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Workspace Canvas (Independent Scroll) */}
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-6xl w-full mx-auto">
           
           {/* Success / Error Toasts */}
           {successToast && (
@@ -1465,10 +1498,103 @@ function GuideDashboardContent() {
             </div>
           )}
 
+          {/* ═════════════════════════════════════════════════════════════
+              TAB 7: MESSAGES (GuideMeet Benchmark Screen)
+             ═════════════════════════════════════════════════════════════ */}
+          {activeTab === "MESSAGES" && (
+            <div className="space-y-6">
+              <h2 className="text-2xl font-black text-slate-900 tracking-tight">Messages</h2>
+              <div className="bg-white border border-slate-200/80 rounded-2xl p-12 text-center space-y-4 shadow-xs">
+                <div className="w-14 h-14 rounded-2xl bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-600 mx-auto">
+                  <Lock size={24} />
+                </div>
+                <h3 className="text-xl font-black text-slate-900 tracking-tight">Profile Setup Required</h3>
+                <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto leading-relaxed">
+                  Complete your profile setup and get verified before travelers can send you messages. Once your profile is live, conversations will appear here.
+                </p>
+                <button
+                  onClick={() => setActiveTab("PROFILE")}
+                  className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-6 py-3 rounded-xl transition-all shadow-xs"
+                >
+                  <span>Complete Profile Setup</span>
+                  <ChevronRight size={14} />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* ═════════════════════════════════════════════════════════════
+              TAB 8: SAVED
+             ═════════════════════════════════════════════════════════════ */}
+          {activeTab === "SAVED" && (
+            <div className="bg-white border border-slate-200/80 rounded-2xl p-8 text-center space-y-3 shadow-xs">
+              <Bookmark size={32} className="mx-auto text-blue-500 opacity-60" />
+              <h3 className="text-lg font-black text-slate-900">Saved Items & Resources</h3>
+              <p className="text-xs text-slate-500 max-w-sm mx-auto">
+                Bookmark top trekking viewpoints, homestays, and nomad guide references here.
+              </p>
+            </div>
+          )}
+
+          {/* ═════════════════════════════════════════════════════════════
+              TAB 9: SUPPORT
+             ═════════════════════════════════════════════════════════════ */}
+          {activeTab === "SUPPORT" && (
+            <div className="bg-white border border-slate-200/80 rounded-2xl p-8 space-y-4 shadow-xs">
+              <h3 className="text-lg font-black text-slate-900">Guide Community Support</h3>
+              <p className="text-xs text-slate-500 leading-relaxed max-w-lg">
+                Need assistance with your guide verification, profile photography, or receiving payments from international nomads? Reach out to our team anytime.
+              </p>
+              <div className="flex flex-wrap gap-3 pt-2">
+                <a
+                  href="https://wa.me/9779865575108"
+                  target="_blank"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition-colors shadow-xs"
+                >
+                  <span>Chat on WhatsApp (+977 9865575108)</span>
+                </a>
+                <a
+                  href="mailto:contact@digitalnomadsinnepal.com"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition-colors"
+                >
+                  <span>Email Support Desk</span>
+                </a>
+              </div>
+            </div>
+          )}
+
+          {/* ═════════════════════════════════════════════════════════════
+              TAB 10: SETTINGS
+             ═════════════════════════════════════════════════════════════ */}
+          {activeTab === "SETTINGS" && (
+            <div className="bg-white border border-slate-200/80 rounded-2xl p-8 space-y-6 shadow-xs max-w-2xl">
+              <h3 className="text-lg font-black text-slate-900">Console Settings</h3>
+              <div className="space-y-4 text-xs">
+                <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200">
+                  <div>
+                    <p className="font-bold text-slate-900">Public Directory Visibility</p>
+                    <p className="text-slate-500 mt-0.5">Allow remote workers to find your profile on the marketplace.</p>
+                  </div>
+                  <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-[10px]">
+                    Active
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200">
+                  <div>
+                    <p className="font-bold text-slate-900">Email Notifications</p>
+                    <p className="text-slate-500 mt-0.5">Receive direct inquiry notifications from travelers via email.</p>
+                  </div>
+                  <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-[10px]">
+                    Enabled
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+
         </main>
       </div>
-
-      <Footer />
     </div>
   )
 }
