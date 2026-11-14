@@ -402,7 +402,7 @@ export default async function Home() {
                     href={`/guides/${guide.id}`}
                     className="group block bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-2xl overflow-hidden hover:-translate-y-1 hover:border-[#023629] dark:hover:border-[#FB923C]/60 hover:shadow-xl transition-all duration-200 flex flex-col justify-between"
                   >
-                    {/* Top Soft Gradient Banner with Circular Avatar & Flag */}
+                    {/* Top Soft Gradient Banner with Circular Avatar & NPL Code Badge */}
                     <div className="pt-6 pb-2 px-5 bg-gradient-to-b from-slate-100/80 via-slate-50/40 to-transparent dark:from-slate-800/40 dark:to-transparent text-center">
                       <div className="relative w-20 h-20 mx-auto mb-3">
                         <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-white dark:border-slate-800 shadow-sm bg-slate-200">
@@ -418,14 +418,13 @@ export default async function Home() {
                             </div>
                           )}
                         </div>
-                        {/* Nepal Flag Badge on bottom-right of avatar */}
-                        <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-white dark:bg-slate-900 shadow-xs border border-slate-100 dark:border-slate-800 flex items-center justify-center overflow-hidden">
-                          <svg viewBox="0 0 24 28" className="w-3.5 h-3.5" fill="none">
-                            <path d="M2 2L16 11L7 12L20 22H2V2Z" fill="#DC2626" stroke="#003893" strokeWidth="1.5" />
-                            <circle cx="6" cy="8" r="1.5" fill="white" />
-                            <path d="M6 16L7.5 19L5 18L6 16Z" fill="white" />
-                          </svg>
-                        </div>
+                        {/* Country Short Code Badge (NPL) */}
+                        <span 
+                          className="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-full bg-[#023629] dark:bg-white text-white dark:text-slate-950 font-black text-[9px] tracking-wider uppercase shadow-xs border-2 border-white dark:border-slate-800 leading-none select-none"
+                          title="Nepal (NPL)"
+                        >
+                          NPL
+                        </span>
                       </div>
 
                       {/* Name & Verified Check */}

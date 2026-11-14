@@ -291,10 +291,13 @@ export default function GuideProfileClient({ guide }: GuideProfileClientProps) {
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  {/* Nepal flag / shield indicator */}
-                  <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-[11px] font-bold shadow-xs">
-                    🇳🇵
-                  </div>
+                  {/* Country Short Code Badge (NPL) */}
+                  <span 
+                    className="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-full bg-[#023629] dark:bg-white text-white dark:text-slate-950 font-black text-[9px] tracking-wider uppercase shadow-xs border-2 border-white dark:border-slate-800 leading-none select-none"
+                    title="Nepal (NPL)"
+                  >
+                    NPL
+                  </span>
                 </div>
 
                 <button
@@ -312,7 +315,7 @@ export default function GuideProfileClient({ guide }: GuideProfileClientProps) {
                 <h1 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">
                   {guide.name}
                 </h1>
-                <span className="w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px]" title="Verified Guide">
+                <span className="w-4 h-4 rounded-full bg-[#023629] dark:bg-[#FB923C] text-white dark:text-slate-950 flex items-center justify-center text-[10px]" title="Verified Guide">
                   ✓
                 </span>
               </div>
