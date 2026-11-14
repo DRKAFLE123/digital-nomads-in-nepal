@@ -52,7 +52,8 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       licenseNumber,
       certifications,
       guidingAreas,
-      profileStatus
+      profileStatus,
+      galleryPhotos
     } = body
 
     const existing = await prisma.guide.findUnique({ where: { id: params.id } })
@@ -60,27 +61,30 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       return NextResponse.json({ error: "Guide profile not found" }, { status: 404 })
     }
 
+    const updateData: any = {
+      ...(name ? { name } : {}),
+      ...(tagline !== undefined ? { tagline } : {}),
+      ...(bio ? { bio } : {}),
+      ...(location ? { location } : {}),
+      ...(specialties !== undefined ? { specialties } : {}),
+      ...(photoUrl !== undefined ? { photoUrl } : {}),
+      ...(contactEmail ? { contactEmail } : {}),
+      ...(phone !== undefined ? { phone } : {}),
+      ...(whatsapp !== undefined ? { whatsapp } : {}),
+      ...(website !== undefined ? { website: website || null } : {}),
+      ...(languages !== undefined ? { languages } : {}),
+      ...(experienceYears !== undefined ? { experienceYears: Number(experienceYears) || 0 } : {}),
+      ...(licensedSince !== undefined ? { licensedSince: licensedSince ? Number(licensedSince) : null } : {}),
+      ...(licenseNumber !== undefined ? { licenseNumber } : {}),
+      ...(certifications !== undefined ? { certifications } : {}),
+      ...(guidingAreas !== undefined ? { guidingAreas } : {}),
+      ...(profileStatus !== undefined ? { profileStatus } : {}),
+      ...(galleryPhotos !== undefined ? { galleryPhotos } : {}),
+    }
+
     const updated = await prisma.guide.update({
       where: { id: params.id },
-      data: {
-        ...(name ? { name } : {}),
-        ...(tagline !== undefined ? { tagline } : {}),
-        ...(bio ? { bio } : {}),
-        ...(location ? { location } : {}),
-        ...(specialties !== undefined ? { specialties } : {}),
-        ...(photoUrl !== undefined ? { photoUrl } : {}),
-        ...(contactEmail ? { contactEmail } : {}),
-        ...(phone !== undefined ? { phone } : {}),
-        ...(whatsapp !== undefined ? { whatsapp } : {}),
-        ...(website !== undefined ? { website: website || null } : {}),
-        ...(languages !== undefined ? { languages } : {}),
-        ...(experienceYears !== undefined ? { experienceYears: Number(experienceYears) || 0 } : {}),
-        ...(licensedSince !== undefined ? { licensedSince: licensedSince ? Number(licensedSince) : null } : {}),
-        ...(licenseNumber !== undefined ? { licenseNumber } : {}),
-        ...(certifications !== undefined ? { certifications } : {}),
-        ...(guidingAreas !== undefined ? { guidingAreas } : {}),
-        ...(profileStatus !== undefined ? { profileStatus } : {}),
-      }
+      data: updateData
     })
 
     return NextResponse.json({ success: true, guide: updated })

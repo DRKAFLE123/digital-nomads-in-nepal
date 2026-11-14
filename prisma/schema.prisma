@@ -73,6 +73,7 @@ model Guide {
   location        String
   specialties     Json
   photoUrl        String?
+  galleryPhotos   Json?
   contactEmail    String
   phone           String?
   whatsapp        String?

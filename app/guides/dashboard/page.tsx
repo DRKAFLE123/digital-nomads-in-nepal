@@ -37,7 +37,10 @@ import {
   LogOut,
   ChevronRight,
   Menu,
-  X
+  X,
+  Camera,
+  Image as ImageIcon,
+  Play
 } from "lucide-react"
 
 interface GuideReview {
@@ -66,6 +69,7 @@ interface GuideData {
   licenseNumber?: string | null
   certifications?: string[] | any
   guidingAreas?: string[] | any
+  galleryPhotos?: string[] | any
   isVerified: boolean
   profileStatus: string
   avgRating: number
@@ -96,6 +100,7 @@ function GuideDashboardContent() {
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<"DASHBOARD" | "PROFILE" | "EXPERIENCES" | "INQUIRIES" | "REVIEWS" | "BILLING">("DASHBOARD")
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly")
 
   // Profile Form State
   const [name, setName] = useState("")
@@ -113,6 +118,8 @@ function GuideDashboardContent() {
   const [certifications, setCertifications] = useState<string[]>([])
   const [guidingAreas, setGuidingAreas] = useState<string[]>([])
   const [photoUrl, setPhotoUrl] = useState("")
+  const [galleryPhotos, setGalleryPhotos] = useState<string[]>([])
+  const [uploadingGallery, setUploadingGallery] = useState(false)
 
   const [saving, setSaving] = useState(false)
   const [successToast, setSuccessToast] = useState("")
@@ -162,6 +169,18 @@ function GuideDashboardContent() {
           setCertifications(Array.isArray(full.certifications) ? full.certifications : [])
           setGuidingAreas(Array.isArray(full.guidingAreas) ? full.guidingAreas : [])
           setPhotoUrl(full.photoUrl || "")
+
+          let parsedGallery: string[] = []
+          if (Array.isArray(full.galleryPhotos)) {
+            parsedGallery = full.galleryPhotos
+          } else if (typeof full.galleryPhotos === "string") {
+            try {
+              parsedGallery = JSON.parse(full.galleryPhotos)
+            } catch {
+              parsedGallery = []
+            }
+          }
+          setGalleryPhotos(parsedGallery)
         }
       }
     } catch (err) {
@@ -201,6 +220,48 @@ function GuideDashboardContent() {
     }
   }
 
+  // Handle Multi-Photo Gallery Upload
+  async function handleGalleryUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files
+    if (!files || files.length === 0) return
+
+    setUploadingGallery(true)
+    setErrorToast("")
+
+    try {
+      const uploadedUrls: string[] = []
+      for (let i = 0; i < files.length; i++) {
+        const formData = new FormData()
+        formData.append("file", files[i])
+        const res = await fetch("/api/guides/upload", {
+          method: "POST",
+          body: formData,
+        })
+        if (res.ok) {
+          const data = await res.json()
+          if (data.url) uploadedUrls.push(data.url)
+        }
+      }
+      if (uploadedUrls.length > 0) {
+        setGalleryPhotos((prev) => [...prev, ...uploadedUrls])
+        setSuccessToast(`Added ${uploadedUrls.length} photo(s) to your gallery! Remember to save profile.`)
+        setTimeout(() => setSuccessToast(""), 4000)
+      } else {
+        setErrorToast("Upload failed for selected files. Ensure JPG or PNG under 5MB.")
+      }
+    } catch {
+      setErrorToast("Network error uploading gallery photos.")
+    } finally {
+      setUploadingGallery(false)
+      // reset file input
+      e.target.value = ""
+    }
+  }
+
+  function removeGalleryPhoto(indexToRemove: number) {
+    setGalleryPhotos((prev) => prev.filter((_, idx) => idx !== indexToRemove))
+  }
+
   // Save Profile Handler
   async function handleSaveProfile(e: React.FormEvent) {
     e.preventDefault()
@@ -230,6 +291,7 @@ function GuideDashboardContent() {
           certifications,
           guidingAreas,
           photoUrl,
+          galleryPhotos,
         }),
       })
 
@@ -487,21 +549,79 @@ function GuideDashboardContent() {
           {activeTab === "DASHBOARD" && (
             <div className="space-y-6">
               
-              {/* Welcome Hero Banner */}
+              {/* Top Video Learning Tutorials (GuideMeet Screenshot Benchmark) */}
+              <div className="space-y-3">
+                <h2 className="text-sm font-extrabold text-slate-800 tracking-tight">
+                  Learn about GuideMeet & Local Guides
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Video 1 */}
+                  <div className="group relative bg-slate-900 rounded-2xl overflow-hidden aspect-16/9 sm:aspect-21/9 shadow-xs border border-slate-200">
+                    <img
+                      src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80"
+                      alt="Find a Trusted Local Guide"
+                      className="w-full h-full object-cover opacity-75 group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/30 flex flex-col justify-between p-5">
+                      <div className="flex items-center gap-2">
+                        <span className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white">
+                          <Play size={14} className="fill-white translate-x-0.5" />
+                        </span>
+                        <span className="text-[11px] font-bold text-white/90">Tutorial 01</span>
+                      </div>
+                      <div>
+                        <h3 className="text-sm sm:text-base font-black text-white leading-snug">
+                          Find a Trusted Local Guide for Your Next Trip | GuideMeet
+                        </h3>
+                        <p className="text-[11px] text-white/70 mt-1 line-clamp-1">
+                          How remote workers connect and hire certified Himalayan guides directly.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Video 2 */}
+                  <div className="group relative bg-blue-900 rounded-2xl overflow-hidden aspect-16/9 sm:aspect-21/9 shadow-xs border border-slate-200">
+                    <img
+                      src="https://images.unsplash.com/photo-1517824806704-9040b037703b?auto=format&fit=crop&w=1200&q=80"
+                      alt="Guide Profile Completion Video"
+                      className="w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-blue-950/85 via-blue-950/30 to-blue-950/30 flex flex-col justify-between p-5">
+                      <div className="flex items-center gap-2">
+                        <span className="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center text-white shadow-md">
+                          <Play size={14} className="fill-white translate-x-0.5" />
+                        </span>
+                        <span className="text-[11px] font-bold text-white/90">Guide Walkthrough</span>
+                      </div>
+                      <div>
+                        <h3 className="text-sm sm:text-base font-black text-white leading-snug">
+                          Guide Profile Completion Video
+                        </h3>
+                        <p className="text-[11px] text-white/70 mt-1 line-clamp-1">
+                          Step-by-step tutorial to craft a 100% verified profile with 5-photo mosaic.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Welcome Hero Banner (GuideMeet Style with Initial Avatar) */}
               <div className="bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-full bg-slate-100 border border-slate-200 overflow-hidden flex-shrink-0 relative">
+                  <div className="w-16 h-16 rounded-full bg-blue-100 border-2 border-blue-200 overflow-hidden flex-shrink-0 relative shadow-2xs flex items-center justify-center">
                     {photoUrl ? (
                       <img src={photoUrl} alt={name} className="w-full h-full object-cover" />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center font-black text-xl text-slate-400">
-                        {name?.charAt(0) || "G"}
-                      </div>
+                      <span className="font-black text-xl text-blue-700">
+                        {name ? name.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase() : "DA"}
+                      </span>
                     )}
                   </div>
                   <div>
                     <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                      Hi {name || "Local Guide"}, welcome to GuideMeet Console 👋
+                      Hi {name ? name.split(" ")[0] : "Guide"}, welcome to GuideMeet Console 👋
                     </h1>
                     <p className="text-xs sm:text-sm text-slate-500 mt-1">
                       Add your details, experience, languages, and photos to get verified and go live.
@@ -652,6 +772,89 @@ function GuideDashboardContent() {
                       />
                     </label>
                   </div>
+                </div>
+
+                {/* 1.5. Trek & Tour Photo Gallery (Bishnu KC 5-Photo Mosaic) */}
+                <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/60 pb-3">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <Camera size={16} className="text-[#023629]" />
+                        <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800">
+                          Trek & Tour Photo Gallery (Bishnu KC Mosaic Showcase)
+                        </h3>
+                      </div>
+                      <p className="text-[11px] text-slate-500 mt-0.5">
+                        The first 4–5 photos form your prominent signature mosaic on your public profile. Extra photos open in your full-screen lightbox!
+                      </p>
+                    </div>
+
+                    <label className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#023629] hover:bg-[#023629]/90 text-white rounded-lg text-xs font-bold cursor-pointer transition-colors shadow-2xs self-start sm:self-auto flex-shrink-0">
+                      {uploadingGallery ? (
+                        <>
+                          <Loader2 size={13} className="animate-spin" />
+                          <span>Uploading...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Plus size={13} />
+                          <span>Add Trek Photos</span>
+                        </>
+                      )}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={handleGalleryUpload}
+                        className="hidden"
+                        disabled={uploadingGallery}
+                      />
+                    </label>
+                  </div>
+
+                  {galleryPhotos.length > 0 ? (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                      {galleryPhotos.map((url, idx) => (
+                        <div
+                          key={idx}
+                          className="group relative aspect-4/3 rounded-xl overflow-hidden border border-slate-200 bg-slate-100 shadow-2xs"
+                        >
+                          <img
+                            src={url}
+                            alt={`Trek photo ${idx + 1}`}
+                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          />
+                          <div className="absolute top-1.5 left-1.5">
+                            <span className={`text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded-md backdrop-blur-md shadow-xs ${
+                              idx === 0 
+                                ? "bg-amber-500 text-slate-950 font-black" 
+                                : idx < 5 
+                                ? "bg-black/70 text-white" 
+                                : "bg-slate-800/60 text-slate-200"
+                            }`}>
+                              {idx === 0 ? "Cover (Hero)" : idx < 5 ? `Mosaic #${idx + 1}` : `#${idx + 1}`}
+                            </span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => removeGalleryPhoto(idx)}
+                            className="absolute top-1.5 right-1.5 w-6 h-6 rounded-md bg-red-600/90 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-700 shadow-xs"
+                            title="Remove photo"
+                          >
+                            <Trash2 size={12} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-6 px-4 rounded-xl border border-dashed border-slate-300 bg-white/50 space-y-2">
+                      <ImageIcon size={28} className="mx-auto text-slate-400" />
+                      <p className="text-xs font-semibold text-slate-700">No custom trek photos uploaded yet</p>
+                      <p className="text-[11px] text-slate-500 max-w-md mx-auto">
+                        Your public profile will use default Nepal Himalayan photography until you upload your own trail, mountain, and client trekking moments.
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 {/* 2. Name & Tagline */}
@@ -989,49 +1192,273 @@ function GuideDashboardContent() {
               TAB 6: PLAN & BILLING (GuideMeet comparison tiers)
              ═════════════════════════════════════════════════════════════ */}
           {activeTab === "BILLING" && (
-            <div className="bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-xs space-y-6">
-              <div className="border-b border-slate-100 pb-5">
-                <h2 className="text-lg font-black text-slate-900">Membership & Verification</h2>
-                <p className="text-xs text-slate-500 mt-0.5">Choose your guide visibility tier across Digital Nomads in Nepal.</p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
-                {/* Free Tier */}
-                <div className="border-2 border-emerald-600 rounded-2xl p-6 relative bg-white shadow-xs">
-                  <span className="absolute -top-3 left-6 px-3 py-0.5 rounded-full bg-emerald-600 text-white font-extrabold text-[10px] uppercase tracking-wider">
-                    Current Active Tier
-                  </span>
-                  <h3 className="font-black text-lg text-slate-900 mt-2">Community Guide</h3>
-                  <p className="text-xs text-slate-500 mt-1">Free forever for verified local Nepali guides.</p>
-                  <p className="text-3xl font-black text-slate-900 my-4">$0 <span className="text-xs text-slate-500 font-normal">/ month</span></p>
-
-                  <ul className="space-y-2.5 text-xs text-slate-700">
-                    <li className="flex items-center gap-2">✓ Public Guide Profile Listing</li>
-                    <li className="flex items-center gap-2">✓ Direct WhatsApp & Email Inquiries</li>
-                    <li className="flex items-center gap-2">✓ 0% Platform Commission on Bookings</li>
-                    <li className="flex items-center gap-2">✓ Standard Search Placement</li>
-                  </ul>
+            <div className="bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-xs space-y-8">
+              
+              {/* Header with Monthly / Yearly toggle */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+                <div>
+                  <h2 className="text-xl font-black text-slate-900 tracking-tight">Plan & Billing</h2>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Choose the visibility tier that fits your mountain guiding career.
+                  </p>
                 </div>
 
-                {/* Featured Pro Tier */}
-                <div className="border border-slate-200 rounded-2xl p-6 bg-slate-50/50 opacity-90">
-                  <h3 className="font-black text-lg text-slate-900 mt-2">Featured Expert</h3>
-                  <p className="text-xs text-slate-500 mt-1">For senior guides seeking maximum nomad visibility.</p>
-                  <p className="text-3xl font-black text-slate-900 my-4">$15 <span className="text-xs text-slate-500 font-normal">/ month</span></p>
-
-                  <ul className="space-y-2.5 text-xs text-slate-600">
-                    <li className="flex items-center gap-2">✓ Top Homepage & Destination Guide Placement</li>
-                    <li className="flex items-center gap-2">✓ Golden Verified Guide Badge</li>
-                    <li className="flex items-center gap-2">✓ Featured in Weekly Nomad Newsletter</li>
-                    <li className="flex items-center gap-2">✓ Priority Support & Direct Trek Bookings</li>
-                  </ul>
+                {/* Monthly / Yearly Toggle */}
+                <div className="inline-flex items-center p-1 bg-slate-100 rounded-full border border-slate-200/80 self-start sm:self-auto">
                   <button
-                    disabled
-                    className="w-full mt-6 py-2.5 bg-slate-200 text-slate-500 font-bold text-xs rounded-xl cursor-not-allowed"
+                    onClick={() => setBillingCycle("monthly")}
+                    className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
+                      billingCycle === "monthly"
+                        ? "bg-blue-600 text-white shadow-xs"
+                        : "text-slate-600 hover:text-slate-900"
+                    }`}
                   >
-                    Coming Soon (Currently in Beta)
+                    Monthly
                   </button>
+                  <button
+                    onClick={() => setBillingCycle("yearly")}
+                    className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
+                      billingCycle === "yearly"
+                        ? "bg-blue-600 text-white shadow-xs"
+                        : "text-slate-600 hover:text-slate-900"
+                    }`}
+                  >
+                    Yearly <span className="text-[10px] text-emerald-400 font-extrabold ml-1">Save 20%</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* 4 Tiers Grid (GuideMeet Screenshot Exact Match) */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                
+                {/* 1. Free */}
+                <div className="rounded-2xl border border-slate-200 p-6 flex flex-col justify-between bg-white shadow-2xs hover:shadow-xs transition-shadow relative">
+                  <div>
+                    <span className="inline-block px-2.5 py-0.5 rounded-full bg-blue-600 text-white text-[10px] font-extrabold uppercase tracking-wider mb-3">
+                      Current Plan
+                    </span>
+                    <h3 className="text-lg font-black text-slate-900">Free</h3>
+                    <p className="text-xs text-slate-500 mt-1 min-h-[34px]">
+                      Best for testing the platform and creating a basic public presence.
+                    </p>
+
+                    <div className="my-5">
+                      <span className="text-3xl font-black text-slate-900">$0</span>
+                      <span className="text-xs text-slate-500 font-medium"> /month</span>
+                    </div>
+
+                    <button
+                      disabled
+                      className="w-full py-2.5 rounded-xl bg-slate-100 text-slate-500 text-xs font-bold cursor-default"
+                    >
+                      Selected Plan
+                    </button>
+
+                    <div className="mt-6 pt-5 border-t border-slate-100 space-y-2.5 text-xs text-slate-600">
+                      <div className="flex items-center gap-2">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>Public guide profile</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>Profile approval</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>1 guide category</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>1 destination</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>Basic messaging</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>3 new inquiry threads / month</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. Professional (RECOMMENDED) */}
+                <div className="rounded-2xl border-2 border-blue-600 p-6 flex flex-col justify-between bg-white shadow-md relative">
+                  <div>
+                    <span className="inline-block px-2.5 py-0.5 rounded-full bg-blue-600 text-white text-[10px] font-extrabold uppercase tracking-wider mb-3">
+                      Recommended
+                    </span>
+                    <h3 className="text-lg font-black text-slate-900">Professional</h3>
+                    <p className="text-xs text-slate-500 mt-1 min-h-[34px]">
+                      Best for serious solo guides who want a stronger presence and better trust.
+                    </p>
+
+                    <div className="my-5">
+                      <span className="text-3xl font-black text-slate-900">
+                        ${billingCycle === "yearly" ? "20" : "25"}
+                      </span>
+                      <span className="text-xs text-slate-500 font-medium"> /month</span>
+                    </div>
+
+                    <button
+                      onClick={() => alert("Professional plan selection will be activated during guide payments launch!")}
+                      className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-xs"
+                    >
+                      Choose Professional
+                    </button>
+
+                    <div className="mt-6 pt-5 border-t border-slate-100 space-y-2.5 text-xs text-slate-700">
+                      <div className="flex items-center gap-2 font-medium">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>Up to 3 guide categories</span>
+                      </div>
+                      <div className="flex items-center gap-2 font-medium">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>Up to 5 destinations</span>
+                      </div>
+                      <div className="flex items-center gap-2 font-medium">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>20 profile photos + intro video</span>
+                      </div>
+                      <div className="flex items-center gap-2 font-medium">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>Verified badge eligibility</span>
+                      </div>
+                      <div className="flex items-center gap-2 font-medium">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>Up to 3 experience packages</span>
+                      </div>
+                      <div className="flex items-center gap-2 font-medium">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>GuideMeet messaging & inquiries</span>
+                      </div>
+                      <div className="flex items-center gap-2 font-medium">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>4 Guide Insights per month</span>
+                      </div>
+                      <div className="flex items-center gap-2 font-medium">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>Basic analytics</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. Growth */}
+                <div className="rounded-2xl border border-slate-200 p-6 flex flex-col justify-between bg-white shadow-2xs hover:shadow-xs transition-shadow">
+                  <div>
+                    <span className="inline-block px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-extrabold uppercase tracking-wider mb-3">
+                      Scale
+                    </span>
+                    <h3 className="text-lg font-black text-slate-900">Growth</h3>
+                    <p className="text-xs text-slate-500 mt-1 min-h-[34px]">
+                      Best for growth-focused guides who want more visibility, content, and service options.
+                    </p>
+
+                    <div className="my-5">
+                      <span className="text-3xl font-black text-slate-900">
+                        ${billingCycle === "yearly" ? "79" : "99"}
+                      </span>
+                      <span className="text-xs text-slate-500 font-medium"> /month</span>
+                    </div>
+
+                    <button
+                      onClick={() => alert("Growth plan selection will be activated during guide payments launch!")}
+                      className="w-full py-2.5 rounded-xl border border-slate-300 hover:border-slate-400 text-slate-800 text-xs font-bold transition-all"
+                    >
+                      Choose Growth
+                    </button>
+
+                    <div className="mt-6 pt-5 border-t border-slate-100 space-y-2.5 text-xs text-slate-600">
+                      <div className="flex items-center gap-2">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>Up to 10 guide categories</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>Up to 15 destinations</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>50 profile photos + intro video</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>10 Guide Insights / month</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>Up to 10 experiences</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>Consultation & booking listing</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>Advanced analytics & priority</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 4. Elite */}
+                <div className="rounded-2xl border border-slate-200 p-6 flex flex-col justify-between bg-white shadow-2xs hover:shadow-xs transition-shadow">
+                  <div>
+                    <span className="inline-block px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-extrabold uppercase tracking-wider mb-3">
+                      Agency / Top Guide
+                    </span>
+                    <h3 className="text-lg font-black text-slate-900">Elite</h3>
+                    <p className="text-xs text-slate-500 mt-1 min-h-[34px]">
+                      Best for senior or top guides who want the strongest visibility and added website support.
+                    </p>
+
+                    <div className="my-5">
+                      <span className="text-3xl font-black text-slate-900">
+                        ${billingCycle === "yearly" ? "119" : "149"}
+                      </span>
+                      <span className="text-xs text-slate-500 font-medium"> /month</span>
+                    </div>
+
+                    <button
+                      onClick={() => alert("Elite plan selection will be activated during guide payments launch!")}
+                      className="w-full py-2.5 rounded-xl border border-slate-300 hover:border-slate-400 text-slate-800 text-xs font-bold transition-all"
+                    >
+                      Choose Elite
+                    </button>
+
+                    <div className="mt-6 pt-5 border-t border-slate-100 space-y-2.5 text-xs text-slate-600">
+                      <div className="flex items-center gap-2 font-medium text-slate-800">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>Everything in Growth</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>Highest visibility placement</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>Up to 15 experiences</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>20 Guide Insights / month</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>Personal website design</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>Website SEO setup</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Check size={14} className="text-blue-600 flex-shrink-0" />
+                        <span>Highest priority support</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
               </div>
