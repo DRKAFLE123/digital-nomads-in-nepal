@@ -62,9 +62,9 @@ export const metadata: Metadata = {
     siteName: 'Digital Nomads in Nepal',
     images: [
       {
-        url: '/webisteofficiallogo-removebg-preview.png',
-        width: 654,
-        height: 274,
+        url: '/branding/logo-horizontal.png',
+        width: 1200,
+        height: 300,
         alt: 'Digital Nomads in Nepal Logo',
       },
     ],

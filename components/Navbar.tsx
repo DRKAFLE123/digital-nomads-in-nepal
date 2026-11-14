@@ -380,58 +380,59 @@ export default function Navbar() {
       <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="flex justify-between items-center h-[72px]">
 
-          {/* Left: Brand Logo & Interactive Platform Intro Popover */}
-          <div className="flex-shrink-0 flex items-center h-[72px] gap-2.5 sm:gap-3">
-            {/* Logo Image (no popover on hover) - Proportional size & seamless spacing */}
-            <Link
-              href="/"
-              onClick={(e) => {
-                setActiveDropdown(null)
-                if (pathname === "/") {
-                  e.preventDefault()
-                  window.scrollTo({ top: 0, behavior: "smooth" })
-                }
-              }}
-              className="relative h-[29px] sm:h-10 md:h-11 w-[70px] sm:w-[96px] md:w-[105px] overflow-hidden flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C2410C] rounded-xl flex items-center transition-transform hover:scale-105 active:scale-95 duration-200 cursor-pointer"
-              aria-label="Digital Nomads in Nepal Home"
-            >
-              <Image src="/webisteofficiallogo-removebg-preview.png" alt="Digital Nomads in Nepal Logo" fill className="object-contain object-center" priority unoptimized />
-            </Link>
-
-            {/* Brand Name (Hidden on mobile when user is signed in to avoid pushing hamburger off screen) */}
-            <div className={`relative group/name items-center h-full ${mounted && session ? "hidden md:flex" : "flex"}`}>
-              <Link
-                href="/"
-                onClick={(e) => {
-                  setActiveDropdown(null)
-                  if (pathname === "/") {
-                    e.preventDefault()
-                    window.scrollTo({ top: 0, behavior: "smooth" })
-                  }
-                }}
-                className="flex flex-col items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C2410C] rounded-xl py-1 text-center select-none cursor-pointer"
-              >
-                <span className={`font-black text-xs sm:text-[15px] md:text-[17px] tracking-normal leading-tight uppercase transition-colors text-center ${
-                  isSolid
-                    ? "text-gray-900 dark:text-[#F5F5F5] lg:group-hover/name:text-[#C2410C] dark:lg:group-hover/name:text-[#FB923C]"
-                    : "text-white lg:group-hover/name:text-[#FB923C]"
-                } ${
-                  !isScrolled ? "inline-block" : "hidden sm:inline-block"
-                }`}>
-                  DIGITAL NOMADS
-                </span>
-                <span className={`w-full flex items-center justify-center gap-1.5 font-black text-[9.5px] sm:text-[11.5px] tracking-[0.2em] uppercase leading-none mt-0.5 select-none text-center ${
-                  isSolid ? "text-[#C2410C] dark:text-[#FB923C]" : "text-[#FB923C]"
-                } ${
-                  !isScrolled ? "flex" : "hidden sm:flex"
-                }`}>
-                  <span className="opacity-60 font-medium select-none">—</span>
-                  <span>IN NEPAL</span>
-                  <span className="opacity-60 font-medium select-none">—</span>
-                </span>
-              </Link>
+          {/* Left: Brand Logo & Title */}
+          <Link
+            href="/"
+            onClick={(e) => {
+              setActiveDropdown(null)
+              if (pathname === "/") {
+                e.preventDefault()
+                window.scrollTo({ top: 0, behavior: "smooth" })
+              }
+            }}
+            className="flex-shrink-0 flex items-center h-[72px] gap-2.5 sm:gap-3 group/brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CD6003] rounded-xl transition-transform hover:scale-[1.02] active:scale-95 duration-200 cursor-pointer"
+            aria-label="Digital Nomads in Nepal Home"
+          >
+            {/* Mountain & Wi-Fi Mark (Auto-adapts between Light and Dark mode) */}
+            <div className="relative h-8 sm:h-9 md:h-10 w-16 sm:w-18 md:w-20 overflow-hidden flex-shrink-0">
+              <Image
+                src={!isSolid ? "/branding/logo-mark-white.svg" : "/branding/logo-mark.svg"}
+                alt="Digital Nomads in Nepal Logo"
+                fill
+                className="object-contain object-left dark:hidden"
+                priority
+                unoptimized
+              />
+              <Image
+                src="/branding/logo-mark-white.svg"
+                alt="Digital Nomads in Nepal Logo"
+                fill
+                className="object-contain object-left hidden dark:block"
+                priority
+                unoptimized
+              />
             </div>
-          </div>
+
+            {/* Brand Title (Hidden on mobile when user is signed in to preserve navbar space) */}
+            <div className={`flex flex-col items-start justify-center ${mounted && session ? "hidden md:flex" : "flex"}`}>
+              <span className={`font-black text-xs sm:text-[14.5px] md:text-[16px] tracking-tight leading-tight uppercase transition-colors ${
+                isSolid
+                  ? "text-gray-900 dark:text-[#F5F5F5] group-hover/brand:text-[#023629] dark:group-hover/brand:text-[#FB923C]"
+                  : "text-white group-hover/brand:text-[#FB923C]"
+              } ${
+                !isScrolled ? "inline-block" : "hidden sm:inline-block"
+              }`}>
+                DIGITAL NOMADS
+              </span>
+              <span className={`font-bold text-[9px] sm:text-[10px] tracking-widest uppercase leading-none mt-0.5 transition-colors ${
+                isSolid ? "text-[#CD6003] dark:text-[#E8923C]" : "text-[#E8923C]"
+              } ${
+                !isScrolled ? "inline-block" : "hidden sm:inline-block"
+              }`}>
+                IN NEPAL
+              </span>
+            </div>
+          </Link>
 
           {/* Mobile Center Top Search Bar Pill: Appears when scrolled (on any page) taking flex width */}
           {isScrolled && (
@@ -989,19 +990,18 @@ export default function Navbar() {
           >
             {/* Mobile Header */}
             <div className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-[#242424] shrink-0">
-              <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 select-none">
-                <div className="relative h-[29px] w-[70px] overflow-hidden shrink-0">
-                  <Image src="/webisteofficiallogo-removebg-preview.png" alt="Logo" fill className="object-contain object-center" unoptimized />
+              <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 select-none group/mob">
+                <div className="relative h-8 w-16 overflow-hidden shrink-0">
+                  <Image src="/branding/logo-mark.svg" alt="Logo" fill className="object-contain object-left dark:hidden" unoptimized />
+                  <Image src="/branding/logo-mark-white.svg" alt="Logo" fill className="object-contain object-left hidden dark:block" unoptimized />
                 </div>
-                <div className="flex flex-col items-center text-center">
-                  <span className="font-black text-xs tracking-normal uppercase text-gray-900 dark:text-white leading-tight">
+                <div className="flex flex-col items-start text-left">
+                  <span className="font-black text-xs tracking-tight uppercase text-gray-900 dark:text-white leading-tight">
                     DIGITAL NOMADS
                   </span>
-                  <div className="w-full flex items-center justify-center gap-1 font-extrabold text-[8px] text-[#C2410C] dark:text-[#FB923C] tracking-[0.16em] uppercase leading-none mt-0.5 select-none">
-                    <span className="text-[#FB923C]/60 font-medium select-none">—</span>
-                    <span>IN NEPAL</span>
-                    <span className="text-[#FB923C]/60 font-medium select-none">—</span>
-                  </div>
+                  <span className="font-bold text-[9px] text-[#CD6003] dark:text-[#E8923C] tracking-widest uppercase leading-none mt-0.5">
+                    IN NEPAL
+                  </span>
                 </div>
               </Link>
               <button

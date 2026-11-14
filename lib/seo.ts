@@ -57,7 +57,7 @@ export function generateArticleJsonLd(post: ArticleJsonLdProps) {
       url: SITE_URL,
       logo: {
         "@type": "ImageObject",
-        url: `${SITE_URL}/webisteofficiallogo-removebg-preview.png`,
+        url: `${SITE_URL}/branding/logo-horizontal.png`,
       },
     },
     mainEntityOfPage: {

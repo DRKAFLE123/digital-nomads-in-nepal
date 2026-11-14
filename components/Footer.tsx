@@ -64,9 +64,17 @@ export default function Footer() {
           
           {/* Column 1: Brand/Bio */}
           <div className="flex flex-col lg:pr-8">
-            <Link href="/" className="inline-block mb-6 transition-transform hover:scale-105 active:scale-95 duration-300">
-              <div className="relative w-[115px] h-12 overflow-hidden">
-                <Image src="/webisteofficiallogo-removebg-preview.png" alt="Digital Nomads in Nepal Logo" fill className="object-contain object-left" unoptimized />
+            <Link href="/" className="inline-flex items-center gap-3 mb-6 transition-transform hover:scale-105 active:scale-95 duration-300 group/footerlogo">
+              <div className="relative w-14 h-9 overflow-hidden flex-shrink-0">
+                <Image src="/branding/logo-mark-white.svg" alt="Digital Nomads in Nepal Logo" fill className="object-contain object-left" unoptimized />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-black text-sm tracking-tight text-white uppercase leading-tight group-hover/footerlogo:text-[#FB923C] transition-colors">
+                  DIGITAL NOMADS
+                </span>
+                <span className="font-bold text-[10.5px] tracking-widest text-[#E8923C] uppercase leading-none mt-0.5">
+                  IN NEPAL
+                </span>
               </div>
             </Link>
             <p className="text-sm leading-relaxed text-muted-foreground mb-6 whitespace-pre-line">
