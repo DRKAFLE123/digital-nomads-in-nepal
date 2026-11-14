@@ -5,8 +5,22 @@ import { useState, Suspense } from "react"
 import { signIn } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import Image from "next/image"
-import { Eye, EyeOff, AlertCircle, CheckCircle2, ArrowRight, Mountain, ShieldCheck, Wifi, Users, Laptop, Compass, Building2 } from "lucide-react"
+import { 
+  Eye, 
+  EyeOff, 
+  AlertCircle, 
+  CheckCircle2, 
+  ArrowRight, 
+  Mountain, 
+  ShieldCheck, 
+  Wifi, 
+  Users, 
+  Laptop, 
+  Compass, 
+  Building2,
+  ChevronRight,
+  Sparkles
+} from "lucide-react"
 
 function GoogleIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
@@ -76,6 +90,8 @@ function UnifiedAuthForm() {
     (initialPurposeParam === "host" || initialPurposeParam === "owner") ? "OWNER" : "NOMAD"
 
   const [mode, setMode] = useState<"signin" | "register">(initialMode)
+  // Step 1: Purpose Selection, Step 2: Signup Form (or pre-skipped if purpose passed via query)
+  const [registerStep, setRegisterStep] = useState<1 | 2>(initialPurposeParam ? 2 : 1)
   const [purpose, setPurpose] = useState<"NOMAD" | "GUIDE" | "OWNER">(initialPurpose)
 
   // Sign In Form States
@@ -228,6 +244,11 @@ function UnifiedAuthForm() {
                     Continue your journey and reconnect with{" "}
                     <span className="text-[#C2410C]">explorers</span>
                   </>
+                ) : registerStep === 1 ? (
+                  <>
+                    Join Nepal&apos;s premier remote work &amp;{" "}
+                    <span className="text-[#C2410C]">travel network</span>
+                  </>
                 ) : (
                   <>
                     {PURPOSE_CONTENT[purpose].headline.replace(
@@ -243,6 +264,8 @@ function UnifiedAuthForm() {
               <p className="text-sm text-slate-600 dark:text-slate-400 mt-3 leading-relaxed max-w-md">
                 {mode === "signin"
                   ? "Connect with verified fiber workspaces, licensed Nepalese mountain experts, and fellow digital nomads across Nepal."
+                  : registerStep === 1
+                  ? "Choose whether you're here to work remotely, offer licensed Himalayan guiding, or host verified nomad spaces across Nepal."
                   : PURPOSE_CONTENT[purpose].description}
               </p>
             </div>
@@ -280,7 +303,14 @@ function UnifiedAuthForm() {
 
               {/* Dynamic Feature Badges */}
               <div className="flex flex-wrap gap-2 pt-2">
-                {PURPOSE_CONTENT[purpose].badges.map((badge, idx) => {
+                {(mode === "register" && registerStep === 1
+                  ? [
+                      { icon: ShieldCheck, text: "0% Commission Direct Guide Hiring", color: "text-emerald-600" },
+                      { icon: Wifi, text: "Verified 100+ Mbps Fiber Stays", color: "text-[#C2410C]" },
+                      { icon: Building2, text: "Verified Host & Guide Consoles", color: "text-[#023629] dark:text-[#FB923C]" },
+                    ]
+                  : PURPOSE_CONTENT[purpose].badges
+                ).map((badge, idx) => {
                   const Icon = badge.icon
                   return (
                     <span
@@ -309,7 +339,7 @@ function UnifiedAuthForm() {
                     setError("")
                     setSuccess("")
                   }}
-                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                     mode === "signin"
                       ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs"
                       : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
@@ -321,10 +351,13 @@ function UnifiedAuthForm() {
                   type="button"
                   onClick={() => {
                     setMode("register")
+                    if (!initialPurposeParam) {
+                      setRegisterStep(1)
+                    }
                     setError("")
                     setSuccess("")
                   }}
-                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                     mode === "register"
                       ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs"
                       : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
@@ -334,273 +367,410 @@ function UnifiedAuthForm() {
                 </button>
               </div>
 
-              {/* Purpose Selector (Registration only) */}
-              {mode === "register" && (
-                <div className="mb-4">
-                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">
-                    Choose your purpose on our platform *
-                  </label>
-                  <div className="grid grid-cols-3 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setPurpose("NOMAD")}
-                      className={`p-2.5 rounded-xl border text-center transition-all flex flex-col items-center gap-1 cursor-pointer ${
-                        purpose === "NOMAD"
-                          ? "border-[#023629] dark:border-[#FB923C] bg-[#023629]/5 dark:bg-[#FB923C]/10 text-[#023629] dark:text-[#FB923C] font-bold shadow-2xs"
-                          : "border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300"
-                      }`}
-                    >
-                      <Laptop size={16} />
-                      <span className="text-[11px] leading-tight">I want to work</span>
-                      <span className="text-[9px] font-normal text-slate-400">Nomad</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setPurpose("GUIDE")}
-                      className={`p-2.5 rounded-xl border text-center transition-all flex flex-col items-center gap-1 cursor-pointer ${
-                        purpose === "GUIDE"
-                          ? "border-[#023629] dark:border-[#FB923C] bg-[#023629]/5 dark:bg-[#FB923C]/10 text-[#023629] dark:text-[#FB923C] font-bold shadow-2xs"
-                          : "border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300"
-                      }`}
-                    >
-                      <Compass size={16} />
-                      <span className="text-[11px] leading-tight">I want to guide</span>
-                      <span className="text-[9px] font-normal text-slate-400">Local Expert</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setPurpose("OWNER")}
-                      className={`p-2.5 rounded-xl border text-center transition-all flex flex-col items-center gap-1 cursor-pointer ${
-                        purpose === "OWNER"
-                          ? "border-[#023629] dark:border-[#FB923C] bg-[#023629]/5 dark:bg-[#FB923C]/10 text-[#023629] dark:text-[#FB923C] font-bold shadow-2xs"
-                          : "border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300"
-                      }`}
-                    >
-                      <Building2 size={16} />
-                      <span className="text-[11px] leading-tight">I want to host</span>
-                      <span className="text-[9px] font-normal text-slate-400">Space Owner</span>
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Header Title */}
-              <div className="mb-4">
-                <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-                  {mode === "signin" 
-                    ? "Log in to Your Account" 
-                    : purpose === "GUIDE"
-                    ? "Join as a Local Expert"
-                    : purpose === "OWNER"
-                    ? "List Your Space in Nepal"
-                    : "Create Your Nomad Account"}
-                </h2>
-                <p className="text-xs text-slate-500 mt-1">
-                  {mode === "signin" 
-                    ? "Enter your credentials to continue." 
-                    : purpose === "GUIDE"
-                    ? "Showcase your treks and get hired directly by remote workers."
-                    : purpose === "OWNER"
-                    ? "Reach digital nomads seeking verified desks & stays."
-                    : "Access verified workspaces, stays, and mountain experts."}
-                </p>
-              </div>
-
-              {/* Alerts */}
-              {error && (
-                <div className="mb-4 p-3 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/40 rounded-xl text-red-700 dark:text-red-400 text-xs flex items-start gap-2">
-                  <AlertCircle size={15} className="shrink-0 mt-0.5" />
-                  <span>{error}</span>
-                </div>
-              )}
-
-              {success && (
-                <div className="mb-4 p-3 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/40 rounded-xl text-emerald-800 dark:text-emerald-400 text-xs flex items-start gap-2">
-                  <CheckCircle2 size={15} className="shrink-0 mt-0.5" />
-                  <span>{success}</span>
-                </div>
-              )}
-
-              {/* Input Form */}
-              <form onSubmit={handleSubmit} className="space-y-3.5">
-                
-                {/* Full Name (Registration only) */}
-                {mode === "register" && (
-                  <div>
-                    <label className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 block">
-                      Full Name *
-                    </label>
-                    <input
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      required
-                      placeholder="e.g. Maya Sharma"
-                      className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629]/20 focus:border-[#023629] dark:focus:ring-[#FB923C]/20 dark:focus:border-[#FB923C] transition-all"
-                    />
-                  </div>
-                )}
-
-                {/* Email Address */}
+              {/* ============================================================== */}
+              {/* STEP 1: CHOOSE PURPOSE (Multi-step Onboarding)                */}
+              {/* ============================================================== */}
+              {mode === "register" && registerStep === 1 && (
                 <div>
-                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 block">
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    placeholder="Enter your email"
-                    className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629]/20 focus:border-[#023629] dark:focus:ring-[#FB923C]/20 dark:focus:border-[#FB923C] transition-all"
-                  />
-                </div>
-
-                {/* Password */}
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                      Password *
-                    </label>
-                    {mode === "signin" && (
-                      <Link
-                        href="/auth/forgot-password"
-                        className="text-[11px] font-semibold text-[#C2410C] hover:underline"
-                      >
-                        Forgot password?
-                      </Link>
-                    )}
+                  <div className="mb-4">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#023629]/10 dark:bg-[#FB923C]/20 text-[#023629] dark:text-[#FB923C] text-[10px] font-bold uppercase tracking-wider mb-2">
+                      <Sparkles size={11} />
+                      <span>Step 1 of 2 • Select Purpose</span>
+                    </div>
+                    <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+                      Join Digital Nomads in Nepal
+                    </h2>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                      Choose how you want to experience our platform to get started:
+                    </p>
                   </div>
-                  <div className="relative">
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      minLength={6}
-                      placeholder="Enter your password"
-                      className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl pl-3.5 pr-10 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629]/20 focus:border-[#023629] dark:focus:ring-[#FB923C]/20 dark:focus:border-[#FB923C] transition-all"
-                    />
+
+                  {/* 3 Interactive Purpose Selection Cards */}
+                  <div className="space-y-3 mb-5">
+                    {/* Option 1: Work and Travel (Nomad) */}
                     <button
                       type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      aria-label={showPassword ? "Hide password" : "Show password"}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1 cursor-pointer"
+                      onClick={() => {
+                        setPurpose("NOMAD")
+                        setRegisterStep(2)
+                        setError("")
+                      }}
+                      className="w-full text-left p-3.5 sm:p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-[#023629] dark:hover:border-[#FB923C] hover:bg-[#023629]/[0.02] dark:hover:bg-[#FB923C]/[0.04] transition-all group cursor-pointer shadow-2xs hover:shadow-sm flex items-start gap-3.5"
                     >
-                      {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                      <div className="w-10 h-10 rounded-xl bg-[#023629]/10 dark:bg-[#FB923C]/10 text-[#023629] dark:text-[#FB923C] flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:bg-[#023629] group-hover:text-white transition-all shadow-2xs">
+                        <Laptop size={18} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-2">
+                          <h3 className="font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-[#023629] dark:group-hover:text-[#FB923C] transition-colors">
+                            I want to work and travel
+                          </h3>
+                          <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 shrink-0">
+                            Nomad
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                          Discover verified 100+ Mbps fiber stays, coworking desks, and hire trusted mountain guides with 0% commission.
+                        </p>
+                      </div>
+                      <ChevronRight size={16} className="text-slate-300 dark:text-slate-600 group-hover:text-[#023629] dark:group-hover:text-[#FB923C] group-hover:translate-x-0.5 transition-all shrink-0 mt-3" />
+                    </button>
+
+                    {/* Option 2: Guide Nomads (Guide) */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPurpose("GUIDE")
+                        setRegisterStep(2)
+                        setError("")
+                      }}
+                      className="w-full text-left p-3.5 sm:p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-[#023629] dark:hover:border-[#FB923C] hover:bg-[#023629]/[0.02] dark:hover:bg-[#FB923C]/[0.04] transition-all group cursor-pointer shadow-2xs hover:shadow-sm flex items-start gap-3.5"
+                    >
+                      <div className="w-10 h-10 rounded-xl bg-[#023629]/10 dark:bg-[#FB923C]/10 text-[#023629] dark:text-[#FB923C] flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:bg-[#023629] group-hover:text-white transition-all shadow-2xs">
+                        <Compass size={18} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-2">
+                          <h3 className="font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-[#023629] dark:group-hover:text-[#FB923C] transition-colors">
+                            I want to guide nomads
+                          </h3>
+                          <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 shrink-0">
+                            Local Guide
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                          Showcase your Himalayan treks, cultural tours, and get booked directly by global remote workers with 0% commission.
+                        </p>
+                      </div>
+                      <ChevronRight size={16} className="text-slate-300 dark:text-slate-600 group-hover:text-[#023629] dark:group-hover:text-[#FB923C] group-hover:translate-x-0.5 transition-all shrink-0 mt-3" />
+                    </button>
+
+                    {/* Option 3: List Space (Owner / Host) */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPurpose("OWNER")
+                        setRegisterStep(2)
+                        setError("")
+                      }}
+                      className="w-full text-left p-3.5 sm:p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-[#023629] dark:hover:border-[#FB923C] hover:bg-[#023629]/[0.02] dark:hover:bg-[#FB923C]/[0.04] transition-all group cursor-pointer shadow-2xs hover:shadow-sm flex items-start gap-3.5"
+                    >
+                      <div className="w-10 h-10 rounded-xl bg-[#023629]/10 dark:bg-[#FB923C]/10 text-[#023629] dark:text-[#FB923C] flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:bg-[#023629] group-hover:text-white transition-all shadow-2xs">
+                        <Building2 size={18} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-2">
+                          <h3 className="font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-[#023629] dark:group-hover:text-[#FB923C] transition-colors">
+                            I want to list space
+                          </h3>
+                          <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 shrink-0">
+                            Space Host
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                          List your coworking hub, coliving rooms, or work-friendly villa across Nepal to welcome remote workers year-round.
+                        </p>
+                      </div>
+                      <ChevronRight size={16} className="text-slate-300 dark:text-slate-600 group-hover:text-[#023629] dark:group-hover:text-[#FB923C] group-hover:translate-x-0.5 transition-all shrink-0 mt-3" />
                     </button>
                   </div>
-                </div>
 
-                {/* Confirm Password (Registration only) */}
-                {mode === "register" && (
-                  <div>
-                    <label className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 block">
-                      Confirm Password *
-                    </label>
-                    <div className="relative">
-                      <input
-                        type={showConfirmPassword ? "text" : "password"}
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        required
-                        minLength={6}
-                        placeholder="Re-enter your password"
-                        className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl pl-3.5 pr-10 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629]/20 focus:border-[#023629] dark:focus:ring-[#FB923C]/20 dark:focus:border-[#FB923C] transition-all"
-                      />
+                  {/* Switch to Sign In */}
+                  <div className="pt-3 border-t border-slate-100 dark:border-slate-800 text-center text-xs text-slate-500">
+                    <p>
+                      Already have an account?{" "}
                       <button
                         type="button"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        aria-label={showConfirmPassword ? "Hide password" : "Show password"}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1 cursor-pointer"
+                        onClick={() => {
+                          setMode("signin")
+                          setError("")
+                          setSuccess("")
+                        }}
+                        className="font-bold text-[#C2410C] hover:underline cursor-pointer"
                       >
-                        {showConfirmPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                        Sign in
+                      </button>
+                    </p>
+                  </div>
+
+                  {/* Micro Legal Disclaimer */}
+                  <p className="text-[10px] text-slate-400 text-center mt-3 leading-tight">
+                    By continuing, you agree to our{" "}
+                    <Link href="/terms" className="underline hover:text-slate-600">Terms</Link> and{" "}
+                    <Link href="/privacy" className="underline hover:text-slate-600">Privacy Policy</Link>.
+                  </p>
+                </div>
+              )}
+
+              {/* ============================================================== */}
+              {/* STEP 2: REGISTRATION FORM OR SIGN IN FORM                     */}
+              {/* ============================================================== */}
+              {(mode === "signin" || (mode === "register" && registerStep === 2)) && (
+                <div>
+                  {/* Step 2 Purpose Badge Switcher Header (Registration only) */}
+                  {mode === "register" && (
+                    <div className="flex items-center justify-between p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl mb-4">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-8 h-8 rounded-lg bg-[#023629] text-white flex items-center justify-center shrink-0 shadow-2xs">
+                          {purpose === "NOMAD" ? (
+                            <Laptop size={15} />
+                          ) : purpose === "GUIDE" ? (
+                            <Compass size={15} />
+                          ) : (
+                            <Building2 size={15} />
+                          )}
+                        </div>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                              {purpose === "NOMAD" 
+                                ? "I want to work and travel" 
+                                : purpose === "GUIDE" 
+                                ? "I want to guide nomads" 
+                                : "I want to list space"}
+                            </span>
+                          </div>
+                          <p className="text-[10px] text-slate-500">
+                            {purpose === "NOMAD" ? "Nomad Account" : purpose === "GUIDE" ? "Local Guide Account" : "Space Host Account"} • Step 2 of 2
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setRegisterStep(1)
+                          setError("")
+                        }}
+                        className="text-[11px] font-bold text-[#C2410C] hover:text-[#9a3412] hover:underline px-2 py-1 rounded cursor-pointer shrink-0 transition-colors"
+                      >
+                        ← Change
                       </button>
                     </div>
+                  )}
+
+                  {/* Header Title */}
+                  <div className="mb-4">
+                    <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+                      {mode === "signin" 
+                        ? "Log in to Your Account" 
+                        : purpose === "GUIDE"
+                        ? "Join as a Local Expert"
+                        : purpose === "OWNER"
+                        ? "List Your Space in Nepal"
+                        : "Create Your Nomad Account"}
+                    </h2>
+                    <p className="text-xs text-slate-500 mt-1">
+                      {mode === "signin" 
+                        ? "Enter your credentials to continue." 
+                        : purpose === "GUIDE"
+                        ? "Showcase your treks and get hired directly by remote workers."
+                        : purpose === "OWNER"
+                        ? "Reach digital nomads seeking verified desks & stays."
+                        : "Access verified workspaces, stays, and mountain experts."}
+                    </p>
                   </div>
-                )}
 
-                {/* Primary Submit Button */}
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full mt-2 bg-[#023629] hover:bg-[#034a38] text-white font-bold text-xs sm:text-sm py-2.5 sm:py-3 rounded-xl transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <span>
-                    {loading 
-                      ? "Processing..." 
-                      : mode === "signin" 
-                      ? "Log in" 
-                      : purpose === "GUIDE"
-                      ? "Create Guide Account & Go to Console"
-                      : purpose === "OWNER"
-                      ? "Create Host Account & Go to Console"
-                      : "Create Account & Sign In"}
-                  </span>
-                  <ArrowRight size={14} />
-                </button>
-              </form>
+                  {/* Alerts */}
+                  {error && (
+                    <div className="mb-4 p-3 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/40 rounded-xl text-red-700 dark:text-red-400 text-xs flex items-start gap-2">
+                      <AlertCircle size={15} className="shrink-0 mt-0.5" />
+                      <span>{error}</span>
+                    </div>
+                  )}
 
-              {/* OR Divider */}
-              <div className="relative flex items-center justify-center my-4">
-                <div className="border-t border-slate-200 dark:border-slate-800 w-full" />
-                <span className="bg-white dark:bg-[#141416] px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">
-                  or
-                </span>
-                <div className="border-t border-slate-200 dark:border-slate-800 w-full" />
-              </div>
+                  {success && (
+                    <div className="mb-4 p-3 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/40 rounded-xl text-emerald-800 dark:text-emerald-400 text-xs flex items-start gap-2">
+                      <CheckCircle2 size={15} className="shrink-0 mt-0.5" />
+                      <span>{success}</span>
+                    </div>
+                  )}
 
-              {/* Clean Google Social Login */}
-              <button
-                type="button"
-                onClick={() => handleSocialLogin("google")}
-                className="w-full flex items-center justify-center gap-2.5 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-2xs cursor-pointer"
-              >
-                <GoogleIcon className="w-4 h-4 shrink-0" />
-                <span>Continue with Google</span>
-              </button>
+                  {/* Input Form */}
+                  <form onSubmit={handleSubmit} className="space-y-3.5">
+                    
+                    {/* Full Name (Registration only) */}
+                    {mode === "register" && (
+                      <div>
+                        <label className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 block">
+                          Full Name *
+                        </label>
+                        <input
+                          type="text"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          required
+                          placeholder="e.g. Maya Sharma"
+                          className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629]/20 focus:border-[#023629] dark:focus:ring-[#FB923C]/20 dark:focus:border-[#FB923C] transition-all"
+                        />
+                      </div>
+                    )}
 
-              {/* Quick Switch Link */}
-              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-center text-xs text-slate-500">
-                {mode === "signin" ? (
-                  <p>
-                    Don&apos;t have an account?{" "}
+                    {/* Email Address */}
+                    <div>
+                      <label className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 block">
+                        Email Address *
+                      </label>
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        placeholder="Enter your email"
+                        className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629]/20 focus:border-[#023629] dark:focus:ring-[#FB923C]/20 dark:focus:border-[#FB923C] transition-all"
+                      />
+                    </div>
+
+                    {/* Password */}
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                          Password *
+                        </label>
+                        {mode === "signin" && (
+                          <Link
+                            href="/auth/forgot-password"
+                            className="text-[11px] font-semibold text-[#C2410C] hover:underline"
+                          >
+                            Forgot password?
+                          </Link>
+                        )}
+                      </div>
+                      <div className="relative">
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          required
+                          minLength={6}
+                          placeholder="Enter your password"
+                          className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl pl-3.5 pr-10 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629]/20 focus:border-[#023629] dark:focus:ring-[#FB923C]/20 dark:focus:border-[#FB923C] transition-all"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          aria-label={showPassword ? "Hide password" : "Show password"}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1 cursor-pointer"
+                        >
+                          {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Confirm Password (Registration only) */}
+                    {mode === "register" && (
+                      <div>
+                        <label className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 block">
+                          Confirm Password *
+                        </label>
+                        <div className="relative">
+                          <input
+                            type={showConfirmPassword ? "text" : "password"}
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            required
+                            minLength={6}
+                            placeholder="Re-enter your password"
+                            className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl pl-3.5 pr-10 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629]/20 focus:border-[#023629] dark:focus:ring-[#FB923C]/20 dark:focus:border-[#FB923C] transition-all"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1 cursor-pointer"
+                          >
+                            {showConfirmPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Primary Submit Button */}
                     <button
-                      type="button"
-                      onClick={() => {
-                        setMode("register")
-                        setError("")
-                        setSuccess("")
-                      }}
-                      className="font-bold text-[#C2410C] hover:underline cursor-pointer"
+                      type="submit"
+                      disabled={loading}
+                      className="w-full mt-2 bg-[#023629] hover:bg-[#034a38] text-white font-bold text-xs sm:text-sm py-2.5 sm:py-3 rounded-xl transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Sign up
+                      <span>
+                        {loading 
+                          ? "Processing..." 
+                          : mode === "signin" 
+                          ? "Log in" 
+                          : purpose === "GUIDE"
+                          ? "Create Guide Account & Go to Console"
+                          : purpose === "OWNER"
+                          ? "Create Host Account & Go to Console"
+                          : "Create Account & Sign In"}
+                      </span>
+                      <ArrowRight size={14} />
                     </button>
-                  </p>
-                ) : (
-                  <p>
-                    Already have an account?{" "}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setMode("signin")
-                        setError("")
-                        setSuccess("")
-                      }}
-                      className="font-bold text-[#C2410C] hover:underline cursor-pointer"
-                    >
-                      Log in
-                    </button>
-                  </p>
-                )}
-              </div>
+                  </form>
 
-              {/* Micro Legal Disclaimer */}
-              <p className="text-[10px] text-slate-400 text-center mt-3 leading-tight">
-                By continuing, you agree to our{" "}
-                <Link href="/terms" className="underline hover:text-slate-600">Terms</Link> and{" "}
-                <Link href="/privacy" className="underline hover:text-slate-600">Privacy Policy</Link>.
-              </p>
+                  {/* OR Divider */}
+                  <div className="relative flex items-center justify-center my-4">
+                    <div className="border-t border-slate-200 dark:border-slate-800 w-full" />
+                    <span className="bg-white dark:bg-[#141416] px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">
+                      or
+                    </span>
+                    <div className="border-t border-slate-200 dark:border-slate-800 w-full" />
+                  </div>
+
+                  {/* Clean Google Social Login */}
+                  <button
+                    type="button"
+                    onClick={() => handleSocialLogin("google")}
+                    className="w-full flex items-center justify-center gap-2.5 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-2xs cursor-pointer"
+                  >
+                    <GoogleIcon className="w-4 h-4 shrink-0" />
+                    <span>Continue with Google</span>
+                  </button>
+
+                  {/* Quick Switch Link */}
+                  <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-center text-xs text-slate-500">
+                    {mode === "signin" ? (
+                      <p>
+                        Don&apos;t have an account?{" "}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setMode("register")
+                            if (!initialPurposeParam) {
+                              setRegisterStep(1)
+                            }
+                            setError("")
+                            setSuccess("")
+                          }}
+                          className="font-bold text-[#C2410C] hover:underline cursor-pointer"
+                        >
+                          Sign up
+                        </button>
+                      </p>
+                    ) : (
+                      <p>
+                        Already have an account?{" "}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setMode("signin")
+                            setError("")
+                            setSuccess("")
+                          }}
+                          className="font-bold text-[#C2410C] hover:underline cursor-pointer"
+                        >
+                          Log in
+                        </button>
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Micro Legal Disclaimer */}
+                  <p className="text-[10px] text-slate-400 text-center mt-3 leading-tight">
+                    By continuing, you agree to our{" "}
+                    <Link href="/terms" className="underline hover:text-slate-600">Terms</Link> and{" "}
+                    <Link href="/privacy" className="underline hover:text-slate-600">Privacy Policy</Link>.
+                  </p>
+
+                </div>
+              )}
 
             </div>
           </div>
