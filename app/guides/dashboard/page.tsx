@@ -735,7 +735,7 @@ function GuideDashboardContent() {
                 <button
                   onClick={handleSaveProfile}
                   disabled={saving}
-                  className="inline-flex items-center gap-1.5 bg-[#023629] hover:bg-[#023629]/90 text-white font-bold text-xs px-5 py-2.5 rounded-xl transition-all shadow-xs disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl transition-all shadow-xs disabled:opacity-50"
                 >
                   {saving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
                   <span>{saving ? "Saving..." : "Save Changes"}</span>
@@ -779,7 +779,7 @@ function GuideDashboardContent() {
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/60 pb-3">
                     <div>
                       <div className="flex items-center gap-2">
-                        <Camera size={16} className="text-[#023629]" />
+                        <Camera size={16} className="text-blue-600" />
                         <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800">
                           Trek & Tour Photo Gallery (Bishnu KC Mosaic Showcase)
                         </h3>
@@ -789,7 +789,7 @@ function GuideDashboardContent() {
                       </p>
                     </div>
 
-                    <label className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#023629] hover:bg-[#023629]/90 text-white rounded-lg text-xs font-bold cursor-pointer transition-colors shadow-2xs self-start sm:self-auto flex-shrink-0">
+                    <label className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold cursor-pointer transition-colors shadow-2xs self-start sm:self-auto flex-shrink-0">
                       {uploadingGallery ? (
                         <>
                           <Loader2 size={13} className="animate-spin" />
@@ -868,7 +868,7 @@ function GuideDashboardContent() {
                       required
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 text-sm focus:ring-2 focus:ring-[#023629] focus:outline-none"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
 
@@ -881,7 +881,7 @@ function GuideDashboardContent() {
                       placeholder="e.g. Licensed Trekking Guide & Shaman"
                       value={tagline}
                       onChange={(e) => setTagline(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 text-sm focus:ring-2 focus:ring-[#023629] focus:outline-none"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
                 </div>
@@ -898,7 +898,7 @@ function GuideDashboardContent() {
                       placeholder="e.g. Panauti, Kavre / Pokhara"
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 text-sm focus:ring-2 focus:ring-[#023629] focus:outline-none"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
                   <div>
@@ -910,7 +910,7 @@ function GuideDashboardContent() {
                       placeholder="+977 98..."
                       value={whatsapp}
                       onChange={(e) => setWhatsapp(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 text-sm focus:ring-2 focus:ring-[#023629] focus:outline-none"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
                   <div>
@@ -922,7 +922,7 @@ function GuideDashboardContent() {
                       placeholder="https://..."
                       value={website}
                       onChange={(e) => setWebsite(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 text-sm focus:ring-2 focus:ring-[#023629] focus:outline-none"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
                 </div>
@@ -986,7 +986,7 @@ function GuideDashboardContent() {
                           }}
                           className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
                             selected
-                              ? "bg-[#023629] text-white border-[#023629]"
+                              ? "bg-blue-600 text-white border-blue-600 shadow-2xs"
                               : "bg-white text-slate-600 border-slate-300 hover:border-slate-400"
                           }`}
                         >
@@ -1009,7 +1009,7 @@ function GuideDashboardContent() {
                         <label 
                           key={cert}
                           className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer text-xs transition-colors ${
-                            selected ? "bg-emerald-50 border-emerald-300 text-emerald-950 font-bold" : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50"
+                            selected ? "bg-blue-50 border-blue-300 text-blue-950 font-bold" : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50"
                           }`}
                         >
                           <input
@@ -1018,7 +1018,7 @@ function GuideDashboardContent() {
                             onChange={() => {
                               setCertifications(selected ? certifications.filter((c) => c !== cert) : [...certifications, cert])
                             }}
-                            className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500"
+                            className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500"
                           />
                           <span>{cert}</span>
                         </label>
@@ -1041,7 +1041,7 @@ function GuideDashboardContent() {
                     value={bio}
                     onChange={(e) => setBio(e.target.value)}
                     placeholder="Describe your background, trekking routes you specialize in, altitude safety approach, and local heritage..."
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 text-sm focus:ring-2 focus:ring-[#023629] focus:outline-none leading-relaxed"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none leading-relaxed"
                   />
                 </div>
 
@@ -1050,7 +1050,7 @@ function GuideDashboardContent() {
                   <button
                     type="submit"
                     disabled={saving}
-                    className="inline-flex items-center gap-2 bg-[#023629] hover:bg-[#023629]/90 text-white font-bold text-sm px-7 py-3 rounded-xl transition-all shadow-md disabled:opacity-50"
+                    className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm px-7 py-3 rounded-xl transition-all shadow-md disabled:opacity-50"
                   >
                     {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                     <span>{saving ? "Saving Changes..." : "Save Guide Profile"}</span>

@@ -349,7 +349,7 @@ export default function GuideQuickRegisterPage() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full flex items-center justify-center gap-2 bg-[#023629] hover:bg-[#023629]/90 dark:bg-[#FB923C] dark:hover:bg-[#FB923C]/90 text-white dark:text-slate-950 font-bold py-3.5 px-6 rounded-xl transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                    className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                   >
                     {loading ? (
                       <>
@@ -370,7 +370,7 @@ export default function GuideQuickRegisterPage() {
                       Already registered as a guide?{" "}
                       <Link
                         href="/auth/signin?callbackUrl=/local-guides/dashboard"
-                        className="font-bold text-[#023629] dark:text-[#FB923C] hover:underline"
+                        className="font-bold text-blue-600 hover:underline"
                       >
                         Sign in to Dashboard →
                       </Link>

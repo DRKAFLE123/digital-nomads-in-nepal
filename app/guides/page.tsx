@@ -70,8 +70,8 @@ export default async function GuidesPage() {
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
             <div>
-              <div className="inline-flex items-center gap-1.5 bg-primary/10 border border-primary/20 text-primary text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full mb-2">
-                <TrekkingGuideIcon size={13} className="shrink-0" />
+              <div className="inline-flex items-center gap-1.5 bg-slate-100 border border-slate-200/80 text-slate-700 text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full mb-2">
+                <TrekkingGuideIcon size={13} className="shrink-0 text-slate-700" />
                 <span>Verified Local Experts</span>
               </div>
               <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-foreground leading-tight">
@@ -83,7 +83,7 @@ export default async function GuidesPage() {
             </div>
             <Link
               href="/guides/register"
-              className="self-start sm:self-center shrink-0 inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-5 sm:py-2.5 border border-primary text-primary font-bold text-xs sm:text-sm rounded-full hover:bg-primary hover:text-black transition-all shadow-xs"
+              className="self-start sm:self-center shrink-0 inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-5 sm:py-2.5 border border-slate-300 bg-white text-slate-800 font-bold text-xs sm:text-sm rounded-full hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all shadow-xs"
             >
               <span>Register as a Guide</span>
               <span>→</span>
@@ -96,14 +96,14 @@ export default async function GuidesPage() {
               <span className="text-sm shrink-0 mt-0.5 sm:mt-0">💡</span>
               <p className="text-[11px] sm:text-xs leading-normal">
                 Looking for tutorials on data, transit, or visas? Read our{" "}
-                <Link href="/resources/sim-cards" className="text-primary font-semibold hover:underline">SIM Cards Guide</Link>,{" "}
-                <Link href="/resources/transportation" className="text-primary font-semibold hover:underline">Transportation</Link>, or{" "}
-                <Link href="/resources/visa" className="text-primary font-semibold hover:underline">Nomad Visa Guide</Link>.
+                <Link href="/resources/sim-cards" className="text-foreground font-semibold hover:text-blue-600 hover:underline">SIM Cards Guide</Link>,{" "}
+                <Link href="/resources/transportation" className="text-foreground font-semibold hover:text-blue-600 hover:underline">Transportation</Link>, or{" "}
+                <Link href="/resources/visa" className="text-foreground font-semibold hover:text-blue-600 hover:underline">Nomad Visa Guide</Link>.
               </p>
             </div>
             <Link
               href="/resources"
-              className="self-start sm:self-center shrink-0 text-primary font-bold text-[11px] sm:text-xs inline-flex items-center gap-1 hover:underline"
+              className="self-start sm:self-center shrink-0 text-foreground hover:text-blue-600 font-bold text-[11px] sm:text-xs inline-flex items-center gap-1 hover:underline"
             >
               <span>View Practical Guides</span>
               <span>→</span>
