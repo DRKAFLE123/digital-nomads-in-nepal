@@ -66,13 +66,28 @@ export default function Footer() {
           <div className="flex flex-col lg:pr-8">
             <Link href="/" className="inline-flex items-center gap-3 mb-6 transition-transform hover:scale-105 active:scale-95 duration-300 group/footerlogo">
               <div className="relative w-14 h-9 overflow-hidden flex-shrink-0">
-                <Image src="/branding/logo-mark-white.svg" alt="Digital Nomads in Nepal Logo" fill className="object-contain object-left" unoptimized />
+                {/* Light Mode: Alpine Pine Mountain + Terracotta Wi-Fi */}
+                <Image 
+                  src="/branding/logo-mark.svg" 
+                  alt="Digital Nomads in Nepal Logo" 
+                  fill 
+                  className="object-contain object-left dark:hidden" 
+                  unoptimized 
+                />
+                {/* Dark Mode: Snow White Mountain + Terracotta Wi-Fi */}
+                <Image 
+                  src="/branding/logo-mark-white.svg" 
+                  alt="Digital Nomads in Nepal Logo" 
+                  fill 
+                  className="object-contain object-left hidden dark:block" 
+                  unoptimized 
+                />
               </div>
               <div className="flex flex-col">
-                <span className="font-black text-sm tracking-tight text-white uppercase leading-tight group-hover/footerlogo:text-[#FB923C] transition-colors">
+                <span className="font-black text-sm tracking-tight text-[#023629] dark:text-white uppercase leading-tight group-hover/footerlogo:text-[#CD6003] dark:group-hover/footerlogo:text-[#FB923C] transition-colors">
                   DIGITAL NOMADS
                 </span>
-                <span className="font-bold text-[10.5px] tracking-widest text-[#E8923C] uppercase leading-none mt-0.5">
+                <span className="font-bold text-[10.5px] tracking-widest text-[#CD6003] dark:text-[#FB923C] uppercase leading-none mt-0.5">
                   IN NEPAL
                 </span>
               </div>
