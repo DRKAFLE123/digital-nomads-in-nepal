@@ -87,9 +87,9 @@ export async function PATCH(req: NextRequest) {
     if (typeof rest.units === "number") allowedUpdates.units = rest.units
     if (typeof rest.openingHours === "string") allowedUpdates.openingHours = rest.openingHours
     if (typeof rest.contactEmail === "string") allowedUpdates.contactEmail = rest.contactEmail.trim().toLowerCase()
-    if (typeof rest.contactPhone === "string") allowedUpdates.contactPhone = rest.contactPhone.trim()
     if (typeof rest.website === "string") allowedUpdates.website = rest.website.trim()
     if (typeof rest.photoUrl === "string") allowedUpdates.photoUrl = rest.photoUrl.trim()
+    if (typeof rest.published === "boolean") allowedUpdates.published = rest.published
 
     const updated = await prisma.workHub.update({
       where: { id: hubId },

@@ -37,7 +37,12 @@ import {
   Check,
   Star,
   Award,
-  Globe
+  Globe,
+  EyeOff,
+  Upload,
+  Sliders,
+  Loader2,
+  Camera
 } from "lucide-react"
 
 interface HubData {
@@ -46,17 +51,41 @@ interface HubData {
   slug: string
   city: string
   address: string
+  description?: string
   spaceType: string
   priceDaily?: number | null
   priceMonthly?: number | null
   openingHours?: string | null
   photoUrl?: string | null
   contactEmail: string
+  website?: string | null
+  published?: boolean
   ownerEmail?: string | null
   ownerName?: string | null
   facilities: string[]
   bookings: any[]
 }
+
+const POPULAR_AMENITIES = [
+  "High-Speed Fiber Wi-Fi (100+ Mbps)",
+  "24/7 Power Backup (Generator / Solar)",
+  "Ergonomic Chairs & Workstations",
+  "Soundproof Call Booths",
+  "Free Organic Himalayan Coffee & Tea",
+  "Mountain View Rooftop",
+  "Air Conditioning & Heating",
+  "Community Events & Masterminds",
+  "Coliving Rooms / Stays Available",
+  "24/7 Hot Showers",
+  "Shared Kitchen Access",
+  "Printing & Document Scanning",
+  "Yoga & Meditation Deck",
+  "Secure Scooter / Bike Parking",
+  "Private Lockers & Storage",
+  "24/7 Keycard / Smart Access",
+  "Outdoor Garden Workspaces",
+  "Standing Desks"
+]
 
 function OwnerDashboardContent() {
   const { data: session, status } = useSession()
@@ -108,13 +137,26 @@ function OwnerDashboardContent() {
     }
   }
 
-  // Editing Space Listing State
-  const [editingHubId, setEditingHubId] = useState<string | null>(null)
+  // Full Property Editor & Visibility State
+  const [editingHub, setEditingHub] = useState<HubData | null>(null)
+  const [editName, setEditName] = useState("")
+  const [editCity, setEditCity] = useState("Kathmandu")
+  const [editAddress, setEditAddress] = useState("")
+  const [editDescription, setEditDescription] = useState("")
+  const [editSpaceType, setEditSpaceType] = useState("Coworking Space")
   const [editPriceDaily, setEditPriceDaily] = useState<number>(10)
   const [editPriceMonthly, setEditPriceMonthly] = useState<number>(180)
-  const [editOpeningHours, setEditOpeningHours] = useState<string>("24/7 Access")
-  const [editFacilities, setEditFacilities] = useState<string>("")
+  const [editOpeningHours, setEditOpeningHours] = useState("24/7 Access")
+  const [editPhotoUrl, setEditPhotoUrl] = useState("")
+  const [editFacilities, setEditFacilities] = useState<string[]>([])
+  const [customFeatureInput, setCustomFeatureInput] = useState("")
+  const [editPublished, setEditPublished] = useState<boolean>(true)
+  const [editWebsite, setEditWebsite] = useState("")
+  const [editContactEmail, setEditContactEmail] = useState("")
+  const [uploadingPhoto, setUploadingPhoto] = useState(false)
   const [updatingHub, setUpdatingHub] = useState(false)
+  const [togglingHubId, setTogglingHubId] = useState<string | null>(null)
+  const [listingFilter, setListingFilter] = useState<"ALL" | "LIVE" | "DRAFT">("ALL")
 
   // Calendar Month State
   const [calendarDate, setCalendarDate] = useState(new Date())
@@ -181,43 +223,177 @@ function OwnerDashboardContent() {
     }
   }
 
-  // Save Hub Details
-  const handleSaveHubDetails = async (hubId: string) => {
-    setUpdatingHub(true)
+  // Open Full Property Editor Modal
+  const handleOpenEditModal = (hub: HubData) => {
+    setEditingHub(hub)
+    setEditName(hub.name || "")
+    setEditCity(hub.city || "Kathmandu")
+    setEditAddress(hub.address || "")
+    setEditDescription(hub.description || "")
+    setEditSpaceType(hub.spaceType || "Coworking Space")
+    setEditPriceDaily(hub.priceDaily ?? 10)
+    setEditPriceMonthly(hub.priceMonthly ?? 180)
+    setEditOpeningHours(hub.openingHours || "24/7 Access")
+    
+    let photo = hub.photoUrl || ""
+    if (photo.startsWith("[")) {
+      try {
+        const parsed = JSON.parse(photo)
+        if (Array.isArray(parsed) && parsed.length > 0) photo = parsed[0]
+      } catch (e) {}
+    }
+    setEditPhotoUrl(photo)
+
+    let facs: string[] = []
+    if (Array.isArray(hub.facilities)) {
+      facs = [...hub.facilities]
+    } else if (typeof hub.facilities === "string") {
+      try {
+        const parsed = JSON.parse(hub.facilities)
+        if (Array.isArray(parsed)) facs = parsed
+      } catch (e) {
+        facs = (hub.facilities as string).split(",").map(s => s.trim()).filter(Boolean)
+      }
+    }
+    setEditFacilities(facs)
+    setEditPublished(hub.published !== false)
+    setEditWebsite(hub.website || "")
+    setEditContactEmail(hub.contactEmail || session?.user?.email || "")
+  }
+
+  // Feature Toggling
+  const handleToggleFeature = (feat: string) => {
+    setEditFacilities(prev =>
+      prev.includes(feat) ? prev.filter(f => f !== feat) : [...prev, feat]
+    )
+  }
+
+  const handleAddCustomFeature = () => {
+    const trimmed = customFeatureInput.trim()
+    if (!trimmed) return
+    if (!editFacilities.includes(trimmed)) {
+      setEditFacilities(prev => [...prev, trimmed])
+    }
+    setCustomFeatureInput("")
+  }
+
+  const handleRemoveFeature = (feat: string) => {
+    setEditFacilities(prev => prev.filter(f => f !== feat))
+  }
+
+  // Cover Photo Uploader
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploadingPhoto(true)
     try {
-      const facArray = editFacilities.split(",").map(s => s.trim()).filter(Boolean)
+      const formData = new FormData()
+      formData.append("file", file)
+      const res = await fetch("/api/work-hubs/upload", {
+        method: "POST",
+        body: formData,
+      })
+      if (res.ok) {
+        const data = await res.json()
+        if (data.url) {
+          setEditPhotoUrl(data.url)
+        }
+      } else {
+        const err = await res.json()
+        alert(err.error || "Failed to upload photo")
+      }
+    } catch (err) {
+      console.error("Upload error:", err)
+      alert("Failed to upload image. Please try again.")
+    } finally {
+      setUploadingPhoto(false)
+    }
+  }
+
+  // Instant Toggle: Live vs Draft / Unlisted
+  const handleTogglePublishStatus = async (hub: HubData) => {
+    const current = hub.published !== false
+    const nextStatus = !current
+    setTogglingHubId(hub.id)
+    try {
       const res = await fetch("/api/owner/hubs", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          hubId,
-          priceDaily: editPriceDaily,
-          priceMonthly: editPriceMonthly,
-          openingHours: editOpeningHours,
-          facilities: facArray
+          hubId: hub.id,
+          published: nextStatus
         })
       })
 
       if (res.ok) {
         setHubs(prev =>
+          prev.map(h => (h.id === hub.id ? { ...h, published: nextStatus } : h))
+        )
+        setSuccessMessage(
+          nextStatus
+            ? `"${hub.name}" is now LIVE in the directory!`
+            : `"${hub.name}" is now UNLISTED (Saved as Draft).`
+        )
+        setTimeout(() => setSuccessMessage(""), 4500)
+      } else {
+        alert("Failed to update listing status")
+      }
+    } catch (err) {
+      console.error("Failed to toggle publish status:", err)
+    } finally {
+      setTogglingHubId(null)
+    }
+  }
+
+  // Save All Listing Details from Modal
+  const handleSaveHubEdits = async () => {
+    if (!editingHub) return
+    setUpdatingHub(true)
+    try {
+      const payload = {
+        hubId: editingHub.id,
+        name: editName.trim(),
+        city: editCity.trim(),
+        address: editAddress.trim(),
+        description: editDescription.trim(),
+        spaceType: editSpaceType,
+        priceDaily: Number(editPriceDaily) || 0,
+        priceMonthly: Number(editPriceMonthly) || 0,
+        openingHours: editOpeningHours.trim(),
+        photoUrl: editPhotoUrl.trim(),
+        facilities: editFacilities,
+        published: editPublished,
+        website: editWebsite.trim(),
+        contactEmail: editContactEmail.trim().toLowerCase()
+      }
+
+      const res = await fetch("/api/owner/hubs", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+
+      if (res.ok) {
+        setHubs(prev =>
           prev.map(h =>
-            h.id === hubId
+            h.id === editingHub.id
               ? {
                   ...h,
-                  priceDaily: editPriceDaily,
-                  priceMonthly: editPriceMonthly,
-                  openingHours: editOpeningHours,
-                  facilities: facArray
+                  ...payload
                 }
               : h
           )
         )
-        setEditingHubId(null)
-        setSuccessMessage("Property pricing & amenities successfully updated!")
-        setTimeout(() => setSuccessMessage(""), 4000)
+        setEditingHub(null)
+        setSuccessMessage(`"${editName}" listing details updated successfully!`)
+        setTimeout(() => setSuccessMessage(""), 4500)
+      } else {
+        const err = await res.json()
+        alert(err.error || "Failed to update property details")
       }
     } catch (err) {
-      console.error("Hub update error:", err)
+      console.error("Hub save error:", err)
+      alert("Error saving property details")
     } finally {
       setUpdatingHub(false)
     }
@@ -260,6 +436,13 @@ function OwnerDashboardContent() {
   })
 
   const activeReservations = todaySubFilter === "TODAY" ? todayBookings : upcomingBookings
+
+  // Filtered Hubs (All vs Live vs Draft)
+  const filteredHubs = hubs.filter(hub => {
+    if (listingFilter === "LIVE") return hub.published !== false
+    if (listingFilter === "DRAFT") return hub.published === false
+    return true
+  })
 
   // User Initial
   const userInitial = session?.user?.name
@@ -943,135 +1126,279 @@ function OwnerDashboardContent() {
         {mainNavTab === "LISTINGS" && (
           <div className="space-y-6">
             
-            {/* Header with Add Property Button */}
+            {/* Header with Add Property Button & Status Info */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-200 dark:border-[#222225]">
               <div>
                 <h2 className="text-xl sm:text-2xl font-serif font-bold text-gray-900 dark:text-white tracking-tight">
                   Your Listed Properties ({hubs.length})
                 </h2>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                  Manage your active workspaces, coliving hubs, daily desk rates, and nomad stays across Nepal.
+                  Manage visibility (Live vs Draft), cover photos, amenities, desk pricing, and nomad stays across Nepal.
                 </p>
               </div>
 
               <Link
                 href="/register/space"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-[#C2410C] hover:bg-[#9A3412] text-white shadow-xs transition-colors self-start sm:self-center"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold bg-[#C2410C] hover:bg-[#9A3412] text-white shadow-xs transition-colors self-start sm:self-center"
               >
                 <PlusCircle size={14} />
                 <span>+ List another property</span>
               </Link>
             </div>
 
+            {/* Filter Pills: All / Live / Draft */}
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setListingFilter("ALL")}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                  listingFilter === "ALL"
+                    ? "bg-gray-900 text-white dark:bg-white dark:text-gray-900 shadow-xs"
+                    : "bg-gray-100 dark:bg-[#1A1A1E] text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-[#252529]"
+                }`}
+              >
+                All Properties ({hubs.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setListingFilter("LIVE")}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                  listingFilter === "LIVE"
+                    ? "bg-blue-600 text-white shadow-xs"
+                    : "bg-gray-100 dark:bg-[#1A1A1E] text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-[#252529]"
+                }`}
+              >
+                <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span>Live in Directory ({hubs.filter(h => h.published !== false).length})</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setListingFilter("DRAFT")}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                  listingFilter === "DRAFT"
+                    ? "bg-amber-600 text-white shadow-xs"
+                    : "bg-gray-100 dark:bg-[#1A1A1E] text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-[#252529]"
+                }`}
+              >
+                <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+                <span>Draft / Unlisted ({hubs.filter(h => h.published === false).length})</span>
+              </button>
+            </div>
+
             {/* WORKSPACE / COLIVING PROPERTY LISTINGS GRID */}
             <div className="space-y-4">
-              {hubs.length === 0 ? (
+              {filteredHubs.length === 0 ? (
                 <div className="p-8 sm:p-12 rounded-2xl bg-gray-50 dark:bg-[#141416] border border-dashed border-gray-300 dark:border-gray-700 text-center">
                   <Building2 className="w-10 h-10 text-gray-400 mx-auto mb-2 opacity-50" />
-                  <p className="text-sm font-bold text-gray-800 dark:text-gray-200">No properties listed yet</p>
-                  <p className="text-xs text-gray-500 mt-1 mb-4">Add your coworking space, workstation villa, or nomad stay to start receiving bookings.</p>
-                  <Link
-                    href="/register/space"
-                    className="px-4 py-2 bg-[#C2410C] text-white text-xs font-bold rounded-xl shadow-xs"
-                  >
-                    + Add your first property
-                  </Link>
+                  <p className="text-sm font-bold text-gray-800 dark:text-gray-200">
+                    {listingFilter === "ALL"
+                      ? "No properties listed yet"
+                      : listingFilter === "LIVE"
+                      ? "No live properties currently published"
+                      : "No draft / unlisted properties"}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1 mb-4">
+                    {listingFilter === "ALL"
+                      ? "Add your coworking space, workstation villa, or nomad stay to start receiving bookings."
+                      : "You can toggle any listing between Live and Draft at any time."}
+                  </p>
+                  {listingFilter === "ALL" && (
+                    <Link
+                      href="/register/space"
+                      className="px-4 py-2 bg-[#C2410C] text-white text-xs font-bold rounded-xl shadow-xs"
+                    >
+                      + Add your first property
+                    </Link>
+                  )}
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {hubs.map(hub => {
-                    const isEditing = editingHubId === hub.id
-                    return (
-                      <div key={hub.id} className="bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-shadow">
-                        {/* Image Thumbnail */}
-                        <div className="relative aspect-video w-full bg-gray-100 dark:bg-[#1F1F22] overflow-hidden">
-                          <img
-                            src={hub.photoUrl ? (hub.photoUrl.startsWith("[") ? JSON.parse(hub.photoUrl)[0] : hub.photoUrl) : "/hero-bg.png"}
-                            alt={hub.name}
-                            className="w-full h-full object-cover"
-                          />
-                          <span className="absolute top-2.5 left-2.5 bg-black/75 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
-                            {hub.city || "Nepal"}
-                          </span>
-                        </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {filteredHubs.map(hub => {
+                    const isLive = hub.published !== false
+                    const isToggling = togglingHubId === hub.id
+                    
+                    let hubPhoto = hub.photoUrl || "/hero-bg.png"
+                    if (hubPhoto.startsWith("[")) {
+                      try {
+                        const parsed = JSON.parse(hubPhoto)
+                        if (Array.isArray(parsed) && parsed.length > 0) hubPhoto = parsed[0]
+                      } catch (e) {}
+                    }
 
-                        <div className="p-4 space-y-3">
-                          <div className="flex items-start justify-between gap-2">
-                            <div>
-                              <h4 className="font-bold text-sm text-gray-900 dark:text-white line-clamp-1">
-                                {hub.name}
-                              </h4>
-                              <p className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
-                                <MapPin size={12} /> {hub.address}
-                              </p>
-                            </div>
-                            <span className="text-xs font-bold text-[#C2410C] shrink-0">
-                              ${hub.priceDaily || 10}/day
+                    // Parse facilities
+                    let facList: string[] = []
+                    if (Array.isArray(hub.facilities)) facList = hub.facilities
+                    else if (typeof hub.facilities === "string") {
+                      try {
+                        const parsed = JSON.parse(hub.facilities)
+                        if (Array.isArray(parsed)) facList = parsed
+                      } catch (e) {
+                        facList = (hub.facilities as string).split(",").map(s => s.trim()).filter(Boolean)
+                      }
+                    }
+
+                    return (
+                      <div
+                        key={hub.id}
+                        className={`bg-white dark:bg-[#141416] border rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between ${
+                          isLive
+                            ? "border-gray-200 dark:border-[#26262A]"
+                            : "border-dashed border-amber-300 dark:border-amber-800/60 bg-amber-50/20 dark:bg-amber-950/10"
+                        }`}
+                      >
+                        <div>
+                          {/* Image Thumbnail & Top Badges */}
+                          <div className="relative aspect-video w-full bg-gray-100 dark:bg-[#1F1F22] overflow-hidden group">
+                            <img
+                              src={hubPhoto}
+                              alt={hub.name}
+                              className={`w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 ${
+                                !isLive ? "grayscale-[30%] opacity-90" : ""
+                              }`}
+                            />
+                            
+                            {/* Top Left: City Badge */}
+                            <span className="absolute top-3 left-3 bg-black/75 backdrop-blur-sm text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full">
+                              {hub.city || "Nepal"}
                             </span>
+
+                            {/* Top Right: Live vs Draft Status Pill */}
+                            <div className="absolute top-3 right-3">
+                              {isLive ? (
+                                <span className="inline-flex items-center gap-1.5 bg-emerald-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-md">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+                                  <span>LIVE</span>
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1.5 bg-amber-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-md">
+                                  <EyeOff size={11} />
+                                  <span>DRAFT / UNLISTED</span>
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Bottom Bar: Space Type */}
+                            <div className="absolute bottom-2.5 left-3">
+                              <span className="bg-white/90 dark:bg-black/80 backdrop-blur-xs text-gray-800 dark:text-gray-200 text-[10px] font-semibold px-2 py-0.5 rounded-md">
+                                {hub.spaceType || "Coworking Hub"}
+                              </span>
+                            </div>
                           </div>
 
-                          {/* Editing Form Inline */}
-                          {isEditing ? (
-                            <div className="space-y-3 pt-2 border-t border-gray-100 dark:border-[#242428] text-xs">
-                              <div>
-                                <label className="block text-gray-500 font-semibold mb-1">Daily Rate ($USD)</label>
-                                <input
-                                  type="number"
-                                  value={editPriceDaily}
-                                  onChange={e => setEditPriceDaily(parseFloat(e.target.value) || 0)}
-                                  className="w-full p-2 bg-gray-50 dark:bg-[#1C1C1F] border border-gray-200 dark:border-[#333] rounded-lg"
-                                />
+                          {/* Body Content */}
+                          <div className="p-4 space-y-3">
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="min-w-0">
+                                <h4 className="font-bold text-base text-gray-900 dark:text-white line-clamp-1">
+                                  {hub.name}
+                                </h4>
+                                <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1 mt-0.5 line-clamp-1">
+                                  <MapPin size={12} className="shrink-0 text-gray-400" />
+                                  <span>{hub.address}</span>
+                                </p>
                               </div>
-                              <div>
-                                <label className="block text-gray-500 font-semibold mb-1">Monthly Coliving Rate ($USD)</label>
-                                <input
-                                  type="number"
-                                  value={editPriceMonthly}
-                                  onChange={e => setEditPriceMonthly(parseFloat(e.target.value) || 0)}
-                                  className="w-full p-2 bg-gray-50 dark:bg-[#1C1C1F] border border-gray-200 dark:border-[#333] rounded-lg"
-                                />
-                              </div>
-                              <div className="flex gap-2 pt-1">
-                                <button
-                                  onClick={() => handleSaveHubDetails(hub.id)}
-                                  disabled={updatingHub}
-                                  className="flex-1 py-1.5 bg-[#C2410C] text-white font-bold rounded-lg"
-                                >
-                                  {updatingHub ? "Saving..." : "Save"}
-                                </button>
-                                <button
-                                  onClick={() => setEditingHubId(null)}
-                                  className="px-3 py-1.5 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-600"
-                                >
-                                  Cancel
-                                </button>
+                              <div className="text-right shrink-0">
+                                <div className="text-sm font-bold text-[#C2410C]">
+                                  ${hub.priceDaily ?? 10}<span className="text-[10px] font-normal text-gray-500">/day</span>
+                                </div>
+                                {hub.priceMonthly ? (
+                                  <div className="text-[11px] text-gray-400">
+                                    ${hub.priceMonthly}/mo
+                                  </div>
+                                ) : null}
                               </div>
                             </div>
-                          ) : (
-                            <div className="flex items-center gap-2 pt-2 border-t border-gray-100 dark:border-[#222226]">
+
+                            {/* Features Preview */}
+                            {facList.length > 0 && (
+                              <div className="flex flex-wrap gap-1.5 pt-1">
+                                {facList.slice(0, 4).map((f, i) => (
+                                  <span
+                                    key={i}
+                                    className="text-[10px] px-2 py-0.5 rounded-md bg-gray-100 dark:bg-[#1E1E22] text-gray-600 dark:text-gray-300 font-medium line-clamp-1"
+                                  >
+                                    {f}
+                                  </span>
+                                ))}
+                                {facList.length > 4 && (
+                                  <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-gray-50 dark:bg-[#1A1A1E] text-gray-400 font-medium">
+                                    +{facList.length - 4} more
+                                  </span>
+                                )}
+                              </div>
+                            )}
+
+                            {/* Status Explanation Notice */}
+                            {!isLive && (
+                              <div className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/40 text-[11px] text-amber-800 dark:text-amber-300 flex items-start gap-2">
+                                <EyeOff size={13} className="shrink-0 mt-0.5 text-amber-600" />
+                                <span>This space is currently <strong>hidden from search</strong>. Nomads cannot view or book it until you make it Live.</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Bottom Action Footer */}
+                        <div className="p-4 pt-0">
+                          <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-gray-100 dark:border-[#222226]">
+                            {/* Live View Link */}
+                            {isLive ? (
                               <Link
                                 href={`/workspaces/${hub.slug}`}
                                 target="_blank"
-                                className="flex-1 py-2 text-center text-xs font-bold rounded-xl border border-gray-200 dark:border-[#2A2A2E] hover:bg-gray-50 dark:hover:bg-[#1C1C20] flex items-center justify-center gap-1.5"
+                                className="flex-1 min-w-[110px] py-2 text-center text-xs font-semibold rounded-xl border border-gray-200 dark:border-[#2A2A2E] hover:bg-gray-50 dark:hover:bg-[#1C1C20] flex items-center justify-center gap-1.5 transition-colors"
                               >
                                 <Eye size={13} />
-                                <span>View Live Listing</span>
+                                <span>Live Page</span>
                               </Link>
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  setEditingHubId(hub.id)
-                                  setEditPriceDaily(hub.priceDaily || 10)
-                                  setEditPriceMonthly(hub.priceMonthly || 180)
-                                  setEditOpeningHours(hub.openingHours || "24/7 Access")
-                                  setEditFacilities(Array.isArray(hub.facilities) ? hub.facilities.join(", ") : "")
-                                }}
-                                className="px-3 py-2 text-xs font-bold rounded-xl bg-gray-100 dark:bg-[#1E1E22] hover:bg-gray-200 text-gray-800 dark:text-gray-200"
+                            ) : (
+                              <Link
+                                href={`/workspaces/${hub.slug}`}
+                                target="_blank"
+                                className="flex-1 min-w-[110px] py-2 text-center text-xs font-semibold rounded-xl border border-dashed border-gray-300 dark:border-gray-700 text-gray-500 hover:bg-gray-50 dark:hover:bg-[#1C1C20] flex items-center justify-center gap-1.5 transition-colors"
                               >
-                                Edit Rates
-                              </button>
-                            </div>
-                          )}
+                                <ExternalLink size={13} />
+                                <span>Preview</span>
+                              </Link>
+                            )}
+
+                            {/* Edit Property Details & Photos Button */}
+                            <button
+                              type="button"
+                              onClick={() => handleOpenEditModal(hub)}
+                              className="px-3.5 py-2 text-xs font-bold rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-black dark:hover:bg-gray-100 flex items-center gap-1.5 transition-colors shadow-xs"
+                            >
+                              <Sliders size={13} />
+                              <span>Edit Details &amp; Photos</span>
+                            </button>
+
+                            {/* Quick Toggle Live / Unlist Button */}
+                            <button
+                              type="button"
+                              disabled={isToggling}
+                              onClick={() => handleTogglePublishStatus(hub)}
+                              className={`px-3 py-2 text-xs font-semibold rounded-xl border transition-colors flex items-center gap-1.5 ${
+                                isLive
+                                  ? "border-amber-200 dark:border-amber-900/60 text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/30"
+                                  : "border-blue-200 dark:border-blue-900/60 text-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30"
+                              }`}
+                              title={isLive ? "Hide from search directory" : "Make publicly visible"}
+                            >
+                              {isToggling ? (
+                                <Loader2 size={13} className="animate-spin" />
+                              ) : isLive ? (
+                                <>
+                                  <EyeOff size={13} />
+                                  <span>Unlist</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Eye size={13} />
+                                  <span>Make Live</span>
+                                </>
+                              )}
+                            </button>
+                          </div>
                         </div>
                       </div>
                     )
@@ -1144,6 +1471,399 @@ function OwnerDashboardContent() {
         )}
 
       </main>
+
+      {/* ─────────────────────────────────────────────────────────────
+          EDIT PROPERTY & FEATURES MODAL
+         ───────────────────────────────────────────────────────────── */}
+      {editingHub && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="relative w-full max-w-2xl bg-white dark:bg-[#121214] border border-gray-200 dark:border-[#26262A] rounded-2xl shadow-2xl overflow-hidden my-8 max-h-[90vh] flex flex-col">
+            
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-5 border-b border-gray-200 dark:border-[#222225] bg-gray-50/70 dark:bg-[#161619] sticky top-0 z-10">
+              <div>
+                <h3 className="font-serif font-bold text-lg text-gray-900 dark:text-white">
+                  Edit Property Listing
+                </h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                  Update visibility, cover photo, amenities, and details for {editingHub.name}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setEditingHub(null)}
+                className="w-8 h-8 rounded-full bg-gray-100 dark:bg-[#202024] flex items-center justify-center text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            {/* Modal Scrollable Body */}
+            <div className="p-6 space-y-6 overflow-y-auto">
+              
+              {/* 1. VISIBILITY / DRAFT TOGGLE */}
+              <div className="p-4 rounded-xl border border-gray-200 dark:border-[#26262A] bg-gray-50 dark:bg-[#161618] flex items-center justify-between gap-4">
+                <div className="space-y-0.5">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-xs text-gray-900 dark:text-white">
+                      Listing Status &amp; Visibility
+                    </span>
+                    {editPublished ? (
+                      <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 px-2 py-0.5 rounded-full">
+                        ● LIVE
+                      </span>
+                    ) : (
+                      <span className="text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 px-2 py-0.5 rounded-full">
+                        ○ DRAFT / UNLISTED
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {editPublished
+                      ? "Your property is actively listed in the Nepal workspace directory and can receive inquiries."
+                      : "Unlisted: Hidden from public search and category feeds. Only you can view it."}
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setEditPublished(!editPublished)}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-colors shrink-0 flex items-center gap-1.5 ${
+                    editPublished
+                      ? "bg-amber-100 text-amber-800 hover:bg-amber-200 dark:bg-amber-950/60 dark:text-amber-300"
+                      : "bg-blue-600 text-white hover:bg-blue-700"
+                  }`}
+                >
+                  {editPublished ? <EyeOff size={13} /> : <Eye size={13} />}
+                  <span>{editPublished ? "Unlist (Draft)" : "Make Live"}</span>
+                </button>
+              </div>
+
+              {/* 2. COVER PHOTO */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                    Cover Photo
+                  </label>
+                  <span className="text-[11px] text-gray-400">
+                    JPEG, PNG, WebP up to 5MB
+                  </span>
+                </div>
+
+                <div className="relative aspect-video w-full rounded-xl overflow-hidden border border-gray-200 dark:border-[#26262A] bg-gray-100 dark:bg-[#1E1E22]">
+                  {editPhotoUrl ? (
+                    <img
+                      src={editPhotoUrl}
+                      alt="Cover Preview"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 gap-2">
+                      <Camera size={28} />
+                      <span className="text-xs">No cover image uploaded</span>
+                    </div>
+                  )}
+
+                  {uploadingPhoto && (
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-xs flex flex-col items-center justify-center text-white gap-2">
+                      <Loader2 size={24} className="animate-spin" />
+                      <span className="text-xs font-bold">Uploading Cover Photo...</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <label className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 dark:bg-[#1E1E22] hover:bg-gray-200 dark:hover:bg-[#28282D] text-gray-800 dark:text-gray-200 text-xs font-bold rounded-xl cursor-pointer transition-colors">
+                    <Upload size={14} />
+                    <span>Upload New Photo</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handlePhotoUpload}
+                      disabled={uploadingPhoto}
+                      className="hidden"
+                    />
+                  </label>
+                  <input
+                    type="text"
+                    value={editPhotoUrl}
+                    onChange={e => setEditPhotoUrl(e.target.value)}
+                    placeholder="Or paste direct image URL (https://...)"
+                    className="flex-[2] p-2 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-800 dark:text-gray-200 placeholder-gray-400 focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+              </div>
+
+              {/* 3. BASIC DETAILS */}
+              <div className="space-y-4">
+                <label className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider block">
+                  Property Info
+                </label>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">
+                      Property Name *
+                    </label>
+                    <input
+                      type="text"
+                      value={editName}
+                      onChange={e => setEditName(e.target.value)}
+                      className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">
+                      Space Type *
+                    </label>
+                    <select
+                      value={editSpaceType}
+                      onChange={e => setEditSpaceType(e.target.value)}
+                      className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-blue-500"
+                    >
+                      <option value="Coworking Space">Coworking Space</option>
+                      <option value="Coliving & Workation">Coliving &amp; Workation</option>
+                      <option value="Workstation Villa">Workstation Villa</option>
+                      <option value="Hostel with Dedicated Desks">Hostel with Dedicated Desks</option>
+                      <option value="Cafe & Cowork">Cafe &amp; Cowork</option>
+                      <option value="Private Studio Hub">Private Studio Hub</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">
+                      City *
+                    </label>
+                    <input
+                      type="text"
+                      value={editCity}
+                      onChange={e => setEditCity(e.target.value)}
+                      placeholder="e.g. Kathmandu, Pokhara, Lalitpur"
+                      className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">
+                      Full Address *
+                    </label>
+                    <input
+                      type="text"
+                      value={editAddress}
+                      onChange={e => setEditAddress(e.target.value)}
+                      placeholder="e.g. Thamel, Ward 26, Kathmandu"
+                      className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">
+                      Daily Desk Rate ($ USD)
+                    </label>
+                    <input
+                      type="number"
+                      step="1"
+                      min="0"
+                      value={editPriceDaily}
+                      onChange={e => setEditPriceDaily(parseFloat(e.target.value) || 0)}
+                      className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">
+                      Monthly Coliving/Desk ($ USD)
+                    </label>
+                    <input
+                      type="number"
+                      step="1"
+                      min="0"
+                      value={editPriceMonthly}
+                      onChange={e => setEditPriceMonthly(parseFloat(e.target.value) || 0)}
+                      className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">
+                      Opening Hours
+                    </label>
+                    <input
+                      type="text"
+                      value={editOpeningHours}
+                      onChange={e => setEditOpeningHours(e.target.value)}
+                      placeholder="e.g. 24/7 Access or 8 AM - 10 PM"
+                      className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">
+                    About this Space (Description for Nomads)
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={editDescription}
+                    onChange={e => setEditDescription(e.target.value)}
+                    placeholder="Describe your internet speed, vibe, community, surrounding cafes, power backup..."
+                    className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+              </div>
+
+              {/* 4. FEATURES & AMENITIES */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                    Amenities &amp; Nomad Features ({editFacilities.length} selected)
+                  </label>
+                  <span className="text-[11px] text-gray-400">
+                    Click to toggle
+                  </span>
+                </div>
+
+                {/* Popular Amenities Chips */}
+                <div className="flex flex-wrap gap-2">
+                  {POPULAR_AMENITIES.map(amenity => {
+                    const selected = editFacilities.includes(amenity)
+                    return (
+                      <button
+                        key={amenity}
+                        type="button"
+                        onClick={() => handleToggleFeature(amenity)}
+                        className={`text-xs px-3 py-1.5 rounded-xl border transition-all text-left flex items-center gap-1.5 ${
+                          selected
+                            ? "bg-blue-600 text-white border-blue-600 shadow-xs"
+                            : "bg-gray-50 dark:bg-[#1A1A1E] text-gray-700 dark:text-gray-300 border-gray-200 dark:border-[#2C2C30] hover:border-gray-400"
+                        }`}
+                      >
+                        {selected ? <Check size={12} className="stroke-[3]" /> : null}
+                        <span>{amenity}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+
+                {/* Custom Feature Input */}
+                <div className="flex items-center gap-2 pt-2">
+                  <input
+                    type="text"
+                    value={customFeatureInput}
+                    onChange={e => setCustomFeatureInput(e.target.value)}
+                    onKeyDown={e => {
+                      if (e.key === "Enter") {
+                        e.preventDefault()
+                        handleAddCustomFeature()
+                      }
+                    }}
+                    placeholder="Add custom feature (e.g. Pet Friendly, Sound Studio)..."
+                    className="flex-1 p-2 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-blue-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAddCustomFeature}
+                    className="px-3 py-2 bg-gray-200 dark:bg-[#222226] hover:bg-gray-300 dark:hover:bg-[#2C2C32] text-xs font-semibold rounded-xl text-gray-800 dark:text-gray-200 transition-colors"
+                  >
+                    + Add
+                  </button>
+                </div>
+
+                {/* Active Custom Features Display */}
+                {editFacilities.filter(f => !POPULAR_AMENITIES.includes(f)).length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {editFacilities.filter(f => !POPULAR_AMENITIES.includes(f)).map(customFeat => (
+                      <span
+                        key={customFeat}
+                        className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800"
+                      >
+                        <span>{customFeat}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveFeature(customFeat)}
+                          className="hover:text-red-500"
+                        >
+                          <X size={12} />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* 5. CONTACT & EXTERNAL LINKS */}
+              <div className="space-y-3">
+                <label className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider block">
+                  Host Contact &amp; Links
+                </label>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">
+                      Contact / Inquiries Email *
+                    </label>
+                    <input
+                      type="email"
+                      value={editContactEmail}
+                      onChange={e => setEditContactEmail(e.target.value)}
+                      className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">
+                      Website / Booking Link (Optional)
+                    </label>
+                    <input
+                      type="url"
+                      value={editWebsite}
+                      onChange={e => setEditWebsite(e.target.value)}
+                      placeholder="https://yourspace.com"
+                      className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 border-t border-gray-200 dark:border-[#222225] bg-gray-50 dark:bg-[#141416] flex items-center justify-end gap-3 sticky bottom-0 z-10">
+              <button
+                type="button"
+                onClick={() => setEditingHub(null)}
+                className="px-4 py-2 text-xs font-semibold rounded-xl border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-[#1E1E22] text-gray-700 dark:text-gray-300 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={updatingHub || uploadingPhoto}
+                onClick={handleSaveHubEdits}
+                className="px-5 py-2 text-xs font-bold rounded-xl bg-blue-600 hover:bg-blue-700 text-white shadow-xs transition-colors flex items-center gap-1.5 disabled:opacity-60"
+              >
+                {updatingHub ? (
+                  <>
+                    <Loader2 size={13} className="animate-spin" />
+                    <span>Saving Changes...</span>
+                  </>
+                ) : (
+                  <>
+                    <Check size={14} />
+                    <span>Save Changes</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>
