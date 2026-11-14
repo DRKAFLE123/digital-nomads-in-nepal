@@ -33,7 +33,12 @@ export default async function GuidesPage() {
 
   const serializedGuides = guides.map(g => ({
     ...g,
-    specialties: Array.isArray(g.specialties) ? (g.specialties as string[]) : []
+    createdAt: g.createdAt ? g.createdAt.toISOString() : new Date().toISOString(),
+    specialties: Array.isArray(g.specialties) ? (g.specialties as string[]) : [],
+    languages: Array.isArray((g as any).languages) ? ((g as any).languages as string[]) : ["English", "Nepali"],
+    tagline: (g as any).tagline || null,
+    experienceYears: (g as any).experienceYears || null,
+    licensedSince: (g as any).licensedSince || null,
   }))
 
   const itemListJsonLd = serializedGuides.length > 0
