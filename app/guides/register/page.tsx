@@ -1,373 +1,389 @@
-/* eslint-disable @next/next/no-img-element */
 "use client"
+
 import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { signIn } from "next-auth/react"
+import Link from "next/link"
+import Image from "next/image"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
-import Link from "next/link"
-import TrekkingGuideIcon from "@/components/TrekkingGuideIcon"
-import { Upload, Link2, Loader2 } from "lucide-react"
+import { 
+  Mountain, 
+  MapPin, 
+  ShieldCheck, 
+  Sparkles, 
+  Eye, 
+  EyeOff, 
+  Loader2, 
+  Check, 
+  ArrowRight,
+  Compass,
+  Phone
+} from "lucide-react"
 
-const LOCATIONS = ["Kathmandu", "Pokhara", "Bandipur", "Chitwan", "Lumbini", "Nagarkot", "Mustang"]
-const ALL_SPECIALTIES = ["Trekking", "Foodie", "History", "Photography", "Cultural", "Wildlife", "Adventure", "Language", "Yoga & Wellness", "Day Trips"]
+const LOCATIONS = [
+  "Kathmandu",
+  "Pokhara",
+  "Lalitpur",
+  "Bhaktapur",
+  "Bandipur",
+  "Chitwan",
+  "Lumbini",
+  "Nagarkot",
+  "Mustang & Manang",
+  "Solukhumbu (Everest Region)",
+  "Langtang Valley",
+  "Other Region",
+]
 
-type FormData = {
-  name: string; email: string; location: string
-  specialties: string[]; bio: string; photoUrl: string
-  website: string
-}
+const PRIMARY_SPECIALTIES = [
+  "Trekking & High-Altitude Hiking",
+  "Cultural, Heritage & Shamanic Tours",
+  "Photography & Filmmaking Expeditions",
+  "Foodie, Culinary & Tea Tasting",
+  "Yoga, Meditation & Wellness",
+  "Rock Climbing & Adventure Sports",
+  "Day Hikes & Hidden Viewpoints",
+  "Wildlife & Jungle Safari",
+]
 
-export default function GuideRegisterPage() {
-  const [step, setStep] = useState(1)
+export default function GuideQuickRegisterPage() {
+  const router = useRouter()
+
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
+  const [location, setLocation] = useState("Pokhara")
+  const [primarySpecialty, setPrimarySpecialty] = useState("Trekking & High-Altitude Hiking")
+  const [phone, setPhone] = useState("")
+
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
-  const [uploading, setUploading] = useState(false)
-  const [uploadError, setUploadError] = useState("")
-  const [form, setForm] = useState<FormData>({
-    name: "", email: "", location: "",
-    specialties: [], bio: "", photoUrl: "",
-    website: "",
-  })
 
-  async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (!file) return
+  async function handleQuickJoin(e: React.FormEvent) {
+    e.preventDefault()
+    setError("")
 
-    // Client-side validation
-    if (file.size > 5 * 1024 * 1024) {
-      setUploadError("File size exceeds 5MB limit. Please choose a smaller image.")
+    if (!name.trim() || !email.trim() || !password || !location) {
+      setError("Please fill in all required fields.")
       return
     }
 
-    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/avif"]
-    if (!allowedTypes.includes(file.type)) {
-      setUploadError("Invalid file type. Please upload a PNG, JPG, WebP, or AVIF image.")
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long.")
       return
     }
 
-    setUploading(true)
-    setUploadError("")
-
-    const formData = new FormData()
-    formData.append("file", file)
+    setLoading(true)
 
     try {
-      const res = await fetch("/api/guides/upload", {
+      // 1. Create User & Guide record
+      const res = await fetch("/api/auth/register-guide", {
         method: "POST",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          password,
+          location,
+          primarySpecialty,
+          phone: phone.trim() || null,
+        }),
       })
 
-      if (res.ok) {
-        const data = await res.json()
-        setForm(p => ({ ...p, photoUrl: data.url }))
+      const data = await res.json()
+
+      if (!res.ok) {
+        setError(data.error || "Failed to create account. Please try again.")
+        setLoading(false)
+        return
+      }
+
+      // 2. Auto-login via NextAuth
+      const loginRes = await signIn("credentials", {
+        redirect: false,
+        email: email.trim().toLowerCase(),
+        password,
+      })
+
+      if (loginRes?.error) {
+        // If auto-login fails, redirect to signin with message
+        router.push("/auth/signin?registered=true&callbackUrl=/local-guides/dashboard")
       } else {
-        const errData = await res.json().catch(() => ({}))
-        setUploadError(errData.error || `Upload failed (Status ${res.status}). Please try again or paste an image link below.`)
+        // Direct redirect into their bright white dashboard with welcome prompt!
+        router.push("/local-guides/dashboard?welcome=true")
       }
     } catch (err: any) {
-      console.error("Guide upload error:", err)
-      setUploadError(err?.message || "An error occurred during upload. Please try again or paste an image link below.")
-    } finally {
-      setUploading(false)
+      console.error("Quick join error:", err)
+      setError("A network error occurred. Please check your connection and try again.")
+      setLoading(false)
     }
   }
-
-  function toggleSpecialty(s: string) {
-    setForm(f => ({
-      ...f,
-      specialties: f.specialties.includes(s)
-        ? f.specialties.filter(x => x !== s)
-        : [...f.specialties, s]
-    }))
-  }
-
-  async function handleSubmit() {
-    setLoading(true)
-    setError("")
-    const res = await fetch("/api/guides", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...form, contactEmail: form.email, website: form.website || null }),
-    })
-    setLoading(false)
-    if (res.ok) {
-      setStep(5)
-    } else {
-      const d = await res.json()
-      setError(d.error ?? "Submission failed. Please try again.")
-    }
-  }
-
-  const progress = Math.round(((step - 1) / 4) * 100)
 
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-background pt-28 pb-24 px-4 sm:px-6">
-        <div className="max-w-xl mx-auto">
-
-          {step < 5 && (
-            <>
-              <div className="mb-8">
-                <span className="text-primary text-xs font-bold uppercase tracking-widest">Guide Registration</span>
-                <h1 className="text-3xl font-black text-foreground mt-2 mb-1">Become a Local Guide</h1>
-                <p className="text-muted text-sm">Share your expertise with digital nomads exploring Nepal.</p>
+      <main className="min-h-screen bg-slate-50/70 dark:bg-[#0A0A0B] pt-28 pb-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            
+            {/* ─────────────────────────────────────────────────────────────
+                LEFT COLUMN: VALUE PROPOSITION & SOCIAL PROOF (GuideMeet style)
+               ───────────────────────────────────────────────────────────── */}
+            <div className="lg:col-span-5 space-y-8">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-[#023629] dark:text-emerald-300 text-xs font-bold tracking-wide uppercase">
+                <Sparkles size={14} className="text-[#FB923C]" />
+                <span>Local Expert Network</span>
               </div>
 
-              {/* Progress Bar */}
-              <div className="mb-8">
-                <div className="flex justify-between text-xs text-muted mb-2">
-                  {["Personal Info", "Specialties & Bio", "Photo", "Review"].map((s, i) => (
-                    <span key={s} className={step === i + 1 ? "text-primary font-bold" : ""}>{s}</span>
-                  ))}
-                </div>
-                <div className="w-full h-1.5 bg-border rounded-full">
-                  <div className="h-1.5 bg-primary rounded-full transition-all duration-500" style={{ width: `${progress}%` }} />
+              <div className="space-y-4">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.15]">
+                  Share Nepal with <span className="text-[#023629] dark:text-[#FB923C]">global nomads</span> & explorers
+                </h1>
+                <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Join Nepal&apos;s fastest-growing platform connecting remote workers, backpackers, and travelers with certified local guides and cultural hosts.
+                </p>
+              </div>
+
+              {/* Social Proof: Avatars of verified local guides */}
+              <div className="pt-2 border-t border-slate-200 dark:border-slate-800">
+                <div className="flex items-center gap-4">
+                  <div className="flex -space-x-3 overflow-hidden">
+                    <img
+                      className="inline-block h-12 w-12 rounded-full ring-2 ring-white dark:ring-slate-900 object-cover"
+                      src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=120&q=80"
+                      alt="Local Guide"
+                    />
+                    <img
+                      className="inline-block h-12 w-12 rounded-full ring-2 ring-white dark:ring-slate-900 object-cover"
+                      src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80"
+                      alt="Trekking Expert"
+                    />
+                    <img
+                      className="inline-block h-12 w-12 rounded-full ring-2 ring-white dark:ring-slate-900 object-cover"
+                      src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80"
+                      alt="Cultural Guide"
+                    />
+                    <img
+                      className="inline-block h-12 w-12 rounded-full ring-2 ring-white dark:ring-slate-900 object-cover"
+                      src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80"
+                      alt="Mountain Guide"
+                    />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1 text-amber-500 font-bold text-sm">
+                      {"★".repeat(5)} <span className="text-slate-900 dark:text-white font-black ml-1">5.0</span>
+                    </div>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                      Join 50+ verified guides across Nepal
+                    </p>
+                  </div>
                 </div>
               </div>
-            </>
-          )}
 
-          <div className="bg-card border border-border rounded-2xl p-8 shadow-sm">
-            {error && <div className="mb-6 px-4 py-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">{error}</div>}
-
-            {/* STEP 1 */}
-            {step === 1 && (
-              <div className="space-y-5">
-                <h2 className="text-lg font-bold text-foreground mb-4">Personal Information</h2>
+              {/* 3 Core Guiding Benefits */}
+              <div className="space-y-3.5">
                 {[
-                  { label: "Full Name", key: "name", type: "text", placeholder: "Sita Rai" },
-                  { label: "Email Address", key: "email", type: "email", placeholder: "sita@example.com" },
-                ].map(f => (
-                  <div key={f.key}>
-                    <label className="text-sm font-medium text-foreground mb-2 block">{f.label}</label>
-                    <input type={f.type} value={form[f.key as keyof FormData] as string}
-                      onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
-                      placeholder={f.placeholder}
-                      className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-muted" />
+                  "0% Platform Commission on direct WhatsApp/email inquiries",
+                  "Verified Guide Badge with official license recognition",
+                  "Direct inquiries from high-budget digital nomads & long-stayers",
+                ].map((perk, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check size={12} strokeWidth={3} />
+                    </div>
+                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                      {perk}
+                    </span>
                   </div>
                 ))}
-
-                <div>
-                  <label className="text-sm font-medium text-foreground mb-2 block">
-                    Website or Agency / Portfolio Link <span className="text-muted text-xs">(Optional)</span>
-                  </label>
-                  <input
-                    type="url"
-                    value={form.website}
-                    onChange={e => setForm(p => ({ ...p, website: e.target.value }))}
-                    placeholder="https://youragency.com or https://instagram.com/yourhandle"
-                    className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-muted"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-sm font-medium text-foreground mb-2 block">Location</label>
-                  <select value={form.location} onChange={e => setForm(p => ({ ...p, location: e.target.value }))}
-                    className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50">
-                    <option value="">Select your city...</option>
-                    {LOCATIONS.map(l => <option key={l} value={l}>{l}</option>)}
-                  </select>
-                </div>
-                <button disabled={!form.name || !form.email || !form.location}
-                  onClick={() => setStep(2)}
-                  className="w-full bg-primary text-black font-bold py-3 rounded-lg hover:bg-white hover:text-black transition-all disabled:opacity-40 disabled:cursor-not-allowed">
-                  Continue →
-                </button>
               </div>
-            )}
 
-            {/* STEP 2 */}
-            {step === 2 && (
-              <div className="space-y-6">
-                <h2 className="text-lg font-bold text-foreground mb-4">Specialties & Bio</h2>
-                <div>
-                  <label className="text-sm font-medium text-foreground mb-3 block">Select your specialties</label>
-                  <div className="flex flex-wrap gap-2">
-                    {ALL_SPECIALTIES.map(s => (
-                      <button key={s} onClick={() => toggleSpecialty(s)}
-                        className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-all ${form.specialties.includes(s) ? "bg-primary text-black border-primary" : "bg-background border-border text-muted hover:border-primary hover:text-primary"}`}>
-                        #{s}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-foreground mb-2 block">Your Bio <span className="text-muted">(min. 50 characters)</span></label>
-                  <textarea value={form.bio} onChange={e => setForm(p => ({ ...p, bio: e.target.value }))} rows={5}
-                    placeholder="Tell nomads about yourself, your experience, and what makes you a great guide..."
-                    className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-muted resize-none" />
-                  <p className="text-xs text-muted mt-1">{form.bio.length} / 50 min characters</p>
-                </div>
-                <div className="flex gap-3">
-                  <button onClick={() => setStep(1)} className="flex-1 border border-border text-foreground font-semibold py-3 rounded-lg hover:border-primary transition-all">← Back</button>
-                  <button disabled={form.specialties.length === 0 || form.bio.length < 50}
-                    onClick={() => setStep(3)}
-                    className="flex-1 bg-primary text-black font-bold py-3 rounded-lg hover:bg-white hover:text-black transition-all disabled:opacity-40 disabled:cursor-not-allowed">
-                    Continue →
-                  </button>
-                </div>
-              </div>
-            )}
+            </div>
 
-            {/* STEP 3 */}
-            {step === 3 && (
-              <div className="space-y-6">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-lg font-bold text-foreground">Profile Photo</h2>
-                  <span className="text-xs text-muted">Step 3 of 4</span>
+            {/* ─────────────────────────────────────────────────────────────
+                RIGHT COLUMN: CLEAN WHITE QUICK-JOIN CARD
+               ───────────────────────────────────────────────────────────── */}
+            <div className="lg:col-span-7">
+              <div className="bg-white dark:bg-[#121215] border border-slate-200/90 dark:border-slate-800 rounded-3xl shadow-xl shadow-slate-200/40 dark:shadow-none p-8 sm:p-10 transition-all">
+                
+                <div className="mb-8">
+                  <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+                    Join as a Local Expert
+                  </h2>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 mt-1.5">
+                    Fast initial sign-up. Complete remaining details & photos from your dashboard.
+                  </p>
                 </div>
 
-                {uploadError && (
-                  <div className="px-4 py-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">
-                    {uploadError}
+                {error && (
+                  <div className="mb-6 p-4 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/60 text-red-700 dark:text-red-300 text-sm font-medium animate-in fade-in">
+                    {error}
                   </div>
                 )}
 
-                {/* Upload Area */}
-                <div className="space-y-4">
-                  <label className="text-sm font-medium text-foreground block">Upload Profile Picture</label>
+                <form onSubmit={handleQuickJoin} className="space-y-5">
                   
-                  <div className="flex flex-col items-center justify-center border-2 border-dashed border-border rounded-xl p-6 hover:border-primary/50 transition-colors relative bg-background/50 group cursor-pointer">
+                  {/* Full Name */}
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
+                      Full Name *
+                    </label>
                     <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileUpload}
-                      disabled={uploading}
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10 disabled:cursor-not-allowed"
+                      type="text"
+                      required
+                      placeholder="e.g. Bishnu KC"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#18181C] text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] text-sm transition-all"
                     />
-                    
-                    {uploading ? (
-                      <div className="flex flex-col items-center py-4">
-                        <Loader2 className="w-8 h-8 text-primary animate-spin mb-2" />
-                        <span className="text-sm text-muted">Uploading image...</span>
-                      </div>
-                    ) : form.photoUrl ? (
-                      <div className="flex flex-col items-center">
-                        <img
-                          src={form.photoUrl}
-                          alt="Profile preview"
-                          className="w-24 h-24 rounded-full object-cover border-2 border-primary mb-3 shadow-md"
-                        />
-                        <span className="text-xs text-primary font-bold bg-primary/10 px-2.5 py-1 rounded-full border border-primary/20">
-                          ✓ Uploaded Successfully
-                        </span>
-                        <span className="text-[11px] text-muted mt-2 group-hover:text-foreground transition-colors">
-                          Click or drag to replace photo
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col items-center py-4 text-center">
-                        <Upload className="w-8 h-8 text-muted group-hover:text-primary transition-colors mb-3" />
-                        <span className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
-                          Choose image file
-                        </span>
-                        <span className="text-xs text-muted mt-1">
-                          PNG, JPG or WEBP (Max 5MB)
-                        </span>
-                      </div>
-                    )}
                   </div>
-                </div>
 
-                {/* Divider */}
-                <div className="relative flex py-2 items-center">
-                  <div className="flex-grow border-t border-border/55"></div>
-                  <span className="flex-shrink mx-4 text-xs font-bold text-muted uppercase">Or Paste Link</span>
-                  <div className="flex-grow border-t border-border/55"></div>
-                </div>
-
-                {/* Direct Link Input */}
-                <div>
-                  <div className="flex items-center gap-1.5 mb-2">
-                    <Link2 className="w-3.5 h-3.5 text-muted" />
-                    <label className="text-sm font-medium text-foreground">External Photo URL</label>
-                  </div>
-                  <input
-                    type="url"
-                    value={form.photoUrl}
-                    onChange={e => {
-                      setForm(p => ({ ...p, photoUrl: e.target.value }))
-                      setUploadError("")
-                    }}
-                    placeholder="https://example.com/your-photo.jpg"
-                    className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-muted"
-                  />
-                </div>
-
-                <p className="text-[11px] text-muted text-center leading-relaxed">Don&apos;t have a photo? You can skip this step and add one later.</p>
-
-                <div className="flex gap-3 pt-2">
-                  <button
-                    onClick={() => {
-                      setStep(2)
-                      setUploadError("")
-                    }}
-                    className="flex-1 border border-border text-foreground font-semibold py-3 rounded-lg hover:border-primary transition-all"
-                  >
-                    ← Back
-                  </button>
-                  <button
-                    onClick={() => setStep(4)}
-                    disabled={uploading}
-                    className="flex-1 bg-primary text-black font-bold py-3 rounded-lg hover:bg-white hover:text-black transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-                  >
-                    Continue →
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* STEP 4 — Review */}
-            {step === 4 && (
-              <div className="space-y-6">
-                <h2 className="text-lg font-bold text-foreground mb-4">Review & Submit</h2>
-                <div className="space-y-3 text-sm">
-                  {[
-                    { label: "Name", value: form.name },
-                    { label: "Email", value: form.email },
-                    { label: "Location", value: form.location },
-                    { label: "Website", value: form.website || "None provided" },
-                    { label: "Specialties", value: form.specialties.map(s => `#${s}`).join("  ") || "None selected" },
-                  ].map(({ label, value }) => (
-                    <div key={label} className="flex gap-3 border-b border-border/50 pb-3">
-                      <span className="text-muted w-24 flex-shrink-0">{label}</span>
-                      <span className="text-foreground font-medium">{value}</span>
+                  {/* Email & Phone Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
+                        Email Address *
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        placeholder="you@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#18181C] text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] text-sm transition-all"
+                      />
                     </div>
-                  ))}
-                  <div className="border-b border-border/50 pb-3">
-                    <span className="text-muted block mb-1">Bio</span>
-                    <p className="text-foreground text-xs leading-relaxed">{form.bio}</p>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
+                        WhatsApp / Mobile (Optional)
+                      </label>
+                      <input
+                        type="tel"
+                        placeholder="+977 98..."
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#18181C] text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] text-sm transition-all"
+                      />
+                    </div>
                   </div>
-                </div>
-                <p className="text-xs text-muted bg-primary/5 border border-primary/20 rounded-lg px-4 py-3">
-                  ✓ Your profile will be reviewed by our team before appearing publicly. You&apos;ll receive a confirmation email.
-                </p>
-                <div className="flex gap-3">
-                  <button onClick={() => setStep(3)} className="flex-1 border border-border text-foreground font-semibold py-3 rounded-lg hover:border-primary transition-all">← Back</button>
-                  <button onClick={handleSubmit} disabled={loading}
-                    className="flex-1 bg-primary text-black font-bold py-3 rounded-lg hover:bg-white hover:text-black transition-all disabled:opacity-50">
-                    {loading ? "Submitting..." : "Submit for Verification ✓"}
-                  </button>
-                </div>
-              </div>
-            )}
 
-            {/* STEP 5 — Success */}
-            {step === 5 && (
-              <div className="text-center py-6">
-                <div className="mb-6 flex justify-center">
-                  <TrekkingGuideIcon size={56} />
-                </div>
-                <h2 className="text-2xl font-black text-foreground mb-3">Application Submitted!</h2>
-                <p className="text-muted mb-8 max-w-sm mx-auto">
-                  Thank you, <strong>{form.name}</strong>! Your guide profile has been submitted for verification. Our team will review it within 2–3 days.
-                </p>
-                <Link href="/local-guides" className="inline-block bg-primary text-black font-bold px-8 py-3 rounded-full hover:bg-white hover:text-black transition-all">
-                  Browse Guides →
-                </Link>
+                  {/* Password */}
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
+                      Password (min. 6 characters) *
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        required
+                        placeholder="Create a secure password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full px-4 py-3 pr-11 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#18181C] text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] text-sm transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                        aria-label={showPassword ? "Hide password" : "Show password"}
+                      >
+                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Location & Specialty Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
+                        Base Location / City *
+                      </label>
+                      <select
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#18181C] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] text-sm transition-all"
+                      >
+                        {LOCATIONS.map((loc) => (
+                          <option key={loc} value={loc}>
+                            {loc}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
+                        Primary Specialty *
+                      </label>
+                      <select
+                        value={primarySpecialty}
+                        onChange={(e) => setPrimarySpecialty(e.target.value)}
+                        className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#18181C] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] text-sm transition-all"
+                      >
+                        {PRIMARY_SPECIALTIES.map((spec) => (
+                          <option key={spec} value={spec}>
+                            {spec}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Terms acceptance note */}
+                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed pt-1">
+                    By signing up, you agree to our{" "}
+                    <Link href="/terms" className="underline hover:text-slate-800 dark:hover:text-slate-200">
+                      Terms of Service
+                    </Link>{" "}
+                    and{" "}
+                    <Link href="/privacy" className="underline hover:text-slate-800 dark:hover:text-slate-200">
+                      Privacy Policy
+                    </Link>
+                    . You can customize all your profile photos, bios, and licenses in your dashboard.
+                  </p>
+
+                  {/* Submit Button */}
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full flex items-center justify-center gap-2 bg-[#023629] hover:bg-[#023629]/90 dark:bg-[#FB923C] dark:hover:bg-[#FB923C]/90 text-white dark:text-slate-950 font-bold py-3.5 px-6 rounded-xl transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <span>Creating Account & Opening Dashboard...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Create Account & Open Dashboard</span>
+                        <ArrowRight size={16} />
+                      </>
+                    )}
+                  </button>
+
+                  {/* Sign In Alternative */}
+                  <div className="pt-4 text-center border-t border-slate-100 dark:border-slate-800">
+                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                      Already registered as a guide?{" "}
+                      <Link
+                        href="/auth/signin?callbackUrl=/local-guides/dashboard"
+                        className="font-bold text-[#023629] dark:text-[#FB923C] hover:underline"
+                      >
+                        Sign in to Dashboard →
+                      </Link>
+                    </p>
+                  </div>
+
+                </form>
+
               </div>
-            )}
+            </div>
+
           </div>
+
         </div>
       </main>
       <Footer />

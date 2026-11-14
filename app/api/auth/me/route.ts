@@ -57,9 +57,14 @@ export async function GET(req: NextRequest) {
     const isOwner = ownedHubs.length > 0
     const pendingOwnerBookings = ownedHubs.reduce((acc, h) => acc + (h.bookings ? h.bookings.length : 0), 0)
 
-    // 3. Check Guide profile by contactEmail
+    // 3. Check Guide profile by contactEmail or userId
     const guideProfile = await prisma.guide.findFirst({
-      where: { contactEmail: email }
+      where: {
+        OR: [
+          { contactEmail: email },
+          ...(user ? [{ userId: user.id }] : [])
+        ]
+      }
     })
 
     const isGuide = !!guideProfile

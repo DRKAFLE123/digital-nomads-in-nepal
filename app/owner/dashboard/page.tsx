@@ -85,6 +85,29 @@ function OwnerDashboardContent() {
   const [dismissChecklist, setDismissChecklist] = useState(false)
   const [successMessage, setSuccessMessage] = useState("")
 
+  // Email verification resend state
+  const [resendingEmail, setResendingEmail] = useState(false)
+  const [resendStatus, setResendStatus] = useState<string | null>(null)
+
+  const handleResendVerification = async () => {
+    if (!session?.user?.email) return
+    setResendingEmail(true)
+    setResendStatus(null)
+    try {
+      const res = await fetch("/api/auth/resend-verification", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: session.user.email }),
+      })
+      const data = await res.json()
+      setResendStatus(data.message || "Fresh verification link sent!")
+    } catch {
+      setResendStatus("Failed to send verification link.")
+    } finally {
+      setResendingEmail(false)
+    }
+  }
+
   // Editing Space Listing State
   const [editingHubId, setEditingHubId] = useState<string | null>(null)
   const [editPriceDaily, setEditPriceDaily] = useState<number>(10)
@@ -395,6 +418,25 @@ function OwnerDashboardContent() {
           </div>
         </div>
       </header>
+
+      {/* Email Verification Banner */}
+      {session?.user && !(session.user as any)?.emailVerified && (
+        <div className="bg-amber-50 dark:bg-amber-950/40 border-b border-amber-200 dark:border-amber-900/60 px-4 py-2.5 text-xs text-amber-900 dark:text-amber-200 flex items-center justify-between">
+          <div className="flex items-center gap-2 max-w-4xl mx-auto w-full">
+            <span className="text-amber-600">⚠️</span>
+            <p className="font-medium">
+              Please verify your email address (<strong>{session?.user?.email}</strong>) to activate direct guest bookings.
+            </p>
+            <button
+              onClick={handleResendVerification}
+              disabled={resendingEmail}
+              className="ml-auto underline font-bold hover:text-amber-950 dark:hover:text-amber-100 flex-shrink-0 disabled:opacity-50"
+            >
+              {resendingEmail ? "Sending link..." : resendStatus || "Resend Email Link"}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* ─────────────────────────────────────────────────────────────
           2. AIRBNB-STYLE ACTION CHECKLIST CARD (Top Center)

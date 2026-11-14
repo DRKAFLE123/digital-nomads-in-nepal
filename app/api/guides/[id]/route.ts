@@ -35,7 +35,25 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     const body = await req.json()
-    const { name, bio, location, specialties, photoUrl, contactEmail, website } = body
+    const { 
+      name, 
+      tagline,
+      bio, 
+      location, 
+      specialties, 
+      photoUrl, 
+      contactEmail, 
+      phone,
+      whatsapp,
+      website,
+      languages,
+      experienceYears,
+      licensedSince,
+      licenseNumber,
+      certifications,
+      guidingAreas,
+      profileStatus
+    } = body
 
     const existing = await prisma.guide.findUnique({ where: { id: params.id } })
     if (!existing) {
@@ -46,12 +64,22 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       where: { id: params.id },
       data: {
         ...(name ? { name } : {}),
+        ...(tagline !== undefined ? { tagline } : {}),
         ...(bio ? { bio } : {}),
         ...(location ? { location } : {}),
-        ...(specialties ? { specialties } : {}),
+        ...(specialties !== undefined ? { specialties } : {}),
         ...(photoUrl !== undefined ? { photoUrl } : {}),
         ...(contactEmail ? { contactEmail } : {}),
-        ...(website !== undefined ? { website: website || null } : {})
+        ...(phone !== undefined ? { phone } : {}),
+        ...(whatsapp !== undefined ? { whatsapp } : {}),
+        ...(website !== undefined ? { website: website || null } : {}),
+        ...(languages !== undefined ? { languages } : {}),
+        ...(experienceYears !== undefined ? { experienceYears: Number(experienceYears) || 0 } : {}),
+        ...(licensedSince !== undefined ? { licensedSince: licensedSince ? Number(licensedSince) : null } : {}),
+        ...(licenseNumber !== undefined ? { licenseNumber } : {}),
+        ...(certifications !== undefined ? { certifications } : {}),
+        ...(guidingAreas !== undefined ? { guidingAreas } : {}),
+        ...(profileStatus !== undefined ? { profileStatus } : {}),
       }
     })
 

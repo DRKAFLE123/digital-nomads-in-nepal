@@ -50,29 +50,46 @@ enum Role {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String
-  password  String
-  role      Role     @default(NOMAD)
-  createdAt DateTime @default(now())
-  reviews   Review[]
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String
+  password      String
+  role          Role      @default(NOMAD)
+  emailVerified DateTime?
+  verifyToken   String?   @unique
+  verifyExpires DateTime?
+  createdAt     DateTime  @default(now())
+  reviews       Review[]
+  guide         Guide?
 }
 
 model Guide {
-  id           String   @id @default(cuid())
-  name         String
-  bio          String
-  location     String
-  specialties  Json
-  photoUrl     String?
-  contactEmail String
-  website      String?
-  isVerified   Boolean  @default(false)
-  avgRating    Float    @default(0)
-  totalReviews Int      @default(0)
-  createdAt    DateTime @default(now())
-  reviews      Review[]
+  id              String    @id @default(cuid())
+  userId          String?   @unique
+  user            User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name            String
+  tagline         String?
+  bio             String    @db.Text
+  location        String
+  specialties     Json
+  photoUrl        String?
+  contactEmail    String
+  phone           String?
+  whatsapp        String?
+  website         String?
+  languages       Json?
+  experienceYears Int?      @default(3)
+  licensedSince   Int?
+  licenseNumber   String?
+  certifications  Json?
+  guidingAreas    Json?
+  isVerified      Boolean   @default(false)
+  profileStatus   String    @default("DRAFT")
+  avgRating       Float     @default(0)
+  totalReviews    Int       @default(0)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @default(now()) @updatedAt
+  reviews         Review[]
 }
 
 model Review {
