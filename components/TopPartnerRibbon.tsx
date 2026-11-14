@@ -2,13 +2,26 @@
 
 import React from "react"
 import Link from "next/link"
-import { Building2, Compass } from "lucide-react"
+import { Building2, Compass, LayoutDashboard } from "lucide-react"
 
 interface TopPartnerRibbonProps {
   isScrolled?: boolean
+  roleInfo?: {
+    isOwner: boolean
+    isGuide: boolean
+    pendingOwnerBookings?: number
+    pendingGuideInquiries?: number
+  }
 }
 
-export default function TopPartnerRibbon({ isScrolled = false }: TopPartnerRibbonProps) {
+export default function TopPartnerRibbon({ 
+  isScrolled = false, 
+  roleInfo = { isOwner: false, isGuide: false } 
+}: TopPartnerRibbonProps) {
+  const isHost = Boolean(roleInfo?.isOwner)
+  const isGuide = Boolean(roleInfo?.isGuide)
+  const isPartner = isHost || isGuide
+
   return (
     <div
       className={`w-full bg-[#17251E] dark:bg-[#111A15] border-b border-[#23382D] text-[#F5F5F0] backdrop-blur-sm z-50 transition-all duration-300 ${
@@ -25,32 +38,57 @@ export default function TopPartnerRibbon({ isScrolled = false }: TopPartnerRibbo
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
           </span>
           <span className="hidden md:inline font-medium text-[#F5F5F0] truncate">
-            Host a workspace, coliving stay, or guide nomads in Nepal?
+            {isPartner
+              ? "Welcome back! Manage your live listings, bookings & client inquiries →"
+              : "Host a workspace, coliving stay, or guide nomads in Nepal?"}
           </span>
           <span className="md:hidden font-semibold text-[#F5F5F0] truncate">
-            Hosts &amp; Guides:
+            {isPartner ? "Partner Console:" : "Hosts & Guides:"}
           </span>
         </div>
 
         {/* Right: Partner Actions */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          
+          {/* Workspace / Host Link */}
           <Link
-            href="/register/space"
+            href={isHost ? "/owner/dashboard" : "/register/space"}
             className="inline-flex items-center gap-1.5 font-semibold text-[#F5F5F0] hover:text-white transition-colors py-0.5 px-1.5 sm:px-2 rounded-md hover:bg-white/10 active:scale-95 text-[10.5px] sm:text-xs"
           >
-            <Building2 className="w-3.5 h-3.5 text-[#C58B55]" />
-            <span>List Space</span>
-            <span className="hidden lg:inline text-[10px] text-white/60 font-normal">(Stay / Work)</span>
+            {isHost ? (
+              <LayoutDashboard className="w-3.5 h-3.5 text-[#C58B55]" />
+            ) : (
+              <Building2 className="w-3.5 h-3.5 text-[#C58B55]" />
+            )}
+            <span>{isHost ? "Host Console" : "List Space"}</span>
+            {!isHost && (
+              <span className="hidden lg:inline text-[10px] text-white/60 font-normal">(Stay / Work)</span>
+            )}
+            {isHost && Boolean(roleInfo?.pendingOwnerBookings) && (
+              <span className="ml-1 px-1.5 py-0.2 rounded-full bg-emerald-500 text-white text-[9px] font-bold">
+                {roleInfo.pendingOwnerBookings}
+              </span>
+            )}
           </Link>
 
           <span className="text-white/30 select-none">•</span>
 
+          {/* Guide Link */}
           <Link
-            href="/local-guides/register"
+            href={isGuide ? "/local-guides/dashboard" : "/local-guides/register"}
             className="inline-flex items-center gap-1.5 font-semibold text-[#D6A06A] hover:text-[#E5B483] transition-colors py-0.5 px-1.5 sm:px-2 rounded-md hover:bg-white/10 active:scale-95 text-[10.5px] sm:text-xs"
           >
-            <Compass className="w-3.5 h-3.5 text-[#D6A06A]" />
-            <span>Join as Guide</span>
+            {isGuide ? (
+              <LayoutDashboard className="w-3.5 h-3.5 text-[#D6A06A]" />
+            ) : (
+              <Compass className="w-3.5 h-3.5 text-[#D6A06A]" />
+            )}
+            <span>{isGuide ? "Guide Dashboard" : "Join as Guide"}</span>
+            {isGuide && Boolean(roleInfo?.pendingGuideInquiries) && (
+              <span className="ml-1 px-1.5 py-0.2 rounded-full bg-amber-500 text-slate-950 text-[9px] font-bold">
+                {roleInfo.pendingGuideInquiries}
+              </span>
+            )}
           </Link>
         </div>
 

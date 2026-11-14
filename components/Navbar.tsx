@@ -366,7 +366,7 @@ export default function Navbar() {
 
   return (
     <header className="fixed top-0 w-full z-50">
-      <TopPartnerRibbon isScrolled={isScrolled} />
+      <TopPartnerRibbon isScrolled={isScrolled} roleInfo={roleInfo} />
       <nav
         ref={navRef}
         suppressHydrationWarning
@@ -1065,12 +1065,12 @@ export default function Navbar() {
                     <span>{roleInfo.isOwner ? "Host Console" : "List Space"}</span>
                   </Link>
                   <Link
-                    href="/local-guides/register"
+                    href={roleInfo.isGuide ? "/local-guides/dashboard" : "/local-guides/register"}
                     onClick={() => setMobileMenuOpen(false)}
                     className="flex items-center justify-center gap-1.5 bg-black/40 dark:bg-white/10 text-foreground border border-border/80 font-bold text-xs py-2 px-2 rounded-xl text-center active:scale-95 transition-all"
                   >
                     <Compass size={13} className="text-[#FB923C]" />
-                    <span>Join as Guide</span>
+                    <span>{roleInfo.isGuide ? "Guide Dashboard" : "Join as Guide"}</span>
                   </Link>
                 </div>
               </div>
