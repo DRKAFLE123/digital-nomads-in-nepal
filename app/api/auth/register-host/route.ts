@@ -7,7 +7,21 @@ import { sendVerificationEmail, sendAdminNotificationEmail } from "@/lib/email"
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const { ownerName, email, password, spaceName, city, spaceType, phone } = body
+    const { 
+      ownerName, 
+      email, 
+      password, 
+      spaceName, 
+      city, 
+      spaceType, 
+      phone,
+      address,
+      description,
+      facilities,
+      priceDaily,
+      priceMonthly,
+      openingHours
+    } = body
 
     if (!ownerName || !email || !password || !spaceName || !city) {
       return NextResponse.json(
@@ -72,28 +86,35 @@ export async function POST(req: Request) {
         },
       })
 
+      const hubFacilities = Array.isArray(facilities) && facilities.length > 0 
+        ? facilities 
+        : [
+            "High-Speed Fiber (100+ Mbps)",
+            "Backup Power Generator (24/7)",
+            "Ergonomic Workstations",
+            "24/7 Access",
+          ]
+
+      const finalDescription = description?.trim() || `${spaceName.trim()} is a dedicated ${defaultType.toLowerCase()} located in ${city.trim()}, Nepal, welcoming digital nomads, remote workers, and traveling creatives.`
+
       const hub = await tx.workHub.create({
         data: {
           name: spaceName.trim(),
           slug,
           city: city.trim(),
-          address: `${city.trim()}, Nepal`,
-          description: `${spaceName.trim()} is a dedicated ${defaultType.toLowerCase()} located in ${city.trim()}, Nepal, welcoming digital nomads, remote workers, and traveling creatives.`,
+          address: address?.trim() || `${city.trim()}, Nepal`,
+          description: phone ? `${finalDescription}\n\nDirect WhatsApp / Phone: ${phone.trim()}` : finalDescription,
           contactEmail: normalizedEmail,
           ownerEmail: normalizedEmail,
           ownerName: ownerName.trim(),
           spaceType: defaultType,
-          facilities: [
-            "High-Speed Fiber (100+ Mbps)",
-            "Backup Power Generator (24/7)",
-            "Ergonomic Workstations",
-            "24/7 Access",
-          ],
+          facilities: hubFacilities,
           isVerified: false,
           isPartner: false,
           published: true,
-          priceDaily: 5,
-          priceMonthly: 85,
+          priceDaily: priceDaily ? parseFloat(priceDaily) : 5,
+          priceMonthly: priceMonthly ? parseFloat(priceMonthly) : 85,
+          openingHours: openingHours || "24/7 Access",
         },
       })
 

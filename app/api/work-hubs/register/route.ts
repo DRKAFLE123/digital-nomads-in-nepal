@@ -33,8 +33,14 @@ export async function POST(req: NextRequest) {
       openingHours
     } = body
 
-    if (!name || !city || !description || !address || !contactEmail) {
-      return NextResponse.json({ error: "Missing required fields." }, { status: 400 })
+    const finalContactEmail = contactEmail || session.user?.email || ownerEmail
+    const finalAddress = (address && address.trim()) ? address.trim() : `${city ? city.trim() : "Kathmandu"}, Nepal`
+    const finalDescription = (description && description.trim()) 
+      ? description.trim() 
+      : `${name ? name.trim() : "Workspace"} is a verified ${spaceType || "space"} located in ${city || "Nepal"}, welcoming remote workers and digital nomads.`
+
+    if (!name || !city || !finalContactEmail) {
+      return NextResponse.json({ error: "Missing required fields: Property Name, City and Contact Email." }, { status: 400 })
     }
 
     // Generate unique slug
@@ -58,9 +64,9 @@ export async function POST(req: NextRequest) {
         name,
         slug,
         city,
-        description,
-        address,
-        contactEmail,
+        description: finalDescription,
+        address: finalAddress,
+        contactEmail: finalContactEmail,
         website: website || null,
         photoUrl: photoUrl || null,
         ownerEmail: finalOwnerEmail,
