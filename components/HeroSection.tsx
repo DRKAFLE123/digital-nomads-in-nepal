@@ -133,15 +133,15 @@ export default function HeroSection() {
   const ActiveCatIcon = activeCatObj.icon
 
   return (
-    <section className="relative w-full pt-28 pb-16 sm:pt-36 sm:pb-24 overflow-hidden bg-[#FAF7F2] dark:bg-[#0B0B0D] transition-colors border-b border-[#E8E2D8]/70 dark:border-[#1F1F24]">
+    <section className="relative w-full pt-28 pb-16 sm:pt-36 sm:pb-24 overflow-hidden bg-white dark:bg-[#0B0B0D] transition-colors border-b border-slate-100 dark:border-[#1F1F24]">
       {/* Subtle Himalayan Topographic Vector Canvas Background */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
         {/* Soft Ambient Radial Glows */}
-        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[720px] h-[450px] bg-gradient-to-b from-[#023629]/8 dark:from-[#023629]/25 via-[#C2410C]/5 dark:via-[#C2410C]/15 to-transparent rounded-full blur-3xl opacity-75" />
+        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[720px] h-[450px] bg-gradient-to-b from-[#023629]/5 dark:from-[#023629]/25 via-[#C2410C]/4 dark:via-[#C2410C]/15 to-transparent rounded-full blur-3xl opacity-75" />
 
         {/* Crisp Topographic Vector Contour Lines (Subtle & Non-distracting) */}
         <svg
-          className="absolute inset-0 w-full h-full stroke-gray-900/[0.03] dark:stroke-white/[0.03] fill-none"
+          className="absolute inset-0 w-full h-full stroke-gray-900/[0.035] dark:stroke-white/[0.03] fill-none"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1440 600"
           preserveAspectRatio="none"
@@ -175,10 +175,10 @@ export default function HeroSection() {
           Connect directly with verified 100+ Mbps fiber workspaces, boutique coliving hubs, mountain hostels, and licensed local guides in Kathmandu, Pokhara &amp; the Himalayas.
         </p>
 
-        {/* Elevated Segmented Search Bar - Symmetrically Centered */}
+        {/* Elevated Segmented Search Bar - Symmetrically Centered on Pure White Canvas */}
         <form
           onSubmit={handleSearch}
-          className="w-full max-w-4xl mx-auto bg-white dark:bg-[#141416] border border-[#E2DDD5] dark:border-[#27272A] rounded-2xl sm:rounded-full p-2 sm:p-2.5 shadow-[0_12px_36px_-8px_rgba(2,54,41,0.08)] dark:shadow-[0_12px_36px_-8px_rgba(0,0,0,0.6)] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 text-left"
+          className="w-full max-w-4xl mx-auto bg-white dark:bg-[#141416] border border-slate-200/90 dark:border-[#27272A] rounded-2xl sm:rounded-full p-2 sm:p-2.5 shadow-[0_14px_40px_-10px_rgba(0,0,0,0.08)] dark:shadow-[0_14px_40px_-10px_rgba(0,0,0,0.6)] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 text-left"
         >
           {/* Segment 1: WHERE Custom Dropdown */}
           <div ref={whereRef} className="relative flex-1">
@@ -191,7 +191,7 @@ export default function HeroSection() {
               className="w-full text-left px-3.5 sm:px-4 py-2 sm:py-2 rounded-xl sm:rounded-full hover:bg-slate-50 dark:hover:bg-[#1E1E23] transition-colors flex items-center justify-between group cursor-pointer"
             >
               <div className="flex items-center gap-3 min-w-0 pr-2">
-                <div className="w-9 h-9 rounded-full bg-[#FAF7F2] dark:bg-[#1E1E23] border border-[#E8E2D8] dark:border-[#2E2E34] flex items-center justify-center shrink-0 group-hover:border-[#C2410C]/40 transition-colors">
+                <div className="w-9 h-9 rounded-full bg-slate-50 dark:bg-[#1E1E23] border border-slate-200/80 dark:border-[#2E2E34] flex items-center justify-center shrink-0 group-hover:border-[#C2410C]/40 transition-colors">
                   <MapPin size={16} className="text-[#C2410C] dark:text-[#FB923C]" />
                 </div>
                 <div className="min-w-0">
@@ -211,13 +211,13 @@ export default function HeroSection() {
               />
             </button>
 
-            {/* Custom Popover */}
+            {/* Custom Popover with Discreet Thin Scrollbar */}
             {whereOpen && (
-              <div className="absolute top-full left-0 right-0 sm:left-0 sm:right-auto sm:w-80 mt-2 bg-white dark:bg-[#141416] border border-[#E2DDD5] dark:border-[#27272A] rounded-2xl shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute top-full left-0 right-0 sm:left-0 sm:right-auto sm:w-80 mt-2 bg-white dark:bg-[#141416] border border-slate-200 dark:border-[#27272A] rounded-2xl shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
                 <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-3 py-1.5">
                   Select Hub / Destination
                 </div>
-                <div className="max-h-64 overflow-y-auto space-y-0.5">
+                <div className="max-h-64 overflow-y-auto space-y-0.5 pr-1 [scrollbar-width:thin] [scrollbar-color:#CBD5E1_transparent] dark:[scrollbar-color:#334155_transparent]">
                   {LOCATIONS.map((loc) => {
                     const isSelected = loc.value === selectedCity
                     return (
@@ -231,7 +231,7 @@ export default function HeroSection() {
                         className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors ${
                           isSelected
                             ? "bg-[#C2410C]/10 text-[#C2410C] dark:text-[#FB923C]"
-                            : "text-slate-700 dark:text-slate-200 hover:bg-[#FAF7F2] dark:hover:bg-[#1F1F24]"
+                            : "text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-[#1F1F24]"
                         }`}
                       >
                         <div className="min-w-0 pr-2">
@@ -261,7 +261,7 @@ export default function HeroSection() {
               className="w-full text-left px-3.5 sm:px-4 py-2 sm:py-2 rounded-xl sm:rounded-full hover:bg-slate-50 dark:hover:bg-[#1E1E23] transition-colors flex items-center justify-between group cursor-pointer"
             >
               <div className="flex items-center gap-3 min-w-0 pr-2">
-                <div className="w-9 h-9 rounded-full bg-[#FAF7F2] dark:bg-[#1E1E23] border border-[#E8E2D8] dark:border-[#2E2E34] flex items-center justify-center shrink-0 group-hover:border-[#023629]/40 transition-colors">
+                <div className="w-9 h-9 rounded-full bg-slate-50 dark:bg-[#1E1E23] border border-slate-200/80 dark:border-[#2E2E34] flex items-center justify-center shrink-0 group-hover:border-[#023629]/40 transition-colors">
                   <ActiveCatIcon size={16} className="text-[#023629] dark:text-[#34D399]" />
                 </div>
                 <div className="min-w-0">
@@ -281,9 +281,9 @@ export default function HeroSection() {
               />
             </button>
 
-            {/* Custom Popover */}
+            {/* Custom Popover with Discreet Thin Scrollbar */}
             {whatOpen && (
-              <div className="absolute top-full left-0 right-0 sm:left-0 sm:right-auto sm:w-80 mt-2 bg-white dark:bg-[#141416] border border-[#E2DDD5] dark:border-[#27272A] rounded-2xl shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute top-full left-0 right-0 sm:left-0 sm:right-auto sm:w-80 mt-2 bg-white dark:bg-[#141416] border border-slate-200 dark:border-[#27272A] rounded-2xl shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
                 <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-3 py-1.5">
                   Select Category
                 </div>
@@ -302,7 +302,7 @@ export default function HeroSection() {
                         className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors ${
                           isSelected
                             ? "bg-[#C2410C]/10 text-[#C2410C] dark:text-[#FB923C]"
-                            : "text-slate-700 dark:text-slate-200 hover:bg-[#FAF7F2] dark:hover:bg-[#1F1F24]"
+                            : "text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-[#1F1F24]"
                         }`}
                       >
                         <div className="flex items-center gap-2.5 min-w-0 pr-2">
@@ -332,7 +332,7 @@ export default function HeroSection() {
           </button>
         </form>
 
-        {/* Quick Category Filter Cards - Symmetrically Centered with Crisp Cards & High Contrast */}
+        {/* Quick Category Filter Cards - High Contrast on Pure White Canvas */}
         <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-6 w-full max-w-4xl">
           {QUICK_FILTERS.map((filter) => {
             const Icon = filter.icon
@@ -340,7 +340,7 @@ export default function HeroSection() {
               <Link
                 key={filter.label}
                 href={filter.href}
-                className="inline-flex items-center gap-2 px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-xl sm:rounded-full text-xs sm:text-[13px] font-semibold bg-white dark:bg-[#141416] border border-[#E2DDD5] dark:border-[#27272A] text-slate-800 dark:text-slate-200 hover:border-[#C2410C] hover:text-[#C2410C] dark:hover:border-[#FB923C] dark:hover:text-[#FB923C] hover:shadow-sm hover:-translate-y-0.5 transition-all shadow-xs"
+                className="inline-flex items-center gap-2 px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-xl sm:rounded-full text-xs sm:text-[13px] font-semibold bg-slate-50/90 hover:bg-white dark:bg-[#141416] dark:hover:bg-[#1F1F24] border border-slate-200/90 dark:border-[#27272A] text-slate-800 dark:text-slate-200 hover:border-[#C2410C] hover:text-[#C2410C] dark:hover:border-[#FB923C] dark:hover:text-[#FB923C] hover:shadow-sm hover:-translate-y-0.5 transition-all shadow-xs"
               >
                 <Icon size={14} className={filter.iconColor} />
                 <span>{filter.label}</span>
@@ -350,7 +350,7 @@ export default function HeroSection() {
         </div>
 
         {/* Social Proof & Trust Strip (Inspired by Bidmytrip.ai) */}
-        <div className="mt-8 sm:mt-10 pt-6 border-t border-slate-200/90 dark:border-[#222226] flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 w-full max-w-3xl">
+        <div className="mt-8 sm:mt-10 pt-6 border-t border-slate-100 dark:border-[#222226] flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 w-full max-w-3xl">
           {/* Nomad Avatars Stack */}
           <div className="flex items-center gap-3">
             <div className="flex -space-x-2 overflow-hidden">
