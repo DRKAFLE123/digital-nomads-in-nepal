@@ -10,7 +10,6 @@ import Footer from "@/components/Footer"
 import { 
   Building2, 
   MapPin, 
-  ShieldCheck, 
   Sparkles, 
   Eye, 
   EyeOff, 
@@ -20,160 +19,19 @@ import {
   ArrowLeft,
   Wifi,
   Zap,
-  BedDouble,
-  Laptop,
   Coffee,
-  Briefcase,
+  Utensils,
+  Laptop,
   Users,
   Mountain,
-  Home,
-  HeartHandshake,
   Phone,
-  DollarSign,
-  Utensils,
   CheckCircle2,
   AlertCircle
 } from "lucide-react"
-
-export type MainCategory = "WORK_ONLY" | "WORK_AND_STAY" | "STAY_ONLY"
-
-interface SubCategoryOption {
-  id: string
-  name: string
-  nepali: string
-  tagline: string
-  icon: any
-}
-
-const CATEGORY_DEFINITIONS: Record<
-  MainCategory,
-  {
-    title: string
-    nepaliTitle: string
-    badge: string
-    subtitle: string
-    icon: any
-    subcategories: SubCategoryOption[]
-  }
-> = {
-  WORK_ONLY: {
-    title: "Work Only",
-    nepaliTitle: "काम मात्र",
-    badge: "Day Desks & Workspaces",
-    subtitle: "For dedicated coworking hubs, cafe lounges, hot desks, private offices and meeting rooms.",
-    icon: Laptop,
-    subcategories: [
-      {
-        id: "coworking_hotdesk",
-        name: "Coworking & Hot Desk Space",
-        nepali: "साझा कोवर्किङ र हट डेस्क",
-        tagline: "Flexible hot desks with 100+ Mbps fiber & backup power",
-        icon: Laptop
-      },
-      {
-        id: "hybrid_cafe",
-        name: "Hybrid Cafe & Work Lounge",
-        nepali: "वर्क-फ्रेन्डली क्याफे र लाउन्ज",
-        tagline: "Specialty coffee, quiet seating & work-friendly ambience",
-        icon: Coffee
-      },
-      {
-        id: "private_office",
-        name: "Private Dedicated Desk / Office",
-        nepali: "प्राइभेट अफिस र केबिन",
-        tagline: "Lockable private rooms or dedicated workstations for teams",
-        icon: Briefcase
-      },
-      {
-        id: "meeting_hub",
-        name: "Meeting & Event Work Hub",
-        nepali: "मिटिङ हल र सेमिनार स्पेस",
-        tagline: "Conference rooms, podcast gear & workshop event seating",
-        icon: Users
-      }
-    ]
-  },
-  WORK_AND_STAY: {
-    title: "Work and Stay",
-    nepaliTitle: "काम र बसाइ दुवै",
-    badge: "Most Popular for Nomads",
-    subtitle: "All-in-one coliving and workstation property. Rooms and verified high-speed workspaces under one roof.",
-    icon: Building2,
-    subcategories: [
-      {
-        id: "coliving_coworking",
-        name: "Coliving & Coworking Hub (Work + Stay)",
-        nepali: "कोलिभिङ र कोवर्किङ हब",
-        tagline: "Dedicated nomad community with private/shared rooms & work hall",
-        icon: Building2
-      },
-      {
-        id: "nomad_hostel",
-        name: "Digital Nomad Hostel & Coliving",
-        nepali: "डिजिटल नोम्याड होस्टेल",
-        tagline: "Budget-friendly social dorms/rooms with quiet fiber work room",
-        icon: Users
-      },
-      {
-        id: "work_hotel",
-        name: "Work-Friendly Hotel & Resort",
-        nepali: "वर्क-फ्रेन्डली होटल/रिसोर्ट",
-        tagline: "Hospitality rooms with in-room desk, fiber Wi-Fi & restaurant",
-        icon: BedDouble
-      },
-      {
-        id: "himalayan_workation",
-        name: "Himalayan Workation Retreat",
-        nepali: "हिमालयन वर्केसन रिट्रिट",
-        tagline: "Mountain-view peace, yoga, organic food & remote work setup",
-        icon: Mountain
-      }
-    ]
-  },
-  STAY_ONLY: {
-    title: "Stay Only",
-    nepaliTitle: "बसाइ मात्र",
-    badge: "Remote Living",
-    subtitle: "Apartments, homestays, and villas with reliable high-speed fiber for independent remote workers.",
-    icon: BedDouble,
-    subcategories: [
-      {
-        id: "nomad_villa",
-        name: "Long-Term Nomad Villa & Apartment",
-        nepali: "लामो अवधिको भिल्ला वा अपार्टमेन्ट",
-        tagline: "Self-contained apartments or villas for stays of 2 weeks to 6 months",
-        icon: Home
-      },
-      {
-        id: "boutique_homestay",
-        name: "Boutique Guesthouse & Homestay",
-        nepali: "होमस्टे र गेस्टहाउस",
-        tagline: "Authentic local family homestay with verified high-speed Wi-Fi",
-        icon: HeartHandshake
-      },
-      {
-        id: "serviced_studio",
-        name: "Serviced Studio for Remote Workers",
-        nepali: "स्टुडियो अपार्टमेन्ट",
-        tagline: "Compact private studio with kitchen, desk and weekly cleaning",
-        icon: BedDouble
-      }
-    ]
-  }
-}
-
-const POPULAR_CITIES = [
-  { name: "Pokhara", badge: "Nomad Capital" },
-  { name: "Kathmandu", badge: "Tech & Capital" },
-  { name: "Lalitpur", badge: "Jhamsikhel & Sanepa" },
-  { name: "Bhaktapur", badge: "Heritage & Peace" },
-  { name: "Bandipur", badge: "Hilltop Workation" },
-  { name: "Nagarkot", badge: "Sunrise & Forest" },
-  { name: "Chitwan", badge: "Sauraha & Terai" },
-  { name: "Lumbini", badge: "Peace & Culture" },
-  { name: "Mustang", badge: "Himalayan High" },
-  { name: "Other Region", badge: "Nepal" }
-]
+import { 
+  NEPAL_DISTRICT_DATA, 
+  PROPERTY_CATEGORY_OPTIONS 
+} from "@/lib/nepal-locations"
 
 const FACILITY_OPTIONS = [
   // Connectivity & Power
@@ -195,19 +53,22 @@ const FACILITY_OPTIONS = [
 
 export default function MultiStepRegisterSpacePage() {
   const router = useRouter()
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
   const isLoggedIn = !!session?.user
 
   // Multi-step Wizard: 1 | 2 | 3 | 4
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1)
 
-  // Step 1: Category & Subcategory
-  const [mainCategory, setMainCategory] = useState<MainCategory>("WORK_AND_STAY")
-  const [subCategory, setSubCategory] = useState<string>("Coliving & Coworking Hub (Work + Stay)")
-
-  // Step 2: Basic Info & Location
+  // Step 1: PROPERTY NAME FIRST & CATEGORY / SUB-TYPE DROPDOWNS
   const [spaceName, setSpaceName] = useState("")
-  const [city, setCity] = useState("Pokhara")
+  const [mainCategory, setMainCategory] = useState("Work and Stay")
+  const [subCategory, setSubCategory] = useState("Coliving & Coworking Hub (Work + Stay)")
+
+  // Step 2: DISTRICT & CITY DROPDOWNS + OTHER MENTION + ADDRESS
+  const [district, setDistrict] = useState("kaski")
+  const [customDistrict, setCustomDistrict] = useState("")
+  const [citySelect, setCitySelect] = useState("Pokhara (Lakeside)")
+  const [customCity, setCustomCity] = useState("")
   const [address, setAddress] = useState("")
   const [phone, setPhone] = useState("")
   const [website, setWebsite] = useState("")
@@ -236,6 +97,12 @@ export default function MultiStepRegisterSpacePage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
+  // Active Category Definition
+  const currentCategoryDef = PROPERTY_CATEGORY_OPTIONS.find(c => c.value === mainCategory) || PROPERTY_CATEGORY_OPTIONS[0]
+
+  // Active District Definition
+  const currentDistrictDef = NEPAL_DISTRICT_DATA.find(d => d.id === district) || NEPAL_DISTRICT_DATA[0]
+
   // Auto pre-fill if logged in
   useEffect(() => {
     if (session?.user) {
@@ -243,6 +110,14 @@ export default function MultiStepRegisterSpacePage() {
       if (session.user.email && !email) setEmail(session.user.email)
     }
   }, [session, ownerName, email])
+
+  // Determine Final Computed City
+  const getComputedCity = () => {
+    if (citySelect.toLowerCase().includes("other") || district === "other") {
+      return customCity.trim() || currentDistrictDef.name
+    }
+    return citySelect.split("(")[0].trim() || citySelect
+  }
 
   function toggleFacility(label: string) {
     setSelectedFacilities(prev => 
@@ -254,8 +129,12 @@ export default function MultiStepRegisterSpacePage() {
     setError("")
 
     if (currentStep === 1) {
-      if (!subCategory) {
-        setError("Please select a specific property subcategory.")
+      if (!spaceName.trim()) {
+        setError("Please enter your Property / Space Name.")
+        return
+      }
+      if (!mainCategory || !subCategory) {
+        setError("Please select both a Property Category and Specific Sub Type.")
         return
       }
       setCurrentStep(2)
@@ -263,16 +142,20 @@ export default function MultiStepRegisterSpacePage() {
     }
 
     if (currentStep === 2) {
-      if (!spaceName.trim()) {
-        setError("Please enter your Space or Property Name.")
+      if (district === "other" && !customDistrict.trim()) {
+        setError("Please mention your District Name.")
         return
       }
-      if (!city) {
-        setError("Please choose a city or region.")
+      if (citySelect.toLowerCase().includes("other") && !customCity.trim()) {
+        setError("Please mention your exact City / Town Name.")
         return
       }
       if (!address.trim()) {
-        setError("Please provide a street or neighborhood address.")
+        setError("Please provide a street address or neighborhood landmark.")
+        return
+      }
+      if (!phone.trim()) {
+        setError("Please provide a WhatsApp or phone number for traveler inquiries.")
         return
       }
       setCurrentStep(3)
@@ -294,6 +177,8 @@ export default function MultiStepRegisterSpacePage() {
     setError("")
     setLoading(true)
 
+    const finalCity = getComputedCity()
+
     try {
       // If user is already logged in, register hub directly via /api/work-hubs/register
       if (isLoggedIn) {
@@ -305,9 +190,9 @@ export default function MultiStepRegisterSpacePage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             name: spaceName.trim(),
-            city: city.trim(),
+            city: finalCity,
             address: address.trim(),
-            description: description.trim() || `${spaceName.trim()} is a verified ${subCategory} located in ${city.trim()}, Nepal, welcoming digital nomads, remote workers, and traveling creatives.`,
+            description: description.trim() || `${spaceName.trim()} is a verified ${subCategory} located in ${finalCity}, Nepal, welcoming digital nomads, remote workers, and traveling creatives.`,
             facilities: selectedFacilities,
             priceDaily: finalDaily,
             priceMonthly: finalMonthly,
@@ -357,7 +242,7 @@ export default function MultiStepRegisterSpacePage() {
           email: email.trim().toLowerCase(),
           password,
           spaceName: spaceName.trim(),
-          city: city.trim(),
+          city: finalCity,
           spaceType: subCategory,
           phone: phone.trim() || null,
           address: address.trim(),
@@ -397,6 +282,8 @@ export default function MultiStepRegisterSpacePage() {
       setLoading(false)
     }
   }
+
+  const computedCityDisplay = getComputedCity()
 
   return (
     <>
@@ -482,11 +369,11 @@ export default function MultiStepRegisterSpacePage() {
                       </h3>
                       <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
                         <MapPin size={12} className="text-[#C2410C]" />
-                        <span>{city}, Nepal</span>
+                        <span>{computedCityDisplay}, Nepal</span>
                       </p>
                     </div>
                     <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-[#023629]/10 text-[#023629] dark:bg-[#FB923C]/20 dark:text-[#FB923C] shrink-0">
-                      {CATEGORY_DEFINITIONS[mainCategory].title}
+                      {mainCategory}
                     </span>
                   </div>
 
@@ -549,8 +436,8 @@ export default function MultiStepRegisterSpacePage() {
                   <div className="flex items-center justify-between text-xs font-bold mb-2">
                     <span className="text-[#023629] dark:text-[#FB923C] uppercase tracking-wider">
                       Step {currentStep} of 4 • {
-                        currentStep === 1 ? "Category & Subcategory" :
-                        currentStep === 2 ? "Location & Details" :
+                        currentStep === 1 ? "Property Name & Category" :
+                        currentStep === 2 ? "District, City & Location" :
                         currentStep === 3 ? "Facilities & Food" :
                         "Pricing & Confirmation"
                       }
@@ -575,127 +462,88 @@ export default function MultiStepRegisterSpacePage() {
                 )}
 
                 {/* ─────────────────────────────────────────────────────────
-                    STEP 1: 3 CATEGORIES & SUBCATEGORIES (EASY FOR NEPAL OWNERS)
+                    STEP 1: PROPERTY NAME (FIRST) & CATEGORY DROPDOWNS
                    ───────────────────────────────────────────────────────── */}
                 {currentStep === 1 && (
                   <div className="space-y-6">
                     <div>
                       <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-                        Choose Property Category
+                        Property Identity &amp; Type
                       </h2>
                       <p className="text-xs text-slate-500 mt-1">
-                        Select the primary purpose of your property, then pick its specific subcategory:
+                        First, give your property a clear name and select its category:
                       </p>
                     </div>
 
-                    {/* 3 Main Category Cards */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      {(["WORK_ONLY", "WORK_AND_STAY", "STAY_ONLY"] as MainCategory[]).map((catKey) => {
-                        const cat = CATEGORY_DEFINITIONS[catKey]
-                        const Icon = cat.icon
-                        const isSelected = mainCategory === catKey
-                        return (
-                          <button
-                            key={catKey}
-                            type="button"
-                            onClick={() => {
-                              setMainCategory(catKey)
-                              // Automatically set first subcategory of chosen main category
-                              setSubCategory(cat.subcategories[0].name)
-                              setError("")
-                            }}
-                            className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
-                              isSelected
-                                ? "border-[#023629] dark:border-[#FB923C] bg-[#023629]/5 dark:bg-[#FB923C]/10 shadow-xs ring-1 ring-[#023629] dark:ring-[#FB923C]"
-                                : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 hover:border-slate-300 dark:hover:border-slate-700"
-                            }`}
-                          >
-                            <div>
-                              <div className="flex items-center justify-between mb-2">
-                                <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${
-                                  isSelected
-                                    ? "bg-[#023629] dark:bg-[#FB923C] text-white dark:text-slate-950 shadow-xs"
-                                    : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
-                                }`}>
-                                  <Icon size={18} />
-                                </div>
-                                {isSelected && (
-                                  <div className="w-5 h-5 rounded-full bg-[#023629] dark:bg-[#FB923C] text-white dark:text-slate-950 flex items-center justify-center">
-                                    <Check size={12} strokeWidth={3} />
-                                  </div>
-                                )}
-                              </div>
-                              <h3 className="font-extrabold text-sm text-slate-900 dark:text-white">
-                                {cat.title}
-                              </h3>
-                              <p className="text-[11px] font-semibold text-[#C2410C] mt-0.5">
-                                {cat.nepaliTitle}
-                              </p>
-                              <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">
-                                {cat.badge}
-                              </p>
-                            </div>
-                          </button>
-                        )
-                      })}
+                    {/* 1. PROPERTY NAME (FIRST FIELD) */}
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
+                        Property / Space Name *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Annapurna Nomad Coliving & Work Hub"
+                        value={spaceName}
+                        onChange={(e) => setSpaceName(e.target.value)}
+                        className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm font-semibold placeholder:font-normal placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] transition-all"
+                      />
+                      <p className="text-[11px] text-slate-400 mt-1">
+                        Name that will appear on public listing cards, search results, and booking passes.
+                      </p>
                     </div>
 
-                    {/* Subcategories for Selected Main Category */}
-                    <div className="pt-2">
-                      <div className="flex items-center justify-between mb-2.5">
-                        <label className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-                          Select Specific Subcategory *
-                        </label>
-                        <span className="text-[11px] text-slate-400">
-                          {CATEGORY_DEFINITIONS[mainCategory].title} Options
-                        </span>
-                      </div>
+                    {/* 2. MAIN CATEGORY DROPDOWN */}
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
+                        Main Property Category (3 Types) *
+                      </label>
+                      <select
+                        value={mainCategory}
+                        onChange={(e) => {
+                          const newCat = e.target.value
+                          setMainCategory(newCat)
+                          const catDef = PROPERTY_CATEGORY_OPTIONS.find(c => c.value === newCat)
+                          if (catDef && catDef.subtypes.length > 0) {
+                            setSubCategory(catDef.subtypes[0].value)
+                          }
+                          setError("")
+                        }}
+                        className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] transition-all cursor-pointer font-medium"
+                      >
+                        {PROPERTY_CATEGORY_OPTIONS.map((cat) => (
+                          <option key={cat.value} value={cat.value}>
+                            {cat.label}
+                          </option>
+                        ))}
+                      </select>
+                      <p className="text-[11px] font-semibold text-[#C2410C] mt-1">
+                        {currentCategoryDef.nepali} • {currentCategoryDef.badge}
+                      </p>
+                    </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                        {CATEGORY_DEFINITIONS[mainCategory].subcategories.map((sub) => {
-                          const SubIcon = sub.icon
-                          const isSubSelected = subCategory === sub.name
-                          return (
-                            <button
-                              key={sub.id}
-                              type="button"
-                              onClick={() => {
-                                setSubCategory(sub.name)
-                                setError("")
-                              }}
-                              className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer flex items-start gap-3 ${
-                                isSubSelected
-                                  ? "border-[#023629] dark:border-[#FB923C] bg-[#023629]/5 dark:bg-[#FB923C]/10 shadow-2xs"
-                                  : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 hover:border-slate-300"
-                              }`}
-                            >
-                              <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-                                isSubSelected
-                                  ? "bg-[#023629] dark:bg-[#FB923C] text-white dark:text-slate-950"
-                                  : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
-                              }`}>
-                                <SubIcon size={16} />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center justify-between gap-1">
-                                  <h4 className="font-bold text-xs text-slate-900 dark:text-white truncate">
-                                    {sub.name}
-                                  </h4>
-                                  {isSubSelected && (
-                                    <Check size={14} className="text-[#023629] dark:text-[#FB923C] shrink-0" />
-                                  )}
-                                </div>
-                                <p className="text-[10px] font-semibold text-[#C2410C]">
-                                  {sub.nepali}
-                                </p>
-                                <p className="text-[10px] text-slate-500 mt-0.5 line-clamp-1">
-                                  {sub.tagline}
-                                </p>
-                              </div>
-                            </button>
-                          )
-                        })}
-                      </div>
+                    {/* 3. SUB CATEGORY DROPDOWN */}
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
+                        Specific Property Sub Type *
+                      </label>
+                      <select
+                        value={subCategory}
+                        onChange={(e) => {
+                          setSubCategory(e.target.value)
+                          setError("")
+                        }}
+                        className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] transition-all cursor-pointer font-medium"
+                      >
+                        {currentCategoryDef.subtypes.map((sub) => (
+                          <option key={sub.value} value={sub.value}>
+                            {sub.label} ({sub.nepali})
+                          </option>
+                        ))}
+                      </select>
+                      <p className="text-[11px] text-slate-500 mt-1">
+                        {currentCategoryDef.subtypes.find(s => s.value === subCategory)?.tagline || "Choose the best match for your space."}
+                      </p>
                     </div>
 
                     {/* Step 1 Actions */}
@@ -713,56 +561,102 @@ export default function MultiStepRegisterSpacePage() {
                 )}
 
                 {/* ─────────────────────────────────────────────────────────
-                    STEP 2: LOCATION & CONTACT DETAILS
+                    STEP 2: DISTRICT & CITY DROPDOWNS + OTHER MENTION
                    ───────────────────────────────────────────────────────── */}
                 {currentStep === 2 && (
                   <div className="space-y-5">
                     <div>
                       <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-                        Property Details &amp; Location
+                        District, City &amp; Address
                       </h2>
                       <p className="text-xs text-slate-500 mt-1">
-                        Where is your space situated in Nepal?
+                        Select your district and city from the dropdowns, or mention your specific town name:
                       </p>
                     </div>
 
-                    {/* Property Name */}
-                    <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
-                        Space / Property Name *
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        placeholder="e.g. Annapurna Nomad Coliving & Work Hub"
-                        value={spaceName}
-                        onChange={(e) => setSpaceName(e.target.value)}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] transition-all"
-                      />
-                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      
+                      {/* District Dropdown */}
+                      <div>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
+                          District (जिल्ला) *
+                        </label>
+                        <select
+                          value={district}
+                          onChange={(e) => {
+                            const newDist = e.target.value
+                            setDistrict(newDist)
+                            const dDef = NEPAL_DISTRICT_DATA.find(d => d.id === newDist)
+                            if (dDef && dDef.cities.length > 0) {
+                              setCitySelect(dDef.cities[0])
+                            }
+                            setError("")
+                          }}
+                          className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] cursor-pointer"
+                        >
+                          {NEPAL_DISTRICT_DATA.map((d) => (
+                            <option key={d.id} value={d.id}>
+                              {d.name} ({d.nepali})
+                            </option>
+                          ))}
+                        </select>
 
-                    {/* City Quick Selection Chips */}
-                    <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
-                        City / Region *
-                      </label>
-                      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mb-2">
-                        {POPULAR_CITIES.map((c) => (
-                          <button
-                            key={c.name}
-                            type="button"
-                            onClick={() => setCity(c.name)}
-                            className={`p-2 rounded-xl border text-center transition-all cursor-pointer ${
-                              city === c.name
-                                ? "border-[#023629] dark:border-[#FB923C] bg-[#023629]/10 dark:bg-[#FB923C]/20 text-[#023629] dark:text-[#FB923C] font-bold shadow-2xs"
-                                : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/40 text-slate-600 dark:text-slate-300 hover:border-slate-300"
-                            }`}
-                          >
-                            <span className="text-xs block leading-tight">{c.name}</span>
-                            <span className="text-[9px] font-normal text-slate-400">{c.badge}</span>
-                          </button>
-                        ))}
+                        {/* If Other District Selected */}
+                        {district === "other" && (
+                          <div className="mt-2.5">
+                            <label className="block text-[11px] font-bold text-[#C2410C] dark:text-[#FB923C] mb-1">
+                              Mention District Name *
+                            </label>
+                            <input
+                              type="text"
+                              required
+                              value={customDistrict}
+                              onChange={(e) => setCustomDistrict(e.target.value)}
+                              placeholder="e.g. Palpa, Nuwakot, Lamjung, Morang"
+                              className="w-full px-3.5 py-2.5 rounded-xl border border-orange-300 dark:border-orange-800 bg-orange-50/30 dark:bg-orange-950/20 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#C2410C]"
+                            />
+                          </div>
+                        )}
                       </div>
+
+                      {/* City Dropdown */}
+                      <div>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
+                          City / Town (सहर / स्थान) *
+                        </label>
+                        <select
+                          value={citySelect}
+                          onChange={(e) => {
+                            setCitySelect(e.target.value)
+                            setError("")
+                          }}
+                          className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] cursor-pointer"
+                        >
+                          {currentDistrictDef.cities.map((c) => (
+                            <option key={c} value={c}>
+                              {c}
+                            </option>
+                          ))}
+                        </select>
+
+                        {/* If Other City is chosen in Dropdown */}
+                        {(citySelect.toLowerCase().includes("other") || district === "other") && (
+                          <div className="mt-2.5">
+                            <label className="block text-[11px] font-bold text-[#C2410C] dark:text-[#FB923C] mb-1">
+                              Mention Your City / Town Name *
+                            </label>
+                            <input
+                              type="text"
+                              required
+                              value={customCity}
+                              onChange={(e) => setCustomCity(e.target.value)}
+                              placeholder="e.g. Ghandruk, Tansen, Kurintar, Sauraha Ward 4"
+                              className="w-full px-3.5 py-2.5 rounded-xl border border-orange-300 dark:border-orange-800 bg-orange-50/30 dark:bg-orange-950/20 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#C2410C]"
+                            />
+                          </div>
+                        )}
+                      </div>
+
                     </div>
 
                     {/* Street Address */}
@@ -1003,7 +897,7 @@ export default function MultiStepRegisterSpacePage() {
                       </label>
                       <textarea
                         rows={2}
-                        placeholder={`e.g. Modern ${subCategory.toLowerCase()} in ${city} with 100 Mbps dual-band fiber, 24/7 generator backup, quiet workspaces, and fresh organic meals.`}
+                        placeholder={`e.g. Modern ${subCategory.toLowerCase()} in ${computedCityDisplay} with 100 Mbps dual-band fiber, 24/7 generator backup, quiet workspaces, and fresh organic meals.`}
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] transition-all"
