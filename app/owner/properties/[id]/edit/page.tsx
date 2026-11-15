@@ -26,7 +26,11 @@ import {
   Mountain,
   DollarSign,
   Phone,
-  Clock
+  Clock,
+  Egg,
+  Soup,
+  Cookie,
+  Flame
 } from "lucide-react"
 import { 
   NEPAL_DISTRICT_DATA, 
@@ -34,16 +38,27 @@ import {
   CategoryOption 
 } from "@/lib/nepal-locations"
 
-const ALL_FACILITIES = [
+const POWER_AND_WIFI_FACILITIES = [
   { id: "wifi_100", label: "High-Speed Fiber (100+ Mbps)", nepali: "१००+ Mbps फाइबर इन्टरनेट", icon: Wifi },
   { id: "power_backup", label: "Backup Power Generator (24/7)", nepali: "२४ घण्टा बत्ती ब्याकअप", icon: Zap },
-  { id: "coffee", label: "Specialty Himalayan Coffee / Tea", nepali: "कफी तथा चिया बार", icon: Coffee },
-  { id: "meals", label: "On-Site Snacks, Lunch & Dinner", nepali: "खाना तथा खाजाको सुविधा", icon: Utensils },
-  { id: "kitchen", label: "Shared Kitchen for Guests", nepali: "साझा किचन", icon: Utensils },
+  { id: "dual_band", label: "Dual-Band Wi-Fi (5GHz + 2.4GHz)", nepali: "ड्युअल-ब्यान्ड राउटर", icon: Wifi },
+]
+
+const WORK_COMFORT_FACILITIES = [
   { id: "ergonomic", label: "Ergonomic Workstations", nepali: "आरामदायी कुर्सी र डेक्स", icon: Laptop },
   { id: "call_booth", label: "Quiet Zoom Call Booths", nepali: "कल बुथ र मिटिङ स्पेस", icon: Users },
   { id: "terrace", label: "Mountain View Rooftop / Terrace", nepali: "रूफटप तथा हिमाल भ्यु", icon: Mountain },
+  { id: "ac_heating", label: "Air Conditioning & Room Heating", nepali: "AC तथा हिटर", icon: Zap },
   { id: "access_247", label: "24/7 Access", nepali: "२४ घण्टा पहुँच", icon: Clock },
+  { id: "clean_water", label: "Filtered Drinking Water (Free)", nepali: "पिउने पानी", icon: CheckCircle2 }
+]
+
+const FOOD_CHECKLIST = [
+  { id: "food_breakfast", label: "Breakfast Available", nepali: "Breakfast (ब्रेकफास्ट)", tagline: "Morning tea, toast, eggs, porridge", icon: Egg },
+  { id: "food_lunch", label: "Lunch Available", nepali: "Lunch (लन्च / खाना)", tagline: "Nepali Dal Bhat, noodles, bowls", icon: Utensils },
+  { id: "food_dinner", label: "Dinner Available", nepali: "Dinner (डिनर / साँझको खाना)", tagline: "Curries, momos, warm evening meals", icon: Soup },
+  { id: "food_snacks", label: "Snacks & Light Bites", nepali: "Snacks & Bites (खाजा)", tagline: "Pastries, sandwiches, pakodas, fries", icon: Cookie },
+  { id: "food_drinks", label: "Specialty Coffee, Tea & Drinks", nepali: "Specialty Coffee, Tea & Drinks (कफी तथा पेय पदार्थ)", tagline: "Himalayan organic coffee, masala chai, fresh juices", icon: Coffee },
 ]
 
 export default function EditPropertyPage() {
@@ -60,7 +75,7 @@ export default function EditPropertyPage() {
   // Form Fields — Property Name FIRST
   const [name, setName] = useState("")
   
-  // Category & Sub Type in Dropdowns
+  // Category & Sub Type in Dropdowns (Hostels, Coliving, Hotels, Homestays, Coworking)
   const [mainCategory, setMainCategory] = useState("Work and Stay")
   const [spaceType, setSpaceType] = useState("Coliving & Coworking Hub (Work + Stay)")
 
@@ -87,6 +102,11 @@ export default function EditPropertyPage() {
   const [uploadingPhoto, setUploadingPhoto] = useState(false)
   const [facilities, setFacilities] = useState<string[]>([])
   const [description, setDescription] = useState("")
+
+  // Food & Drinks Specific State
+  const [hasFoodService, setHasFoodService] = useState<boolean>(true)
+  const [hasSharedKitchen, setHasSharedKitchen] = useState<boolean>(true)
+  const [isBreakfastIncluded, setIsBreakfastIncluded] = useState<boolean>(false)
 
   // Fetch Existing Hub Data
   useEffect(() => {
@@ -130,14 +150,25 @@ export default function EditPropertyPage() {
         setPhotoUrl(photo)
 
         // Parse Facilities
+        let loadedFacilities: string[] = []
         if (Array.isArray(hub.facilities)) {
-          setFacilities(hub.facilities)
+          loadedFacilities = hub.facilities
         } else if (typeof hub.facilities === "string") {
           try {
             const parsed = JSON.parse(hub.facilities)
-            if (Array.isArray(parsed)) setFacilities(parsed)
+            if (Array.isArray(parsed)) loadedFacilities = parsed
           } catch (e) {}
         }
+        setFacilities(loadedFacilities)
+
+        // Check if food options present
+        const hasAnyFood = loadedFacilities.some(f => 
+          f.includes("Breakfast") || f.includes("Lunch") || f.includes("Dinner") || 
+          f.includes("Snacks") || f.includes("Coffee") || f.includes("Meals")
+        )
+        setHasFoodService(hasAnyFood || loadedFacilities.length === 0)
+        setHasSharedKitchen(loadedFacilities.some(f => f.toLowerCase().includes("kitchen")))
+        setIsBreakfastIncluded(loadedFacilities.some(f => f.toLowerCase().includes("breakfast included")))
 
         // Map Space Type & Main Category
         const st = hub.spaceType || "Coliving & Coworking Hub (Work + Stay)"
@@ -239,8 +270,16 @@ export default function EditPropertyPage() {
       if (citySelect.toLowerCase().includes("other") || district === "other") {
         finalCity = customCity.trim() || currentDistrictDef.name
       } else {
-        // Strip out parenthetical additions if clean name needed
         finalCity = citySelect.split("(")[0].trim() || citySelect
+      }
+
+      // Compile final facilities list
+      const finalFacilitiesList = [...facilities]
+      if (hasSharedKitchen && !finalFacilitiesList.includes("Shared Guest Kitchen for Self-Cooking")) {
+        finalFacilitiesList.push("Shared Guest Kitchen for Self-Cooking")
+      }
+      if (isBreakfastIncluded && !finalFacilitiesList.includes("Free Breakfast Included with Stay")) {
+        finalFacilitiesList.push("Free Breakfast Included with Stay")
       }
 
       const payload = {
@@ -254,7 +293,7 @@ export default function EditPropertyPage() {
         priceMonthly: Number(priceMonthly) || 0,
         openingHours: openingHours.trim(),
         photoUrl: photoUrl.trim(),
-        facilities,
+        facilities: Array.from(new Set(finalFacilitiesList)),
         published,
         website: website.trim(),
         contactEmail: contactEmail.trim().toLowerCase()
@@ -311,8 +350,8 @@ export default function EditPropertyPage() {
           </Link>
           <div className="h-5 w-px bg-slate-200 dark:bg-slate-700 hidden sm:block" />
           <div>
-            <h1 className="text-base font-extrabold text-slate-900 dark:text-white leading-tight flex items-center gap-2">
-              <span>Edit Property: {name || "Untitled Space"}</span>
+            <h1 className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white leading-tight flex items-center gap-2">
+              <span className="truncate max-w-[200px] sm:max-w-md">Edit: {name || "Untitled Space"}</span>
             </h1>
             <p className="text-[11px] text-slate-500">
               Host Console • Dedicated Property Editor
@@ -338,7 +377,7 @@ export default function EditPropertyPage() {
       </header>
 
       {/* Main Container */}
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
+      <main className="max-w-4xl mx-auto px-3.5 sm:px-6 pt-6 sm:pt-8">
         
         {/* Alerts */}
         {error && (
@@ -355,12 +394,12 @@ export default function EditPropertyPage() {
           </div>
         )}
 
-        <form onSubmit={handleSave} className="space-y-8">
+        <form onSubmit={handleSave} className="space-y-6 sm:space-y-8">
           
           {/* ─────────────────────────────────────────────────────────────
               SECTION 1: PROPERTY IDENTITY (NAME FIRST!)
              ───────────────────────────────────────────────────────────── */}
-          <div className="bg-white dark:bg-[#121215] border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
+          <div className="bg-white dark:bg-[#121215] border border-slate-200 dark:border-slate-800 rounded-3xl p-5 sm:p-8 shadow-xs space-y-5 sm:space-y-6">
             <div className="border-b border-slate-100 dark:border-slate-800/80 pb-3">
               <span className="text-[10px] font-bold uppercase tracking-wider text-[#023629] dark:text-[#FB923C]">
                 Section 1 • Identity &amp; Classification
@@ -380,7 +419,7 @@ export default function EditPropertyPage() {
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="e.g. Annapurna Nomad Coliving & Work Hub"
+                placeholder="e.g. Annapurna Nomad Hostel & Coliving Hub"
                 className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm font-semibold placeholder:font-normal placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C]"
               />
               <p className="text-[11px] text-slate-400 mt-1">
@@ -388,7 +427,7 @@ export default function EditPropertyPage() {
               </p>
             </div>
 
-            {/* 2. CATEGORY & SUB TYPE IN DROPDOWNS */}
+            {/* 2. CATEGORY & SUB TYPE IN DROPDOWNS (WITH HOSTELS) */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               
               {/* Main Category Dropdown */}
@@ -406,7 +445,7 @@ export default function EditPropertyPage() {
                       setSpaceType(def.subtypes[0].value)
                     }
                   }}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C]"
+                  className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] cursor-pointer"
                 >
                   {PROPERTY_CATEGORY_OPTIONS.map((cat) => (
                     <option key={cat.value} value={cat.value}>
@@ -422,12 +461,12 @@ export default function EditPropertyPage() {
               {/* Sub Category Dropdown */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
-                  Specific Property Sub Type *
+                  Specific Property Sub Type (Hostel, Coliving, Hotel, Homestay) *
                 </label>
                 <select
                   value={spaceType}
                   onChange={(e) => setSpaceType(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C]"
+                  className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] cursor-pointer"
                 >
                   {currentCategoryDef.subtypes.map((sub) => (
                     <option key={sub.value} value={sub.value}>
@@ -447,7 +486,7 @@ export default function EditPropertyPage() {
           {/* ─────────────────────────────────────────────────────────────
               SECTION 2: LOCATION (DISTRICT, CITY DROPDOWN & STREET ADDRESS)
              ───────────────────────────────────────────────────────────── */}
-          <div className="bg-white dark:bg-[#121215] border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
+          <div className="bg-white dark:bg-[#121215] border border-slate-200 dark:border-slate-800 rounded-3xl p-5 sm:p-8 shadow-xs space-y-5 sm:space-y-6">
             <div className="border-b border-slate-100 dark:border-slate-800/80 pb-3">
               <span className="text-[10px] font-bold uppercase tracking-wider text-[#023629] dark:text-[#FB923C]">
                 Section 2 • Nepal Location &amp; Contact
@@ -474,7 +513,7 @@ export default function EditPropertyPage() {
                       setCitySelect(dDef.cities[0])
                     }
                   }}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C]"
+                  className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] cursor-pointer"
                 >
                   {NEPAL_DISTRICT_DATA.map((d) => (
                     <option key={d.id} value={d.id}>
@@ -509,7 +548,7 @@ export default function EditPropertyPage() {
                 <select
                   value={citySelect}
                   onChange={(e) => setCitySelect(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C]"
+                  className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] cursor-pointer"
                 >
                   {currentDistrictDef.cities.map((c) => (
                     <option key={c} value={c}>
@@ -549,7 +588,7 @@ export default function EditPropertyPage() {
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder="e.g. Lakeside Ward 6, Baidam (Near Center Point / Hallanchowk)"
-                className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C]"
+                className="w-full px-4 py-2.5 sm:py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C]"
               />
             </div>
 
@@ -588,7 +627,7 @@ export default function EditPropertyPage() {
           {/* ─────────────────────────────────────────────────────────────
               SECTION 3: COVER PHOTO & MEDIA
              ───────────────────────────────────────────────────────────── */}
-          <div className="bg-white dark:bg-[#121215] border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xs space-y-5">
+          <div className="bg-white dark:bg-[#121215] border border-slate-200 dark:border-slate-800 rounded-3xl p-5 sm:p-8 shadow-xs space-y-5">
             <div className="border-b border-slate-100 dark:border-slate-800/80 pb-3 flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#023629] dark:text-[#FB923C]">
@@ -666,63 +705,173 @@ export default function EditPropertyPage() {
           </div>
 
           {/* ─────────────────────────────────────────────────────────────
-              SECTION 4: AMENITIES & FACILITIES
+              SECTION 4: AMENITIES & STRUCTURED FOOD SERVICES
              ───────────────────────────────────────────────────────────── */}
-          <div className="bg-white dark:bg-[#121215] border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xs space-y-5">
+          <div className="bg-white dark:bg-[#121215] border border-slate-200 dark:border-slate-800 rounded-3xl p-5 sm:p-8 shadow-xs space-y-6">
             <div className="border-b border-slate-100 dark:border-slate-800/80 pb-3">
               <span className="text-[10px] font-bold uppercase tracking-wider text-[#023629] dark:text-[#FB923C]">
-                Section 4 • Amenities &amp; Food
+                Section 4 • Amenities &amp; Food Services
               </span>
               <h2 className="text-lg font-black text-slate-900 dark:text-white mt-0.5">
-                Power, Wi-Fi &amp; Facilities
+                Food, Power, Wi-Fi &amp; Facilities
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-              {ALL_FACILITIES.map((fac) => {
-                const isSelected = facilities.includes(fac.label)
-                const FacIcon = fac.icon
-                return (
+            {/* Structured Food & Beverage Management Card */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-orange-50/40 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-900/40 space-y-4">
+              
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-3 border-b border-orange-200/80 dark:border-orange-900/40">
+                <div>
+                  <span className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                    <Utensils size={15} className="text-[#C2410C]" />
+                    <span>Food &amp; Drinks Available on Premises?</span>
+                  </span>
+                  <p className="text-[11px] text-slate-500">
+                    खाना, खाजा वा कफी/चिया तपाईंको प्रोपर्टीमा उपलब्ध छ?
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2">
                   <button
-                    key={fac.id}
                     type="button"
-                    onClick={() => toggleFacility(fac.label)}
-                    className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex items-start gap-2.5 ${
-                      isSelected
-                        ? "border-[#023629] dark:border-[#FB923C] bg-[#023629]/5 dark:bg-[#FB923C]/10 shadow-2xs"
-                        : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 hover:border-slate-300"
+                    onClick={() => setHasFoodService(true)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                      hasFoodService
+                        ? "bg-[#023629] text-white shadow-xs"
+                        : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700"
                     }`}
                   >
-                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
-                      isSelected
-                        ? "bg-[#023629] dark:bg-[#FB923C] text-white dark:text-slate-950"
-                        : "bg-slate-100 dark:bg-slate-800 text-slate-400"
-                    }`}>
-                      <FacIcon size={14} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between gap-1">
-                        <span className="text-xs font-bold text-slate-900 dark:text-white truncate">
-                          {fac.label}
-                        </span>
-                        {isSelected && (
-                          <Check size={13} className="text-[#023629] dark:text-[#FB923C] shrink-0" />
-                        )}
-                      </div>
-                      <p className="text-[10px] text-[#C2410C]">
-                        {fac.nepali}
-                      </p>
-                    </div>
+                    ✓ Yes Available
                   </button>
-                )
-              })}
+                  <button
+                    type="button"
+                    onClick={() => setHasFoodService(false)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                      !hasFoodService
+                        ? "bg-slate-700 text-white shadow-xs"
+                        : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700"
+                    }`}
+                  >
+                    No Food On-Site
+                  </button>
+                </div>
+              </div>
+
+              {hasFoodService && (
+                <div className="space-y-3">
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                    Available Meal &amp; Drink Options (कुन-कुन उपलब्ध छ?):
+                  </label>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {FOOD_CHECKLIST.map((food) => {
+                      const FoodIcon = food.icon
+                      const isSelected = facilities.includes(food.label)
+                      return (
+                        <button
+                          key={food.id}
+                          type="button"
+                          onClick={() => toggleFacility(food.label)}
+                          className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex items-center gap-2.5 ${
+                            isSelected
+                              ? "border-[#023629] dark:border-[#FB923C] bg-white dark:bg-slate-900 font-bold shadow-2xs text-slate-900 dark:text-white"
+                              : "border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 text-slate-600 dark:text-slate-400"
+                          }`}
+                        >
+                          <FoodIcon size={16} className="text-[#C2410C] shrink-0" />
+                          <div className="min-w-0 flex-1">
+                            <span className="text-xs block leading-tight">{food.nepali}</span>
+                            <span className="text-[10px] text-slate-400 font-normal">{food.tagline}</span>
+                          </div>
+                          {isSelected && (
+                            <Check size={14} className="text-[#023629] dark:text-[#FB923C] shrink-0" />
+                          )}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+
+              <div className="pt-2 border-t border-orange-200/80 dark:border-orange-900/40 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <label className="flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-slate-200 cursor-pointer p-1.5 rounded-lg hover:bg-orange-100/50 dark:hover:bg-orange-950/40 transition-colors">
+                  <input
+                    type="checkbox"
+                    checked={hasSharedKitchen}
+                    onChange={(e) => setHasSharedKitchen(e.target.checked)}
+                    className="rounded text-[#023629] focus:ring-[#023629]"
+                  />
+                  <Flame size={14} className="text-[#C2410C]" />
+                  <span>Shared Guest Kitchen for Self-Cooking (साझा भान्सा)</span>
+                </label>
+
+                <label className="flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-slate-200 cursor-pointer p-1.5 rounded-lg hover:bg-orange-100/50 dark:hover:bg-orange-950/40 transition-colors">
+                  <input
+                    type="checkbox"
+                    checked={isBreakfastIncluded}
+                    onChange={(e) => setIsBreakfastIncluded(e.target.checked)}
+                    className="rounded text-[#023629] focus:ring-[#023629]"
+                  />
+                  <Egg size={14} className="text-[#C2410C]" />
+                  <span>Free Breakfast Included with Stay (ब्रेकफास्ट समावेश)</span>
+                </label>
+              </div>
+
             </div>
+
+            {/* Connectivity & Workspace Amenities */}
+            <div className="space-y-3">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                Power, Wi-Fi &amp; Work Desks:
+              </label>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                {[...POWER_AND_WIFI_FACILITIES, ...WORK_COMFORT_FACILITIES].map((fac) => {
+                  const isSelected = facilities.includes(fac.label)
+                  const FacIcon = fac.icon
+                  return (
+                    <button
+                      key={fac.id}
+                      type="button"
+                      onClick={() => toggleFacility(fac.label)}
+                      className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex items-start gap-2.5 ${
+                        isSelected
+                          ? "border-[#023629] dark:border-[#FB923C] bg-[#023629]/5 dark:bg-[#FB923C]/10 shadow-2xs"
+                          : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 hover:border-slate-300"
+                      }`}
+                    >
+                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
+                        isSelected
+                          ? "bg-[#023629] dark:bg-[#FB923C] text-white dark:text-slate-950"
+                          : "bg-slate-100 dark:bg-slate-800 text-slate-400"
+                      }`}>
+                        <FacIcon size={14} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-1">
+                          <span className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                            {fac.label}
+                          </span>
+                          {isSelected && (
+                            <Check size={13} className="text-[#023629] dark:text-[#FB923C] shrink-0" />
+                          )}
+                        </div>
+                        <p className="text-[10px] text-[#C2410C]">
+                          {fac.nepali}
+                        </p>
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
           </div>
 
           {/* ─────────────────────────────────────────────────────────────
               SECTION 5: PRICING, HOURS & BIO
              ───────────────────────────────────────────────────────────── */}
-          <div className="bg-white dark:bg-[#121215] border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xs space-y-5">
+          <div className="bg-white dark:bg-[#121215] border border-slate-200 dark:border-slate-800 rounded-3xl p-5 sm:p-8 shadow-xs space-y-5">
             <div className="border-b border-slate-100 dark:border-slate-800/80 pb-3">
               <span className="text-[10px] font-bold uppercase tracking-wider text-[#023629] dark:text-[#FB923C]">
                 Section 5 • Pricing &amp; Bio
@@ -781,7 +930,7 @@ export default function EditPropertyPage() {
                 rows={4}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Describe your workspace, rooms, community atmosphere, and view..."
+                placeholder="Describe your workspace, rooms, community atmosphere, food options, and view..."
                 className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#023629] transition-all"
               />
             </div>

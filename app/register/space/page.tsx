@@ -25,30 +25,33 @@ import {
   Users,
   Mountain,
   Phone,
+  Clock,
+  Egg,
+  Soup,
+  Cookie,
+  Flame,
   CheckCircle2,
   AlertCircle
 } from "lucide-react"
 import { 
   NEPAL_DISTRICT_DATA, 
-  PROPERTY_CATEGORY_OPTIONS 
+  PROPERTY_CATEGORY_OPTIONS,
+  FOOD_AND_DRINKS_OPTIONS
 } from "@/lib/nepal-locations"
 
-const FACILITY_OPTIONS = [
-  // Connectivity & Power
-  { id: "wifi_100", label: "100+ Mbps Fiber Wi-Fi", nepali: "१००+ Mbps फाइबर इन्टरनेट", group: "Power & Internet", icon: Wifi },
-  { id: "backup_power", label: "24/7 Power & Inverter / Generator", nepali: "२४ घण्टा बत्ती ब्याकअप", group: "Power & Internet", icon: Zap },
-  { id: "dual_band", label: "Dual-Band Wi-Fi (5GHz + 2.4GHz)", nepali: "ड्युअल-ब्यान्ड राउटर", group: "Power & Internet", icon: Wifi },
-  // Food & Dining
-  { id: "coffee", label: "Specialty Himalayan Coffee / Tea", nepali: "कफी तथा चिया बार", group: "Dining & Food", icon: Coffee },
-  { id: "meals", label: "On-Site Snacks, Lunch & Dinner", nepali: "खाना तथा खाजाको सुविधा", group: "Dining & Food", icon: Utensils },
-  { id: "kitchen", label: "Shared Kitchen for Guests", nepali: "साझा किचन", group: "Dining & Food", icon: Utensils },
-  // Comfort & Work
-  { id: "ergonomic", label: "Ergonomic Chairs & Desks", nepali: "आरामदायी कुर्सी र डेक्स", group: "Comfort & Work", icon: Laptop },
-  { id: "call_booth", label: "Quiet Zoom Call Booths", nepali: "कल बुथ र मिटिङ स्पेस", group: "Comfort & Work", icon: Users },
-  { id: "mountain_view", label: "Mountain View Terrace / Balcony", nepali: "रूफटप तथा हिमाल भ्यु", group: "Comfort & Work", icon: Mountain },
-  { id: "ac_heating", label: "Air Conditioning & Room Heating", nepali: "AC तथा हिटर", group: "Comfort & Work", icon: Zap },
-  { id: "access_247", label: "24/7 Space Access", nepali: "२४ घण्टा पहुँच", group: "Comfort & Work", icon: CheckCircle2 },
-  { id: "clean_water", label: "Filtered Drinking Water (Free)", nepali: "पिउने पानी", group: "Comfort & Work", icon: CheckCircle2 }
+const POWER_AND_WIFI_FACILITIES = [
+  { id: "wifi_100", label: "100+ Mbps Fiber Wi-Fi", nepali: "१००+ Mbps फाइबर इन्टरनेट", icon: Wifi },
+  { id: "backup_power", label: "24/7 Power & Inverter / Generator", nepali: "२४ घण्टा बत्ती ब्याकअप", icon: Zap },
+  { id: "dual_band", label: "Dual-Band Wi-Fi (5GHz + 2.4GHz)", nepali: "ड्युअल-ब्यान्ड राउटर", icon: Wifi },
+]
+
+const WORK_COMFORT_FACILITIES = [
+  { id: "ergonomic", label: "Ergonomic Chairs & Desks", nepali: "आरामदायी कुर्सी र डेक्स", icon: Laptop },
+  { id: "call_booth", label: "Quiet Zoom Call Booths", nepali: "कल बुथ र मिटिङ स्पेस", icon: Users },
+  { id: "mountain_view", label: "Mountain View Terrace / Balcony", nepali: "रूफटप तथा हिमाल भ्यु", icon: Mountain },
+  { id: "ac_heating", label: "Air Conditioning & Room Heating", nepali: "AC तथा हिटर", icon: Zap },
+  { id: "access_247", label: "24/7 Space Access", nepali: "२४ घण्टा पहुँच", icon: Clock },
+  { id: "clean_water", label: "Filtered Drinking Water (Free)", nepali: "पिउने पानी", icon: CheckCircle2 }
 ]
 
 export default function MultiStepRegisterSpacePage() {
@@ -77,10 +80,24 @@ export default function MultiStepRegisterSpacePage() {
   const [selectedFacilities, setSelectedFacilities] = useState<string[]>([
     "100+ Mbps Fiber Wi-Fi",
     "24/7 Power & Inverter / Generator",
-    "Specialty Himalayan Coffee / Tea",
-    "On-Site Snacks, Lunch & Dinner",
+    "Specialty Coffee, Tea & Drinks",
+    "Breakfast Available",
+    "Lunch Available",
+    "Dinner Available",
     "Ergonomic Chairs & Desks"
   ])
+
+  // Step 3 Specific: Food & Drinks Management
+  const [hasFoodService, setHasFoodService] = useState<boolean>(true)
+  const [selectedFoodOptions, setSelectedFoodOptions] = useState<string[]>([
+    "Breakfast Available",
+    "Lunch Available",
+    "Dinner Available",
+    "Snacks & Light Bites",
+    "Specialty Coffee, Tea & Drinks"
+  ])
+  const [hasSharedKitchen, setHasSharedKitchen] = useState<boolean>(true)
+  const [isBreakfastIncluded, setIsBreakfastIncluded] = useState<boolean>(false)
 
   // Step 4: Pricing, Description & Account
   const [currency, setCurrency] = useState<"NPR" | "USD">("NPR")
@@ -121,6 +138,12 @@ export default function MultiStepRegisterSpacePage() {
 
   function toggleFacility(label: string) {
     setSelectedFacilities(prev => 
+      prev.includes(label) ? prev.filter(f => f !== label) : [...prev, label]
+    )
+  }
+
+  function toggleFoodOption(label: string) {
+    setSelectedFoodOptions(prev =>
       prev.includes(label) ? prev.filter(f => f !== label) : [...prev, label]
     )
   }
@@ -172,12 +195,32 @@ export default function MultiStepRegisterSpacePage() {
     }
   }
 
+  // Combine all facilities for final submission
+  const getAggregatedFacilities = () => {
+    const combined = [...selectedFacilities]
+    
+    if (hasFoodService) {
+      selectedFoodOptions.forEach(opt => {
+        if (!combined.includes(opt)) combined.push(opt)
+      })
+    }
+    if (hasSharedKitchen && !combined.includes("Shared Guest Kitchen for Self-Cooking")) {
+      combined.push("Shared Guest Kitchen for Self-Cooking")
+    }
+    if (isBreakfastIncluded && !combined.includes("Free Breakfast Included with Stay")) {
+      combined.push("Free Breakfast Included with Stay")
+    }
+
+    return Array.from(new Set(combined))
+  }
+
   async function handleFinalSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError("")
     setLoading(true)
 
     const finalCity = getComputedCity()
+    const allFinalFacilities = getAggregatedFacilities()
 
     try {
       // If user is already logged in, register hub directly via /api/work-hubs/register
@@ -193,7 +236,7 @@ export default function MultiStepRegisterSpacePage() {
             city: finalCity,
             address: address.trim(),
             description: description.trim() || `${spaceName.trim()} is a verified ${subCategory} located in ${finalCity}, Nepal, welcoming digital nomads, remote workers, and traveling creatives.`,
-            facilities: selectedFacilities,
+            facilities: allFinalFacilities,
             priceDaily: finalDaily,
             priceMonthly: finalMonthly,
             contactEmail: session?.user?.email || email.trim(),
@@ -247,7 +290,7 @@ export default function MultiStepRegisterSpacePage() {
           phone: phone.trim() || null,
           address: address.trim(),
           description: description.trim(),
-          facilities: selectedFacilities,
+          facilities: allFinalFacilities,
           priceDaily: finalDaily,
           priceMonthly: finalMonthly,
           openingHours: "24/7 Access",
@@ -288,19 +331,19 @@ export default function MultiStepRegisterSpacePage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-slate-50/70 dark:bg-[#0A0A0B] pt-28 pb-20 px-4 sm:px-6 lg:px-8 font-sans">
+      <main className="min-h-screen bg-slate-50/70 dark:bg-[#0A0A0B] pt-24 sm:pt-28 pb-20 px-3.5 sm:px-6 lg:px-8 font-sans">
         <div className="max-w-6xl mx-auto">
           
           {/* Top Session / Host Welcome Banner */}
-          <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-3.5 bg-white dark:bg-[#121215] border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs">
+          <div className="mb-5 sm:mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-3.5 sm:p-4 bg-white dark:bg-[#121215] border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-[#023629] text-white flex items-center justify-center shrink-0 shadow-xs">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#023629] text-white flex items-center justify-center shrink-0 shadow-xs">
                 <Building2 size={18} />
               </div>
               <div>
                 {isLoggedIn ? (
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-slate-900 dark:text-white">
+                    <span className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
                       Logged in as {session?.user?.name || session?.user?.email}
                     </span>
                     <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300">
@@ -308,7 +351,7 @@ export default function MultiStepRegisterSpacePage() {
                     </span>
                   </div>
                 ) : (
-                  <p className="text-xs font-bold text-slate-900 dark:text-white">
+                  <p className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
                     Nepal Host Space Registration Portal
                   </p>
                 )}
@@ -323,21 +366,21 @@ export default function MultiStepRegisterSpacePage() {
             {!isLoggedIn && (
               <Link
                 href="/auth/signin?callbackUrl=/register/space"
-                className="text-xs font-bold text-[#C2410C] hover:text-[#9a3412] hover:underline px-3 py-1.5 rounded-lg border border-orange-200 dark:border-orange-900/50 bg-orange-50/50 dark:bg-orange-950/20 whitespace-nowrap"
+                className="text-xs font-bold text-[#C2410C] hover:text-[#9a3412] hover:underline px-3 py-1.5 rounded-lg border border-orange-200 dark:border-orange-900/50 bg-orange-50/50 dark:bg-orange-950/20 whitespace-nowrap self-end sm:self-auto"
               >
                 Already have an account? Sign In →
               </Link>
             )}
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-start">
             
             {/* ─────────────────────────────────────────────────────────────
                 LEFT COLUMN: VALUE PROPOSITION & LIVE SUMMARY PREVIEW
                ───────────────────────────────────────────────────────────── */}
-            <div className="lg:col-span-5 space-y-6">
+            <div className="lg:col-span-5 space-y-5 sm:space-y-6">
               
-              <div className="space-y-3">
+              <div className="space-y-2 sm:space-y-3">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#023629]/10 dark:bg-[#FB923C]/20 text-[#023629] dark:text-[#FB923C] text-[11px] font-bold tracking-wide uppercase">
                   <Sparkles size={13} />
                   <span>Verified Host Network Nepal</span>
@@ -345,13 +388,13 @@ export default function MultiStepRegisterSpacePage() {
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
                   Register your property for <span className="text-[#023629] dark:text-[#FB923C]">remote workers</span>
                 </h1>
-                <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                  Join Nepal&apos;s curated network of fiber workspaces, coliving hubs, and nomad villas. Attract verified guests staying for weeks to months.
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Join Nepal&apos;s curated network of fiber workspaces, hostels, coliving hubs, and nomad villas. Attract verified guests staying for weeks to months.
                 </p>
               </div>
 
               {/* Dynamic Live Preview Card */}
-              <div className="bg-white dark:bg-[#121215] border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs">
+              <div className="bg-white dark:bg-[#121215] border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-xs">
                 <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 mb-3">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                     Live Listing Preview
@@ -363,13 +406,13 @@ export default function MultiStepRegisterSpacePage() {
 
                 <div className="space-y-2.5">
                   <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <h3 className="font-extrabold text-base text-slate-900 dark:text-white leading-snug">
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white leading-snug truncate">
                         {spaceName.trim() || "Your Space / Property Name"}
                       </h3>
                       <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
-                        <MapPin size={12} className="text-[#C2410C]" />
-                        <span>{computedCityDisplay}, Nepal</span>
+                        <MapPin size={12} className="text-[#C2410C] shrink-0" />
+                        <span className="truncate">{computedCityDisplay}, Nepal</span>
                       </p>
                     </div>
                     <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-[#023629]/10 text-[#023629] dark:bg-[#FB923C]/20 dark:text-[#FB923C] shrink-0">
@@ -377,7 +420,7 @@ export default function MultiStepRegisterSpacePage() {
                     </span>
                   </div>
 
-                  <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 truncate">
                     {subCategory}
                   </p>
 
@@ -387,6 +430,16 @@ export default function MultiStepRegisterSpacePage() {
                       {currency === "NPR" ? `रू ${priceDaily} / day • रू ${priceMonthly} / mo` : `$${priceDaily} / day • $${priceMonthly} / mo`}
                     </span>
                   </div>
+
+                  {/* Food & Dining Preview Badge */}
+                  {hasFoodService && selectedFoodOptions.length > 0 && (
+                    <div className="pt-2 flex items-center gap-1.5 text-[11px] text-[#C2410C] font-semibold">
+                      <Utensils size={12} />
+                      <span className="truncate">
+                        Food: {selectedFoodOptions.map(f => f.replace(" Available", "")).join(", ")}
+                      </span>
+                    </div>
+                  )}
 
                   {selectedFacilities.length > 0 && (
                     <div className="pt-2 flex flex-wrap gap-1.5">
@@ -406,11 +459,12 @@ export default function MultiStepRegisterSpacePage() {
               </div>
 
               {/* Core Host Perks */}
-              <div className="space-y-2.5 pt-2">
+              <div className="space-y-2 pt-1 hidden sm:block">
                 {[
+                  "Hostels, Coliving, Hotels, Homestays & Coworking Hubs welcome",
                   "0% Platform Commission on direct monthly guest bookings",
-                  "Direct WhatsApp & email inquiries from nomads",
-                  "Customized consoles for room availability & desk passes",
+                  "Direct WhatsApp & email inquiries from global nomads",
+                  "Manage room availability, day passes & menus from Host Console",
                 ].map((perk, i) => (
                   <div key={i} className="flex items-start gap-2.5">
                     <div className="w-4 h-4 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 flex items-center justify-center shrink-0 mt-0.5">
@@ -426,19 +480,19 @@ export default function MultiStepRegisterSpacePage() {
             </div>
 
             {/* ─────────────────────────────────────────────────────────────
-                RIGHT COLUMN: MULTI-STEP WIZARD CARD
+                RIGHT COLUMN: MULTI-STEP WIZARD CARD (MOBILE OPTIMIZED)
                ───────────────────────────────────────────────────────────── */}
             <div className="lg:col-span-7">
-              <div className="bg-white dark:bg-[#121215] border border-slate-200 dark:border-slate-800 rounded-3xl shadow-lg p-6 sm:p-8 transition-all">
+              <div className="bg-white dark:bg-[#121215] border border-slate-200 dark:border-slate-800 rounded-3xl shadow-lg p-5 sm:p-8 transition-all">
                 
                 {/* Step Progress Indicator */}
-                <div className="mb-6">
+                <div className="mb-5 sm:mb-6">
                   <div className="flex items-center justify-between text-xs font-bold mb-2">
                     <span className="text-[#023629] dark:text-[#FB923C] uppercase tracking-wider">
                       Step {currentStep} of 4 • {
                         currentStep === 1 ? "Property Name & Category" :
                         currentStep === 2 ? "District, City & Location" :
-                        currentStep === 3 ? "Facilities & Food" :
+                        currentStep === 3 ? "Facilities & Food Service" :
                         "Pricing & Confirmation"
                       }
                     </span>
@@ -462,16 +516,16 @@ export default function MultiStepRegisterSpacePage() {
                 )}
 
                 {/* ─────────────────────────────────────────────────────────
-                    STEP 1: PROPERTY NAME (FIRST) & CATEGORY DROPDOWNS
+                    STEP 1: PROPERTY NAME (FIRST) & ALL CATEGORY DROPDOWNS
                    ───────────────────────────────────────────────────────── */}
                 {currentStep === 1 && (
-                  <div className="space-y-6">
+                  <div className="space-y-5 sm:space-y-6">
                     <div>
                       <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
                         Property Identity &amp; Type
                       </h2>
                       <p className="text-xs text-slate-500 mt-1">
-                        First, give your property a clear name and select its category:
+                        First, give your property a clear name and select its category (Hostel, Coliving, Coworking, Hotel, Homestay):
                       </p>
                     </div>
 
@@ -483,10 +537,10 @@ export default function MultiStepRegisterSpacePage() {
                       <input
                         type="text"
                         required
-                        placeholder="e.g. Annapurna Nomad Coliving & Work Hub"
+                        placeholder="e.g. Annapurna Nomad Hostel & Coliving Hub"
                         value={spaceName}
                         onChange={(e) => setSpaceName(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm font-semibold placeholder:font-normal placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] transition-all"
+                        className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm font-semibold placeholder:font-normal placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] transition-all"
                       />
                       <p className="text-[11px] text-slate-400 mt-1">
                         Name that will appear on public listing cards, search results, and booking passes.
@@ -509,7 +563,7 @@ export default function MultiStepRegisterSpacePage() {
                           }
                           setError("")
                         }}
-                        className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] transition-all cursor-pointer font-medium"
+                        className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] transition-all cursor-pointer font-medium"
                       >
                         {PROPERTY_CATEGORY_OPTIONS.map((cat) => (
                           <option key={cat.value} value={cat.value}>
@@ -522,10 +576,10 @@ export default function MultiStepRegisterSpacePage() {
                       </p>
                     </div>
 
-                    {/* 3. SUB CATEGORY DROPDOWN */}
+                    {/* 3. SUB CATEGORY DROPDOWN (HOSTEL, COLIVING, RETREAT, ETC.) */}
                     <div>
                       <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
-                        Specific Property Sub Type *
+                        Specific Property Sub Type (Including Hostels, Stays &amp; Desks) *
                       </label>
                       <select
                         value={subCategory}
@@ -533,7 +587,7 @@ export default function MultiStepRegisterSpacePage() {
                           setSubCategory(e.target.value)
                           setError("")
                         }}
-                        className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] transition-all cursor-pointer font-medium"
+                        className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] transition-all cursor-pointer font-medium"
                       >
                         {currentCategoryDef.subtypes.map((sub) => (
                           <option key={sub.value} value={sub.value}>
@@ -551,7 +605,7 @@ export default function MultiStepRegisterSpacePage() {
                       <button
                         type="button"
                         onClick={handleNextStep}
-                        className="flex items-center gap-2 bg-[#023629] hover:bg-[#034a38] dark:bg-[#FB923C] dark:hover:bg-[#FB923C]/90 text-white dark:text-slate-950 font-bold px-6 py-2.5 rounded-xl transition-all shadow-xs text-xs sm:text-sm cursor-pointer"
+                        className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#023629] hover:bg-[#034a38] dark:bg-[#FB923C] dark:hover:bg-[#FB923C]/90 text-white dark:text-slate-950 font-bold px-6 py-3 rounded-xl transition-all shadow-xs text-xs sm:text-sm cursor-pointer"
                       >
                         <span>Continue to Location</span>
                         <ArrowRight size={15} />
@@ -564,7 +618,7 @@ export default function MultiStepRegisterSpacePage() {
                     STEP 2: DISTRICT & CITY DROPDOWNS + OTHER MENTION
                    ───────────────────────────────────────────────────────── */}
                 {currentStep === 2 && (
-                  <div className="space-y-5">
+                  <div className="space-y-4 sm:space-y-5">
                     <div>
                       <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
                         District, City &amp; Address
@@ -574,7 +628,7 @@ export default function MultiStepRegisterSpacePage() {
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
                       
                       {/* District Dropdown */}
                       <div>
@@ -592,7 +646,7 @@ export default function MultiStepRegisterSpacePage() {
                             }
                             setError("")
                           }}
-                          className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] cursor-pointer"
+                          className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] cursor-pointer"
                         >
                           {NEPAL_DISTRICT_DATA.map((d) => (
                             <option key={d.id} value={d.id}>
@@ -613,7 +667,7 @@ export default function MultiStepRegisterSpacePage() {
                               value={customDistrict}
                               onChange={(e) => setCustomDistrict(e.target.value)}
                               placeholder="e.g. Palpa, Nuwakot, Lamjung, Morang"
-                              className="w-full px-3.5 py-2.5 rounded-xl border border-orange-300 dark:border-orange-800 bg-orange-50/30 dark:bg-orange-950/20 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#C2410C]"
+                              className="w-full px-3.5 py-2 rounded-xl border border-orange-300 dark:border-orange-800 bg-orange-50/30 dark:bg-orange-950/20 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#C2410C]"
                             />
                           </div>
                         )}
@@ -630,7 +684,7 @@ export default function MultiStepRegisterSpacePage() {
                             setCitySelect(e.target.value)
                             setError("")
                           }}
-                          className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] cursor-pointer"
+                          className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] cursor-pointer"
                         >
                           {currentDistrictDef.cities.map((c) => (
                             <option key={c} value={c}>
@@ -651,7 +705,7 @@ export default function MultiStepRegisterSpacePage() {
                               value={customCity}
                               onChange={(e) => setCustomCity(e.target.value)}
                               placeholder="e.g. Ghandruk, Tansen, Kurintar, Sauraha Ward 4"
-                              className="w-full px-3.5 py-2.5 rounded-xl border border-orange-300 dark:border-orange-800 bg-orange-50/30 dark:bg-orange-950/20 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#C2410C]"
+                              className="w-full px-3.5 py-2 rounded-xl border border-orange-300 dark:border-orange-800 bg-orange-50/30 dark:bg-orange-950/20 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#C2410C]"
                             />
                           </div>
                         )}
@@ -670,7 +724,7 @@ export default function MultiStepRegisterSpacePage() {
                         placeholder="e.g. Lakeside Ward 6, Baidam (Near Hallanchowk)"
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] transition-all"
+                        className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#023629] dark:focus:ring-[#FB923C] transition-all"
                       />
                     </div>
 
@@ -711,7 +765,7 @@ export default function MultiStepRegisterSpacePage() {
                     </div>
 
                     {/* Step 2 Actions */}
-                    <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                    <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
                       <button
                         type="button"
                         onClick={() => setCurrentStep(1)}
@@ -736,62 +790,248 @@ export default function MultiStepRegisterSpacePage() {
                     STEP 3: POWER, WI-FI, FOOD & NOMAD FACILITIES
                    ───────────────────────────────────────────────────────── */}
                 {currentStep === 3 && (
-                  <div className="space-y-5">
+                  <div className="space-y-6">
                     <div>
                       <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-                        Power, Wi-Fi &amp; Facilities
+                        Power, Wi-Fi &amp; Food Services
                       </h2>
                       <p className="text-xs text-slate-500 mt-1">
-                        Select all amenities available on-site for remote workers:
+                        Select food availability and workspace amenities for remote workers:
                       </p>
                     </div>
 
-                    {/* Facility Selection Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                      {FACILITY_OPTIONS.map((fac) => {
-                        const FacIcon = fac.icon
-                        const isChecked = selectedFacilities.includes(fac.label)
-                        return (
+                    {/* ───────────────────────────────────────────────────
+                        FOOD & DRINKS MANAGEMENT CARD
+                       ─────────────────────────────────────────────────── */}
+                    <div className="p-4 sm:p-5 rounded-2xl bg-orange-50/40 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-900/40 space-y-4">
+                      
+                      {/* Master Food Service Switch */}
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-3 border-b border-orange-200/80 dark:border-orange-900/40">
+                        <div>
+                          <span className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                            <Utensils size={15} className="text-[#C2410C]" />
+                            <span>Food &amp; Drinks Available on Premises?</span>
+                          </span>
+                          <p className="text-[11px] text-slate-500">
+                            खाना, खाजा वा कफी/चिया तपाईंको प्रोपर्टीमा उपलब्ध छ?
+                          </p>
+                        </div>
+
+                        <div className="flex items-center gap-2">
                           <button
-                            key={fac.id}
                             type="button"
-                            onClick={() => toggleFacility(fac.label)}
-                            className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex items-start gap-3 ${
-                              isChecked
-                                ? "border-[#023629] dark:border-[#FB923C] bg-[#023629]/5 dark:bg-[#FB923C]/10 shadow-2xs"
-                                : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 hover:border-slate-300"
+                            onClick={() => setHasFoodService(true)}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                              hasFoodService
+                                ? "bg-[#023629] text-white shadow-xs"
+                                : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700"
                             }`}
                           >
-                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-                              isChecked
-                                ? "bg-[#023629] dark:bg-[#FB923C] text-white dark:text-slate-950"
-                                : "bg-slate-100 dark:bg-slate-800 text-slate-500"
-                            }`}>
-                              <FacIcon size={16} />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center justify-between gap-1">
-                                <h4 className="font-bold text-xs text-slate-900 dark:text-white truncate">
-                                  {fac.label}
-                                </h4>
-                                {isChecked && (
-                                  <Check size={14} className="text-[#023629] dark:text-[#FB923C] shrink-0" />
-                                )}
-                              </div>
-                              <p className="text-[10px] font-semibold text-[#C2410C]">
-                                {fac.nepali}
-                              </p>
-                              <span className="text-[9px] text-slate-400">
-                                {fac.group}
-                              </span>
-                            </div>
+                            ✓ Yes Available
                           </button>
-                        )
-                      })}
+                          <button
+                            type="button"
+                            onClick={() => setHasFoodService(false)}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                              !hasFoodService
+                                ? "bg-slate-700 text-white shadow-xs"
+                                : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700"
+                            }`}
+                          >
+                            No Food On-Site
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Food & Drink Options Checklist */}
+                      {hasFoodService && (
+                        <div className="space-y-3">
+                          <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                            Select Available Meal &amp; Drink Options (कुन-कुन उपलब्ध छ?):
+                          </label>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            {/* Breakfast */}
+                            <button
+                              type="button"
+                              onClick={() => toggleFoodOption("Breakfast Available")}
+                              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex items-center gap-2.5 ${
+                                selectedFoodOptions.includes("Breakfast Available")
+                                  ? "border-[#023629] dark:border-[#FB923C] bg-white dark:bg-slate-900 font-bold shadow-2xs text-slate-900 dark:text-white"
+                                  : "border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 text-slate-600 dark:text-slate-400"
+                              }`}
+                            >
+                              <Egg size={16} className="text-[#C2410C] shrink-0" />
+                              <div className="min-w-0 flex-1">
+                                <span className="text-xs block leading-tight">Breakfast (ब्रेकफास्ट)</span>
+                                <span className="text-[10px] text-slate-400 font-normal">Morning tea, toast, eggs, porridge</span>
+                              </div>
+                              {selectedFoodOptions.includes("Breakfast Available") && (
+                                <Check size={14} className="text-[#023629] dark:text-[#FB923C] shrink-0" />
+                              )}
+                            </button>
+
+                            {/* Lunch */}
+                            <button
+                              type="button"
+                              onClick={() => toggleFoodOption("Lunch Available")}
+                              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex items-center gap-2.5 ${
+                                selectedFoodOptions.includes("Lunch Available")
+                                  ? "border-[#023629] dark:border-[#FB923C] bg-white dark:bg-slate-900 font-bold shadow-2xs text-slate-900 dark:text-white"
+                                  : "border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 text-slate-600 dark:text-slate-400"
+                              }`}
+                            >
+                              <Utensils size={16} className="text-[#C2410C] shrink-0" />
+                              <div className="min-w-0 flex-1">
+                                <span className="text-xs block leading-tight">Lunch (लन्च / खाना)</span>
+                                <span className="text-[10px] text-slate-400 font-normal">Nepali Dal Bhat, noodles, bowls</span>
+                              </div>
+                              {selectedFoodOptions.includes("Lunch Available") && (
+                                <Check size={14} className="text-[#023629] dark:text-[#FB923C] shrink-0" />
+                              )}
+                            </button>
+
+                            {/* Dinner */}
+                            <button
+                              type="button"
+                              onClick={() => toggleFoodOption("Dinner Available")}
+                              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex items-center gap-2.5 ${
+                                selectedFoodOptions.includes("Dinner Available")
+                                  ? "border-[#023629] dark:border-[#FB923C] bg-white dark:bg-slate-900 font-bold shadow-2xs text-slate-900 dark:text-white"
+                                  : "border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 text-slate-600 dark:text-slate-400"
+                              }`}
+                            >
+                              <Soup size={16} className="text-[#C2410C] shrink-0" />
+                              <div className="min-w-0 flex-1">
+                                <span className="text-xs block leading-tight">Dinner (डिनर / साँझको खाना)</span>
+                                <span className="text-[10px] text-slate-400 font-normal">Curries, momos, warm evening meals</span>
+                              </div>
+                              {selectedFoodOptions.includes("Dinner Available") && (
+                                <Check size={14} className="text-[#023629] dark:text-[#FB923C] shrink-0" />
+                              )}
+                            </button>
+
+                            {/* Snacks */}
+                            <button
+                              type="button"
+                              onClick={() => toggleFoodOption("Snacks & Light Bites")}
+                              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex items-center gap-2.5 ${
+                                selectedFoodOptions.includes("Snacks & Light Bites")
+                                  ? "border-[#023629] dark:border-[#FB923C] bg-white dark:bg-slate-900 font-bold shadow-2xs text-slate-900 dark:text-white"
+                                  : "border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 text-slate-600 dark:text-slate-400"
+                              }`}
+                            >
+                              <Cookie size={16} className="text-[#C2410C] shrink-0" />
+                              <div className="min-w-0 flex-1">
+                                <span className="text-xs block leading-tight">Snacks &amp; Bites (खाजा)</span>
+                                <span className="text-[10px] text-slate-400 font-normal">Pastries, sandwiches, pakodas, fries</span>
+                              </div>
+                              {selectedFoodOptions.includes("Snacks & Light Bites") && (
+                                <Check size={14} className="text-[#023629] dark:text-[#FB923C] shrink-0" />
+                              )}
+                            </button>
+
+                            {/* Drinks & Coffee (Spans 2 cols on desktop) */}
+                            <button
+                              type="button"
+                              onClick={() => toggleFoodOption("Specialty Coffee, Tea & Drinks")}
+                              className={`sm:col-span-2 p-2.5 rounded-xl border text-left transition-all cursor-pointer flex items-center gap-2.5 ${
+                                selectedFoodOptions.includes("Specialty Coffee, Tea & Drinks")
+                                  ? "border-[#023629] dark:border-[#FB923C] bg-white dark:bg-slate-900 font-bold shadow-2xs text-slate-900 dark:text-white"
+                                  : "border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 text-slate-600 dark:text-slate-400"
+                              }`}
+                            >
+                              <Coffee size={16} className="text-[#C2410C] shrink-0" />
+                              <div className="min-w-0 flex-1">
+                                <span className="text-xs block leading-tight">Specialty Coffee, Tea &amp; Beverages (कफी तथा पेय पदार्थ)</span>
+                                <span className="text-[10px] text-slate-400 font-normal">Himalayan espresso, pour-over, masala chai, fresh juices</span>
+                              </div>
+                              {selectedFoodOptions.includes("Specialty Coffee, Tea & Drinks") && (
+                                <Check size={14} className="text-[#023629] dark:text-[#FB923C] shrink-0" />
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Additional Kitchen Facilities */}
+                      <div className="pt-2 border-t border-orange-200/80 dark:border-orange-900/40 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <label className="flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-slate-200 cursor-pointer p-1.5 rounded-lg hover:bg-orange-100/50 dark:hover:bg-orange-950/40 transition-colors">
+                          <input
+                            type="checkbox"
+                            checked={hasSharedKitchen}
+                            onChange={(e) => setHasSharedKitchen(e.target.checked)}
+                            className="rounded text-[#023629] focus:ring-[#023629]"
+                          />
+                          <Flame size={14} className="text-[#C2410C]" />
+                          <span>Shared Guest Kitchen for Self-Cooking (साझा भान्सा)</span>
+                        </label>
+
+                        <label className="flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-slate-200 cursor-pointer p-1.5 rounded-lg hover:bg-orange-100/50 dark:hover:bg-orange-950/40 transition-colors">
+                          <input
+                            type="checkbox"
+                            checked={isBreakfastIncluded}
+                            onChange={(e) => setIsBreakfastIncluded(e.target.checked)}
+                            className="rounded text-[#023629] focus:ring-[#023629]"
+                          />
+                          <Egg size={14} className="text-[#C2410C]" />
+                          <span>Free Breakfast Included with Stay (ब्रेकफास्ट समावेश)</span>
+                        </label>
+                      </div>
+
+                    </div>
+
+                    {/* ───────────────────────────────────────────────────
+                        POWER, WI-FI & WORK COMFORT
+                       ─────────────────────────────────────────────────── */}
+                    <div className="space-y-3">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                        Connectivity, Power &amp; Workspace Amenities:
+                      </label>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        {[...POWER_AND_WIFI_FACILITIES, ...WORK_COMFORT_FACILITIES].map((fac) => {
+                          const FacIcon = fac.icon
+                          const isChecked = selectedFacilities.includes(fac.label)
+                          return (
+                            <button
+                              key={fac.id}
+                              type="button"
+                              onClick={() => toggleFacility(fac.label)}
+                              className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex items-start gap-3 ${
+                                isChecked
+                                  ? "border-[#023629] dark:border-[#FB923C] bg-[#023629]/5 dark:bg-[#FB923C]/10 shadow-2xs"
+                                  : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 hover:border-slate-300"
+                              }`}
+                            >
+                              <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+                                isChecked
+                                  ? "bg-[#023629] dark:bg-[#FB923C] text-white dark:text-slate-950"
+                                  : "bg-slate-100 dark:bg-slate-800 text-slate-500"
+                              }`}>
+                                <FacIcon size={16} />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center justify-between gap-1">
+                                  <h4 className="font-bold text-xs text-slate-900 dark:text-white truncate">
+                                    {fac.label}
+                                  </h4>
+                                  {isChecked && (
+                                    <Check size={14} className="text-[#023629] dark:text-[#FB923C] shrink-0" />
+                                  )}
+                                </div>
+                                <p className="text-[10px] font-semibold text-[#C2410C]">
+                                  {fac.nepali}
+                                </p>
+                              </div>
+                            </button>
+                          )
+                        })}
+                      </div>
                     </div>
 
                     {/* Step 3 Actions */}
-                    <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                    <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
                       <button
                         type="button"
                         onClick={() => setCurrentStep(2)}
@@ -886,7 +1126,7 @@ export default function MultiStepRegisterSpacePage() {
                         </div>
                       </div>
                       <p className="text-[10px] text-slate-400">
-                        * You can adjust individual room rates, hot desk passes, and discount packages anytime in your Host Console.
+                        * You can adjust individual dorm beds, private rooms, hot desk passes, and discount packages anytime in your Host Console.
                       </p>
                     </div>
 
@@ -982,7 +1222,7 @@ export default function MultiStepRegisterSpacePage() {
                     )}
 
                     {/* Step 4 Actions */}
-                    <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                    <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
                       <button
                         type="button"
                         onClick={() => setCurrentStep(3)}

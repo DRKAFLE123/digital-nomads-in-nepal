@@ -176,20 +176,20 @@ export const PROPERTY_CATEGORY_OPTIONS: CategoryOption[] = [
   {
     value: "Work and Stay",
     label: "Work and Stay (काम र बसाइ दुवै)",
-    nepali: "काम र बसाइ दुवै — Coliving & Workation",
+    nepali: "काम र बसाइ दुवै — Coliving, Hostel & Workation",
     badge: "Most Popular for Nomads",
     subtypes: [
       {
         value: "Coliving & Coworking Hub (Work + Stay)",
         label: "Coliving & Coworking Hub (Work + Stay)",
         nepali: "कोलिभिङ र कोवर्किङ हब",
-        tagline: "Dedicated nomad community with private/shared rooms & work hall"
+        tagline: "Dedicated nomad community with private/shared rooms & 24/7 work hall"
       },
       {
-        value: "Digital Nomad Hostel & Coliving",
-        label: "Digital Nomad Hostel & Coliving",
-        nepali: "डिजिटल नोम्याड होस्टेल",
-        tagline: "Social dorms/rooms with quiet fiber work room"
+        value: "Digital Nomad Hostel with Coworking",
+        label: "Digital Nomad Hostel with Coworking",
+        nepali: "डिजिटल नोम्याड होस्टेल र वर्क स्पेस",
+        tagline: "Social hostel with shared dorms/rooms & dedicated fiber work room"
       },
       {
         value: "Work-Friendly Hotel & Resort",
@@ -201,7 +201,19 @@ export const PROPERTY_CATEGORY_OPTIONS: CategoryOption[] = [
         value: "Himalayan Workation Retreat",
         label: "Himalayan Workation Retreat",
         nepali: "हिमालयन वर्केसन रिट्रिट",
-        tagline: "Mountain-view peace, organic food & remote work setup"
+        tagline: "Mountain-view peace, organic meals, yoga & remote work setup"
+      },
+      {
+        value: "Homestay with Dedicated Workspace",
+        label: "Homestay with Dedicated Workspace",
+        nepali: "होमस्टे र वर्क डेक्स",
+        tagline: "Authentic local family homestay with fiber Wi-Fi & workspace"
+      },
+      {
+        value: "Nomad Guesthouse with Work Lounge",
+        label: "Nomad Guesthouse with Work Lounge",
+        nepali: "गेस्टहाउस र साझा वर्क लाउन्ज",
+        tagline: "Cozy mountain/lakeside guesthouse with high-speed work terrace"
       }
     ]
   },
@@ -215,13 +227,13 @@ export const PROPERTY_CATEGORY_OPTIONS: CategoryOption[] = [
         value: "Coworking & Hot Desk Space",
         label: "Coworking & Hot Desk Space",
         nepali: "साझा कोवर्किङ र हट डेस्क",
-        tagline: "Flexible hot desks with 100+ Mbps fiber & backup power"
+        tagline: "Flexible hot desks with 100+ Mbps fiber, power backup & phone booths"
       },
       {
         value: "Hybrid Cafe & Work Lounge",
         label: "Hybrid Cafe & Work Lounge",
         nepali: "वर्क-फ्रेन्डली क्याफे र लाउन्ज",
-        tagline: "Specialty coffee, quiet seating & work-friendly ambience"
+        tagline: "Specialty coffee, quiet seating, charging ports & laptop ambience"
       },
       {
         value: "Private Dedicated Desk / Office",
@@ -234,33 +246,115 @@ export const PROPERTY_CATEGORY_OPTIONS: CategoryOption[] = [
         label: "Meeting & Event Work Hub",
         nepali: "मिटिङ हल र सेमिनार स्पेस",
         tagline: "Conference rooms, podcast gear & workshop event seating"
+      },
+      {
+        value: "Library & Quiet Study Space",
+        label: "Library & Quiet Study Space",
+        nepali: "शान्त अध्ययन र कोडिङ स्पेस",
+        tagline: "Silent focus environment ideal for software engineers & writers"
+      },
+      {
+        value: "Creative Studio / Maker Space",
+        label: "Creative Studio / Maker Space",
+        nepali: "सिर्जनात्मक स्टुडियो र वर्कसप",
+        tagline: "Photo/video studios, audio recording & maker workspaces"
       }
     ]
   },
   {
     value: "Stay Only",
     label: "Stay Only (बसाइ मात्र)",
-    nepali: "बसाइ मात्र — Remote Living",
-    badge: "Remote Living",
+    nepali: "बसाइ मात्र — Hostels, Villas & Homestays",
+    badge: "Remote Living & Stays",
     subtypes: [
+      {
+        value: "Nomad & Backpacker Hostel",
+        label: "Nomad & Backpacker Hostel",
+        nepali: "होस्टेल / ब्याकप्याकर होस्टेल",
+        tagline: "Budget shared dorms & private rooms, social vibe, community lounge"
+      },
       {
         value: "Long-Term Nomad Villa & Apartment",
         label: "Long-Term Nomad Villa & Apartment",
         nepali: "लामो अवधिको भिल्ला वा अपार्टमेन्ट",
-        tagline: "Self-contained apartments or villas for stays of 2 weeks to 6 months"
+        tagline: "Self-contained furnished apartments/villas for stays of 2 weeks to 6 months"
       },
       {
-        value: "Boutique Guesthouse & Homestay",
-        label: "Boutique Guesthouse & Homestay",
-        nepali: "होमस्टे र गेस्टहाउस",
-        tagline: "Authentic local family homestay with verified high-speed Wi-Fi"
+        value: "Boutique Guesthouse & Bed & Breakfast",
+        label: "Boutique Guesthouse & Bed & Breakfast",
+        nepali: "गेस्टहाउस तथा B&B",
+        tagline: "Charming rooms with home-cooked breakfast & peaceful setting"
+      },
+      {
+        value: "Traditional Local Homestay",
+        label: "Traditional Local Homestay",
+        nepali: "गाउँले तथा सांस्कृतिक होमस्टे",
+        tagline: "Cultural family stay with authentic home meals & mountain view"
       },
       {
         value: "Serviced Studio for Remote Workers",
         label: "Serviced Studio for Remote Workers",
-        nepali: "स्टुडियो अपार्टमेन्ट",
+        nepali: "फर्निस्ड स्टुडियो अपार्टमेन्ट",
         tagline: "Compact private studio with kitchen, desk and weekly cleaning"
+      },
+      {
+        value: "Eco-Lodge & Nature Cottage",
+        label: "Eco-Lodge & Nature Cottage",
+        nepali: "इको-लज र कटेज",
+        tagline: "Sustainable tranquil nature stays in Sauraha, Nagarkot or Bandipur"
       }
     ]
+  }
+]
+
+export interface FoodDrinkOption {
+  id: string
+  label: string
+  nepali: string
+  description: string
+}
+
+export const FOOD_AND_DRINKS_OPTIONS: FoodDrinkOption[] = [
+  {
+    id: "food_breakfast",
+    label: "Breakfast",
+    nepali: "बिहानको खाजा / ब्रेकफास्ट",
+    description: "Morning meals, eggs, toast, local tea or porridge"
+  },
+  {
+    id: "food_lunch",
+    label: "Lunch",
+    nepali: "दिउँसोको खाना / लन्च",
+    description: "Nepali Dal Bhat, noodles, sandwiches, or thali sets"
+  },
+  {
+    id: "food_dinner",
+    label: "Dinner",
+    nepali: "साँझको खाना / डिनर",
+    description: "Warm evening dinners, momos, curries, or international food"
+  },
+  {
+    id: "food_snacks",
+    label: "Snacks & Quick Bites",
+    nepali: "खाजा तथा स्न्याक्स",
+    description: "Light bites, pastries, energy bars, pakodas, fries"
+  },
+  {
+    id: "food_drinks",
+    label: "Specialty Coffee, Tea & Drinks",
+    nepali: "कफी, चिया तथा पेय पदार्थ",
+    description: "Himalayan organic coffee, masala chai, fresh juices"
+  },
+  {
+    id: "food_kitchen",
+    label: "Shared Guest Kitchen",
+    nepali: "अतिथि स्वयंले पकाउन मिल्ने भान्सा",
+    description: "Gas stove, refrigerator & utensils for nomads to cook their own food"
+  },
+  {
+    id: "food_breakfast_included",
+    label: "Free Breakfast Included with Stay",
+    nepali: "बसाइमा बिहानको खाजा समावेश",
+    description: "Complimentary daily morning breakfast for staying guests"
   }
 ]
