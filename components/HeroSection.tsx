@@ -140,10 +140,10 @@ export default function HeroSection() {
         {/* High-Contrast Editorial Heading */}
         <h1 className="tracking-tight text-center max-w-4xl mb-4 sm:mb-6">
           <span className="block font-extrabold text-3xl sm:text-5xl lg:text-6xl text-slate-900 dark:text-white leading-[1.12]">
-            Work &amp; Explore across Nepal
+            Digital Nomads in Nepal
           </span>
           <span className="block font-serif italic font-normal text-2xl sm:text-4xl lg:text-5xl text-[#C2410C] dark:text-[#FB923C] mt-2 leading-[1.18]">
-            High-Speed Stays, Coliving &amp; Licensed Guides
+            Live, Work &amp; Explore
           </span>
         </h1>
 
