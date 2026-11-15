@@ -372,7 +372,8 @@ export default function Navbar() {
     },
   ]
 
-  const isSolid = !isHome || isScrolled
+  // Always solid navigation with high-contrast palette matching static canvas
+  const isSolid = true
 
   return (
     <header className="fixed top-0 w-full z-50">
