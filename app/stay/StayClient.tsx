@@ -45,7 +45,7 @@ export default function StayClient() {
               <div className="pt-2 flex items-center justify-center">
                 <Link
                   href="/workspaces"
-                  className="px-5 py-2.5 bg-primary/10 hover:bg-primary text-primary hover:text-black border border-primary/40 font-extrabold text-xs rounded-xl transition-all shadow-md flex items-center gap-2 active:scale-95"
+                  className="px-5 py-2.5 bg-[#C2410C]/10 hover:bg-[#C2410C] text-[#C2410C] dark:text-[#FB923C] hover:text-white border border-[#C2410C]/30 font-bold text-xs rounded-xl transition-all shadow-xs flex items-center gap-2 active:scale-95"
                 >
                   <Building size={14} />
                   Looking for Coworking Desks &amp; Workspaces? Explore Marketplace ➔
@@ -60,10 +60,10 @@ export default function StayClient() {
               <button
                 key={type}
                 onClick={() => setSelectedType(type)}
-                className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all border ${
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
                   selectedType.toLowerCase() === type.toLowerCase()
-                    ? "bg-primary text-black border-primary shadow-md shadow-primary/20"
-                    : "bg-card border-border text-muted-foreground hover:text-foreground hover:border-primary/40"
+                    ? "bg-[#C2410C] text-white border-[#C2410C] shadow-sm shadow-[#C2410C]/20"
+                    : "bg-card border-border text-muted-foreground hover:text-foreground hover:border-[#C2410C]/40"
                 }`}
               >
                 {type}
@@ -71,7 +71,7 @@ export default function StayClient() {
             ))}
             <Link
               href="/workspaces"
-              className="px-4 py-2 rounded-xl text-xs font-black transition-all border bg-primary/10 border-primary/40 text-primary hover:bg-primary hover:text-black flex items-center gap-1.5 shadow-md shadow-primary/10"
+              className="px-4 py-2 rounded-xl text-xs font-bold transition-all border bg-[#C2410C]/10 border-[#C2410C]/30 text-[#C2410C] dark:text-[#FB923C] hover:bg-[#C2410C] hover:text-white flex items-center gap-1.5 shadow-xs"
             >
               🏢 Coworking & Workspaces ➔
             </Link>
@@ -83,7 +83,7 @@ export default function StayClient() {
               <div key={stay.id} className="bg-card border border-border rounded-3xl overflow-hidden hover:border-primary/40 transition-all flex flex-col sm:flex-row group shadow-md">
                 <div className="sm:w-2/5 h-48 sm:h-auto bg-muted relative overflow-hidden">
                   <img src={stay.photoUrl} alt={stay.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                  <span className="absolute top-3 left-3 bg-primary text-black font-black text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-md">
+                  <span className="absolute top-3 left-3 bg-[#1B4332] text-white font-bold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-md shadow-xs">
                     {stay.type}
                   </span>
                 </div>
@@ -113,10 +113,10 @@ export default function StayClient() {
                         ⭐ <strong className="text-foreground">{stay.rating}</strong> ({stay.reviews} reviews)
                       </span>
                       <Link
-                        href="/workspaces#book"
-                        className="inline-flex items-center gap-1 text-xs font-black text-black bg-primary hover:bg-yellow-400 px-3.5 py-1.5 rounded-xl transition-all"
+                        href="/workspaces"
+                        className="inline-flex items-center gap-1 text-xs font-bold text-white bg-[#C2410C] hover:bg-[#9A3412] px-3.5 py-1.5 rounded-xl transition-all shadow-xs"
                       >
-                        Reserve <ArrowRight size={12} />
+                        Explore <ArrowRight size={12} />
                       </Link>
                     </div>
                   </div>

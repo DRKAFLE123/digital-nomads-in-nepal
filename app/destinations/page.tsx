@@ -240,7 +240,7 @@ export default async function DestinationsPage() {
                   <div className="p-6 pt-0 mt-auto">
                     <Link
                       href={`/destinations/${dest.slug}`}
-                      className="w-full bg-accent hover:bg-primary hover:text-black transition-colors text-foreground font-bold rounded-xl py-3 px-4 text-xs flex items-center justify-center gap-2 group-hover:shadow-md"
+                      className="w-full bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold rounded-xl py-3 px-4 text-xs flex items-center justify-center gap-2 shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
                     >
                       Explore Complete Guide
                       <ArrowRight size={14} />
