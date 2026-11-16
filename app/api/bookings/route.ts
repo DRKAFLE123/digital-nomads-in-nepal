@@ -102,6 +102,16 @@ export async function GET(req: NextRequest) {
 // POST create a new booking
 export async function POST(req: NextRequest) {
   try {
+    const { checkRateLimit, getClientIp } = await import("@/lib/rate-limit")
+    const ip = getClientIp(req)
+    const rateLimit = checkRateLimit(`bookings-post:${ip}`, { limit: 10, windowSeconds: 15 * 60 })
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        { error: `Too many booking requests. Please try again in ${rateLimit.resetInSeconds} seconds.` },
+        { status: 429, headers: { "Retry-After": String(rateLimit.resetInSeconds) } }
+      )
+    }
+
     const session = await getServerSession(authOptions)
     const body = await req.json()
     const { hubId, nomadName, nomadEmail, startDate, endDate, notes } = body
@@ -120,8 +130,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid date format." }, { status: 400 })
     }
 
-    if (bookingEndDate < bookingStartDate) {
-      return NextResponse.json({ error: "Check-out date must be on or after check-in date." }, { status: 400 })
+    if (bookingEndDate <= bookingStartDate) {
+      return NextResponse.json({ error: "Check-out date must be strictly after check-in date." }, { status: 400 })
+    }
+
+    // Do not allow reservations in the past
+    const now = new Date()
+    now.setHours(0, 0, 0, 0)
+    now.setDate(now.getDate() - 1)
+    if (bookingStartDate < now) {
+      return NextResponse.json({ error: "Reservation dates cannot be in the past." }, { status: 400 })
     }
 
     // Verify target hub exists
@@ -131,7 +149,32 @@ export async function POST(req: NextRequest) {
     }
 
     // If authenticated, ensure nomadEmail matches authenticated user unless Admin
-    const emailToUse = session?.user?.email ? session.user.email : nomadEmail.trim().toLowerCase()
+    const emailToUse = session?.user?.email ? session.user.email.toLowerCase() : String(nomadEmail).trim().toLowerCase()
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(emailToUse) || emailToUse.length > 100) {
+      return NextResponse.json({ error: "Please provide a valid email address." }, { status: 400 })
+    }
+
+    // Double-booking prevention
+    const existingConflict = await prisma.hubBooking.findFirst({
+      where: {
+        hubId: hub.id,
+        nomadEmail: emailToUse,
+        status: { in: ["PENDING", "CONFIRMED"] },
+        AND: [
+          { startDate: { lt: bookingEndDate } },
+          { endDate: { gt: bookingStartDate } }
+        ]
+      }
+    })
+
+    if (existingConflict) {
+      return NextResponse.json(
+        { error: "You already have an active or pending reservation for this space overlapping these dates." },
+        { status: 409 }
+      )
+    }
 
     const booking = await prisma.hubBooking.create({
       data: {

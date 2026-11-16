@@ -1,11 +1,21 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit"
 
 export async function POST(
   req: NextRequest,
   { params }: { params: { slug: string } }
 ) {
   try {
+    const ip = getClientIp(req)
+    const rateLimit = checkRateLimit(`book:${ip}`, { limit: 10, windowSeconds: 15 * 60 })
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        { error: `Too many reservation requests. Please try again in ${rateLimit.resetInSeconds} seconds.` },
+        { status: 429, headers: { "Retry-After": String(rateLimit.resetInSeconds) } }
+      )
+    }
+
     const hub = await prisma.workHub.findUnique({
       where: { slug: params.slug }
     })
@@ -21,25 +31,60 @@ export async function POST(
       return NextResponse.json({ error: "Missing required booking fields." }, { status: 400 })
     }
 
+    const normalizedEmail = String(nomadEmail).trim().toLowerCase()
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(normalizedEmail) || normalizedEmail.length > 100) {
+      return NextResponse.json({ error: "Please provide a valid email address." }, { status: 400 })
+    }
+
     const start = new Date(startDate)
     const end = new Date(endDate)
 
     if (isNaN(start.getTime()) || isNaN(end.getTime())) {
-      return NextResponse.json({ error: "Invalid start or end date." }, { status: 400 })
+      return NextResponse.json({ error: "Invalid start or end date format." }, { status: 400 })
     }
 
     if (start >= end) {
-      return NextResponse.json({ error: "Start date must be before end date." }, { status: 400 })
+      return NextResponse.json({ error: "Check-out date must be strictly after check-in date." }, { status: 400 })
+    }
+
+    // Do not allow reservations in the past (allow small grace buffer for timezones)
+    const now = new Date()
+    now.setHours(0, 0, 0, 0)
+    now.setDate(now.getDate() - 1)
+    if (start < now) {
+      return NextResponse.json({ error: "Reservation dates cannot be in the past." }, { status: 400 })
+    }
+
+    // Double-booking prevention: Check if user already has an active overlapping reservation for this hub
+    const existingConflict = await prisma.hubBooking.findFirst({
+      where: {
+        hubId: hub.id,
+        nomadEmail: normalizedEmail,
+        status: { in: ["PENDING", "CONFIRMED"] },
+        AND: [
+          { startDate: { lt: end } },
+          { endDate: { gt: start } }
+        ]
+      }
+    })
+
+    if (existingConflict) {
+      return NextResponse.json(
+        { error: "You already have an active or pending reservation for this space overlapping these dates." },
+        { status: 409 }
+      )
     }
 
     const booking = await prisma.hubBooking.create({
       data: {
         hubId: hub.id,
-        nomadName,
-        nomadEmail,
+        nomadName: String(nomadName).trim().slice(0, 100),
+        nomadEmail: normalizedEmail,
         startDate: start,
         endDate: end,
-        notes: notes || null
+        notes: notes ? String(notes).trim().slice(0, 1000) : null,
+        status: "PENDING"
       }
     })
 
