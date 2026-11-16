@@ -24,32 +24,61 @@ const LOCATIONS = [
   { value: "Lalitpur", label: "Lalitpur", desc: "Jhamsikhel & Sanepa" },
   { value: "Bandipur", label: "Bandipur", desc: "Hilltop Peace & Coliving" },
   { value: "Bhaktapur", label: "Bhaktapur", desc: "Newari Heritage & Quiet" },
-  { value: "Solukhumbu", label: "Everest / Namche", desc: "Himalayan High Altitude" },
+  { value: "Solukhumbu", label: "Everest Region", desc: "Himalayan High Altitude" },
   { value: "Mustang", label: "Mustang", desc: "Rainshadow & Monasteries" },
+]
+
+const ROTATING_LOCATIONS = [
+  { value: "Kathmandu", label: "Kathmandu" },
+  { value: "Pokhara", label: "Pokhara" },
+  { value: "Bandipur", label: "Bandipur" },
+  { value: "Solukhumbu", label: "Everest Region" },
 ]
 
 const CATEGORIES = [
   {
     value: "workspace",
-    label: "Workspaces & Cafes",
+    label: "Workspaces & Desks",
     shortLabel: "Workspaces",
-    desc: "Coworking spaces, hot desks & fiber cafes",
+    desc: "Coworking spaces, dedicated desks & fiber hubs",
     icon: Building,
   },
   {
     value: "stay",
-    label: "Stays, Hostels & Coliving",
+    label: "Stays & Hostels",
     shortLabel: "Stays & Hostels",
-    desc: "Verified rooms with backup power & fiber",
+    desc: "Coliving hubs, boutique rooms & nomad hostels",
     icon: Home,
   },
   {
     value: "guide",
-    label: "Local Mountain Guides",
+    label: "Local Guides",
     shortLabel: "Local Guides",
-    desc: "Licensed Sherpa & trekking specialists",
+    desc: "Licensed Sherpa guides & certified trek leaders",
     icon: Users,
   },
+  {
+    value: "cafes",
+    label: "Nomad Work Cafes",
+    shortLabel: "Nomad Cafes",
+    desc: "Verified specialty coffee with fast Wi-Fi & plugs",
+    icon: Coffee,
+  },
+  {
+    value: "treks",
+    label: "Himalayan Treks",
+    shortLabel: "Himalayan Treks",
+    desc: "Everest, Annapurna & high-altitude routes",
+    icon: Mountain,
+  },
+]
+
+const ROTATING_CATEGORIES = [
+  { value: "workspace", shortLabel: "Workspaces", icon: Building },
+  { value: "stay", shortLabel: "Stays & Hostels", icon: Home },
+  { value: "guide", shortLabel: "Local Guides", icon: Users },
+  { value: "cafes", shortLabel: "Nomad Cafes", icon: Coffee },
+  { value: "treks", shortLabel: "Himalayan Treks", icon: Mountain },
 ]
 
 const QUICK_FILTERS = [
@@ -86,49 +115,119 @@ const QUICK_FILTERS = [
 ]
 
 export default function HeroSection() {
-  const [selectedCity, setSelectedCity] = useState("all")
-  const [selectedCategory, setSelectedCategory] = useState("workspace")
+  const router = useRouter()
+
+  // User explicit choices (null means empty / rotating placeholder state)
+  const [userCategory, setUserCategory] = useState<string | null>(null)
+  const [userCity, setUserCity] = useState<string | null>(null)
+
+  // Rotating indexes
+  const [catIndex, setCatIndex] = useState(0)
+  const [locIndex, setLocIndex] = useState(0)
+
+  // Interaction tracking (pauses rotation on hover or focus)
+  const [isHovered, setIsHovered] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
+  const [reducedMotion, setReducedMotion] = useState(false)
 
   // Custom Dropdowns
-  const [whereOpen, setWhereOpen] = useState(false)
   const [whatOpen, setWhatOpen] = useState(false)
+  const [whereOpen, setWhereOpen] = useState(false)
 
-  const whereRef = useRef<HTMLDivElement>(null)
   const whatRef = useRef<HTMLDivElement>(null)
-  const router = useRouter()
+  const whereRef = useRef<HTMLDivElement>(null)
+
+  // Detect prefers-reduced-motion
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)")
+    setReducedMotion(mq.matches)
+
+    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches)
+    mq.addEventListener("change", handler)
+    return () => mq.removeEventListener("change", handler)
+  }, [])
 
   // Close dropdowns on outside click
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
-      if (whereRef.current && !whereRef.current.contains(e.target as Node)) {
-        setWhereOpen(false)
-      }
       if (whatRef.current && !whatRef.current.contains(e.target as Node)) {
         setWhatOpen(false)
+      }
+      if (whereRef.current && !whereRef.current.contains(e.target as Node)) {
+        setWhereOpen(false)
       }
     }
     document.addEventListener("mousedown", handleClickOutside)
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
 
+  // Segment 1 (What) Category rotation every 2.8s
+  useEffect(() => {
+    if (reducedMotion || userCategory !== null) return
+
+    const interval = setInterval(() => {
+      if (!isHovered && !isFocused && !whatOpen && !whereOpen) {
+        setCatIndex((prev) => (prev + 1) % ROTATING_CATEGORIES.length)
+      }
+    }, 2800)
+
+    return () => clearInterval(interval)
+  }, [reducedMotion, userCategory, isHovered, isFocused, whatOpen, whereOpen])
+
+  // Segment 2 (Where) Location rotation (staggered by 1.2s so they don't flip simultaneously)
+  useEffect(() => {
+    if (reducedMotion || userCity !== null) return
+
+    let interval: NodeJS.Timeout
+
+    const startTimeout = setTimeout(() => {
+      interval = setInterval(() => {
+        if (!isHovered && !isFocused && !whatOpen && !whereOpen) {
+          setLocIndex((prev) => (prev + 1) % ROTATING_LOCATIONS.length)
+        }
+      }, 2800)
+    }, 1200)
+
+    return () => {
+      clearTimeout(startTimeout)
+      if (interval) clearInterval(interval)
+    }
+  }, [reducedMotion, userCity, isHovered, isFocused, whatOpen, whereOpen])
+
   function handleSearch(e: React.FormEvent) {
     e.preventDefault()
     setWhereOpen(false)
     setWhatOpen(false)
 
-    const cityQuery = selectedCity !== "all" ? `?city=${encodeURIComponent(selectedCity)}` : ""
-    if (selectedCategory === "workspace") {
-      router.push(`/workspaces${cityQuery}`)
-    } else if (selectedCategory === "stay") {
+    const cityQuery = userCity && userCity !== "all" ? `?city=${encodeURIComponent(userCity)}` : ""
+    const cat = userCategory || "workspace"
+
+    if (cat === "stay") {
       router.push(`/stay${cityQuery}`)
-    } else {
+    } else if (cat === "guide") {
       router.push(`/guides${cityQuery}`)
+    } else if (cat === "treks") {
+      router.push(`/destinations${cityQuery}`)
+    } else if (cat === "cafes") {
+      const cafeQuery = userCity && userCity !== "all"
+        ? `?category=Work-Friendly%20Cafes&city=${encodeURIComponent(userCity)}`
+        : `?category=Work-Friendly%20Cafes`
+      router.push(`/workspaces${cafeQuery}`)
+    } else {
+      router.push(`/workspaces${cityQuery}`)
     }
   }
 
-  const activeCityObj = LOCATIONS.find((l) => l.value === selectedCity) || LOCATIONS[0]
-  const activeCatObj = CATEGORIES.find((c) => c.value === selectedCategory) || CATEGORIES[0]
-  const ActiveCatIcon = activeCatObj.icon
+  // Active or rotating display values
+  const currentRotatingCat = ROTATING_CATEGORIES[catIndex] || ROTATING_CATEGORIES[0]
+  const selectedCatObj = userCategory ? CATEGORIES.find((c) => c.value === userCategory) : null
+  const ActiveWhatIcon = selectedCatObj ? selectedCatObj.icon : currentRotatingCat.icon
+  const activeWhatLabel = selectedCatObj ? selectedCatObj.shortLabel : currentRotatingCat.shortLabel
+
+  const currentRotatingLoc = ROTATING_LOCATIONS[locIndex] || ROTATING_LOCATIONS[0]
+  const selectedCityObj = userCity ? LOCATIONS.find((l) => l.value === userCity) : null
+  const activeWhereLabel = selectedCityObj ? selectedCityObj.label : currentRotatingLoc.label
 
   return (
     <section className="relative z-20 w-full pt-[124px] pb-5 sm:pt-[136px] sm:pb-6 bg-white dark:bg-[#0B0B0D] transition-colors border-b border-[#E8E2D8]/60 dark:border-[#1F1F24]">
@@ -175,79 +274,13 @@ export default function HeroSection() {
         {/* Elevated Segmented Search Bar - Primary Visual Anchor */}
         <form
           onSubmit={handleSearch}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
           className="w-full max-w-4xl mx-auto bg-white dark:bg-[#141416] border border-slate-200/90 dark:border-[#27272A] rounded-2xl sm:rounded-full p-2 sm:p-2 shadow-[0_12px_36px_-10px_rgba(0,0,0,0.08)] dark:shadow-[0_12px_36px_-10px_rgba(0,0,0,0.6)] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 text-left"
         >
-          {/* Segment 1: WHERE Custom Dropdown */}
-          <div ref={whereRef} className="relative flex-1">
-            <button
-              type="button"
-              onClick={() => {
-                setWhereOpen(!whereOpen)
-                setWhatOpen(false)
-              }}
-              className="w-full text-left px-3.5 sm:px-4 py-1.5 sm:py-1.5 rounded-xl sm:rounded-full hover:bg-slate-50 dark:hover:bg-[#1E1E23] transition-colors flex items-center justify-between group cursor-pointer"
-            >
-              <div className="flex items-center gap-3 min-w-0 pr-2">
-                <div className="w-8.5 h-8.5 rounded-full bg-slate-50 dark:bg-[#1E1E23] border border-slate-200/80 dark:border-[#2E2E34] flex items-center justify-center shrink-0 group-hover:border-[#C2410C]/40 transition-colors">
-                  <MapPin size={15} className="text-[#C2410C] dark:text-[#FB923C]" />
-                </div>
-                <div className="min-w-0">
-                  <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block leading-tight mb-0.5">
-                    Where in Nepal
-                  </span>
-                  <span className="block text-xs sm:text-sm font-bold text-slate-900 dark:text-white truncate">
-                    {activeCityObj.label}
-                  </span>
-                </div>
-              </div>
-              <ChevronDown
-                size={15}
-                className={`text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-200 transition-transform duration-200 shrink-0 mr-1 ${
-                  whereOpen ? "rotate-180 text-[#C2410C]" : ""
-                }`}
-              />
-            </button>
-
-            {/* Custom Popover with Discreet Thin Scrollbar */}
-            {whereOpen && (
-              <div className="absolute top-full left-0 right-0 sm:left-0 sm:right-auto sm:w-80 mt-2 bg-white dark:bg-[#141416] border border-slate-200 dark:border-[#27272A] rounded-2xl shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
-                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-3 py-1.5">
-                  Select Hub / Destination
-                </div>
-                <div className="max-h-64 overflow-y-auto space-y-0.5 pr-1 [scrollbar-width:thin] [scrollbar-color:#CBD5E1_transparent] dark:[scrollbar-color:#334155_transparent]">
-                  {LOCATIONS.map((loc) => {
-                    const isSelected = loc.value === selectedCity
-                    return (
-                      <button
-                        key={loc.value}
-                        type="button"
-                        onClick={() => {
-                          setSelectedCity(loc.value)
-                          setWhereOpen(false)
-                        }}
-                        className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors ${
-                          isSelected
-                            ? "bg-[#C2410C]/10 text-[#C2410C] dark:text-[#FB923C]"
-                            : "text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-[#1F1F24]"
-                        }`}
-                      >
-                        <div className="min-w-0 pr-2">
-                          <span className="block font-bold truncate">{loc.label}</span>
-                          <span className="text-[10px] text-slate-400 block truncate">{loc.desc}</span>
-                        </div>
-                        {isSelected && <Check size={14} className="text-[#C2410C] dark:text-[#FB923C] shrink-0" />}
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Divider (Desktop Only) */}
-          <div className="hidden sm:block w-[1px] h-9 bg-slate-200 dark:bg-[#27272A]" />
-
-          {/* Segment 2: WHAT Custom Dropdown */}
+          {/* Segment 1: WHAT ARE YOU LOOKING FOR? (FIRST) */}
           <div ref={whatRef} className="relative flex-1">
             <button
               type="button"
@@ -255,19 +288,32 @@ export default function HeroSection() {
                 setWhatOpen(!whatOpen)
                 setWhereOpen(false)
               }}
+              aria-label={userCategory ? `What are you looking for: ${activeWhatLabel}` : "What are you looking for? Select category"}
               className="w-full text-left px-3.5 sm:px-4 py-1.5 sm:py-1.5 rounded-xl sm:rounded-full hover:bg-slate-50 dark:hover:bg-[#1E1E23] transition-colors flex items-center justify-between group cursor-pointer"
             >
               <div className="flex items-center gap-3 min-w-0 pr-2">
                 <div className="w-8.5 h-8.5 rounded-full bg-slate-50 dark:bg-[#1E1E23] border border-slate-200/80 dark:border-[#2E2E34] flex items-center justify-center shrink-0 group-hover:border-[#023629]/40 transition-colors">
-                  <ActiveCatIcon size={15} className="text-[#023629] dark:text-[#34D399]" />
+                  <ActiveWhatIcon size={15} className="text-[#023629] dark:text-[#34D399]" />
                 </div>
                 <div className="min-w-0">
                   <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block leading-tight mb-0.5">
                     What are you looking for?
                   </span>
-                  <span className="block text-xs sm:text-sm font-bold text-slate-900 dark:text-white truncate">
-                    {activeCatObj.shortLabel}
-                  </span>
+                  <div className="h-5 flex items-center min-w-[140px] sm:min-w-[170px] overflow-hidden">
+                    {userCategory ? (
+                      <span className="block text-xs sm:text-sm font-bold text-slate-900 dark:text-white truncate">
+                        {activeWhatLabel}
+                      </span>
+                    ) : (
+                      <span
+                        key={catIndex}
+                        aria-hidden="true"
+                        className="block text-xs sm:text-sm font-bold text-slate-900 dark:text-white truncate animate-hint-slide"
+                      >
+                        {activeWhatLabel}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
               <ChevronDown
@@ -278,25 +324,37 @@ export default function HeroSection() {
               />
             </button>
 
-            {/* Custom Popover with Discreet Thin Scrollbar */}
+            {/* What Custom Popover */}
             {whatOpen && (
               <div className="absolute top-full left-0 right-0 sm:left-0 sm:right-auto sm:w-80 mt-2 bg-white dark:bg-[#141416] border border-slate-200 dark:border-[#27272A] rounded-2xl shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
-                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-3 py-1.5">
-                  Select Category
+                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-3 py-1.5 flex items-center justify-between">
+                  <span>Select Category</span>
+                  {userCategory && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setUserCategory(null)
+                        setWhatOpen(false)
+                      }}
+                      className="text-[10px] text-[#C2410C] hover:underline cursor-pointer lowercase font-medium"
+                    >
+                      reset hint
+                    </button>
+                  )}
                 </div>
                 <div className="space-y-0.5">
                   {CATEGORIES.map((cat) => {
-                    const isSelected = cat.value === selectedCategory
+                    const isSelected = userCategory === cat.value
                     const Icon = cat.icon
                     return (
                       <button
                         key={cat.value}
                         type="button"
                         onClick={() => {
-                          setSelectedCategory(cat.value)
+                          setUserCategory(cat.value)
                           setWhatOpen(false)
                         }}
-                        className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors ${
+                        className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer ${
                           isSelected
                             ? "bg-[#C2410C]/10 text-[#C2410C] dark:text-[#FB923C]"
                             : "text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-[#1F1F24]"
@@ -318,7 +376,102 @@ export default function HeroSection() {
             )}
           </div>
 
-          {/* Search Button (Solid Terracotta, Proportional Height & Crisp Alignment) */}
+          {/* Divider (Desktop Only) */}
+          <div className="hidden sm:block w-[1px] h-9 bg-slate-200 dark:bg-[#27272A]" />
+
+          {/* Segment 2: WHERE IN NEPAL (SECOND) */}
+          <div ref={whereRef} className="relative flex-1">
+            <button
+              type="button"
+              onClick={() => {
+                setWhereOpen(!whereOpen)
+                setWhatOpen(false)
+              }}
+              aria-label={userCity ? `Where in Nepal: ${activeWhereLabel}` : "Where in Nepal? Select destination"}
+              className="w-full text-left px-3.5 sm:px-4 py-1.5 sm:py-1.5 rounded-xl sm:rounded-full hover:bg-slate-50 dark:hover:bg-[#1E1E23] transition-colors flex items-center justify-between group cursor-pointer"
+            >
+              <div className="flex items-center gap-3 min-w-0 pr-2">
+                <div className="w-8.5 h-8.5 rounded-full bg-slate-50 dark:bg-[#1E1E23] border border-slate-200/80 dark:border-[#2E2E34] flex items-center justify-center shrink-0 group-hover:border-[#C2410C]/40 transition-colors">
+                  <MapPin size={15} className="text-[#C2410C] dark:text-[#FB923C]" />
+                </div>
+                <div className="min-w-0">
+                  <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block leading-tight mb-0.5">
+                    Where in Nepal
+                  </span>
+                  <div className="h-5 flex items-center min-w-[140px] sm:min-w-[170px] overflow-hidden">
+                    {userCity ? (
+                      <span className="block text-xs sm:text-sm font-bold text-slate-900 dark:text-white truncate">
+                        {activeWhereLabel}
+                      </span>
+                    ) : (
+                      <span
+                        key={locIndex}
+                        aria-hidden="true"
+                        className="block text-xs sm:text-sm font-bold text-slate-900 dark:text-white truncate animate-hint-slide"
+                      >
+                        {activeWhereLabel}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <ChevronDown
+                size={15}
+                className={`text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-200 transition-transform duration-200 shrink-0 mr-1 ${
+                  whereOpen ? "rotate-180 text-[#C2410C]" : ""
+                }`}
+              />
+            </button>
+
+            {/* Where Custom Popover */}
+            {whereOpen && (
+              <div className="absolute top-full left-0 right-0 sm:left-0 sm:right-auto sm:w-80 mt-2 bg-white dark:bg-[#141416] border border-slate-200 dark:border-[#27272A] rounded-2xl shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-3 py-1.5 flex items-center justify-between">
+                  <span>Select Destination</span>
+                  {userCity && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setUserCity(null)
+                        setWhereOpen(false)
+                      }}
+                      className="text-[10px] text-[#C2410C] hover:underline cursor-pointer lowercase font-medium"
+                    >
+                      reset hint
+                    </button>
+                  )}
+                </div>
+                <div className="max-h-64 overflow-y-auto space-y-0.5 pr-1 [scrollbar-width:thin] [scrollbar-color:#CBD5E1_transparent] dark:[scrollbar-color:#334155_transparent]">
+                  {LOCATIONS.map((loc) => {
+                    const isSelected = userCity === loc.value
+                    return (
+                      <button
+                        key={loc.value}
+                        type="button"
+                        onClick={() => {
+                          setUserCity(loc.value)
+                          setWhereOpen(false)
+                        }}
+                        className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer ${
+                          isSelected
+                            ? "bg-[#C2410C]/10 text-[#C2410C] dark:text-[#FB923C]"
+                            : "text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-[#1F1F24]"
+                        }`}
+                      >
+                        <div className="min-w-0 pr-2">
+                          <span className="block font-bold truncate">{loc.label}</span>
+                          <span className="text-[10px] text-slate-400 block truncate">{loc.desc}</span>
+                        </div>
+                        {isSelected && <Check size={14} className="text-[#C2410C] dark:text-[#FB923C] shrink-0" />}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Search Button (Third) */}
           <button
             type="submit"
             className="w-full sm:w-auto bg-[#C2410C] hover:bg-[#9A3412] active:scale-95 text-white font-bold text-xs sm:text-sm px-7 py-3 rounded-xl sm:rounded-full transition-all shadow-md shadow-[#C2410C]/25 flex items-center justify-center gap-2 cursor-pointer shrink-0 mt-0.5 sm:mt-0"
