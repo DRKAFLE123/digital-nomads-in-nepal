@@ -55,7 +55,18 @@ export default function CoworkingMarketplaceClient({
   const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
   const [sort, setSort] = useState("lowest_price");
   const [viewMode, setViewMode] = useState<"grid" | "split">("grid");
-  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+
+  // ESC key listener to close filter modal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isFilterModalOpen) {
+        setIsFilterModalOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isFilterModalOpen]);
 
   // Sync URL search params if navigated via /stay, /stay?category=hostel, /workspaces?type=stay, etc.
   useEffect(() => {
@@ -239,12 +250,13 @@ export default function CoworkingMarketplaceClient({
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-0.5">
               {/* Button Controls Grid (3 equal columns on mobile) */}
               <div className="grid grid-cols-3 sm:flex sm:items-center gap-1.5 sm:gap-2 w-full sm:w-auto">
-                {/* Mobile Filter Button */}
+                {/* Filter Modal Trigger Button (Available on Desktop & Mobile) */}
                 <button
                   type="button"
-                  onClick={() => setMobileFilterOpen(true)}
-                  className="lg:hidden flex items-center justify-center gap-1.5 px-2.5 py-2 bg-[#F8F6F0] hover:bg-gray-100 dark:bg-[#161618] dark:hover:bg-[#202024] border border-[#E8E2D8] dark:border-[#28282D] hover:border-[#C2410C]/60 rounded-xl text-xs font-semibold text-gray-800 dark:text-white transition-all cursor-pointer active:scale-95 shadow-xs"
-                  aria-label="Open Filters Drawer"
+                  onClick={() => setIsFilterModalOpen(true)}
+                  className="flex items-center justify-center gap-1.5 px-3 py-2 bg-[#F8F6F0] hover:bg-gray-100 dark:bg-[#161618] dark:hover:bg-[#202024] border border-[#E8E2D8] dark:border-[#28282D] hover:border-[#C2410C]/60 rounded-xl text-xs font-semibold text-gray-800 dark:text-white transition-all cursor-pointer active:scale-95 shadow-xs"
+                  aria-label="Open Filters Modal"
+                  title="Open comprehensive filters in pop-up modal"
                 >
                   <SlidersHorizontal size={13} className="text-[#C2410C] dark:text-[#FB923C] shrink-0" />
                   <span className="truncate lowercase">filters</span>
@@ -366,6 +378,7 @@ export default function CoworkingMarketplaceClient({
                 onToggleFacility={toggleFacility}
                 onClearAll={handleClearFilters}
                 totalCount={hubs.length}
+                onOpenFilterModal={() => setIsFilterModalOpen(true)}
               />
             </div>
 
@@ -563,34 +576,49 @@ export default function CoworkingMarketplaceClient({
           </div>
         </section>
 
-        {/* MOBILE LEFT SLIDER DRAWER MODAL */}
-        {mobileFilterOpen && (
-          <div className="fixed inset-0 z-50 flex lg:hidden">
+        {/* COMPREHENSIVE FILTER MODAL (Desktop Pop-Up Modal & Mobile Drawer) */}
+        {isFilterModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-4 md:p-6">
             {/* Backdrop */}
             <div
-              onClick={() => setMobileFilterOpen(false)}
-              className="fixed inset-0 bg-black/70 backdrop-blur-xs transition-opacity"
+              onClick={() => setIsFilterModalOpen(false)}
+              className="fixed inset-0 bg-black/70 backdrop-blur-xs transition-opacity animate-in fade-in duration-200"
             />
 
-            {/* Slide-In Drawer from Left */}
-            <div className="relative w-4/5 max-w-xs sm:max-w-sm h-full bg-white dark:bg-[#0F0F11] border-r border-[#E8E2D8] dark:border-[#242428] shadow-2xl z-10 flex flex-col p-5 overflow-y-auto animate-in slide-in-from-left duration-200">
-              {/* Drawer Top Header */}
-              <div className="flex items-center justify-between pb-3 border-b border-[#E8E2D8] dark:border-[#242428] mb-3">
-                <span className="font-black text-xs uppercase tracking-wider text-gray-900 dark:text-white flex items-center gap-2">
-                  <SlidersHorizontal size={14} className="text-[#C2410C] dark:text-[#FB923C]" /> Filter Workspaces
-                </span>
+            {/* Modal Dialog Container */}
+            <div className="relative w-full h-full sm:h-auto sm:max-h-[90vh] sm:max-w-2xl bg-white dark:bg-[#0F0F11] sm:border border-[#E8E2D8] dark:border-[#262628] sm:rounded-3xl shadow-2xl z-10 flex flex-col overflow-hidden animate-in zoom-in-95 duration-200">
+              {/* Modal Top Header */}
+              <div className="flex items-center justify-between px-5 sm:px-6 py-4 border-b border-[#E8E2D8] dark:border-[#242428] shrink-0 bg-white/95 dark:bg-[#0F0F11]/95 backdrop-blur-sm">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-[#C2410C]/10 text-[#C2410C] dark:text-[#FB923C] flex items-center justify-center">
+                    <SlidersHorizontal size={16} />
+                  </div>
+                  <div>
+                    <h3 className="font-black text-sm sm:text-base text-gray-900 dark:text-white flex items-center gap-2">
+                      <span>Filters</span>
+                      {activeFilterCount > 0 && (
+                        <span className="bg-[#C2410C] text-white text-[10px] font-black px-2 py-0.5 rounded-full">
+                          {activeFilterCount} active
+                        </span>
+                      )}
+                    </h3>
+                    <p className="text-[11px] text-gray-500 dark:text-[#888]">
+                      Choose space type, verified work readiness, city, meals and amenities
+                    </p>
+                  </div>
+                </div>
                 <button
                   type="button"
-                  onClick={() => setMobileFilterOpen(false)}
-                  className="p-1.5 rounded-lg bg-gray-100 dark:bg-[#1a1a1a] text-gray-500 hover:text-gray-900 dark:hover:text-white cursor-pointer"
-                  aria-label="Close Filter Drawer"
+                  onClick={() => setIsFilterModalOpen(false)}
+                  className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-[#1a1a1c] dark:hover:bg-[#252528] text-gray-600 dark:text-gray-300 flex items-center justify-center transition-all cursor-pointer"
+                  aria-label="Close Filter Modal"
                 >
                   <X size={16} />
                 </button>
               </div>
 
-              {/* Sidebar Filters Inside Mobile Drawer */}
-              <div className="flex-1 overflow-y-auto pb-4 custom-scrollbar">
+              {/* Modal Scrollable Body */}
+              <div className="flex-1 overflow-y-auto p-5 sm:p-6 custom-scrollbar">
                 <WorkspaceSidebarFilter
                   offeringType={offeringType}
                   onSelectOfferingType={(type) => {
@@ -609,9 +637,26 @@ export default function CoworkingMarketplaceClient({
                   onToggleFacility={toggleFacility}
                   onClearAll={handleClearFilters}
                   totalCount={hubs.length}
-                  isMobileDrawer={true}
-                  onCloseMobile={() => setMobileFilterOpen(false)}
+                  isMobileDrawer={false}
                 />
+              </div>
+
+              {/* Modal Bottom Action Footer */}
+              <div className="flex items-center justify-between px-5 sm:px-6 py-3.5 border-t border-[#E8E2D8] dark:border-[#242428] bg-[#FBF9F5] dark:bg-[#121214] shrink-0">
+                <button
+                  type="button"
+                  onClick={handleClearFilters}
+                  className="text-xs font-bold text-gray-600 dark:text-gray-400 hover:text-[#C2410C] dark:hover:text-[#FB923C] hover:underline cursor-pointer"
+                >
+                  Clear all filters
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsFilterModalOpen(false)}
+                  className="px-6 py-2.5 bg-[#C2410C] hover:bg-[#9A3412] text-white font-extrabold text-xs sm:text-sm rounded-xl transition-all shadow-md shadow-[#C2410C]/20 active:scale-95 cursor-pointer"
+                >
+                  Show {hubs.length} {hubs.length === 1 ? "Space" : "Spaces"}
+                </button>
               </div>
             </div>
           </div>

@@ -1,7 +1,7 @@
 "use client"
 
-import React from "react"
-import { RotateCcw, Check, SlidersHorizontal, MapPin, Building, Wifi, Zap, Utensils } from "lucide-react"
+import React, { useState } from "react"
+import { RotateCcw, Check, SlidersHorizontal, MapPin, Building, Wifi, Zap, Utensils, ChevronDown, ChevronUp } from "lucide-react"
 
 export const SPACE_TYPES_BY_OFFERING: Record<string, Array<{ id: string; label: string }>> = {
   all: [
@@ -119,6 +119,7 @@ interface WorkspaceSidebarFilterProps {
   totalCount?: number
   isMobileDrawer?: boolean
   onCloseMobile?: () => void
+  onOpenFilterModal?: () => void
 }
 
 export default function WorkspaceSidebarFilter({
@@ -138,9 +139,16 @@ export default function WorkspaceSidebarFilter({
   totalCount,
   isMobileDrawer = false,
   onCloseMobile,
+  onOpenFilterModal,
 }: WorkspaceSidebarFilterProps) {
   const isHostelActive = category === "hostel" || category === "work_and_stay_hostel" || hostelType !== "all"
   const isStayContext = offeringType === "stay" || offeringType === "work_and_stay" || ["hotel", "hostel", "coliving", "apartment", "long_stay", "lodge"].includes(category)
+
+  // Progressive Disclosure State ("View more" / "Show less" only for long lists)
+  const [showAllSpaceTypes, setShowAllSpaceTypes] = useState(false)
+  const [showAllCities, setShowAllCities] = useState(false)
+  const [showAllWorkAmenities, setShowAllWorkAmenities] = useState(false)
+  const [showAllStayFacilities, setShowAllStayFacilities] = useState(false)
 
   const hasActiveFilters =
     offeringType !== "all" ||
@@ -171,10 +179,29 @@ export default function WorkspaceSidebarFilter({
       {/* Header / Clear All */}
       <div className="flex items-center justify-between pb-3 border-b border-[#E8E2D8] dark:border-[#242424]">
         <div className="flex items-center gap-2">
-          <SlidersHorizontal size={15} className="text-[#C2410C] dark:text-[#FB923C]" />
-          <span className="font-extrabold uppercase tracking-wider text-xs text-gray-900 dark:text-white">
-            Filters
-          </span>
+          {onOpenFilterModal ? (
+            <button
+              type="button"
+              onClick={onOpenFilterModal}
+              className="group/flth flex items-center gap-2 text-left cursor-pointer hover:opacity-85 transition-all select-none"
+              title="Open full filter dialog"
+            >
+              <SlidersHorizontal size={15} className="text-[#C2410C] dark:text-[#FB923C] group-hover/flth:scale-110 transition-transform" />
+              <span className="font-extrabold uppercase tracking-wider text-xs text-gray-900 dark:text-white group-hover/flth:text-[#C2410C] transition-colors">
+                Filters
+              </span>
+              <span className="text-[10px] font-mono text-gray-400 group-hover/flth:text-[#C2410C] transition-colors">
+                ↗
+              </span>
+            </button>
+          ) : (
+            <div className="flex items-center gap-2">
+              <SlidersHorizontal size={15} className="text-[#C2410C] dark:text-[#FB923C]" />
+              <span className="font-extrabold uppercase tracking-wider text-xs text-gray-900 dark:text-white">
+                Filters
+              </span>
+            </div>
+          )}
           {hasActiveFilters && (
             <span className="w-2 h-2 rounded-full bg-[#EA580C] animate-pulse" />
           )}
@@ -260,7 +287,7 @@ export default function WorkspaceSidebarFilter({
         </div>
 
         <div className="space-y-1">
-          {currentSpaceTypes.map((opt) => {
+          {(showAllSpaceTypes ? currentSpaceTypes : currentSpaceTypes.slice(0, 5)).map((opt) => {
             const isSelected = category === opt.id
             return (
               <button
@@ -278,6 +305,16 @@ export default function WorkspaceSidebarFilter({
               </button>
             )
           })}
+          {currentSpaceTypes.length > 5 && (
+            <button
+              type="button"
+              onClick={() => setShowAllSpaceTypes(!showAllSpaceTypes)}
+              className="w-full pt-1.5 px-1 text-left text-[11px] font-bold text-[#C2410C] dark:text-[#FB923C] hover:underline flex items-center gap-1 cursor-pointer"
+            >
+              <span>{showAllSpaceTypes ? "Show less" : `+ View ${currentSpaceTypes.length - 5} more types`}</span>
+              {showAllSpaceTypes ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+            </button>
+          )}
         </div>
       </div>
 
@@ -394,7 +431,7 @@ export default function WorkspaceSidebarFilter({
           <MapPin size={12} className="text-[#C2410C] dark:text-[#FB923C]" /> Location &amp; City
         </span>
         <div className="space-y-1">
-          {SIDEBAR_CITIES.map((c) => {
+          {(showAllCities ? SIDEBAR_CITIES : SIDEBAR_CITIES.slice(0, 4)).map((c) => {
             const isSelected = selectedCity === c.id
             return (
               <button
@@ -430,6 +467,16 @@ export default function WorkspaceSidebarFilter({
               </button>
             )
           })}
+          {SIDEBAR_CITIES.length > 4 && (
+            <button
+              type="button"
+              onClick={() => setShowAllCities(!showAllCities)}
+              className="w-full pt-1.5 px-1 text-left text-[11px] font-bold text-[#C2410C] dark:text-[#FB923C] hover:underline flex items-center gap-1 cursor-pointer"
+            >
+              <span>{showAllCities ? "Show less" : `+ View ${SIDEBAR_CITIES.length - 4} more cities`}</span>
+              {showAllCities ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+            </button>
+          )}
         </div>
       </div>
 
@@ -446,7 +493,7 @@ export default function WorkspaceSidebarFilter({
           )}
         </div>
         <div className="space-y-1.5 pr-1">
-          {POPULAR_AMENITIES.map((amenity) => {
+          {(showAllWorkAmenities ? POPULAR_AMENITIES : POPULAR_AMENITIES.slice(0, 5)).map((amenity) => {
             const isChecked = selectedFacilities.includes(amenity.id)
             return (
               <label
@@ -473,6 +520,16 @@ export default function WorkspaceSidebarFilter({
               </label>
             )
           })}
+          {POPULAR_AMENITIES.length > 5 && (
+            <button
+              type="button"
+              onClick={() => setShowAllWorkAmenities(!showAllWorkAmenities)}
+              className="w-full pt-1.5 px-1 text-left text-[11px] font-bold text-[#C2410C] dark:text-[#FB923C] hover:underline flex items-center gap-1 cursor-pointer"
+            >
+              <span>{showAllWorkAmenities ? "Show less" : `+ View ${POPULAR_AMENITIES.length - 5} more amenities`}</span>
+              {showAllWorkAmenities ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+            </button>
+          )}
         </div>
       </div>
 
@@ -485,7 +542,7 @@ export default function WorkspaceSidebarFilter({
             </span>
           </div>
           <div className="space-y-1.5 pr-1">
-            {STAY_FACILITIES.map((fac) => {
+            {(showAllStayFacilities ? STAY_FACILITIES : STAY_FACILITIES.slice(0, 4)).map((fac) => {
               const isChecked = selectedFacilities.includes(fac.id)
               return (
                 <label
@@ -512,6 +569,16 @@ export default function WorkspaceSidebarFilter({
                 </label>
               )
             })}
+            {STAY_FACILITIES.length > 4 && (
+              <button
+                type="button"
+                onClick={() => setShowAllStayFacilities(!showAllStayFacilities)}
+                className="w-full pt-1.5 px-1 text-left text-[11px] font-bold text-sky-700 dark:text-sky-400 hover:underline flex items-center gap-1 cursor-pointer"
+              >
+                <span>{showAllStayFacilities ? "Show less" : `+ View ${STAY_FACILITIES.length - 4} more facilities`}</span>
+                {showAllStayFacilities ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+              </button>
+            )}
           </div>
         </div>
       )}
