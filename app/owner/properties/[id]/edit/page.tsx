@@ -182,7 +182,7 @@ export default function EditPropertyPage() {
 
         // Map District & City
         const hubCity = hub.city || "Pokhara"
-        let foundDistrict = NEPAL_DISTRICT_DATA.find(d => 
+        const foundDistrict = NEPAL_DISTRICT_DATA.find(d => 
           d.cities.some(c => c.toLowerCase().includes(hubCity.toLowerCase())) ||
           hubCity.toLowerCase().includes(d.name.toLowerCase())
         )
