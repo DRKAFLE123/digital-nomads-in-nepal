@@ -1,8 +1,8 @@
 "use client"
 
 /* eslint-disable @next/next/no-img-element */
-import React, { useState } from "react"
-import { Star, CheckCircle, ThumbsUp, MessageSquarePlus, Filter, Camera, ShieldCheck } from "lucide-react"
+import React, { useState, useRef, useEffect } from "react"
+import { Star, CheckCircle, ThumbsUp, MessageSquarePlus, Filter, Camera, ShieldCheck, ChevronRight, ChevronLeft } from "lucide-react"
 
 interface ReviewItem {
   id: string
@@ -118,6 +118,38 @@ export default function WorkspaceReviewsSection({
   const [selectedKeyword, setSelectedKeyword] = useState("all")
   const [verifiedOnly, setVerifiedOnly] = useState(false)
   const [showReviewModal, setShowReviewModal] = useState(false)
+
+  // Horizontal Scroll state for Review Filter Chips (No slider, clean arrows)
+  const chipsContainerRef = useRef<HTMLDivElement>(null)
+  const [canScrollLeft, setCanScrollLeft] = useState(false)
+  const [canScrollRight, setCanScrollRight] = useState(true)
+
+  const checkScrollState = () => {
+    const el = chipsContainerRef.current
+    if (!el) return
+    setCanScrollLeft(el.scrollLeft > 10)
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 10)
+  }
+
+  const scrollChips = (dir: "left" | "right") => {
+    const el = chipsContainerRef.current
+    if (!el) return
+    const amount = 220
+    el.scrollBy({ left: dir === "right" ? amount : -amount, behavior: "smooth" })
+  }
+
+  useEffect(() => {
+    checkScrollState()
+    const el = chipsContainerRef.current
+    if (el) {
+      el.addEventListener("scroll", checkScrollState, { passive: true })
+      window.addEventListener("resize", checkScrollState)
+      return () => {
+        el.removeEventListener("scroll", checkScrollState)
+        window.removeEventListener("resize", checkScrollState)
+      }
+    }
+  }, [])
 
   // New Review Form State
   const [newRating, setNewRating] = useState(5)
@@ -276,25 +308,59 @@ export default function WorkspaceReviewsSection({
             </button>
           </div>
 
-          {/* Keyword Filter Chips (Airbnb Style) */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-            {KEYWORD_FILTERS.map((kf) => {
-              const isSelected = selectedKeyword === kf.id
-              return (
+          {/* Keyword Filter Chips (Airbnb Style with Right/Left Arrows and No Scrollbar Slider) */}
+          <div className="relative group/chips flex items-center">
+            {/* Optional Left Arrow when scrolled */}
+            {canScrollLeft && (
+              <div className="absolute left-0 top-0 bottom-0 z-10 flex items-center pr-6 bg-gradient-to-r from-white dark:from-[#141416] via-white/90 dark:via-[#141416]/90 to-transparent">
                 <button
-                  key={kf.id}
-                  onClick={() => setSelectedKeyword(kf.id)}
-                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap cursor-pointer border ${
-                    isSelected
-                      ? "bg-[#C2410C] text-white border-[#C2410C] shadow-sm scale-102"
-                      : "bg-[#FBF9F5] dark:bg-[#1A1A1E] text-gray-700 dark:text-gray-300 border-[#E8E2D8] dark:border-[#28282C] hover:border-gray-400 hover:text-gray-900 dark:hover:text-white"
-                  }`}
+                  type="button"
+                  onClick={() => scrollChips("left")}
+                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white dark:bg-[#1E1E22] border border-gray-300 dark:border-[#333] shadow-md hover:border-[#C2410C] hover:text-[#C2410C] active:scale-95 flex items-center justify-center text-gray-700 dark:text-gray-200 transition-all cursor-pointer"
+                  aria-label="Scroll left"
                 >
-                  {kf.icon && <span>{kf.icon}</span>}
-                  <span>{kf.label}</span>
+                  <ChevronLeft size={15} />
                 </button>
-              )
-            })}
+              </div>
+            )}
+
+            {/* Chips Container - Native Scrollbar Completely Hidden */}
+            <div
+              ref={chipsContainerRef}
+              className="flex items-center gap-2 overflow-x-auto py-1 scroll-smooth no-scrollbar scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden w-full select-none"
+            >
+              {KEYWORD_FILTERS.map((kf) => {
+                const isSelected = selectedKeyword === kf.id
+                return (
+                  <button
+                    key={kf.id}
+                    onClick={() => setSelectedKeyword(kf.id)}
+                    className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap cursor-pointer border shrink-0 ${
+                      isSelected
+                        ? "bg-[#C2410C] text-white border-[#C2410C] shadow-sm scale-102"
+                        : "bg-[#FBF9F5] dark:bg-[#1A1A1E] text-gray-700 dark:text-gray-300 border-[#E8E2D8] dark:border-[#28282C] hover:border-gray-400 hover:text-gray-900 dark:hover:text-white"
+                    }`}
+                  >
+                    {kf.icon && <span>{kf.icon}</span>}
+                    <span>{kf.label}</span>
+                  </button>
+                )
+              })}
+            </div>
+
+            {/* Right Arrow Button (Always available for scrolling through keywords without slider) */}
+            {canScrollRight && (
+              <div className="absolute right-0 top-0 bottom-0 z-10 flex items-center pl-6 bg-gradient-to-l from-white dark:from-[#141416] via-white/90 dark:via-[#141416]/90 to-transparent">
+                <button
+                  type="button"
+                  onClick={() => scrollChips("right")}
+                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white dark:bg-[#1E1E22] border border-gray-300 dark:border-[#333] shadow-md hover:border-[#C2410C] hover:text-[#C2410C] active:scale-95 flex items-center justify-center text-gray-700 dark:text-gray-200 transition-all cursor-pointer"
+                  aria-label="Scroll right"
+                >
+                  <ChevronRight size={15} />
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Active Filter Summary */}
