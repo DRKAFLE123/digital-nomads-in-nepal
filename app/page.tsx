@@ -293,7 +293,7 @@ export default async function Home() {
                 <p className="text-[11px] font-semibold tracking-[0.08em] uppercase text-[#C2410C] dark:text-[#FB923C] mb-1">
                   Work infrastructure
                 </p>
-                <h2 className="font-serif text-2xl sm:text-3xl lg:text-[38px] font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight leading-tight">
+                <h2 className="font-serif text-2xl sm:text-3xl lg:text-[36px] font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight leading-tight">
                   Featured workspaces
                 </h2>
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-[#A8A8B0] font-normal mt-1 max-w-xl">
@@ -327,23 +327,23 @@ export default async function Home() {
         </section>
 
         {/* 3. Popular Destinations */}
-        <section className="w-full py-20 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white dark:bg-[#141416] border-y border-[#E8E2D8] dark:border-[#26262A]">
+        <section className="w-full py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-[#141416] border-y border-[#E8E2D8] dark:border-[#26262A]">
           <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 sm:mb-12">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-6 sm:mb-8">
               <div>
-                <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#C2410C] dark:text-[#FB923C] mb-2">
+                <p className="text-[11px] font-semibold tracking-[0.08em] uppercase text-[#C2410C] dark:text-[#FB923C] mb-1">
                   Nomad bases
                 </p>
-                <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight">
+                <h2 className="font-serif text-2xl sm:text-3xl lg:text-[36px] font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight leading-tight">
                   Popular destinations
                 </h2>
-                <p className="text-sm sm:text-base text-gray-600 dark:text-[#A8A8B0] font-normal mt-2 max-w-xl">
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-[#A8A8B0] font-normal mt-1 max-w-xl">
                   From urban heritage cafe culture in Kathmandu to tranquil lakeside coworking in Pokhara.
                 </p>
               </div>
               <Link
                 href="/destinations"
-                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#C2410C] dark:text-[#FB923C] hover:underline group"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#C2410C] dark:text-[#FB923C] hover:underline group shrink-0"
               >
                 <span>Explore all destinations</span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
@@ -360,25 +360,25 @@ export default async function Home() {
         </section>
 
         {/* 4. Featured Local Tour Guides (Always Rendered - Workspaces, Guides, Stays trifecta) */}
-        <section className="w-full py-20 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#FAF7F2] dark:bg-[#0B0B0C] border-b border-[#E8E2D8] dark:border-[#26262A]">
+        <section className="w-full py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[#FAF7F2] dark:bg-[#0B0B0C] border-b border-[#E8E2D8] dark:border-[#26262A]">
           <div className="max-w-7xl mx-auto">
             
             {/* Section Header */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 sm:mb-12">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-6 sm:mb-8">
               <div>
-                <p className="text-xs font-bold tracking-[0.08em] uppercase text-[#C2410C] dark:text-[#FB923C] mb-2">
+                <p className="text-[11px] font-bold tracking-[0.08em] uppercase text-[#C2410C] dark:text-[#FB923C] mb-1">
                   Verified Local Experts
                 </p>
-                <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight">
+                <h2 className="font-serif text-2xl sm:text-3xl lg:text-[36px] font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight leading-tight">
                   Featured local tour guides
                 </h2>
-                <p className="text-sm sm:text-base text-gray-600 dark:text-[#A8A8B0] font-normal mt-2 max-w-xl">
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-[#A8A8B0] font-normal mt-1 max-w-xl">
                   Government-licensed trekking leaders, cultural insiders, and high-altitude mountain experts across Nepal. 0% platform booking commission.
                 </p>
               </div>
               <Link
                 href="/guides"
-                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#C2410C] dark:text-[#FB923C] hover:text-[#9A3412] hover:underline group"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#C2410C] dark:text-[#FB923C] hover:text-[#9A3412] hover:underline group shrink-0"
               >
                 <span>Browse all guides marketplace</span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
@@ -520,23 +520,23 @@ export default async function Home() {
         </section>
 
         {/* 5. Recommended Stays & Coliving */}
-        <section className="w-full py-20 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white dark:bg-[#141416] border-b border-[#E8E2D8] dark:border-[#26262A]">
+        <section className="w-full py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-[#141416] border-b border-[#E8E2D8] dark:border-[#26262A]">
           <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 sm:mb-12">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-6 sm:mb-8">
               <div>
-                <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#C2410C] dark:text-[#FB923C] mb-2">
+                <p className="text-[11px] font-semibold tracking-[0.08em] uppercase text-[#C2410C] dark:text-[#FB923C] mb-1">
                   Sleep &amp; work
                 </p>
-                <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight">
+                <h2 className="font-serif text-2xl sm:text-3xl lg:text-[36px] font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight leading-tight">
                   Recommended stays &amp; coliving
                 </h2>
-                <p className="text-sm sm:text-base text-gray-600 dark:text-[#A8A8B0] font-normal mt-2 max-w-xl">
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-[#A8A8B0] font-normal mt-1 max-w-xl">
                   Work-friendly hotels and coliving houses vetted for dedicated desks and high-speed Wi-Fi.
                 </p>
               </div>
               <Link
                 href="/stay"
-                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#C2410C] dark:text-[#FB923C] hover:underline group"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#C2410C] dark:text-[#FB923C] hover:underline group shrink-0"
               >
                 <span>Browse all nomad stays</span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
@@ -631,14 +631,14 @@ export default async function Home() {
           </div>
 
           <div className="relative z-10 max-w-7xl mx-auto">
-            <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14">
-              <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#C2410C] dark:text-[#FB923C] mb-2">
+            <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
+              <p className="text-[11px] font-semibold tracking-[0.08em] uppercase text-[#C2410C] dark:text-[#FB923C] mb-1">
                 Nomad life &amp; adventure
               </p>
-              <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight">
+              <h2 className="font-serif text-2xl sm:text-3xl lg:text-[36px] font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight leading-tight">
                 Things to do in Nepal
               </h2>
-              <p className="text-gray-600 dark:text-[#A8A8B0] text-sm sm:text-base mt-2 max-w-2xl mx-auto font-normal">
+              <p className="text-gray-600 dark:text-[#A8A8B0] text-xs sm:text-sm mt-1.5 max-w-2xl mx-auto font-normal">
                 Balance deep remote work sprints with Himalayan outdoors, heritage cafe culture, and restorative escapes.
               </p>
             </div>
@@ -724,23 +724,23 @@ export default async function Home() {
         </section>
 
         {/* 7. Latest Guides & Articles (Blog) */}
-        <section className="w-full py-20 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#FAF7F2] dark:bg-[#0B0B0C] border-y border-[#E8E2D8] dark:border-[#26262A]">
+        <section className="w-full py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[#FAF7F2] dark:bg-[#0B0B0C] border-y border-[#E8E2D8] dark:border-[#26262A]">
           <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 sm:mb-12">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-6 sm:mb-8">
               <div>
-                <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#C2410C] dark:text-[#FB923C] mb-2">
+                <p className="text-[11px] font-semibold tracking-[0.08em] uppercase text-[#C2410C] dark:text-[#FB923C] mb-1">
                   Knowledge base
                 </p>
-                <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight">
+                <h2 className="font-serif text-2xl sm:text-3xl lg:text-[36px] font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight leading-tight">
                   Field guides &amp; articles
                 </h2>
-                <p className="text-sm sm:text-base text-gray-600 dark:text-[#A8A8B0] font-normal mt-2 max-w-xl">
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-[#A8A8B0] font-normal mt-1 max-w-xl">
                   Cost breakdowns, visa rules, and remote work logistics across Nepal.
                 </p>
               </div>
               <Link
                 href="/blog"
-                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#C2410C] dark:text-[#FB923C] hover:underline group"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#C2410C] dark:text-[#FB923C] hover:underline group shrink-0"
               >
                 <span>View all articles</span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
@@ -885,15 +885,15 @@ export default async function Home() {
 
         {/* 9. Join the Community (Dynamic Admin Social Media Links) */}
         {activeSocials.length > 0 && (
-          <section className="w-full py-20 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white dark:bg-[#141416] border-t border-[#E8E2D8] dark:border-[#26262A]">
+          <section className="w-full py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-[#141416] border-t border-[#E8E2D8] dark:border-[#26262A]">
             <div className="max-w-4xl mx-auto text-center">
-              <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#C2410C] dark:text-[#FB923C] mb-2">
+              <p className="text-[11px] font-semibold tracking-[0.08em] uppercase text-[#C2410C] dark:text-[#FB923C] mb-1">
                 Connected community
               </p>
-              <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-[#F5F5F4] mb-4 tracking-tight">
+              <h2 className="font-serif text-2xl sm:text-3xl lg:text-[36px] font-bold text-gray-900 dark:text-[#F5F5F4] mb-3 tracking-tight leading-tight">
                 Join the nomad community
               </h2>
-              <p className="text-muted-foreground text-sm sm:text-base mb-10 max-w-xl mx-auto font-normal">
+              <p className="text-muted-foreground text-xs sm:text-sm mb-7 max-w-xl mx-auto font-normal">
                 Connect with our active digital nomad community across our verified social channels for meetup announcements, trek invites, and insider advice.
               </p>
 
