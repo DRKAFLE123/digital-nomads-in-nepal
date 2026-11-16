@@ -8,7 +8,41 @@ import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import WorkabilityScoreBadge from "@/components/coworking/WorkabilityScoreBadge"
 import WorkspaceReviewsSection from "@/components/coworking/WorkspaceReviewsSection"
-import { ArrowLeft, MapPin, CheckCircle, Star, Loader2, Calendar, Info, Building, ShieldCheck, Wifi, Zap, ExternalLink, Maximize2, X, ChevronLeft, ChevronRight, ImageIcon, MessageSquare, Layers, Edit3 } from "lucide-react"
+import WorkspaceGallery from "@/components/coworking/WorkspaceGallery"
+import {
+  ArrowLeft,
+  MapPin,
+  CheckCircle,
+  Star,
+  Loader2,
+  Calendar,
+  Info,
+  Building,
+  ShieldCheck,
+  Wifi,
+  Zap,
+  ExternalLink,
+  X,
+  Layers,
+  Edit3,
+  Mail,
+  Coffee,
+  Utensils,
+  Lock,
+  Waves,
+  Mountain,
+  Car,
+  PawPrint,
+  TreePine,
+  PhoneCall,
+  Wind,
+  BellOff,
+  Sparkles,
+  Droplets,
+  Briefcase,
+  MessageSquare,
+  type LucideIcon,
+} from "lucide-react"
 
 import BookingModalCard from "@/components/coworking/BookingModalCard"
 import EnquiryModalCard from "@/components/coworking/EnquiryModalCard"
@@ -31,11 +65,152 @@ type Hub = {
   priceDaily: number | null
   priceMonthly: number | null
   contactEmail: string
+  ownerName?: string | null
   ownerEmail?: string | null
   website: string | null
   updatedAt?: string
   spaceType?: string | null
 }
+
+interface AmenityItem {
+  icon: LucideIcon
+  title: string
+  desc: string
+  category: "work" | "food" | "stay" | "safety" | "unavailable"
+  unavailable?: boolean
+}
+
+const ALL_AMENITIES: AmenityItem[] = [
+  // Fast Internet & Work Productivity
+  {
+    icon: Wifi,
+    title: "High-Speed Dual Fiber WiFi",
+    desc: "100+ Mbps dual-WAN backup line with low latency for video calls",
+    category: "work",
+  },
+  {
+    icon: Briefcase,
+    title: "Dedicated Workspace",
+    desc: "Ergonomic chair, spacious work desk, lumbar support & multi-plug outlets",
+    category: "work",
+  },
+  {
+    icon: Zap,
+    title: "24/7 Power Backup",
+    desc: "Automatic generator + solar battery inverter (zero load shedding downtime)",
+    category: "work",
+  },
+  {
+    icon: PhoneCall,
+    title: "Soundproof Call & Skype Booths",
+    desc: "Private acoustic booths for quiet confidential meetings and client calls",
+    category: "work",
+  },
+  {
+    icon: Layers,
+    title: "Meeting Rooms & Conference Setup",
+    desc: "Equipped with 4K display, whiteboard and video conference equipment",
+    category: "work",
+  },
+
+  // Food & Drinks (explicitly requested by user)
+  {
+    icon: Utensils,
+    title: "Kitchen & Shared Kitchen Access",
+    desc: "Equipped with gas stove, microwave, refrigerator, cookware & dishware",
+    category: "food",
+  },
+  {
+    icon: Coffee,
+    title: "Specialty Coffee & Himalayan Tea",
+    desc: "Fresh organic espresso, French press beans & unlimited local teas",
+    category: "food",
+  },
+  {
+    icon: Droplets,
+    title: "Filtered Drinking Water (Free Refill)",
+    desc: "Complimentary UV and multi-stage RO purified safe drinking water",
+    category: "food",
+  },
+  {
+    icon: Sparkles,
+    title: "Breakfast & Fresh Lunch Menu",
+    desc: "Fresh continental and authentic Nepali breakfast options available daily",
+    category: "food",
+  },
+  {
+    icon: Building,
+    title: "Refrigerator & Food Storage",
+    desc: "Dedicated guest refrigerator space for groceries, snacks and meal preps",
+    category: "food",
+  },
+
+  // Stay & Comfort (explicitly requested by user)
+  {
+    icon: Lock,
+    title: "Lock on Bedroom Door",
+    desc: "Private keycard or keyed lock on bedroom door for safety and privacy",
+    category: "stay",
+  },
+  {
+    icon: Waves,
+    title: "Lake Access",
+    desc: "Convenient walking distance or direct access to Phewa Lake promenade",
+    category: "stay",
+  },
+  {
+    icon: Mountain,
+    title: "Mountain & Valley Panorama",
+    desc: "Scenic rooftop terrace with unobstructed views of Himalayan peaks",
+    category: "stay",
+  },
+  {
+    icon: Car,
+    title: "Free Parking on Premises",
+    desc: "Complimentary private on-site parking for motorbikes, scooters & cars",
+    category: "stay",
+  },
+  {
+    icon: PawPrint,
+    title: "Pets Allowed",
+    desc: "Nomad dog and cat friendly workspace, courtyard and common lounge",
+    category: "stay",
+  },
+  {
+    icon: TreePine,
+    title: "Shared Backyard & Garden Patio",
+    desc: "Outdoor lawn, shaded hammocks and garden benches for relaxing breaks",
+    category: "stay",
+  },
+  {
+    icon: Wind,
+    title: "Air Conditioning & Room Heating",
+    desc: "Dual climate-controlled rooms for hot summer afternoons and winter nights",
+    category: "stay",
+  },
+
+  // Safety & Explicit Not Included (Airbnb signature)
+  {
+    icon: ShieldCheck,
+    title: "24/7 CCTV & Security Monitoring",
+    desc: "Keycard-controlled building entrance and security cameras on premises",
+    category: "safety",
+  },
+  {
+    icon: BellOff,
+    title: "Unavailable: Carbon monoxide alarm",
+    desc: "Host has reported no carbon monoxide alarm is installed on premises",
+    category: "unavailable",
+    unavailable: true,
+  },
+  {
+    icon: BellOff,
+    title: "Unavailable: Smoke alarm",
+    desc: "Host has reported no smoke alarm is installed in this building",
+    category: "unavailable",
+    unavailable: true,
+  },
+]
 
 function parsePhotos(photoUrl: string | null): string[] {
   if (!photoUrl) return []
@@ -66,11 +241,10 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
     }
   }, [params.slug, router])
 
-  // Gallery, Lightbox, Enquiry & Booking Modal State
-  const [selectedImgIdx, setSelectedImgIdx] = useState(0)
-  const [lightboxOpen, setLightboxOpen] = useState(false)
+  // Enquiry, Booking & Amenities Modal State
   const [bookingModalOpen, setBookingModalOpen] = useState(false)
   const [enquiryModalOpen, setEnquiryModalOpen] = useState(false)
+  const [amenitiesModalOpen, setAmenitiesModalOpen] = useState(false)
   const [selectedUnitType, setSelectedUnitType] = useState("hot_desk")
 
   const isOwner = Boolean(
@@ -131,7 +305,6 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
 
   const facs = Array.isArray(hub.facilities) ? (hub.facilities as string[]) : []
   const photos = parsePhotos(hub.photoUrl)
-  const activePhoto = photos[selectedImgIdx] || photos[0] || null
 
   return (
     <>
@@ -165,117 +338,123 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
             </nav>
           </div>
 
-          {/* Hero Banner Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+          {/* Space Title & Location Header Bar (Airbnb Style) */}
+          <div className="space-y-3">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-2 text-xs text-[#C2410C] dark:text-[#FB923C] font-bold uppercase tracking-wider">
+                  <MapPin size={14} />
+                  <span>{hub.city}, Nepal</span>
+                  <span>•</span>
+                  <span>📍 {hub.address}</span>
+                </div>
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 dark:text-white tracking-tight">
+                  {hub.name}
+                </h1>
+              </div>
+
+              {hub.website && (
+                <a
+                  href={hub.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-xs font-extrabold text-[#C2410C] dark:text-[#FB923C] bg-[#C2410C]/5 dark:bg-[#C2410C]/10 hover:bg-[#C2410C]/15 dark:hover:bg-[#C2410C]/20 border border-[#C2410C]/30 px-4 py-2.5 rounded-xl transition-all self-start md:self-end"
+                >
+                  <span>Visit Space Website</span>
+                  <ExternalLink size={13} />
+                </a>
+              )}
+            </div>
+
+            {/* Quick Meta Row (Rating, Reviews, Verification, Host Name) */}
+            <div className="flex items-center flex-wrap gap-4 text-xs text-gray-600 dark:text-[#A1A1AA] pt-1">
+              <div className="flex items-center gap-1.5 text-gray-900 dark:text-white font-bold">
+                <Star className="w-4 h-4 text-[#EA580C] fill-[#EA580C]" />
+                <span className="font-mono text-sm">{hub.rating.toFixed(1)}</span>
+                <span className="text-gray-500 dark:text-[#A1A1AA] font-normal underline cursor-pointer">
+                  ({hub.totalReviews} nomad reviews)
+                </span>
+              </div>
+              <span>•</span>
+              <span className="inline-flex items-center gap-1 text-emerald-700 dark:text-[#22C55E] font-semibold bg-emerald-50 dark:bg-[#22C55E]/10 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-[#22C55E]/20">
+                <ShieldCheck size={13} /> Remote Work Vetted
+              </span>
+              <span>•</span>
+              <span className="font-medium text-gray-700 dark:text-gray-300">
+                Hosted by <strong className="text-gray-900 dark:text-white font-bold">{hub.ownerName || `${hub.name} Host`}</strong>
+              </span>
+              {hub.updatedAt && (
+                <>
+                  <span>•</span>
+                  <span>Verified {new Date(hub.updatedAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Airbnb 5-Photo Hero Gallery Component */}
+          <WorkspaceGallery
+            photos={photos}
+            hubName={hub.name}
+            city={hub.city}
+            isPartner={hub.isPartner}
+            isVerified={hub.isVerified}
+            rating={hub.rating}
+            reviewsCount={hub.totalReviews}
+            facilities={facs}
+          />
+
+          {/* 2-Column Split: Details & Content on Left, Sticky Rates Card on Right */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start pt-2">
             
             {/* Left Main Content (2 Cols) */}
             <div className="lg:col-span-2 space-y-6">
               
-              {/* Photo Gallery Banner with Badges & Thumbnail Strip */}
-              <div className="space-y-3">
-                <div className="h-96 md:h-[440px] bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-3xl overflow-hidden relative shadow-md flex items-center justify-center group">
-                  {activePhoto ? (
-                    <img src={activePhoto} alt={`${hub.name} Coworking Space in ${hub.city}, Nepal`} className="w-full h-full object-cover transition-all duration-300" />
-                  ) : (
-                    <Building className="w-24 h-24 text-gray-300 dark:text-[#333]" />
-                  )}
-
-                  {/* Expand Lightbox Button */}
-                  {activePhoto && (
-                    <button
-                      type="button"
-                      onClick={() => setLightboxOpen(true)}
-                      className="absolute top-6 right-6 bg-black/60 hover:bg-[#C2410C] text-white p-2.5 rounded-full transition-all backdrop-blur z-20 shadow-lg"
-                      title="View full screen gallery"
-                    >
-                      <Maximize2 size={16} />
-                    </button>
-                  )}
-
-                  <div className="absolute top-6 left-6 flex flex-wrap gap-2.5 z-10">
-                    {hub.isPartner && (
-                      <span className="flex items-center gap-1.5 bg-[#C2410C] text-white text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full shadow-lg">
-                        <Building size={13} className="fill-white" /> System Partner
-                      </span>
-                    )}
-                    {hub.isVerified && (
-                      <span className="flex items-center gap-1.5 bg-emerald-600 text-white text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full shadow-lg">
-                        <CheckCircle size={13} className="fill-white" /> Verified WorkHub
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="absolute bottom-6 right-6 z-10">
-                    <WorkabilityScoreBadge
-                      compact
-                      score={96}
-                      rating={hub.rating}
-                      reviewsCount={hub.totalReviews}
-                      facilities={facs}
-                    />
-                  </div>
-                </div>
-
-                {/* Clickable Thumbnail Gallery Row */}
-                {photos.length > 1 && (
-                  <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-none">
-                    {photos.map((imgUrl, i) => (
-                      <button
-                        key={i}
-                        type="button"
-                        onClick={() => setSelectedImgIdx(i)}
-                        className={`relative w-24 h-16 rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 bg-white dark:bg-[#141416] ${
-                          selectedImgIdx === i
-                            ? "border-[#C2410C] ring-2 ring-[#C2410C]/30 scale-105"
-                            : "border-[#E8E2D8] dark:border-[#242424] opacity-70 hover:opacity-100 hover:border-gray-400"
-                        }`}
+              {/* Hosted by [Owner Name] Section (Airbnb Style) */}
+              <div className="bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-3xl p-6 sm:p-7 shadow-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+                  <div className="flex items-center gap-4">
+                    <div className="relative flex-shrink-0">
+                      <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#023629] text-white flex items-center justify-center text-xl sm:text-2xl font-black shadow-md border-2 border-white dark:border-[#141416]">
+                        {hub.ownerName ? hub.ownerName.charAt(0).toUpperCase() : hub.name.charAt(0).toUpperCase()}
+                      </div>
+                      <div
+                        className="absolute -bottom-1 -right-1 bg-emerald-600 text-white p-1 rounded-full border-2 border-white dark:border-[#141416]"
+                        title="Verified Space Owner"
                       >
-                        <img src={imgUrl} alt={`Thumbnail ${i + 1}`} className="w-full h-full object-cover" />
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Header Title & Rating Box */}
-              <div className="bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-3xl p-6 sm:p-8 space-y-5 shadow-xs">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E8E2D8] dark:border-[#26262A] pb-5">
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-xs text-[#C2410C] dark:text-[#FB923C] font-bold uppercase tracking-wider">
-                      <MapPin size={14} />
-                      {hub.city}, Nepal
+                        <CheckCircle size={13} className="fill-white text-emerald-600" />
+                      </div>
                     </div>
-                    <h1 className="text-3xl sm:text-4xl font-black text-gray-900 dark:text-white">{hub.name}</h1>
-                    <p className="text-gray-500 dark:text-[#A1A1AA] text-sm flex items-center gap-1.5">📍 {hub.address}</p>
-                  </div>
-                  
-                  {hub.website && (
-                    <a
-                      href={hub.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-xs font-extrabold text-[#C2410C] dark:text-[#FB923C] bg-[#C2410C]/5 dark:bg-[#C2410C]/10 hover:bg-[#C2410C]/15 dark:hover:bg-[#C2410C]/20 border border-[#C2410C]/30 px-4 py-2.5 rounded-xl transition-all self-start sm:self-center"
-                    >
-                      Visit Space Website <ExternalLink size={13} />
-                    </a>
-                  )}
-                </div>
-
-                <div className="flex items-center flex-wrap gap-6 text-sm text-gray-500 dark:text-[#A1A1AA]">
-                  <div className="flex items-center gap-2 text-gray-900 dark:text-white font-bold">
-                    <Star className="w-5 h-5 text-[#EA580C] fill-[#EA580C]" />
-                    <span className="text-lg font-mono">{hub.rating.toFixed(1)}</span>
-                    <span className="text-xs text-gray-500 dark:text-[#A1A1AA] font-normal">({hub.totalReviews} verified nomad reviews)</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-xs font-semibold text-emerald-700 dark:text-[#22C55E] bg-emerald-50 dark:bg-[#22C55E]/10 px-3 py-1 rounded-full border border-emerald-200 dark:border-[#22C55E]/20">
-                    <ShieldCheck size={14} /> Vetted Remote Work Ready
-                  </div>
-                  {hub.updatedAt && (
-                    <div className="text-xs text-gray-500 dark:text-[#A1A1AA] flex items-center gap-1 font-medium">
-                      <span>•</span>
-                      <span>Verified {new Date(hub.updatedAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h2 className="text-lg sm:text-xl font-black text-gray-900 dark:text-white">
+                          Hosted by {hub.ownerName || `${hub.name} Team`}
+                        </h2>
+                        <span className="inline-flex items-center gap-1 bg-[#C2410C]/10 text-[#C2410C] dark:text-[#FB923C] text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-[#C2410C]/20">
+                          ★ Verified Host
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-500 dark:text-[#A1A1AA] flex items-center gap-2 flex-wrap">
+                        <span>Local Space Operator</span>
+                        <span>•</span>
+                        <span>📍 {hub.city}, Nepal</span>
+                        <span>•</span>
+                        <span className="text-emerald-700 dark:text-emerald-400 font-semibold flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                          Responds within an hour
+                        </span>
+                      </p>
                     </div>
-                  )}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setEnquiryModalOpen(true)}
+                    className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 hover:border-[#C2410C] text-gray-900 dark:text-white hover:text-[#C2410C] text-xs font-bold transition-all shadow-xs hover:shadow bg-[#FBF9F5] dark:bg-[#1A1A1E] cursor-pointer active:scale-95 self-start sm:self-center"
+                  >
+                    <Mail size={14} className="text-[#C2410C]" />
+                    <span>Contact Host</span>
+                  </button>
                 </div>
               </div>
 
@@ -324,6 +503,77 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                 <p className="text-gray-600 dark:text-[#A1A1AA] text-sm leading-relaxed whitespace-pre-line">
                   {hub.description}
                 </p>
+              </div>
+
+              {/* "What this place offers" Categorized Amenities Grid (Airbnb Style) */}
+              <div className="bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-3xl p-6 sm:p-8 space-y-6 shadow-xs">
+                <div className="flex items-center justify-between border-b border-[#E8E2D8] dark:border-[#26262A] pb-4 flex-wrap gap-2">
+                  <div>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-[#C2410C] dark:text-[#FB923C] flex items-center gap-1.5">
+                      <Sparkles size={13} /> Verified Nomad Amenities
+                    </span>
+                    <h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white mt-1">
+                      What this space offers
+                    </h2>
+                  </div>
+                  <span className="text-xs text-gray-500 dark:text-[#A1A1AA]">
+                    Food, high-speed fiber, stay &amp; safety verified
+                  </span>
+                </div>
+
+                {/* 2-Column Amenities Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8">
+                  {ALL_AMENITIES.slice(0, 10).map((amenity, idx) => {
+                    const IconComponent = amenity.icon
+                    const isUnavailable = amenity.unavailable
+                    return (
+                      <div
+                        key={idx}
+                        className={`flex items-start gap-3.5 py-1 ${
+                          isUnavailable ? "opacity-60" : ""
+                        }`}
+                      >
+                        <div
+                          className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                            isUnavailable
+                              ? "bg-slate-100 dark:bg-slate-800 text-slate-400"
+                              : "bg-[#023629]/5 dark:bg-[#023629]/20 text-[#023629] dark:text-emerald-400 border border-[#023629]/10"
+                          }`}
+                        >
+                          <IconComponent size={18} />
+                        </div>
+                        <div className="space-y-0.5">
+                          <p
+                            className={`text-sm font-bold ${
+                              isUnavailable
+                                ? "line-through text-gray-500 dark:text-gray-400"
+                                : "text-gray-900 dark:text-white"
+                            }`}
+                          >
+                            {amenity.title}
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-[#A1A1AA] leading-snug">
+                            {amenity.desc}
+                          </p>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+
+                {/* Show All Amenities Button (Airbnb Style Modal Trigger) */}
+                <div className="pt-2 border-t border-[#E8E2D8] dark:border-[#26262A] flex items-center justify-between flex-wrap gap-3">
+                  <p className="text-xs text-gray-500 dark:text-[#A1A1AA]">
+                    Showing 10 of {ALL_AMENITIES.length} verified amenities &amp; safety features
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setAmenitiesModalOpen(true)}
+                    className="px-5 py-2.5 rounded-xl border border-gray-900 dark:border-white/30 text-gray-900 dark:text-white hover:bg-gray-900 hover:text-white dark:hover:bg-white dark:hover:text-black text-xs font-bold transition-all cursor-pointer active:scale-95 shadow-xs"
+                  >
+                    Show all {ALL_AMENITIES.length} amenities
+                  </button>
+                </div>
               </div>
 
               {/* Available Seat Types & Room Options Section */}
@@ -659,50 +909,123 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
         </div>
       </div>
 
-      {/* FULLSCREEN LIGHTBOX GALLERY MODAL */}
-      {lightboxOpen && photos.length > 0 && (
-        <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-8">
-          {/* Close button */}
-          <button
-            type="button"
-            onClick={() => setLightboxOpen(false)}
-            className="absolute top-6 right-6 text-white hover:text-[#FB923C] p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all z-50"
-          >
-            <X size={24} />
-          </button>
+      {/* ALL AMENITIES MODAL (AIRBNB STYLE CATEGORIZED POPUP) */}
+      {amenitiesModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+          <div className="w-full max-w-2xl max-h-[85vh] bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl flex flex-col">
+            <div className="flex items-center justify-between border-b border-[#E8E2D8] dark:border-[#26262A] pb-4">
+              <div>
+                <h3 className="text-xl font-black text-gray-900 dark:text-white">
+                  What this space offers
+                </h3>
+                <p className="text-xs text-gray-500 dark:text-[#A1A1AA]">
+                  Full breakdown of nomad remote work, food &amp; stay amenities
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setAmenitiesModalOpen(false)}
+                className="p-2 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-300 transition-colors cursor-pointer"
+                title="Close modal"
+              >
+                <X size={18} />
+              </button>
+            </div>
 
-          {/* Lightbox Main Image */}
-          <div className="relative max-w-5xl max-h-[85vh] w-full flex items-center justify-center">
-            <img
-              src={photos[selectedImgIdx]}
-              alt={`${hub.name} photo ${selectedImgIdx + 1}`}
-              className="max-w-full max-h-[80vh] object-contain rounded-2xl border border-white/10 shadow-2xl"
-            />
+            <div className="overflow-y-auto space-y-6 pr-1 divide-y divide-[#E8E2D8] dark:divide-[#26262A]">
+              {/* Category: Fast Internet & Remote Work */}
+              <div className="space-y-4 pt-1">
+                <h4 className="text-xs font-black uppercase tracking-wider text-[#C2410C] dark:text-[#FB923C] flex items-center gap-1.5">
+                  <Wifi size={14} /> High-Speed Internet &amp; Office Setup
+                </h4>
+                <div className="space-y-3.5">
+                  {ALL_AMENITIES.filter((a) => a.category === "work").map((a, i) => {
+                    const IconComp = a.icon
+                    return (
+                      <div key={i} className="flex items-start gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-[#023629]/10 dark:bg-[#023629]/30 text-[#023629] dark:text-emerald-400 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <IconComp size={16} />
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold text-gray-900 dark:text-white">{a.title}</p>
+                          <p className="text-xs text-gray-500 dark:text-[#A1A1AA]">{a.desc}</p>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
 
-            {/* Prev / Next controls */}
-            {photos.length > 1 && (
-              <>
-                <button
-                  type="button"
-                  onClick={() => setSelectedImgIdx((prev: number) => (prev - 1 + photos.length) % photos.length)}
-                  className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-[#C2410C] text-white p-3 rounded-full transition-all border border-white/10 shadow-xl"
-                >
-                  <ChevronLeft size={24} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSelectedImgIdx((prev: number) => (prev + 1) % photos.length)}
-                  className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-[#C2410C] text-white p-3 rounded-full transition-all border border-white/10 shadow-xl"
-                >
-                  <ChevronRight size={24} />
-                </button>
-              </>
-            )}
+              {/* Category: Food & Drinks */}
+              <div className="space-y-4 pt-5">
+                <h4 className="text-xs font-black uppercase tracking-wider text-[#C2410C] dark:text-[#FB923C] flex items-center gap-1.5">
+                  <Utensils size={14} /> Food, Coffee &amp; Kitchen
+                </h4>
+                <div className="space-y-3.5">
+                  {ALL_AMENITIES.filter((a) => a.category === "food").map((a, i) => {
+                    const IconComp = a.icon
+                    return (
+                      <div key={i} className="flex items-start gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-orange-50 dark:bg-orange-950/40 text-[#C2410C] dark:text-[#FB923C] flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <IconComp size={16} />
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold text-gray-900 dark:text-white">{a.title}</p>
+                          <p className="text-xs text-gray-500 dark:text-[#A1A1AA]">{a.desc}</p>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
 
-            {/* Photo Counter */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/80 border border-white/10 px-4 py-1.5 rounded-full text-xs font-mono text-white flex items-center gap-2">
-              <ImageIcon size={14} className="text-[#FB923C]" />
-              {selectedImgIdx + 1} of {photos.length}
+              {/* Category: Stay & Comfort */}
+              <div className="space-y-4 pt-5">
+                <h4 className="text-xs font-black uppercase tracking-wider text-[#C2410C] dark:text-[#FB923C] flex items-center gap-1.5">
+                  <Lock size={14} /> Stay, Bedroom &amp; Outdoor Comfort
+                </h4>
+                <div className="space-y-3.5">
+                  {ALL_AMENITIES.filter((a) => a.category === "stay").map((a, i) => {
+                    const IconComp = a.icon
+                    return (
+                      <div key={i} className="flex items-start gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <IconComp size={16} />
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold text-gray-900 dark:text-white">{a.title}</p>
+                          <p className="text-xs text-gray-500 dark:text-[#A1A1AA]">{a.desc}</p>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+
+              {/* Category: Safety & Not Included (Airbnb signature) */}
+              <div className="space-y-4 pt-5">
+                <h4 className="text-xs font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                  <ShieldCheck size={14} /> Safety &amp; Not Included Features
+                </h4>
+                <div className="space-y-3.5">
+                  {ALL_AMENITIES.filter((a) => a.category === "safety" || a.category === "unavailable").map((a, i) => {
+                    const IconComp = a.icon
+                    return (
+                      <div key={i} className={`flex items-start gap-3 ${a.unavailable ? "opacity-60" : ""}`}>
+                        <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <IconComp size={16} />
+                        </div>
+                        <div>
+                          <p className={`text-sm font-bold ${a.unavailable ? "line-through text-gray-500" : "text-gray-900 dark:text-white"}`}>
+                            {a.title}
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-[#A1A1AA]">{a.desc}</p>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
             </div>
           </div>
         </div>

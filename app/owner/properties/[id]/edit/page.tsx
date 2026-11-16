@@ -30,7 +30,9 @@ import {
   Egg,
   Soup,
   Cookie,
-  Flame
+  Flame,
+  X,
+  ImageIcon
 } from "lucide-react"
 import { 
   NEPAL_DISTRICT_DATA, 
@@ -96,10 +98,13 @@ export default function EditPropertyPage() {
   const [priceMonthly, setPriceMonthly] = useState<number | string>(85)
   const [openingHours, setOpeningHours] = useState("24/7 Access")
 
-  // Visibility, Cover Photo & Facilities
+  // Visibility, Cover Photo & Gallery Photos
   const [published, setPublished] = useState(true)
   const [photoUrl, setPhotoUrl] = useState("")
+  const [additionalPhotos, setAdditionalPhotos] = useState<string[]>([])
+  const [newGalleryUrl, setNewGalleryUrl] = useState("")
   const [uploadingPhoto, setUploadingPhoto] = useState(false)
+  const [uploadingGallery, setUploadingGallery] = useState(false)
   const [facilities, setFacilities] = useState<string[]>([])
   const [description, setDescription] = useState("")
 
@@ -107,6 +112,41 @@ export default function EditPropertyPage() {
   const [hasFoodService, setHasFoodService] = useState<boolean>(true)
   const [hasSharedKitchen, setHasSharedKitchen] = useState<boolean>(true)
   const [isBreakfastIncluded, setIsBreakfastIncluded] = useState<boolean>(false)
+
+  // Handlers for gallery photos
+  async function handleGalleryUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    try {
+      setUploadingGallery(true)
+      const formData = new FormData()
+      formData.append("file", file)
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      })
+      if (res.ok) {
+        const data = await res.json()
+        if (data.url) {
+          setAdditionalPhotos((prev) => [...prev, data.url])
+        }
+      }
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setUploadingGallery(false)
+    }
+  }
+
+  function addGalleryUrl() {
+    if (!newGalleryUrl.trim()) return
+    setAdditionalPhotos((prev) => [...prev, newGalleryUrl.trim()])
+    setNewGalleryUrl("")
+  }
+
+  function removeGalleryPhoto(index: number) {
+    setAdditionalPhotos((prev) => prev.filter((_, i) => i !== index))
+  }
 
   // Fetch Existing Hub Data
   useEffect(() => {
@@ -139,15 +179,24 @@ export default function EditPropertyPage() {
         setWebsite(hub.website || "")
         setPublished(hub.published ?? true)
 
-        // Parse Photo
+        // Parse Photos (1 Cover + Additional Gallery Photos)
         let photo = hub.photoUrl || ""
+        let extraPhotos: string[] = []
         if (photo.startsWith("[")) {
           try {
             const parsed = JSON.parse(photo)
-            if (Array.isArray(parsed) && parsed.length > 0) photo = parsed[0]
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              photo = parsed[0]
+              extraPhotos = parsed.slice(1).filter(Boolean)
+            }
           } catch (e) {}
+        } else if (photo.includes(",")) {
+          const parts = photo.split(",").map((s: string) => s.trim()).filter(Boolean)
+          photo = parts[0] || ""
+          extraPhotos = parts.slice(1)
         }
         setPhotoUrl(photo)
+        setAdditionalPhotos(extraPhotos)
 
         // Parse Facilities
         let loadedFacilities: string[] = []
@@ -282,6 +331,10 @@ export default function EditPropertyPage() {
         finalFacilitiesList.push("Free Breakfast Included with Stay")
       }
 
+      // Compile photos payload (Cover + Gallery)
+      const allPhotos = [photoUrl.trim(), ...additionalPhotos.map(p => p.trim()).filter(Boolean)].filter(Boolean)
+      const finalPhotoPayload = allPhotos.length > 1 ? JSON.stringify(allPhotos) : (photoUrl.trim() || "")
+
       const payload = {
         hubId,
         name: name.trim(),
@@ -292,7 +345,7 @@ export default function EditPropertyPage() {
         priceDaily: Number(priceDaily) || 0,
         priceMonthly: Number(priceMonthly) || 0,
         openingHours: openingHours.trim(),
-        photoUrl: photoUrl.trim(),
+        photoUrl: finalPhotoPayload,
         facilities: Array.from(new Set(finalFacilitiesList)),
         published,
         website: website.trim(),
@@ -701,6 +754,102 @@ export default function EditPropertyPage() {
                 </div>
               </div>
 
+            </div>
+
+            {/* ADDITIONAL GALLERY PHOTOS SECTION */}
+            <div className="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div>
+                  <label className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                    <ImageIcon size={14} className="text-[#C2410C]" />
+                    Additional Gallery Photos ({additionalPhotos.length})
+                  </label>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                    Upload at least 3 additional photos (interior desks, cafe/kitchen, mountain view, coliving room) to activate the 5-photo Airbnb hero grid.
+                  </p>
+                </div>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#023629]/10 dark:bg-[#023629]/30 text-[#023629] dark:text-emerald-400">
+                  {1 + additionalPhotos.length >= 5 ? "✓ 5-Photo Hero Grid Active" : `${5 - (1 + additionalPhotos.length)} more needed for 5-photo grid`}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* File Upload Dropzone */}
+                <label className="border border-dashed border-slate-300 dark:border-slate-700 hover:border-[#023629] dark:hover:border-[#C2410C] bg-slate-50 dark:bg-slate-900 rounded-2xl p-4 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-1.5 group">
+                  {uploadingGallery ? (
+                    <Loader2 className="w-5 h-5 text-[#C2410C] animate-spin" />
+                  ) : (
+                    <Upload className="w-5 h-5 text-slate-400 group-hover:text-[#023629] dark:group-hover:text-[#C2410C] transition-colors" />
+                  )}
+                  <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                    {uploadingGallery ? "Uploading Photo..." : "Upload Gallery Image"}
+                  </span>
+                  <span className="text-[10px] text-slate-400">JPG, PNG, WEBP up to 5MB</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleGalleryUpload}
+                    disabled={uploadingGallery}
+                    className="hidden"
+                  />
+                </label>
+
+                {/* URL Link Input */}
+                <div className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 space-y-2 flex flex-col justify-between">
+                  <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block">Add Photo via URL</span>
+                  <div className="flex gap-2">
+                    <input
+                      type="url"
+                      value={newGalleryUrl}
+                      onChange={(e) => setNewGalleryUrl(e.target.value)}
+                      placeholder="https://images.unsplash.com/..."
+                      className="flex-1 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#023629]"
+                    />
+                    <button
+                      type="button"
+                      onClick={addGalleryUrl}
+                      className="bg-[#023629] hover:bg-[#034d3b] text-white font-bold px-3 py-1.5 rounded-xl text-xs transition-colors cursor-pointer"
+                    >
+                      Add
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Photo Gallery Thumbnails Preview Grid */}
+              {(photoUrl || additionalPhotos.length > 0) && (
+                <div className="pt-2">
+                  <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-2 uppercase tracking-wider">
+                    Listing Photos Preview ({1 + additionalPhotos.length} total)
+                  </span>
+                  <div className="grid grid-cols-3 sm:grid-cols-5 gap-2.5">
+                    {photoUrl && (
+                      <div className="relative aspect-video rounded-xl overflow-hidden border-2 border-[#C2410C] group shadow-sm">
+                        <img src={photoUrl} alt="Cover" className="w-full h-full object-cover" />
+                        <span className="absolute bottom-1 left-1 bg-[#C2410C] text-white text-[9px] font-black px-1.5 py-0.5 rounded shadow">
+                          Main Cover
+                        </span>
+                      </div>
+                    )}
+                    {additionalPhotos.map((url, idx) => (
+                      <div key={idx} className="relative aspect-video rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 group shadow-sm">
+                        <img src={url} alt={`Gallery ${idx + 1}`} className="w-full h-full object-cover" />
+                        <span className="absolute bottom-1 left-1 bg-black/60 text-white text-[8px] font-bold px-1 rounded">
+                          #{idx + 2}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => removeGalleryPhoto(idx)}
+                          className="absolute top-1 right-1 bg-black/80 hover:bg-red-600 text-white p-1 rounded-full opacity-90 transition-all cursor-pointer"
+                          title="Remove image"
+                        >
+                          <X size={10} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

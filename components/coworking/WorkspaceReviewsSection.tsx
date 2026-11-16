@@ -21,6 +21,7 @@ interface ReviewItem {
     comfort: number
     videoCalls: number
   }
+  tags?: string[]
   photos?: string[]
 }
 
@@ -32,10 +33,11 @@ const MOCK_REVIEWS: ReviewItem[] = [
     country: "Germany",
     stayDuration: "2 weeks",
     isVerifiedBooking: true,
-    comment: "Flawless fiber internet and automatic generator backup! I hosted 4 live video webinars during my stay without a single drop. Staff were super helpful and coffee is unlimited.",
+    comment: "Flawless fiber internet and automatic generator backup! I hosted 4 live video webinars during my stay without a single drop. Staff were super helpful and coffee is unlimited. Delicious local breakfast and momos right downstairs.",
     createdAt: "2026-08-20T10:00:00Z",
     helpfulCount: 14,
     categoryRatings: { internet: 5, power: 5, noise: 4, comfort: 5, videoCalls: 5 },
+    tags: ["wifi", "power", "calls", "host", "food"],
     photos: ["/blog-cost-of-living.png", "/blog-lakeside-pokhara.png"],
   },
   {
@@ -45,23 +47,62 @@ const MOCK_REVIEWS: ReviewItem[] = [
     country: "United Kingdom",
     stayDuration: "1 month",
     isVerifiedBooking: true,
-    comment: "The quiet call booths saved my life! Great ergonomic chairs, solid power backup during evening load cuts, and the view of the valley is unreal.",
+    comment: "The quiet call booths saved my life! Great ergonomic chairs, solid power backup during evening load cuts, and the view of the valley is unreal. The shared kitchen with fridge and tea station made long workdays so comfortable.",
     createdAt: "2026-08-12T14:30:00Z",
     helpfulCount: 9,
     categoryRatings: { internet: 5, power: 5, noise: 5, comfort: 5, videoCalls: 5 },
+    tags: ["calls", "desk", "power", "location", "food"],
   },
   {
     id: "r3",
+    rating: 5,
+    reviewerName: "Elena B.",
+    country: "Spain",
+    stayDuration: "3 weeks",
+    isVerifiedBooking: true,
+    comment: "Stayed here while working remotely for an EU startup. The specialty coffee bar, fresh organic breakfast in the morning, and high-speed Starlink dual line made this my favorite workspace in Nepal. The host greeted me personally and gave great local tips!",
+    createdAt: "2026-08-04T11:20:00Z",
+    helpfulCount: 8,
+    categoryRatings: { internet: 5, power: 5, noise: 4, comfort: 5, videoCalls: 5 },
+    tags: ["food", "wifi", "host", "location"],
+  },
+  {
+    id: "r4",
+    rating: 5,
+    reviewerName: "David K.",
+    country: "United States",
+    stayDuration: "3 weeks",
+    isVerifiedBooking: true,
+    comment: "Incredible dual-monitor setups and height-adjustable standing desks! Absolute lifesaver for long engineering sessions. Auto inverter power kicks in under 1 second, and the WiFi was consistently over 150 Mbps.",
+    createdAt: "2026-07-29T16:00:00Z",
+    helpfulCount: 11,
+    categoryRatings: { internet: 5, power: 5, noise: 5, comfort: 5, videoCalls: 4 },
+    tags: ["desk", "power", "wifi"],
+  },
+  {
+    id: "r5",
     rating: 4,
     reviewerName: "Kenji R.",
     country: "Japan",
     stayDuration: "3 days",
     isVerifiedBooking: false,
-    comment: "Fast WiFi and comfortable desks. Good coffee near Thamel. A bit crowded around 2 PM, but otherwise top notch.",
+    comment: "Fast WiFi and comfortable desks. Good specialty pour-over coffee and fresh lunch menu. A bit busy around 2 PM, but otherwise top notch. Very helpful host on WhatsApp.",
     createdAt: "2026-07-28T09:15:00Z",
     helpfulCount: 5,
     categoryRatings: { internet: 4, power: 4, noise: 4, comfort: 4, videoCalls: 4 },
+    tags: ["wifi", "desk", "food", "host", "location"],
   },
+]
+
+const KEYWORD_FILTERS = [
+  { id: "all", label: "All Reviews", icon: null },
+  { id: "food", label: "Food & Drinks", icon: "☕", keywords: ["food", "coffee", "kitchen", "breakfast", "lunch", "cafe", "tea", "momo"] },
+  { id: "wifi", label: "Internet & WiFi", icon: "⚡", keywords: ["wifi", "fiber", "internet", "starlink", "zoom", "speed", "mbps"] },
+  { id: "desk", label: "Desk & Ergonomics", icon: "🪑", keywords: ["desk", "chair", "ergonomic", "monitor", "standing", "setup"] },
+  { id: "calls", label: "Quiet & Calls", icon: "🤫", keywords: ["call", "quiet", "booth", "skype", "noise", "webinar"] },
+  { id: "power", label: "Power Backup", icon: "🔌", keywords: ["power", "generator", "inverter", "load", "electricity", "backup"] },
+  { id: "host", label: "Host & Staff", icon: "👥", keywords: ["host", "staff", "helpful", "friendly", "owner", "whatsapp"] },
+  { id: "location", label: "Location & Views", icon: "📍", keywords: ["location", "view", "valley", "lake", "pokhara", "thamel", "terrace"] },
 ]
 
 export default function WorkspaceReviewsSection({
@@ -74,8 +115,8 @@ export default function WorkspaceReviewsSection({
   totalReviews?: number
 }) {
   const [reviews, setReviews] = useState<ReviewItem[]>(MOCK_REVIEWS)
-  const [filterTab, setFilterTab] = useState("all")
-  const [activePhotoTab, setActivePhotoTab] = useState<"nomad" | "owner">("nomad")
+  const [selectedKeyword, setSelectedKeyword] = useState("all")
+  const [verifiedOnly, setVerifiedOnly] = useState(false)
   const [showReviewModal, setShowReviewModal] = useState(false)
 
   // New Review Form State
@@ -104,6 +145,7 @@ export default function WorkspaceReviewsSection({
       createdAt: new Date().toISOString(),
       helpfulCount: 0,
       categoryRatings: { internet: 5, power: 5, noise: 4, comfort: 5, videoCalls: 5 },
+      tags: ["wifi", "desk", "food", "host"],
     }
 
     setReviews([created, ...reviews])
@@ -113,8 +155,14 @@ export default function WorkspaceReviewsSection({
   }
 
   const filteredReviews = reviews.filter(r => {
-    if (filterTab === "verified") return r.isVerifiedBooking
-    return true
+    if (verifiedOnly && !r.isVerifiedBooking) return false
+    if (selectedKeyword === "all") return true
+
+    const activeFilter = KEYWORD_FILTERS.find(k => k.id === selectedKeyword)
+    if (!activeFilter || !activeFilter.keywords) return true
+
+    const textToSearch = `${r.comment} ${r.reviewerName} ${r.country || ""} ${(r.tags || []).join(" ")}`.toLowerCase()
+    return activeFilter.keywords.some(kw => textToSearch.includes(kw.toLowerCase()))
   })
 
   return (
@@ -175,76 +223,118 @@ export default function WorkspaceReviewsSection({
         </div>
       </div>
 
-      {/* Nomad Photos vs Owner Photos Tabs */}
+      {/* Nomad Community Photos (User-submitted workspace snapshots) */}
       <div className="bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#242424] rounded-3xl p-6 space-y-4 shadow-xs">
         <div className="flex items-center justify-between border-b border-[#E8E2D8] dark:border-[#242424] pb-3">
           <div className="flex items-center gap-2">
             <Camera size={16} className="text-[#C2410C] dark:text-[#FB923C]" />
-            <h3 className="text-base font-bold text-gray-900 dark:text-white">Community Photo Gallery</h3>
+            <h3 className="text-base font-bold text-gray-900 dark:text-white">Nomad Community Snapshots</h3>
           </div>
-          <div className="flex items-center gap-1 bg-[#F8F6F0] dark:bg-[#1a1a1a] p-1 rounded-xl border border-[#E8E2D8] dark:border-[#2a2a2a] text-xs">
-            <button
-              onClick={() => setActivePhotoTab("nomad")}
-              className={`px-3 py-1 rounded-lg font-bold transition-all ${
-                activePhotoTab === "nomad" ? "bg-[#C2410C] text-white shadow-xs" : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-              }`}
-            >
-              Nomad Photos (12)
-            </button>
-            <button
-              onClick={() => setActivePhotoTab("owner")}
-              className={`px-3 py-1 rounded-lg font-bold transition-all ${
-                activePhotoTab === "owner" ? "bg-[#C2410C] text-white shadow-xs" : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-              }`}
-            >
-              Owner Photos (8)
-            </button>
-          </div>
+          <span className="text-xs text-gray-500 dark:text-[#A1A1AA]">
+            Real workspace photos uploaded by remote workers
+          </span>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {(activePhotoTab === "nomad"
-            ? ["/blog-cost-of-living.png", "/blog-lakeside-pokhara.png", "/blog-top-10-destinations.png", "/hero-bg.png"]
-            : ["/nepal-blog-hero-banner.png", "/blog-safety-health.png", "/blog-list-workspace.png", "/webisteofficiallogo-removebg-preview.png"]
-          ).map((src, idx) => (
+          {[
+            { src: "/blog-cost-of-living.png", author: "by Alex (Germany)" },
+            { src: "/blog-lakeside-pokhara.png", author: "by Sarah (UK)" },
+            { src: "/blog-top-10-destinations.png", author: "by Elena (Spain)" },
+            { src: "/hero-bg.png", author: "by Kenji (Japan)" },
+          ].map((item, idx) => (
             <div key={idx} className="h-32 bg-[#F8F6F0] dark:bg-[#181818] rounded-xl overflow-hidden border border-[#E8E2D8] dark:border-[#242424] group relative">
-              <img src={src} alt="Workspace gallery" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+              <img src={item.src} alt="Nomad workspace snapshot" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
               <div className="absolute bottom-2 left-2 bg-black/80 px-2 py-0.5 rounded text-[10px] text-gray-300 font-medium backdrop-blur">
-                {activePhotoTab === "nomad" ? "by Alex (Nomad)" : "Official Space Photo"}
+                {item.author}
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Reviews Filter Bar & Cards List */}
+      {/* Airbnb-Style Reviews Keyword Filter Bar */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between flex-wrap gap-2">
-          <div className="flex items-center gap-2">
-            <Filter size={14} className="text-[#C2410C] dark:text-[#FB923C]" />
-            <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Filter Reviews:</span>
+        <div className="bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#242424] rounded-3xl p-5 space-y-3 shadow-xs">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center gap-2">
+              <Filter size={14} className="text-[#C2410C] dark:text-[#FB923C]" />
+              <span className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">
+                Filter Nomad Reviews by Topic:
+              </span>
+            </div>
+            
             <button
-              onClick={() => setFilterTab("all")}
-              className={`px-3 py-1 rounded-lg text-xs font-bold transition-all border ${
-                filterTab === "all" ? "bg-gray-900 text-white dark:bg-white dark:text-black border-transparent shadow-xs" : "bg-white dark:bg-[#141414] border-[#E8E2D8] dark:border-[#242424] text-gray-700 dark:text-gray-300"
+              onClick={() => setVerifiedOnly(prev => !prev)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
+                verifiedOnly
+                  ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
+                  : "bg-white dark:bg-[#141414] border-[#E8E2D8] dark:border-[#242424] text-gray-700 dark:text-gray-300 hover:border-emerald-600"
               }`}
             >
-              All Reviews
-            </button>
-            <button
-              onClick={() => setFilterTab("verified")}
-              className={`px-3 py-1 rounded-lg text-xs font-bold transition-all border ${
-                filterTab === "verified" ? "bg-[#C2410C] text-white border-[#C2410C] shadow-xs" : "bg-white dark:bg-[#141414] border-[#E8E2D8] dark:border-[#242424] text-gray-700 dark:text-gray-300"
-              }`}
-            >
-              Verified Nomad Bookings Only
+              <CheckCircle size={13} className={verifiedOnly ? "fill-white text-emerald-600" : "text-emerald-600"} />
+              <span>Verified Bookings Only</span>
             </button>
           </div>
+
+          {/* Keyword Filter Chips (Airbnb Style) */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+            {KEYWORD_FILTERS.map((kf) => {
+              const isSelected = selectedKeyword === kf.id
+              return (
+                <button
+                  key={kf.id}
+                  onClick={() => setSelectedKeyword(kf.id)}
+                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap cursor-pointer border ${
+                    isSelected
+                      ? "bg-[#C2410C] text-white border-[#C2410C] shadow-sm scale-102"
+                      : "bg-[#FBF9F5] dark:bg-[#1A1A1E] text-gray-700 dark:text-gray-300 border-[#E8E2D8] dark:border-[#28282C] hover:border-gray-400 hover:text-gray-900 dark:hover:text-white"
+                  }`}
+                >
+                  {kf.icon && <span>{kf.icon}</span>}
+                  <span>{kf.label}</span>
+                </button>
+              )
+            })}
+          </div>
+
+          {/* Active Filter Summary */}
+          {selectedKeyword !== "all" && (
+            <div className="flex items-center justify-between text-xs text-gray-500 dark:text-[#A1A1AA] pt-1">
+              <span>
+                Showing {filteredReviews.length} {filteredReviews.length === 1 ? "review" : "reviews"} mentioning{" "}
+                <strong className="text-gray-900 dark:text-white font-semibold">
+                  "{KEYWORD_FILTERS.find(k => k.id === selectedKeyword)?.label}"
+                </strong>
+              </span>
+              <button
+                onClick={() => setSelectedKeyword("all")}
+                className="text-[#C2410C] hover:underline font-bold"
+              >
+                Clear filter
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Reviews List */}
         <div className="space-y-4">
-          {filteredReviews.map((r) => (
+          {filteredReviews.length === 0 ? (
+            <div className="bg-white dark:bg-[#121212] border border-[#E8E2D8] dark:border-[#242424] rounded-2xl p-8 text-center space-y-2">
+              <p className="text-sm font-bold text-gray-700 dark:text-gray-300">
+                No reviews found matching "{KEYWORD_FILTERS.find(k => k.id === selectedKeyword)?.label}"
+              </p>
+              <button
+                onClick={() => {
+                  setSelectedKeyword("all")
+                  setVerifiedOnly(false)
+                }}
+                className="text-xs text-[#C2410C] font-extrabold hover:underline"
+              >
+                Reset filters to see all reviews
+              </button>
+            </div>
+          ) : (
+            filteredReviews.map((r) => (
             <div key={r.id} className="bg-white dark:bg-[#121212] border border-[#E8E2D8] dark:border-[#242424] rounded-2xl p-5 space-y-3 shadow-xs">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#E8E2D8] dark:border-[#1e1e1e] pb-3">
                 <div className="flex items-center gap-3">
@@ -291,7 +381,7 @@ export default function WorkspaceReviewsSection({
                 </button>
               </div>
             </div>
-          ))}
+          )))}
         </div>
       </div>
 

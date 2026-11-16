@@ -775,7 +775,7 @@ export default function SpaceRegisterPage() {
                           <ImageIcon size={14} className="text-primary" /> Additional Gallery Photos ({additionalPhotos.length})
                         </label>
                         <span className="text-[10px] text-muted-foreground font-semibold">
-                          Upload interior, desk setup, or meeting room photos
+                          Upload at least 3 photos (desks, cafe/kitchen, mountain view, rooms) for the 5-photo grid
                         </span>
                       </div>
 
