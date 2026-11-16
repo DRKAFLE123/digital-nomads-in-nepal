@@ -2,9 +2,20 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import crypto from "crypto"
 import { sendVerificationEmail } from "@/lib/email"
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit"
 
 export async function POST(req: Request) {
   try {
+    const ip = getClientIp(req)
+    const rateLimit = checkRateLimit(`resend-verify:${ip}`, { limit: 3, windowSeconds: 10 * 60 })
+
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        { error: `Too many verification requests. Please try again in ${rateLimit.resetInSeconds} seconds.` },
+        { status: 429, headers: { "Retry-After": String(rateLimit.resetInSeconds) } }
+      )
+    }
+
     const { email } = await req.json()
 
     if (!email || typeof email !== "string") {

@@ -14,8 +14,8 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/", req.url), 301)
   }
 
-  // 1. Protect Owner / Hosting Dashboard (/owner/dashboard, /hosting)
-  if (pathname.startsWith("/owner/dashboard") || pathname.startsWith("/hosting")) {
+  // 1. Protect Owner / Hosting Dashboard (/owner, /hosting)
+  if (pathname.startsWith("/owner") || pathname.startsWith("/hosting")) {
     const token = await getToken({ req })
     if (!token) {
       const loginUrl = new URL("/auth/signin", req.url)
@@ -25,8 +25,8 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next()
   }
 
-  // 2. Protect Local Expert Dashboard (/guides/dashboard)
-  if (pathname.startsWith("/guides/dashboard")) {
+  // 2. Protect Local Expert Dashboard (/guides/dashboard, /local-guides/dashboard)
+  if (pathname.startsWith("/guides/dashboard") || pathname.startsWith("/local-guides/dashboard")) {
     const token = await getToken({ req })
     if (!token) {
       const loginUrl = new URL("/auth/signin", req.url)
@@ -100,14 +100,20 @@ export const config = {
   matcher: [
     "/dashboard",
     "/dashboard/:path*",
+    "/admin",
     "/admin/:path*",
-    "/community/:path*",
     "/community",
+    "/community/:path*",
+    "/owner",
     "/owner/:path*",
-    "/guides/dashboard/:path*",
+    "/hosting",
+    "/hosting/:path*",
     "/guides/dashboard",
-    "/nomad/bookings/:path*",
+    "/guides/dashboard/:path*",
+    "/local-guides/dashboard",
+    "/local-guides/dashboard/:path*",
     "/nomad/bookings",
+    "/nomad/bookings/:path*",
     "/workspaces/:path*",
     "/resources/coworking/:path*",
     "/sofa-hub",

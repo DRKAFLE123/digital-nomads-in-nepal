@@ -29,8 +29,33 @@ function generateSignature(params: Record<string, string>, apiSecret: string) {
     .digest("hex")
 }
 
+function isValidImageSignature(buffer: Buffer): boolean {
+  if (buffer.length < 12) return false
+
+  // JPEG (FF D8 FF)
+  if (buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff) return true
+
+  // PNG (89 50 4E 47)
+  if (buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4e && buffer[3] === 0x47) return true
+
+  // WebP (RIFF .... WEBP)
+  if (buffer.toString("ascii", 0, 4) === "RIFF" && buffer.toString("ascii", 8, 12) === "WEBP") return true
+
+  // AVIF (.... ftypavif)
+  const ftyp = buffer.toString("ascii", 4, 8)
+  const brand = buffer.toString("ascii", 8, 12)
+  if (ftyp === "ftyp" && (brand === "avif" || brand === "avis" || brand === "mif1")) return true
+
+  return false
+}
+
 export async function POST(req: NextRequest) {
   try {
+    const session = await getServerSession(authOptions)
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "Unauthorized. Please sign in to upload images." }, { status: 401 })
+    }
+
     const formData = await req.formData()
     const file = formData.get("file") as File | null
     if (!file) {
@@ -50,6 +75,11 @@ export async function POST(req: NextRequest) {
     const safeExt = ALLOWED_MIME_TYPES[file.type]
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
+
+    // Deep inspection: verify magic bytes to prevent spoofed MIME types
+    if (!isValidImageSignature(buffer)) {
+      return NextResponse.json({ error: "Corrupted or invalid image file content." }, { status: 400 })
+    }
 
     const cloudName = process.env.CLOUDINARY_CLOUD_NAME
     const apiKey = process.env.CLOUDINARY_API_KEY

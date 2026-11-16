@@ -1,19 +1,40 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit"
 
 export async function POST(req: Request) {
   try {
+    const ip = getClientIp(req)
+    const rateLimit = checkRateLimit(`newsletter:${ip}`, { limit: 5, windowSeconds: 10 * 60 })
+
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        { error: `Too many subscription attempts. Please try again in ${rateLimit.resetInSeconds} seconds.` },
+        { status: 429, headers: { "Retry-After": String(rateLimit.resetInSeconds) } }
+      )
+    }
+
     const { email } = await req.json()
-    if (!email) {
+    if (!email || typeof email !== "string") {
       return NextResponse.json({ error: "Email is required" }, { status: 400 })
+    }
+
+    const normalizedEmail = email.trim().toLowerCase()
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(normalizedEmail) || normalizedEmail.length > 100) {
+      return NextResponse.json({ error: "Please enter a valid email address." }, { status: 400 })
     }
 
     try {
       await prisma.subscriber.create({
-        data: { email }
+        data: { email: normalizedEmail }
       })
-    } catch (dbError) {
-      console.error("Database save error. If running without DB, ignoring this for Brevo push.", dbError)
+    } catch (dbError: unknown) {
+      // If already subscribed, return friendly success
+      if (dbError && typeof dbError === "object" && "code" in dbError && dbError.code === "P2002") {
+        return NextResponse.json({ success: true, message: "You are already subscribed!" }, { status: 200 })
+      }
+      console.error("Database save error:", dbError)
     }
 
     const BREVO_API_KEY = process.env.BREVO_API_KEY
@@ -26,7 +47,7 @@ export async function POST(req: Request) {
           "api-key": BREVO_API_KEY
         },
         body: JSON.stringify({
-          email: email,
+          email: normalizedEmail,
           listIds: [2]
         })
       })

@@ -3,9 +3,20 @@ import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 import crypto from "crypto"
 import { sendVerificationEmail, sendAdminNotificationEmail } from "@/lib/email"
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit"
 
 export async function POST(req: Request) {
   try {
+    const ip = getClientIp(req)
+    const rateLimit = checkRateLimit(`register-guide:${ip}`, { limit: 5, windowSeconds: 15 * 60 })
+
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        { error: `Too many registration attempts. Please try again in ${rateLimit.resetInSeconds} seconds.` },
+        { status: 429, headers: { "Retry-After": String(rateLimit.resetInSeconds) } }
+      )
+    }
+
     const body = await req.json()
     const { name, email, password, location, primarySpecialty, phone } = body
 
@@ -16,14 +27,18 @@ export async function POST(req: Request) {
       )
     }
 
-    if (password.length < 6) {
+    if (typeof password !== "string" || password.length < 8) {
       return NextResponse.json(
-        { error: "Password must be at least 6 characters long." },
+        { error: "Password must be at least 8 characters long." },
         { status: 400 }
       )
     }
 
-    const normalizedEmail = email.toLowerCase().trim()
+    const normalizedEmail = String(email).toLowerCase().trim()
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(normalizedEmail) || normalizedEmail.length > 100) {
+      return NextResponse.json({ error: "Please provide a valid email address." }, { status: 400 })
+    }
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
@@ -37,8 +52,8 @@ export async function POST(req: Request) {
       )
     }
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10)
+    // Hash password with 12 rounds
+    const hashedPassword = await bcrypt.hash(password, 12)
 
     // Generate secure 24-hour verification token
     const verifyToken = crypto.randomBytes(32).toString("hex")

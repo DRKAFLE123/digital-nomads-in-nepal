@@ -34,6 +34,36 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 // PATCH update guide profile (bio, location, specialties, photoUrl, contactEmail, etc.)
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   try {
+    const { getServerSession } = await import("next-auth")
+    const { authOptions } = await import("@/lib/auth")
+    const session = await getServerSession(authOptions)
+
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "Unauthorized. Please sign in to edit your profile." }, { status: 401 })
+    }
+
+    const sessionEmail = session.user.email.toLowerCase()
+    const sessionUserId = (session.user as { id?: string }).id
+    const sessionRole = (session.user as { role?: string }).role
+    const isAdmin = sessionRole === "ADMIN"
+
+    const existing = await prisma.guide.findUnique({ where: { id: params.id } })
+    if (!existing) {
+      return NextResponse.json({ error: "Guide profile not found" }, { status: 404 })
+    }
+
+    // IDOR check: only the guide owner or Admin can mutate this profile
+    const isOwner =
+      (existing.userId && existing.userId === sessionUserId) ||
+      existing.contactEmail?.toLowerCase() === sessionEmail
+
+    if (!isOwner && !isAdmin) {
+      return NextResponse.json(
+        { error: "Forbidden: You do not have permission to edit this guide profile." },
+        { status: 403 }
+      )
+    }
+
     const body = await req.json()
     const { 
       name, 
@@ -56,30 +86,25 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       galleryPhotos
     } = body
 
-    const existing = await prisma.guide.findUnique({ where: { id: params.id } })
-    if (!existing) {
-      return NextResponse.json({ error: "Guide profile not found" }, { status: 404 })
-    }
-
     const updateData: any = {
-      ...(name ? { name } : {}),
-      ...(tagline !== undefined ? { tagline } : {}),
-      ...(bio ? { bio } : {}),
-      ...(location ? { location } : {}),
-      ...(specialties !== undefined ? { specialties } : {}),
-      ...(photoUrl !== undefined ? { photoUrl } : {}),
-      ...(contactEmail ? { contactEmail } : {}),
-      ...(phone !== undefined ? { phone } : {}),
-      ...(whatsapp !== undefined ? { whatsapp } : {}),
-      ...(website !== undefined ? { website: website || null } : {}),
-      ...(languages !== undefined ? { languages } : {}),
-      ...(experienceYears !== undefined ? { experienceYears: Number(experienceYears) || 0 } : {}),
+      ...(typeof name === "string" ? { name: name.trim().slice(0, 100) } : {}),
+      ...(tagline !== undefined ? { tagline: typeof tagline === "string" ? tagline.trim().slice(0, 150) : null } : {}),
+      ...(typeof bio === "string" ? { bio: bio.trim().slice(0, 5000) } : {}),
+      ...(typeof location === "string" ? { location: location.trim().slice(0, 100) } : {}),
+      ...(Array.isArray(specialties) ? { specialties } : {}),
+      ...(photoUrl !== undefined ? { photoUrl: typeof photoUrl === "string" ? photoUrl.trim() : null } : {}),
+      ...(typeof contactEmail === "string" ? { contactEmail: contactEmail.trim().toLowerCase() } : {}),
+      ...(phone !== undefined ? { phone: typeof phone === "string" ? phone.trim().slice(0, 30) : null } : {}),
+      ...(whatsapp !== undefined ? { whatsapp: typeof whatsapp === "string" ? whatsapp.trim().slice(0, 30) : null } : {}),
+      ...(website !== undefined ? { website: typeof website === "string" ? website.trim() : null } : {}),
+      ...(Array.isArray(languages) ? { languages } : {}),
+      ...(experienceYears !== undefined ? { experienceYears: Math.max(0, Math.min(50, Number(experienceYears) || 0)) } : {}),
       ...(licensedSince !== undefined ? { licensedSince: licensedSince ? Number(licensedSince) : null } : {}),
-      ...(licenseNumber !== undefined ? { licenseNumber } : {}),
-      ...(certifications !== undefined ? { certifications } : {}),
-      ...(guidingAreas !== undefined ? { guidingAreas } : {}),
-      ...(profileStatus !== undefined ? { profileStatus } : {}),
-      ...(galleryPhotos !== undefined ? { galleryPhotos } : {}),
+      ...(licenseNumber !== undefined ? { licenseNumber: typeof licenseNumber === "string" ? licenseNumber.trim().slice(0, 50) : null } : {}),
+      ...(Array.isArray(certifications) ? { certifications } : {}),
+      ...(Array.isArray(guidingAreas) ? { guidingAreas } : {}),
+      ...(typeof profileStatus === "string" ? { profileStatus: profileStatus === "PUBLISHED" ? "PUBLISHED" : "DRAFT" } : {}),
+      ...(Array.isArray(galleryPhotos) ? { galleryPhotos } : {}),
     }
 
     const updated = await prisma.guide.update({

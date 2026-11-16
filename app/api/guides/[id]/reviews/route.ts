@@ -32,9 +32,17 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   const guide = await prisma.guide.findUnique({ where: { id: params.id } })
   if (!guide) return NextResponse.json({ error: "Guide not found." }, { status: 404 })
 
+  // Prevent self-reviews
+  const sessionEmail = session.user?.email?.toLowerCase()
+  if (guide.userId === userId || (sessionEmail && guide.contactEmail.toLowerCase() === sessionEmail)) {
+    return NextResponse.json({ error: "Guides cannot review their own profile." }, { status: 403 })
+  }
+
+  const cleanComment = String(comment).trim().slice(0, 2000)
+
   try {
     const review = await prisma.review.create({
-      data: { rating, comment, guideId: params.id, userId },
+      data: { rating: Math.round(rating), comment: cleanComment, guideId: params.id, userId },
     })
 
     // Recalculate average rating
