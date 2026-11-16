@@ -151,10 +151,19 @@ export default function CoworkingMarketplaceClient({
     setSelectedCity("All Cities");
     setSelectedFacilities([]);
     setSort("lowest_price");
+
+    // Clean URL query parameters so they don't persist in browser history
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.search = "";
+      window.history.replaceState({}, "", url.pathname);
+    }
   }
 
+  const isOfferingTypeChanged = offeringType !== defaultOfferingType;
+
   const activeFilterCount =
-    (offeringType !== "all" ? 1 : 0) +
+    (isOfferingTypeChanged ? 1 : 0) +
     (category !== "All" ? 1 : 0) +
     (hostelType !== "all" ? 1 : 0) +
     (selectedMeal !== "All" ? 1 : 0) +
@@ -362,6 +371,7 @@ export default function CoworkingMarketplaceClient({
             <div className="hidden lg:block lg:col-span-3 sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto overscroll-contain bg-white dark:bg-[#0F0F11] border border-[#E8E2D8] dark:border-[#242428] rounded-3xl p-5 shadow-sm custom-scrollbar">
               <WorkspaceSidebarFilter
                 offeringType={offeringType}
+                defaultOfferingType={defaultOfferingType}
                 onSelectOfferingType={(type) => {
                   setOfferingType(type);
                   setCategory("All");
@@ -621,6 +631,7 @@ export default function CoworkingMarketplaceClient({
               <div className="flex-1 overflow-y-auto p-5 sm:p-6 custom-scrollbar">
                 <WorkspaceSidebarFilter
                   offeringType={offeringType}
+                  defaultOfferingType={defaultOfferingType}
                   onSelectOfferingType={(type) => {
                     setOfferingType(type);
                     setCategory("All");

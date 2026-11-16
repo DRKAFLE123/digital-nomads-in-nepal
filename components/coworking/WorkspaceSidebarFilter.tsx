@@ -104,6 +104,7 @@ export const OFFERING_TYPES = [
 
 interface WorkspaceSidebarFilterProps {
   offeringType?: "all" | "work" | "stay" | "work_and_stay"
+  defaultOfferingType?: "all" | "work" | "stay" | "work_and_stay"
   onSelectOfferingType?: (type: "all" | "work" | "stay" | "work_and_stay") => void
   category: string
   onSelectCategory: (cat: string) => void
@@ -124,6 +125,7 @@ interface WorkspaceSidebarFilterProps {
 
 export default function WorkspaceSidebarFilter({
   offeringType = "all",
+  defaultOfferingType = "all",
   onSelectOfferingType,
   category,
   onSelectCategory,
@@ -150,8 +152,10 @@ export default function WorkspaceSidebarFilter({
   const [showAllWorkAmenities, setShowAllWorkAmenities] = useState(false)
   const [showAllStayFacilities, setShowAllStayFacilities] = useState(false)
 
+  const isModeChanged = Boolean(offeringType && offeringType !== (defaultOfferingType || "all"))
+
   const hasActiveFilters =
-    offeringType !== "all" ||
+    isModeChanged ||
     category !== "All" ||
     hostelType !== "all" ||
     selectedMeal !== "All" ||
