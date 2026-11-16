@@ -56,6 +56,7 @@ export async function POST(req: NextRequest) {
       slug = `${baseSlug}-${Math.floor(Math.random() * 10000)}`
     }
 
+    const sessionUserId = (session.user as { id?: string }).id
     const finalOwnerEmail = session.user?.email || ownerEmail || contactEmail
     const finalOwnerName = ownerName || session.user?.name || "Workspace Partner"
 
@@ -69,6 +70,7 @@ export async function POST(req: NextRequest) {
         contactEmail: finalContactEmail,
         website: website || null,
         photoUrl: photoUrl || null,
+        ownerId: sessionUserId || null,
         ownerEmail: finalOwnerEmail,
         ownerName: finalOwnerName,
         spaceType: spaceType || "Coworking Hub",

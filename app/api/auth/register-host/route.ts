@@ -119,6 +119,7 @@ export async function POST(req: Request) {
           city: city.trim(),
           address: address?.trim() || `${city.trim()}, Nepal`,
           description: phone ? `${finalDescription}\n\nDirect WhatsApp / Phone: ${phone.trim()}` : finalDescription,
+          ownerId: user.id,
           contactEmail: normalizedEmail,
           ownerEmail: normalizedEmail,
           ownerName: ownerName.trim(),

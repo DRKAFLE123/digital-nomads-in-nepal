@@ -61,6 +61,7 @@ model User {
   createdAt     DateTime  @default(now())
   reviews       Review[]
   guide         Guide?
+  workHubs      WorkHub[]
 }
 
 model Guide {
@@ -152,6 +153,8 @@ model WorkHub {
   city         String       
   description  String       @db.Text
   address      String
+  ownerId      String?
+  owner        User?        @relation(fields: [ownerId], references: [id], onDelete: SetNull)
   ownerEmail   String?
   ownerName    String?
   spaceType    String?      @default("Coworking Hub")

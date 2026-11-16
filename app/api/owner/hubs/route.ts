@@ -16,18 +16,22 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url)
     const ownerEmail = searchParams.get("email") || session.user.email
 
+    const sessionUserId = (session.user as { id?: string }).id
     const sessionRole = (session.user as { role?: string }).role
     if (ownerEmail.toLowerCase() !== session.user.email.toLowerCase() && sessionRole !== "ADMIN") {
       return NextResponse.json({ error: "Forbidden: Cannot access hubs of another owner." }, { status: 403 })
     }
 
+    const orConditions: Array<{ ownerId?: string; ownerEmail?: { equals: string }; contactEmail?: { equals: string } }> = [
+      { ownerEmail: { equals: ownerEmail } },
+      { contactEmail: { equals: ownerEmail } }
+    ]
+    if (sessionUserId) {
+      orConditions.unshift({ ownerId: sessionUserId })
+    }
+
     const hubs = await prisma.workHub.findMany({
-      where: {
-        OR: [
-          { ownerEmail: { equals: ownerEmail } },
-          { contactEmail: { equals: ownerEmail } }
-        ]
-      },
+      where: { OR: orConditions },
       include: {
         bookings: {
           orderBy: { createdAt: "desc" }
@@ -64,8 +68,10 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: "Hub not found" }, { status: 404 })
     }
 
+    const sessionUserId = (session.user as { id?: string }).id
     const sessionRole = (session.user as { role?: string }).role
     const isOwner =
+      (existing.ownerId && existing.ownerId === sessionUserId) ||
       existing.ownerEmail?.toLowerCase() === session.user.email.toLowerCase() ||
       existing.contactEmail?.toLowerCase() === session.user.email.toLowerCase()
     const isAdmin = sessionRole === "ADMIN"
@@ -76,6 +82,10 @@ export async function PATCH(req: NextRequest) {
 
     // Whitelist only editable fields with strict type, numeric, and length validation
     const allowedUpdates: Record<string, unknown> = {}
+    // Link immutable ownerId if legacy hub was unlinked
+    if (!existing.ownerId && sessionUserId && isOwner) {
+      allowedUpdates.ownerId = sessionUserId
+    }
     if (typeof rest.name === "string" && rest.name.trim()) allowedUpdates.name = rest.name.trim().slice(0, 150)
     if (typeof rest.city === "string" && rest.city.trim()) allowedUpdates.city = rest.city.trim().slice(0, 100)
     if (typeof rest.address === "string" && rest.address.trim()) allowedUpdates.address = rest.address.trim().slice(0, 250)

@@ -34,8 +34,10 @@ export async function GET(
       return NextResponse.json({ error: "Property not found" }, { status: 404 })
     }
 
+    const sessionUserId = (session.user as { id?: string }).id
     const sessionRole = (session.user as { role?: string }).role
     const isOwner =
+      (hub.ownerId && hub.ownerId === sessionUserId) ||
       hub.ownerEmail?.toLowerCase() === session.user.email.toLowerCase() ||
       hub.contactEmail?.toLowerCase() === session.user.email.toLowerCase()
     const isAdmin = sessionRole === "ADMIN"
