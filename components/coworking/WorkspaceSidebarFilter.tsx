@@ -583,27 +583,7 @@ export default function WorkspaceSidebarFilter({
         </div>
       )}
 
-      {/* Coliving / Stay Shortcut Promotion Card */}
-      <div className="p-3 rounded-2xl bg-[#FBF9F5] dark:bg-gradient-to-br dark:from-[#1c1809] dark:to-[#121212] border border-[#E8E2D8] dark:border-[#C2410C]/30 text-xs space-y-1.5 shadow-xs">
-        <div className="flex items-center justify-between">
-          <span className="text-[10px] font-black uppercase tracking-wider text-[#C2410C] dark:text-[#FB923C]">
-            🛌 Work + Coliving
-          </span>
-          <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#C2410C] text-white font-bold">
-            Live &amp; Work
-          </span>
-        </div>
-        <p className="text-[11px] text-gray-600 dark:text-gray-300 leading-snug">
-          Looking for rooms with ergonomic desks &amp; Starlink?
-        </p>
-        <button
-          type="button"
-          onClick={() => onSelectCategory("coliving")}
-          className="w-full mt-1 py-1.5 rounded-lg bg-[#C2410C] hover:bg-[#9A3412] text-white font-extrabold text-[11px] transition-all text-center block cursor-pointer shadow-xs"
-        >
-          Filter Coliving Workhubs →
-        </button>
-      </div>
+
 
       {/* Mobile Drawer Footer Actions */}
       {isMobileDrawer && (
