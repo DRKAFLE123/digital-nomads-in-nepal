@@ -1,5 +1,5 @@
-import type { Metadata } from "next"
-import CoworkingMarketplacePage from "@/app/resources/coworking/page"
+import type { Metadata } from "next";
+import CoworkingMarketplaceClient from "@/components/coworking/CoworkingMarketplaceClient";
 
 export const metadata: Metadata = {
   title: "Workspaces in Nepal | Verified Coworking & Hot Desks for Digital Nomads",
@@ -15,8 +15,8 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
-}
+};
 
 export default function WorkspacesPage() {
-  return <CoworkingMarketplacePage />
+  return <CoworkingMarketplaceClient defaultOfferingType="all" />;
 }

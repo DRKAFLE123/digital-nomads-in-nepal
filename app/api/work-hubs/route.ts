@@ -116,6 +116,14 @@ export async function GET(req: NextRequest) {
         } else if (catLower.includes("hostel")) {
           const isHostel = hubName.includes("hostel") || hubName.includes("pod") || spaceType.includes("hostel") || u.some(unit => (unit.type || unit.name || "").toLowerCase().includes("hostel") || (unit.type || unit.name || "").toLowerCase().includes("dorm") || (unit.type || unit.name || "").toLowerCase().includes("pod"))
           if (!isHostel) return false
+
+          const hostelTypeParam = searchParams.get("hostelType")
+          const isWorkAndStay = classifyHub(h) === "work_and_stay" || facs.some(f => f.toLowerCase().includes("generator") || f.toLowerCase().includes("100+ mbps") || f.toLowerCase().includes("fiber") || f.toLowerCase().includes("ergonomic") || f.toLowerCase().includes("quiet"))
+          if (hostelTypeParam === "work_and_stay" || catLower.includes("work_and_stay")) {
+            if (!isWorkAndStay) return false
+          } else if (hostelTypeParam === "stay_only") {
+            if (isWorkAndStay) return false
+          }
         } else if (catLower.includes("lodge")) {
           const isLodge = hubName.includes("lodge") || hubName.includes("guesthouse") || hubName.includes("inn") || spaceType.includes("lodge")
           if (!isLodge) return false
@@ -143,10 +151,26 @@ export async function GET(req: NextRequest) {
         }
       }
 
-      // Facility check
+      // Facility check (supports comma-separated list)
       if (facility && facility !== "All" && facility !== "All Amenities") {
-        const facs = Array.isArray(h.facilities) ? (h.facilities as string[]) : []
-        if (!facs.includes(facility)) return false
+        const facs = (Array.isArray(h.facilities) ? (h.facilities as string[]) : []).map(f => f.toLowerCase())
+        const requiredFacs = facility.split(",").map(f => f.trim().toLowerCase()).filter(Boolean)
+        const hasAll = requiredFacs.every(reqF => facs.some(f => f.includes(reqF) || reqF.includes(f)))
+        if (!hasAll) return false
+      }
+
+      // Meal & Dining check
+      const meal = searchParams.get("meal")
+      if (meal && meal !== "All" && meal !== "Any Meal Option") {
+        const mLower = meal.toLowerCase()
+        const facs = (Array.isArray(h.facilities) ? (h.facilities as string[]) : []).map(f => f.toLowerCase())
+        if (mLower.includes("breakfast")) {
+          if (!facs.some(f => f.includes("breakfast"))) return false
+        } else if (mLower.includes("kitchen")) {
+          if (!facs.some(f => f.includes("kitchen") || f.includes("cookware") || f.includes("self-cooking"))) return false
+        } else if (mLower.includes("restaurant")) {
+          if (!facs.some(f => f.includes("restaurant") || f.includes("cafe") || f.includes("dining"))) return false
+        }
       }
 
       // Price check

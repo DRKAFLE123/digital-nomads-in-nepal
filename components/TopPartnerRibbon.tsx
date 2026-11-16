@@ -2,7 +2,7 @@
 
 import React from "react"
 import Link from "next/link"
-import { Building2, Compass, LayoutDashboard } from "lucide-react"
+import { Building2, Compass } from "lucide-react"
 
 interface TopPartnerRibbonProps {
   isScrolled?: boolean
@@ -55,12 +55,8 @@ export default function TopPartnerRibbon({
             href={isHost ? "/owner/dashboard" : "/register/space"}
             className="inline-flex items-center gap-1.5 font-semibold text-[#F5F5F0] hover:text-white transition-colors py-0.5 px-1.5 sm:px-2 rounded-md hover:bg-white/10 active:scale-95 text-[10.5px] sm:text-xs"
           >
-            {isHost ? (
-              <LayoutDashboard className="w-3.5 h-3.5 text-[#C58B55]" />
-            ) : (
-              <Building2 className="w-3.5 h-3.5 text-[#C58B55]" />
-            )}
-            <span>{isHost ? "Dashboard" : "List Space"}</span>
+            <Building2 className="w-3.5 h-3.5 text-[#C58B55]" />
+            <span>{isHost ? "Host Dashboard" : "List Space"}</span>
             {!isHost && (
               <span className="hidden lg:inline text-[10px] text-white/60 font-normal">(Stay / Work)</span>
             )}
@@ -78,12 +74,8 @@ export default function TopPartnerRibbon({
             href={isGuide ? "/guides/dashboard" : "/guides/register"}
             className="inline-flex items-center gap-1.5 font-semibold text-[#D6A06A] hover:text-[#E5B483] transition-colors py-0.5 px-1.5 sm:px-2 rounded-md hover:bg-white/10 active:scale-95 text-[10.5px] sm:text-xs"
           >
-            {isGuide ? (
-              <LayoutDashboard className="w-3.5 h-3.5 text-[#D6A06A]" />
-            ) : (
-              <Compass className="w-3.5 h-3.5 text-[#D6A06A]" />
-            )}
-            <span>{isGuide ? "Dashboard" : "Join as Guide"}</span>
+            <Compass className="w-3.5 h-3.5 text-[#D6A06A]" />
+            <span>{isGuide ? "Guide Console" : "Join as Guide"}</span>
             {isGuide && Boolean(roleInfo?.pendingGuideInquiries) && (
               <span className="ml-1 px-1.5 py-0.2 rounded-full bg-amber-500 text-slate-950 text-[9px] font-bold">
                 {roleInfo.pendingGuideInquiries}

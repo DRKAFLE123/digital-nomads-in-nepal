@@ -103,10 +103,80 @@ export function classifyOfferingType(hub: { spaceType?: string | null; name: str
   return "work"
 }
 
+function getBadge(hub: Hub, offeringType: "work" | "stay" | "work_and_stay") {
+  const type = (hub.spaceType || "").toLowerCase()
+  const name = hub.name.toLowerCase()
+  const isHostel = type.includes("hostel") || name.includes("hostel")
+  const facs = (Array.isArray(hub.facilities) ? (hub.facilities as string[]) : []).map(f => f.toLowerCase())
+  const hasWorkSetup = facs.some(f => f.includes("fiber") || f.includes("wifi") || f.includes("mbps")) &&
+                       facs.some(f => f.includes("generator") || f.includes("backup") || f.includes("desk"))
+
+  if (isHostel) {
+    if (offeringType === "work_and_stay" || hasWorkSetup) {
+      return {
+        label: "⚡ WORK + STAY HOSTEL",
+        className: "bg-[#C2410C] text-white",
+      }
+    }
+    return {
+      label: "🛌 NOMAD HOSTEL (STAY ONLY)",
+      className: "bg-sky-700 text-white",
+    }
+  }
+
+  if (type.includes("coliving") || name.includes("coliving")) {
+    return {
+      label: "⚡ COLIVING & WORK",
+      className: "bg-[#C2410C] text-white",
+    }
+  }
+
+  if (type.includes("hotel") || name.includes("hotel") || type.includes("resort")) {
+    return {
+      label: "🏨 HOTEL",
+      className: "bg-emerald-800 text-white",
+    }
+  }
+
+  if (type.includes("apartment") || name.includes("apartment")) {
+    return {
+      label: "🏢 APARTMENT",
+      className: "bg-indigo-700 text-white",
+    }
+  }
+
+  if (type.includes("long_stay")) {
+    return {
+      label: "📅 MONTHLY STAY",
+      className: "bg-purple-700 text-white",
+    }
+  }
+
+  if (offeringType === "work_and_stay") {
+    return {
+      label: "⚡ WORK + STAY",
+      className: "bg-[#C2410C] text-white",
+    }
+  }
+
+  if (offeringType === "stay") {
+    return {
+      label: "🛌 STAY",
+      className: "bg-sky-700 text-white",
+    }
+  }
+
+  return {
+    label: "💻 WORK",
+    className: "bg-[#1B4332] text-white",
+  }
+}
+
 export default function WorkspaceCard({ hub }: WorkspaceCardProps) {
   const [favorited, setFavorited] = useState(false)
   const photos = parsePhotos(hub.photoUrl)
   const offeringType = classifyOfferingType(hub)
+  const badge = getBadge(hub, offeringType)
   
   // Deterministic curated fallback based on workspace slug
   const fallbackCover = CURATED_WORKSPACE_COVERS[
@@ -201,21 +271,9 @@ export default function WorkspaceCard({ hub }: WorkspaceCardProps) {
 
         {/* Top-Left Category & Verification Badges */}
         <div className="absolute top-3 left-3 flex flex-wrap items-center gap-1.5 z-10">
-          {offeringType === "work_and_stay" && (
-            <span className="bg-[#C2410C] text-white text-[10.5px] font-extrabold px-2.5 py-0.5 rounded-full shadow-md flex items-center gap-1 tracking-wide">
-              <span>⚡</span> WORK + STAY
-            </span>
-          )}
-          {offeringType === "stay" && (
-            <span className="bg-sky-700 text-white text-[10.5px] font-extrabold px-2.5 py-0.5 rounded-full shadow-md flex items-center gap-1 tracking-wide">
-              <span>🛌</span> STAY
-            </span>
-          )}
-          {offeringType === "work" && (
-            <span className="bg-[#1B4332] text-white text-[10.5px] font-extrabold px-2.5 py-0.5 rounded-full shadow-md flex items-center gap-1 tracking-wide">
-              <span>💻</span> WORK
-            </span>
-          )}
+          <span className={`${badge.className} text-[10.5px] font-extrabold px-2.5 py-0.5 rounded-full shadow-md flex items-center gap-1 tracking-wide`}>
+            {badge.label}
+          </span>
           {(hub.isVerified || hub.isPartner) && (
             <span className="bg-black/65 backdrop-blur-xs text-white text-[10px] font-semibold px-2 py-0.5 rounded-full border border-white/20">
               {hub.isVerified ? "Verified" : "Partner"}

@@ -57,43 +57,40 @@ export async function GET(req: NextRequest) {
     const isOwner = ownedHubs.length > 0 || user?.role === "OWNER"
     const pendingOwnerBookings = ownedHubs.reduce((acc, h) => acc + (h.bookings ? h.bookings.length : 0), 0)
 
-    // 3. Check Guide profile by contactEmail or userId
-    const guideProfile = await prisma.guide.findFirst({
-      where: {
-        OR: [
-          { contactEmail: email },
-          ...(user ? [{ userId: user.id }] : [])
-        ]
-      }
-    })
-
-    const isGuide = !!guideProfile || user?.role === "GUIDE"
-
-    // Sync User role in DB if they have active guide profile or listed space
-    if (user && user.role !== "ADMIN") {
-      if (isGuide && user.role !== "GUIDE") {
-        await prisma.user.update({
-          where: { id: user.id },
-          data: { role: "GUIDE" }
+    // 3. Check Guide profile strictly linked to user.id or if role is GUIDE
+    const guideProfile = user
+      ? await prisma.guide.findFirst({
+          where: { userId: user.id }
         })
-      } else if (isOwner && user.role !== "OWNER") {
+      : null
+
+    const isGuide = user?.role === "GUIDE" || (Boolean(guideProfile) && user?.role !== "OWNER")
+
+    // Sync User role in DB if they have listed space or active guide profile (Host priority)
+    if (user && user.role !== "ADMIN") {
+      if (isOwner && user.role !== "OWNER") {
         await prisma.user.update({
           where: { id: user.id },
           data: { role: "OWNER" }
+        })
+      } else if (isGuide && user.role !== "GUIDE") {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { role: "GUIDE" }
         })
       }
     }
 
     return NextResponse.json({
       isLoggedIn: true,
-      user: user ? { id: user.id, name: user.name, email: user.email, role: isGuide ? "GUIDE" : isOwner ? "OWNER" : user.role } : null,
-      role: isGuide ? "GUIDE" : isOwner ? "OWNER" : user?.role || "NOMAD",
+      user: user ? { id: user.id, name: user.name, email: user.email, role: isOwner ? "OWNER" : isGuide ? "GUIDE" : user.role } : null,
+      role: isOwner ? "OWNER" : isGuide ? "GUIDE" : user?.role || "NOMAD",
       isOwner,
       isGuide,
       ownerHubsCount: ownedHubs.length,
       guideId: guideProfile?.id || null,
       pendingOwnerBookings,
-      pendingGuideInquiries: isGuide ? 1 : 0
+      pendingGuideInquiries: 0
     })
   } catch (err) {
     console.error("GET /api/auth/me error:", err)

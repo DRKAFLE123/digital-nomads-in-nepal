@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { Filter, X, RotateCcw, Check, SlidersHorizontal, MapPin, Building, DollarSign, Wifi, Zap } from "lucide-react"
+import { RotateCcw, Check, SlidersHorizontal, MapPin, Building, Wifi, Zap, Utensils } from "lucide-react"
 
 export const SPACE_TYPES_BY_OFFERING: Record<string, Array<{ id: string; label: string }>> = {
   all: [
@@ -9,10 +9,12 @@ export const SPACE_TYPES_BY_OFFERING: Record<string, Array<{ id: string; label: 
     { id: "hot_desk", label: "Hot Desks" },
     { id: "dedicated_desk", label: "Dedicated Desks" },
     { id: "private_office", label: "Private Offices" },
+    { id: "hotel", label: "Hotels & Resorts" },
+    { id: "hostel", label: "Hostels & Nomad Pods" },
     { id: "coliving", label: "Coliving & Work" },
-    { id: "apartment", label: "Nomad Apartments" },
-    { id: "hostel", label: "Hostels & Pods" },
-    { id: "lodge", label: "Lodges & Homestays" },
+    { id: "apartment", label: "Entire Homes & Apartments" },
+    { id: "long_stay", label: "Long-Term Stays (Monthly)" },
+    { id: "lodge", label: "Homestays, Guesthouses & Lodges" },
   ],
   work: [
     { id: "All", label: "All Workspaces" },
@@ -24,20 +26,40 @@ export const SPACE_TYPES_BY_OFFERING: Record<string, Array<{ id: string; label: 
   ],
   stay: [
     { id: "All", label: "All Nomad Stays" },
-    { id: "apartment", label: "Nomad Apartments & Studios" },
+    { id: "hotel", label: "Hotels & Resorts" },
     { id: "hostel", label: "Hostels & Nomad Pods" },
-    { id: "lodge", label: "Guesthouses & Mountain Lodges" },
-    { id: "hotel", label: "Boutique Nomad Hotels" },
-    { id: "villa", label: "Homestays & Villas" },
+    { id: "coliving", label: "Coliving Spaces" },
+    { id: "apartment", label: "Entire Homes & Apartments" },
+    { id: "long_stay", label: "Long-Term Stays (Monthly)" },
+    { id: "lodge", label: "Homestays, B&Bs & Lodges" },
   ],
   work_and_stay: [
     { id: "All", label: "All Work + Stay Packages" },
     { id: "coliving", label: "Coliving Communities" },
+    { id: "work_and_stay_hostel", label: "Work & Stay Hostels ⚡" },
     { id: "room_desk", label: "Room + Dedicated Desk" },
     { id: "workation_hub", label: "Workation Retreats" },
     { id: "long_stay", label: "Monthly Live & Work" },
   ],
 }
+
+export const MEAL_OPTIONS = [
+  { id: "All", label: "Any Meal Option" },
+  { id: "breakfast", label: "Breakfast Included" },
+  { id: "kitchen", label: "Kitchen / Self-Cooking" },
+  { id: "restaurant", label: "Restaurant / Cafe on Site" },
+]
+
+export const STAY_FACILITIES = [
+  { id: "Free Parking", label: "Free Parking on Premises" },
+  { id: "Swimming Pool", label: "Swimming Pool" },
+  { id: "Fitness Center", label: "Fitness Center / Gym" },
+  { id: "Spa & Wellness", label: "Spa & Wellness / Hot Tub" },
+  { id: "Airport Shuttle", label: "Airport Shuttle Service" },
+  { id: "24-Hour Front Desk", label: "24-Hour Front Desk" },
+  { id: "EV Charging", label: "EV Charging Station" },
+  { id: "Wheelchair Accessible", label: "Wheelchair Accessible" },
+]
 
 // Flattened list for label lookups and backward compatibility
 export const CATEGORY_OPTIONS: Array<{ id: string; label: string }> = [
@@ -85,6 +107,10 @@ interface WorkspaceSidebarFilterProps {
   onSelectOfferingType?: (type: "all" | "work" | "stay" | "work_and_stay") => void
   category: string
   onSelectCategory: (cat: string) => void
+  hostelType?: "all" | "work_and_stay" | "stay_only"
+  onSelectHostelType?: (t: "all" | "work_and_stay" | "stay_only") => void
+  selectedMeal?: string
+  onSelectMeal?: (m: string) => void
   selectedCity: string
   onSelectCity: (city: string) => void
   selectedFacilities: string[]
@@ -100,6 +126,10 @@ export default function WorkspaceSidebarFilter({
   onSelectOfferingType,
   category,
   onSelectCategory,
+  hostelType = "all",
+  onSelectHostelType,
+  selectedMeal = "All",
+  onSelectMeal,
   selectedCity,
   onSelectCity,
   selectedFacilities,
@@ -109,9 +139,14 @@ export default function WorkspaceSidebarFilter({
   isMobileDrawer = false,
   onCloseMobile,
 }: WorkspaceSidebarFilterProps) {
+  const isHostelActive = category === "hostel" || category === "work_and_stay_hostel" || hostelType !== "all"
+  const isStayContext = offeringType === "stay" || offeringType === "work_and_stay" || ["hotel", "hostel", "coliving", "apartment", "long_stay", "lodge"].includes(category)
+
   const hasActiveFilters =
     offeringType !== "all" ||
     category !== "All" ||
+    hostelType !== "all" ||
+    selectedMeal !== "All" ||
     selectedCity !== "All Cities" ||
     selectedFacilities.length > 0
 
@@ -246,6 +281,113 @@ export default function WorkspaceSidebarFilter({
         </div>
       </div>
 
+      {/* 1.5 Hostel Work-Readiness Toggle (Shown when Hostel category is selected or stay context) */}
+      {(isHostelActive || category === "hostel" || category === "work_and_stay_hostel") && onSelectHostelType && (
+        <div className="space-y-2 p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-black uppercase tracking-wider text-amber-800 dark:text-amber-400 flex items-center gap-1.5">
+              <span>⚡</span> Hostel Work Readiness
+            </span>
+            {hostelType !== "all" && (
+              <button
+                type="button"
+                onClick={() => onSelectHostelType("all")}
+                className="text-[10px] font-semibold text-amber-700 dark:text-amber-300 hover:underline cursor-pointer"
+              >
+                Reset
+              </button>
+            )}
+          </div>
+          <p className="text-[11px] text-gray-600 dark:text-gray-400">
+            Differentiate remote-work ready hostels with fiber &amp; desks from stay-only backpacker hostels:
+          </p>
+          <div className="grid grid-cols-1 gap-1.5 pt-1">
+            <button
+              type="button"
+              onClick={() => onSelectHostelType("all")}
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all text-left cursor-pointer border ${
+                hostelType === "all"
+                  ? "bg-amber-600 text-white border-amber-600 font-extrabold shadow-sm"
+                  : "bg-white dark:bg-[#141416] border-gray-200 dark:border-[#2a2a2a] text-gray-700 dark:text-gray-300 hover:border-amber-400"
+              }`}
+            >
+              <span>All Hostels</span>
+              {hostelType === "all" && <Check size={13} className="stroke-[3]" />}
+            </button>
+            <button
+              type="button"
+              onClick={() => onSelectHostelType("work_and_stay")}
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all text-left cursor-pointer border ${
+                hostelType === "work_and_stay"
+                  ? "bg-[#C2410C] text-white border-[#C2410C] font-extrabold shadow-sm"
+                  : "bg-white dark:bg-[#141416] border-gray-200 dark:border-[#2a2a2a] text-gray-700 dark:text-gray-300 hover:border-[#C2410C]"
+              }`}
+            >
+              <span className="flex flex-col">
+                <span className="font-bold flex items-center gap-1">⚡ Work &amp; Stay Hostels</span>
+                <span className="text-[10px] opacity-85">100+ Mbps, power backup, call spaces</span>
+              </span>
+              {hostelType === "work_and_stay" && <Check size={13} className="stroke-[3]" />}
+            </button>
+            <button
+              type="button"
+              onClick={() => onSelectHostelType("stay_only")}
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all text-left cursor-pointer border ${
+                hostelType === "stay_only"
+                  ? "bg-sky-700 text-white border-sky-700 font-extrabold shadow-sm"
+                  : "bg-white dark:bg-[#141416] border-gray-200 dark:border-[#2a2a2a] text-gray-700 dark:text-gray-300 hover:border-sky-500"
+              }`}
+            >
+              <span className="flex flex-col">
+                <span className="font-bold flex items-center gap-1">🛌 Stay-Only Hostels</span>
+                <span className="text-[10px] opacity-85">Affordable beds &amp; social dorms</span>
+              </span>
+              {hostelType === "stay_only" && <Check size={13} className="stroke-[3]" />}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* 1.6 Meals & Kitchen Options */}
+      {onSelectMeal && (
+        <div className="space-y-2 pt-2 border-t border-[#E8E2D8] dark:border-[#242424]">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-black uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
+              <Utensils size={12} className="text-[#C2410C] dark:text-[#FB923C]" /> Meals &amp; Kitchen
+            </span>
+            {selectedMeal !== "All" && (
+              <button
+                type="button"
+                onClick={() => onSelectMeal("All")}
+                className="text-[10px] font-semibold text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer"
+              >
+                Reset
+              </button>
+            )}
+          </div>
+          <div className="space-y-1">
+            {MEAL_OPTIONS.map((m) => {
+              const isSelected = selectedMeal === m.id
+              return (
+                <button
+                  key={m.id}
+                  type="button"
+                  onClick={() => onSelectMeal(m.id)}
+                  className={`w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-xs font-semibold transition-all text-left cursor-pointer border ${
+                    isSelected
+                      ? "bg-[#C2410C] text-white border-[#C2410C] font-extrabold shadow-sm"
+                      : "bg-[#F8F6F0] dark:bg-[#161618] border-[#E8E2D8] dark:border-[#28282D] text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:border-gray-400"
+                  }`}
+                >
+                  <span>{m.label}</span>
+                  {isSelected && <Check size={13} className="stroke-[3]" />}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
       {/* 2. Destination / City */}
       <div className="space-y-2.5 pt-2 border-t border-[#E8E2D8] dark:border-[#242424]">
         <span className="text-[11px] font-black uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
@@ -295,7 +437,7 @@ export default function WorkspaceSidebarFilter({
       <div className="space-y-2.5 pt-2 border-t border-[#E8E2D8] dark:border-[#242424]">
         <div className="flex items-center justify-between">
           <span className="text-[11px] font-black uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
-            <Zap size={12} className="text-[#C2410C] dark:text-[#FB923C]" /> Key Amenities
+            <Zap size={12} className="text-[#C2410C] dark:text-[#FB923C]" /> Key Work Amenities
           </span>
           {selectedFacilities.length > 0 && (
             <span className="text-[10px] text-[#C2410C] dark:text-[#FB923C] font-bold">
@@ -333,6 +475,46 @@ export default function WorkspaceSidebarFilter({
           })}
         </div>
       </div>
+
+      {/* 3.5 Stay Facilities (Parking, Pool, Gym, Spa, Shuttle, etc.) */}
+      {isStayContext && (
+        <div className="space-y-2.5 pt-2 border-t border-[#E8E2D8] dark:border-[#242424]">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-black uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
+              <Building size={12} className="text-sky-600 dark:text-sky-400" /> Stay Facilities
+            </span>
+          </div>
+          <div className="space-y-1.5 pr-1">
+            {STAY_FACILITIES.map((fac) => {
+              const isChecked = selectedFacilities.includes(fac.id)
+              return (
+                <label
+                  key={fac.id}
+                  onClick={() => onToggleFacility(fac.id)}
+                  className={`flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs cursor-pointer select-none transition-all ${
+                    isChecked
+                      ? "bg-sky-500/10 border border-sky-500/40 text-gray-900 dark:text-white font-bold shadow-xs"
+                      : "hover:bg-gray-100 dark:hover:bg-[#161616] text-gray-700 dark:text-gray-300 border border-transparent hover:border-gray-200 dark:hover:border-[#282828] hover:text-gray-900 dark:hover:text-white"
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <div
+                      className={`w-4 h-4 rounded-md flex items-center justify-center border transition-all ${
+                        isChecked
+                          ? "bg-sky-600 border-sky-600 text-white"
+                          : "border-gray-300 dark:border-[#3a3a3a] bg-white dark:bg-[#141414]"
+                      }`}
+                    >
+                      {isChecked && <Check size={11} className="stroke-[3] text-white" />}
+                    </div>
+                    <span>{fac.label}</span>
+                  </div>
+                </label>
+              )
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Coliving / Stay Shortcut Promotion Card */}
       <div className="p-3 rounded-2xl bg-[#FBF9F5] dark:bg-gradient-to-br dark:from-[#1c1809] dark:to-[#121212] border border-[#E8E2D8] dark:border-[#C2410C]/30 text-xs space-y-1.5 shadow-xs">
