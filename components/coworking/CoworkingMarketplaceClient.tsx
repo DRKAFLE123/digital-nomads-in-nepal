@@ -250,13 +250,13 @@ export default function CoworkingMarketplaceClient({
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-0.5">
               {/* Button Controls Grid (3 equal columns on mobile) */}
               <div className="grid grid-cols-3 sm:flex sm:items-center gap-1.5 sm:gap-2 w-full sm:w-auto">
-                {/* Filter Modal Trigger Button (Available on Desktop & Mobile) */}
+                {/* Mobile Filter Button (Hidden on Desktop to avoid duplicate with left sidebar) */}
                 <button
                   type="button"
                   onClick={() => setIsFilterModalOpen(true)}
-                  className="flex items-center justify-center gap-1.5 px-3 py-2 bg-[#F8F6F0] hover:bg-gray-100 dark:bg-[#161618] dark:hover:bg-[#202024] border border-[#E8E2D8] dark:border-[#28282D] hover:border-[#C2410C]/60 rounded-xl text-xs font-semibold text-gray-800 dark:text-white transition-all cursor-pointer active:scale-95 shadow-xs"
+                  className="lg:hidden flex items-center justify-center gap-1.5 px-3 py-2 bg-[#F8F6F0] hover:bg-gray-100 dark:bg-[#161618] dark:hover:bg-[#202024] border border-[#E8E2D8] dark:border-[#28282D] hover:border-[#C2410C]/60 rounded-xl text-xs font-semibold text-gray-800 dark:text-white transition-all cursor-pointer active:scale-95 shadow-xs"
                   aria-label="Open Filters Modal"
-                  title="Open comprehensive filters in pop-up modal"
+                  title="Open filters modal"
                 >
                   <SlidersHorizontal size={13} className="text-[#C2410C] dark:text-[#FB923C] shrink-0" />
                   <span className="truncate lowercase">filters</span>
