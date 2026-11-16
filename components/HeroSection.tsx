@@ -133,7 +133,7 @@ export default function HeroSection() {
   const ActiveCatIcon = activeCatObj.icon
 
   return (
-    <section className="relative w-full pt-[124px] pb-8 sm:pt-[136px] sm:pb-10 overflow-hidden bg-white dark:bg-[#0B0B0D] transition-colors border-b border-slate-100 dark:border-[#1F1F24]">
+    <section className="relative z-20 w-full pt-[124px] pb-8 sm:pt-[136px] sm:pb-10 bg-white dark:bg-[#0B0B0D] transition-colors border-b border-slate-100 dark:border-[#1F1F24]">
       {/* Subtle Himalayan Topographic Vector Canvas Background */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
         {/* Soft Ambient Radial Glows */}
