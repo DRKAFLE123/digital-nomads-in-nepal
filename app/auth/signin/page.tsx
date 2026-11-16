@@ -373,15 +373,21 @@ function UnifiedAuthForm() {
               {mode === "register" && registerStep === 1 && (
                 <div>
                   <div className="mb-4">
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#023629]/10 dark:bg-[#FB923C]/20 text-[#023629] dark:text-[#FB923C] text-[10px] font-bold uppercase tracking-wider mb-2">
-                      <Sparkles size={11} />
-                      <span>Step 1 of 2 • Select Purpose</span>
+                    <div className="flex items-center justify-between flex-wrap gap-2 mb-2">
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#023629]/10 dark:bg-[#FB923C]/20 text-[#023629] dark:text-[#FB923C] text-[10px] font-bold uppercase tracking-wider">
+                        <Sparkles size={11} />
+                        <span>Step 1 of 2 • Select Purpose</span>
+                      </div>
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 text-[10.5px] font-extrabold shadow-2xs">
+                        <ShieldCheck size={12} className="text-emerald-600 dark:text-emerald-400" />
+                        0% Platform Commission
+                      </span>
                     </div>
                     <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
                       Join Digital Nomads in Nepal
                     </h2>
                     <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                      Choose how you want to experience our platform to get started:
+                      Direct booking with 0% middleman fees — choose your role to get started:
                     </p>
                   </div>
 
@@ -410,7 +416,7 @@ function UnifiedAuthForm() {
                           </span>
                         </div>
                         <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                          Discover verified 100+ Mbps fiber stays, coworking desks, and hire trusted mountain guides with 0% commission.
+                          Find fast-wifi stays and coworking desks across Nepal.
                         </p>
                       </div>
                       <ChevronRight size={16} className="text-slate-300 dark:text-slate-600 group-hover:text-[#023629] dark:group-hover:text-[#FB923C] group-hover:translate-x-0.5 transition-all shrink-0 mt-3" />
@@ -439,7 +445,7 @@ function UnifiedAuthForm() {
                           </span>
                         </div>
                         <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                          Showcase your Himalayan treks, cultural tours, and get booked directly by global remote workers with 0% commission.
+                          Showcase your Himalayan treks and cultural tours directly to global remote workers.
                         </p>
                       </div>
                       <ChevronRight size={16} className="text-slate-300 dark:text-slate-600 group-hover:text-[#023629] dark:group-hover:text-[#FB923C] group-hover:translate-x-0.5 transition-all shrink-0 mt-3" />
@@ -468,7 +474,7 @@ function UnifiedAuthForm() {
                           </span>
                         </div>
                         <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                          List your coworking hub, coliving rooms, or work-friendly villa across Nepal to welcome remote workers year-round.
+                          List your coworking hub, coliving rooms, or work-friendly stay to welcome nomads year-round.
                         </p>
                       </div>
                       <ChevronRight size={16} className="text-slate-300 dark:text-slate-600 group-hover:text-[#023629] dark:group-hover:text-[#FB923C] group-hover:translate-x-0.5 transition-all shrink-0 mt-3" />
