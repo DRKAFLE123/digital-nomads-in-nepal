@@ -66,7 +66,7 @@ export default function WhatsAppButton({
   return (
     <aside
       aria-label="WhatsApp Quick Chat"
-      className={`fixed bottom-20 md:bottom-6 right-4 md:right-6 z-[80] flex items-center gap-2 select-none print:hidden ${className}`}
+      className={`fixed bottom-[calc(4.25rem+env(safe-area-inset-bottom,0px))] md:bottom-6 right-3 sm:right-4 md:right-6 z-[80] flex items-center gap-2 select-none print:hidden ${className}`}
     >
       {/* Interactive Chat Bubble / Tooltip */}
       <div
@@ -91,19 +91,20 @@ export default function WhatsAppButton({
         onClick={handleClick}
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
-        className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white shadow-[0_10px_25px_rgba(37,211,102,0.45)] hover:shadow-[0_14px_32px_rgba(37,211,102,0.6)] active:scale-95 transition-all duration-300"
+        className="group relative flex items-center justify-center w-10.5 h-10.5 sm:w-14 sm:h-14 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white shadow-[0_6px_16px_rgba(37,211,102,0.4)] sm:shadow-[0_10px_25px_rgba(37,211,102,0.45)] hover:shadow-[0_14px_32px_rgba(37,211,102,0.6)] active:scale-95 transition-all duration-300"
         aria-label="Chat with us on WhatsApp"
         title="Chat with us on WhatsApp"
       >
         {/* Radar ping ring */}
         <span className="absolute inset-0 rounded-full bg-[#25D366] opacity-30 animate-ping group-hover:hidden" />
 
-        {/* WhatsApp Icon */}
-        <WhatsAppIcon size={30} className="relative z-10 transition-transform duration-300 group-hover:scale-110" />
+        {/* WhatsApp Icon (Compact 20px on mobile, full 28px on desktop) */}
+        <WhatsAppIcon size={20} className="relative z-10 transition-transform duration-300 group-hover:scale-110 sm:hidden" />
+        <WhatsAppIcon size={28} className="relative z-10 transition-transform duration-300 group-hover:scale-110 hidden sm:block" />
 
         {/* Online Status Dot */}
-        <span className="absolute top-0.5 right-0.5 flex h-3.5 w-3.5">
-          <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-400 border-2 border-white dark:border-[#121212]" />
+        <span className="absolute top-0 right-0 sm:top-0.5 sm:right-0.5 flex h-2.5 w-2.5 sm:h-3.5 sm:w-3.5">
+          <span className="relative inline-flex rounded-full h-2.5 w-2.5 sm:h-3.5 sm:w-3.5 bg-emerald-400 border-[1.5px] sm:border-2 border-white dark:border-[#121212]" />
         </span>
       </a>
     </aside>
