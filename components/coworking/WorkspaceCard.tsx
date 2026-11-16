@@ -5,6 +5,7 @@ import React, { useState } from "react"
 import Link from "next/link"
 import { MapPin, Star, Heart, Wifi, Zap, X } from "lucide-react"
 import { useSession } from "next-auth/react"
+import { useCurrency } from "@/context/CurrencyContext"
 
 export type Unit = {
   type: string
@@ -215,6 +216,7 @@ function formatFacilityChip(facility: string): string {
 
 export default function WorkspaceCard({ hub }: WorkspaceCardProps) {
   const { data: session } = useSession()
+  const { formatPrice } = useCurrency()
   const [favorited, setFavorited] = useState(false)
   const [showSignInPrompt, setShowSignInPrompt] = useState(false)
   const photos = parsePhotos(hub.photoUrl)
@@ -313,36 +315,36 @@ export default function WorkspaceCard({ hub }: WorkspaceCardProps) {
     setFavorited((prev) => !prev)
   }
 
-  // Price formatting adapted to offering type (Work, Stay, Work + Stay)
+  // Price formatting adapted to offering type (Work, Stay, Work + Stay) with Multi-Currency support
   let priceLine = "Inquire for rates"
   if (offeringType === "work_and_stay") {
     if (hub.priceMonthly) {
-      priceLine = `From $${hub.priceMonthly}/mo · Stay + Desk`
+      priceLine = `From ${formatPrice(hub.priceMonthly)}/mo · Stay + Desk`
     } else if (hub.priceDaily) {
-      priceLine = `From $${hub.priceDaily}/day · Workation`
+      priceLine = `From ${formatPrice(hub.priceDaily)}/day · Workation`
     } else {
       priceLine = "Work + Stay Package"
     }
   } else if (offeringType === "stay") {
     if (hub.priceDaily && hub.priceMonthly) {
-      priceLine = `$${hub.priceDaily}/night · $${hub.priceMonthly}/mo`
+      priceLine = `${formatPrice(hub.priceDaily)}/night · ${formatPrice(hub.priceMonthly)}/mo`
     } else if (hub.priceDaily) {
-      priceLine = `From $${hub.priceDaily}/night`
+      priceLine = `From ${formatPrice(hub.priceDaily)}/night`
     } else if (hub.priceMonthly) {
-      priceLine = `From $${hub.priceMonthly}/month`
+      priceLine = `From ${formatPrice(hub.priceMonthly)}/month`
     } else {
-      priceLine = "From $15/night"
+      priceLine = `From ${formatPrice(15)}/night`
     }
   } else {
-    const priceDaily = hub.priceDaily ? `$${hub.priceDaily}/day` : null
-    const priceMonthly = hub.priceMonthly ? `$${hub.priceMonthly}/month` : null
+    const priceDaily = hub.priceDaily ? `${formatPrice(hub.priceDaily)}/day` : null
+    const priceMonthly = hub.priceMonthly ? `${formatPrice(hub.priceMonthly)}/month` : null
     priceLine = priceDaily && priceMonthly
       ? `From ${priceDaily} · ${priceMonthly}`
       : priceDaily
       ? `From ${priceDaily}`
       : priceMonthly
       ? `From ${priceMonthly}`
-      : "From $5/day"
+      : `From ${formatPrice(5)}/day`
   }
 
   return (

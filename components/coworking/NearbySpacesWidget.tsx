@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react"
 import Link from "next/link"
 import { MapPin, Zap, ArrowRight, ShieldCheck, Star } from "lucide-react"
+import { useCurrency } from "@/context/CurrencyContext"
 
 export type NearbyHub = {
   id: string
@@ -59,6 +60,7 @@ export default function NearbySpacesWidget({
   currentSpaceType,
   currentHubName,
 }: NearbySpacesWidgetProps) {
+  const { formatPrice } = useCurrency()
   const [nearbyHubs, setNearbyHubs] = useState<NearbyHub[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -159,15 +161,15 @@ export default function NearbySpacesWidget({
           const photo = parsePhoto(hub.photoUrl)
           const priceLine = isStay
             ? hub.priceDaily
-              ? `From $${hub.priceDaily}/day`
+              ? `From ${formatPrice(hub.priceDaily)}/day`
               : hub.priceMonthly
-              ? `From $${hub.priceMonthly}/mo`
+              ? `From ${formatPrice(hub.priceMonthly)}/mo`
               : "Daily passes available"
             : hub.priceDaily
-            ? `From $${hub.priceDaily}/day`
+            ? `From ${formatPrice(hub.priceDaily)}/day`
             : hub.priceMonthly
-            ? `From $${hub.priceMonthly}/mo`
-            : "From $18/night"
+            ? `From ${formatPrice(hub.priceMonthly)}/mo`
+            : `From ${formatPrice(18)}/night`
 
           return (
             <div

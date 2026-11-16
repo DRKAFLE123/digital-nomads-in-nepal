@@ -13,6 +13,7 @@ import { useSession } from "next-auth/react"
 import GoogleSearchModal from "./search/GoogleSearchModal"
 import ProfileSlider from "./profile/ProfileSlider"
 import TopPartnerRibbon from "./TopPartnerRibbon"
+import CurrencySelector from "./CurrencySelector"
 
 interface NavActionItem {
   name: string
@@ -789,6 +790,9 @@ export default function Navbar() {
               </Link>
             ) : null}
 
+            {/* Currency Dropdown Selector (Booking.com Style) */}
+            <CurrencySelector isSolid={isSolid} />
+
             {mounted && session ? (
               /* Signed in profile avatar (FB-style circular avatar icon only, no name) */
               <div className="flex items-center">
@@ -1103,6 +1107,9 @@ export default function Navbar() {
                   <span className="text-[11px] text-[#C2410C] dark:text-[#FB923C] font-bold">View Profile &rarr;</span>
                 </div>
               )}
+
+              {/* Mobile Currency Selector */}
+              <CurrencySelector variant="mobile" onSelectCallback={() => setMobileMenuOpen(false)} />
 
               {/* Mobile Theme Row */}
               <div className="flex items-center justify-between p-2.5 bg-gray-50 dark:bg-[#121212] border border-gray-200 dark:border-[#242424] rounded-xl">

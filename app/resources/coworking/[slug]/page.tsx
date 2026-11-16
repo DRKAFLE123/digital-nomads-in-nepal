@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
+import { useCurrency } from "@/context/CurrencyContext"
 import Link from "next/link"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
@@ -231,6 +232,7 @@ function parsePhotos(photoUrl: string | null): string[] {
 export default function CoworkingDetailPage({ params }: { params: { slug: string } }) {
   const router = useRouter()
   const { data: session } = useSession()
+  const { formatPrice } = useCurrency()
   const [hub, setHub] = useState<Hub | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
@@ -597,7 +599,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-black text-gray-900 dark:text-white uppercase tracking-wider">Hot Desks / Flexi Seats</span>
                         <span className="text-xs font-black text-[#C2410C] dark:text-[#FB923C] font-mono">
-                          ${hub.priceDaily || 5}/day
+                          {formatPrice(hub.priceDaily || 5)}/day
                         </span>
                       </div>
                       <div className="flex items-center justify-between text-[10px]">
@@ -629,7 +631,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-black text-gray-900 dark:text-white uppercase tracking-wider">Dedicated Fixed Desks</span>
                         <span className="text-xs font-black text-[#C2410C] dark:text-[#FB923C] font-mono">
-                          ${hub.priceMonthly || 120}/mo
+                          {formatPrice(hub.priceMonthly || 120)}/mo
                         </span>
                       </div>
                       <div className="flex items-center justify-between text-[10px]">
@@ -728,7 +730,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-black text-gray-900 dark:text-white uppercase tracking-wider">Meeting Halls & Event Space</span>
                         <span className="text-xs font-black text-[#C2410C] dark:text-[#FB923C] font-mono">
-                          From $40/day
+                          From {formatPrice(40)}/day
                         </span>
                       </div>
                       <div className="flex items-center justify-between text-[10px]">
@@ -816,7 +818,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                           : "Daily Hot Desk"}
                       </span>
                       <span className="text-base font-black text-[#C2410C] dark:text-[#FB923C] font-mono">
-                        ${hub.priceDaily} <span className="text-[10px] text-gray-500 dark:text-[#A1A1AA] font-normal">/ day</span>
+                        {formatPrice(hub.priceDaily)} <span className="text-[10px] text-gray-500 dark:text-[#A1A1AA] font-normal">/ day</span>
                       </span>
                     </div>
                   )}
@@ -830,7 +832,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
                           : "Monthly Unlimited"}
                       </span>
                       <span className="text-base font-black text-[#C2410C] dark:text-[#FB923C] font-mono">
-                        ${hub.priceMonthly} <span className="text-[10px] text-gray-500 dark:text-[#A1A1AA] font-normal">/ mo</span>
+                        {formatPrice(hub.priceMonthly)} <span className="text-[10px] text-gray-500 dark:text-[#A1A1AA] font-normal">/ mo</span>
                       </span>
                     </div>
                   )}
@@ -887,7 +889,7 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
         <div>
           <span className="text-[10px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider block">Desk Rate</span>
           <span className="text-sm font-black text-[#C2410C] dark:text-[#FB923C] font-mono">
-            {hub.priceMonthly ? `$${hub.priceMonthly}/mo` : hub.priceDaily ? `$${hub.priceDaily}/day` : "Vetted Seat"}
+            {hub.priceMonthly ? `${formatPrice(hub.priceMonthly)}/mo` : hub.priceDaily ? `${formatPrice(hub.priceDaily)}/day` : "Vetted Seat"}
           </span>
         </div>
         <div className="flex items-center gap-2">
