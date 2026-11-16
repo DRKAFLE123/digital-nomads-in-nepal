@@ -5,7 +5,7 @@ import React, { useState, useEffect, useRef } from "react"
 import { createPortal } from "react-dom"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Menu, X, ChevronDown, CalendarCheck, User, Compass, Building, Home, Users, BookOpen, ArrowRight, Bell, Search, TrendingUp, Building2, Sparkles } from "lucide-react"
+import { Menu, X, ChevronDown, CalendarCheck, User, Compass, Building, Home, Users, BookOpen, ArrowRight, Bell, Search, TrendingUp, Building2, Sparkles, Languages } from "lucide-react"
 import { ThemeToggle } from "./ThemeToggle"
 import Image from "next/image"
 import TrekkingGuideIcon from "./TrekkingGuideIcon"
@@ -996,17 +996,17 @@ export default function Navbar() {
                   <Link
                     href={roleInfo.isOwner ? "/owner/dashboard" : "/register/space"}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-center gap-1.5 bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold text-xs py-2 px-2 rounded-xl text-center active:scale-95 transition-all shadow-sm"
+                    className="flex items-center justify-center gap-1.5 bg-white dark:bg-[#18181A] border border-[#E8E2D8] dark:border-[#2C2C30] hover:border-[#C2410C] dark:hover:border-[#FB923C] text-gray-900 dark:text-white font-bold text-xs py-2.5 px-2 rounded-xl text-center active:scale-95 transition-all shadow-2xs group"
                   >
-                    <Building2 size={13} />
+                    <Building2 size={13} className="text-[#C2410C] dark:text-[#FB923C] group-hover:scale-110 transition-transform" />
                     <span>{roleInfo.isOwner ? "Host Console" : "List Your Space"}</span>
                   </Link>
                   <Link
                     href={roleInfo.isGuide ? "/local-guides/dashboard" : "/local-guides/register"}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-center gap-1.5 bg-black/40 dark:bg-white/10 text-foreground border border-border/80 font-bold text-xs py-2 px-2 rounded-xl text-center active:scale-95 transition-all"
+                    className="flex items-center justify-center gap-1.5 bg-white dark:bg-[#18181A] border border-[#E8E2D8] dark:border-[#2C2C30] hover:border-[#C2410C] dark:hover:border-[#FB923C] text-gray-900 dark:text-white font-bold text-xs py-2.5 px-2 rounded-xl text-center active:scale-95 transition-all shadow-2xs group"
                   >
-                    <Compass size={13} className="text-[#FB923C]" />
+                    <Compass size={13} className="text-[#C2410C] dark:text-[#FB923C] group-hover:rotate-45 transition-transform" />
                     <span>{roleInfo.isGuide ? "Guide Dashboard" : "Join as Local Guide"}</span>
                   </Link>
                 </div>
@@ -1079,13 +1079,24 @@ export default function Navbar() {
             {/* Mobile Actions Footer (Pinned to bottom of drawer) */}
             <div className="border-t border-gray-200 dark:border-[#242424] pt-4 space-y-2.5 shrink-0 bg-white dark:bg-[#080808]">
               {!session ? (
-                <Link
-                  href="/auth/signin"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center text-center w-full px-4 py-3 bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold rounded-xl text-xs transition-all shadow-sm"
-                >
-                  Sign In
-                </Link>
+                <div className="space-y-1.5">
+                  <div className="grid grid-cols-2 gap-2">
+                    <Link
+                      href="/auth/signin"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center justify-center text-center px-4 py-3 bg-white dark:bg-[#161616] border border-[#E8E2D8] dark:border-[#2A2A2A] text-gray-900 dark:text-white font-bold rounded-xl text-xs hover:border-[#C2410C] dark:hover:border-[#FB923C] hover:text-[#C2410C] dark:hover:text-[#FB923C] transition-all shadow-2xs active:scale-95 cursor-pointer"
+                    >
+                      Sign In
+                    </Link>
+                    <Link
+                      href="/auth/signin?mode=register"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center justify-center text-center px-4 py-3 bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold rounded-xl text-xs transition-all shadow-sm shadow-[#C2410C]/25 active:scale-95 cursor-pointer"
+                    >
+                      Join Free
+                    </Link>
+                  </div>
+                </div>
               ) : (
                 <div
                   onClick={() => {
@@ -1108,32 +1119,27 @@ export default function Navbar() {
                 </div>
               )}
 
-              {/* Mobile Currency Selector */}
+              {/* Mobile Currency Selector Row */}
               <CurrencySelector variant="mobile" onSelectCallback={() => setMobileMenuOpen(false)} />
 
-              {/* Mobile Theme Row */}
-              <div className="flex items-center justify-between p-2.5 bg-gray-50 dark:bg-[#121212] border border-gray-200 dark:border-[#242424] rounded-xl">
-                <span className="text-xs text-gray-700 dark:text-gray-300 font-semibold">Theme</span>
-                <ThemeToggle variant="ghost" />
+              {/* Mobile Language Row (Ready for Localization) */}
+              <div className="flex items-center justify-between p-3 min-h-[48px] bg-gray-50 dark:bg-[#121212] border border-gray-200 dark:border-[#242424] rounded-xl">
+                <div className="flex items-center gap-2.5">
+                  <Languages size={16} className="text-[#C2410C] dark:text-[#FB923C]" />
+                  <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">Language</span>
+                </div>
+                <div className="flex items-center gap-1.5 text-xs font-bold text-gray-900 dark:text-white">
+                  <span className="px-2 py-0.5 rounded bg-gray-200 dark:bg-[#202020] text-[11px] font-mono text-gray-700 dark:text-gray-300">
+                    English
+                  </span>
+                  <span className="text-[10px] text-gray-400 font-normal">EN</span>
+                </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2">
-                <Link
-                  href="/resources/coworking#book"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center gap-1.5 text-center px-3 py-2.5 bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold rounded-xl transition-all text-xs shadow-md shadow-[#C2410C]/20 active:scale-95"
-                >
-                  <CalendarCheck size={14} />
-                  <span>Book Space</span>
-                </Link>
-                <Link
-                  href="/guides"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center gap-1.5 text-center px-3 py-2.5 bg-gray-100 dark:bg-[#181818] border border-gray-200 dark:border-[#282828] hover:border-[#C2410C] text-gray-900 dark:text-white font-bold rounded-xl transition-all text-xs shadow-xs active:scale-95"
-                >
-                  <TrekkingGuideIcon size={14} />
-                  <span>Book Guide</span>
-                </Link>
+              {/* Mobile Theme Row */}
+              <div className="flex items-center justify-between p-3 min-h-[48px] bg-gray-50 dark:bg-[#121212] border border-gray-200 dark:border-[#242424] rounded-xl">
+                <span className="text-xs text-gray-700 dark:text-gray-300 font-semibold">Theme</span>
+                <ThemeToggle variant="ghost" />
               </div>
             </div>
           </div>
