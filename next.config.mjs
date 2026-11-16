@@ -42,6 +42,10 @@ const nextConfig = {
             key: 'Strict-Transport-Security',
             value: 'max-age=63072000; includeSubDomains; preload',
           },
+          {
+            key: 'Content-Security-Policy-Report-Only',
+            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://images.unsplash.com https://res.cloudinary.com https://digitalnomadsinnepal.com https://lh3.googleusercontent.com https://avatars.githubusercontent.com https://upload.wikimedia.org; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://api.cloudinary.com https://api.brevo.com https://www.google-analytics.com https://region1.google-analytics.com; frame-ancestors 'self';",
+          },
         ],
       },
     ]

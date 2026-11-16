@@ -74,21 +74,32 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: "Forbidden: You do not own this hub" }, { status: 403 })
     }
 
-    // Whitelist only editable fields to prevent mass assignment
+    // Whitelist only editable fields with strict type, numeric, and length validation
     const allowedUpdates: Record<string, unknown> = {}
-    if (typeof rest.name === "string") allowedUpdates.name = rest.name.trim()
-    if (typeof rest.city === "string") allowedUpdates.city = rest.city.trim()
-    if (typeof rest.address === "string") allowedUpdates.address = rest.address.trim()
-    if (typeof rest.description === "string") allowedUpdates.description = rest.description.trim()
-    if (typeof rest.priceDaily === "number") allowedUpdates.priceDaily = rest.priceDaily
-    if (typeof rest.priceMonthly === "number") allowedUpdates.priceMonthly = rest.priceMonthly
-    if (typeof rest.spaceType === "string") allowedUpdates.spaceType = rest.spaceType
-    if (Array.isArray(rest.facilities)) allowedUpdates.facilities = rest.facilities
-    if (typeof rest.units === "number") allowedUpdates.units = rest.units
-    if (typeof rest.openingHours === "string") allowedUpdates.openingHours = rest.openingHours
-    if (typeof rest.contactEmail === "string") allowedUpdates.contactEmail = rest.contactEmail.trim().toLowerCase()
-    if (typeof rest.website === "string") allowedUpdates.website = rest.website.trim()
-    if (typeof rest.photoUrl === "string") allowedUpdates.photoUrl = rest.photoUrl.trim()
+    if (typeof rest.name === "string" && rest.name.trim()) allowedUpdates.name = rest.name.trim().slice(0, 150)
+    if (typeof rest.city === "string" && rest.city.trim()) allowedUpdates.city = rest.city.trim().slice(0, 100)
+    if (typeof rest.address === "string" && rest.address.trim()) allowedUpdates.address = rest.address.trim().slice(0, 250)
+    if (typeof rest.description === "string" && rest.description.trim()) allowedUpdates.description = rest.description.trim().slice(0, 10000)
+    
+    if (typeof rest.priceDaily === "number" && Number.isFinite(rest.priceDaily) && rest.priceDaily >= 0) {
+      allowedUpdates.priceDaily = Math.round(rest.priceDaily * 100) / 100
+    }
+    if (typeof rest.priceMonthly === "number" && Number.isFinite(rest.priceMonthly) && rest.priceMonthly >= 0) {
+      allowedUpdates.priceMonthly = Math.round(rest.priceMonthly * 100) / 100
+    }
+    if (typeof rest.spaceType === "string") allowedUpdates.spaceType = rest.spaceType.trim().slice(0, 50)
+    if (Array.isArray(rest.facilities)) allowedUpdates.facilities = rest.facilities.slice(0, 50)
+    if (typeof rest.openingHours === "string") allowedUpdates.openingHours = rest.openingHours.trim().slice(0, 100)
+    
+    if (typeof rest.contactEmail === "string") {
+      const email = rest.contactEmail.trim().toLowerCase()
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (emailRegex.test(email) && email.length <= 100) {
+        allowedUpdates.contactEmail = email
+      }
+    }
+    if (typeof rest.website === "string") allowedUpdates.website = rest.website.trim().slice(0, 300)
+    if (typeof rest.photoUrl === "string") allowedUpdates.photoUrl = rest.photoUrl.trim().slice(0, 1000)
     if (typeof rest.published === "boolean") allowedUpdates.published = rest.published
 
     const updated = await prisma.workHub.update({

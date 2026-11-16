@@ -124,8 +124,7 @@ export async function POST(req: NextRequest) {
         fs.mkdirSync(UPLOAD_DIR, { recursive: true })
       }
       
-      const baseName = path.basename(file.name, path.extname(file.name)).replace(/[^a-zA-Z0-9]/g, "-").slice(0, 50)
-      const uniqueFilename = `hub-${Date.now()}-${baseName}${safeExt}`
+      const uniqueFilename = `hub-${Date.now()}-${crypto.randomUUID()}${safeExt}`
       const filepath = path.join(UPLOAD_DIR, uniqueFilename)
 
       fs.writeFileSync(filepath, buffer)
