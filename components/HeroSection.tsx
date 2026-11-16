@@ -171,7 +171,7 @@ export default function HeroSection() {
 
         {/* Supporting Description - Concise 1-liner to prevent vertical scroll overflow */}
         <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-normal leading-relaxed max-w-xl mx-auto mb-5 sm:mb-6 text-center">
-          Verified 100+ Mbps workspaces, boutique coliving hubs, mountain hostels, and licensed local guides across Nepal.
+          Speed-tested workspaces, boutique coliving hubs, mountain hostels, and licensed local guides across Nepal.
         </p>
 
         {/* Elevated Segmented Search Bar - Primary Visual Anchor */}
@@ -194,7 +194,7 @@ export default function HeroSection() {
                   <MapPin size={15} className="text-[#C2410C] dark:text-[#FB923C]" />
                 </div>
                 <div className="min-w-0">
-                  <span className="text-[10px] sm:text-[10.5px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block leading-tight mb-0.5">
+                  <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block leading-tight mb-0.5">
                     Where in Nepal
                   </span>
                   <span className="block text-xs sm:text-sm font-bold text-slate-900 dark:text-white truncate">
@@ -264,7 +264,7 @@ export default function HeroSection() {
                   <ActiveCatIcon size={15} className="text-[#023629] dark:text-[#34D399]" />
                 </div>
                 <div className="min-w-0">
-                  <span className="text-[10px] sm:text-[10.5px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block leading-tight mb-0.5">
+                  <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block leading-tight mb-0.5">
                     What are you looking for?
                   </span>
                   <span className="block text-xs sm:text-sm font-bold text-slate-900 dark:text-white truncate">
@@ -351,52 +351,52 @@ export default function HeroSection() {
         {/* Compact Micro-Trust Strip */}
         <div className="mt-5 sm:mt-6 pt-4 border-t border-slate-100 dark:border-[#222226] flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 w-full max-w-3xl">
           {/* Nomad Avatars Stack */}
-          <div className="flex items-center gap-2.5">
-            <div className="flex -space-x-2 overflow-hidden">
+          <div className="flex items-center gap-3">
+            <div className="flex -space-x-3 overflow-hidden p-0.5">
               <img
-                className="inline-block h-7 w-7 rounded-full ring-2 ring-white dark:ring-[#141416] object-cover"
+                className="inline-block h-9 w-9 sm:h-9.5 sm:w-9.5 rounded-full ring-2 ring-white dark:ring-[#141416] object-cover shadow-xs"
                 src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80"
                 alt="Nomad"
               />
               <img
-                className="inline-block h-7 w-7 rounded-full ring-2 ring-white dark:ring-[#141416] object-cover"
+                className="inline-block h-9 w-9 sm:h-9.5 sm:w-9.5 rounded-full ring-2 ring-white dark:ring-[#141416] object-cover shadow-xs"
                 src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80"
                 alt="Guide"
               />
               <img
-                className="inline-block h-7 w-7 rounded-full ring-2 ring-white dark:ring-[#141416] object-cover"
+                className="inline-block h-9 w-9 sm:h-9.5 sm:w-9.5 rounded-full ring-2 ring-white dark:ring-[#141416] object-cover shadow-xs"
                 src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80"
                 alt="Remote Worker"
               />
               <img
-                className="inline-block h-7 w-7 rounded-full ring-2 ring-white dark:ring-[#141416] object-cover"
+                className="inline-block h-9 w-9 sm:h-9.5 sm:w-9.5 rounded-full ring-2 ring-white dark:ring-[#141416] object-cover shadow-xs"
                 src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80"
                 alt="Host"
               />
             </div>
             <div className="text-left">
-              <p className="text-[11.5px] font-bold text-slate-900 dark:text-white leading-tight">
-                1,200+ Nomads, Guides &amp; Hosts
+              <p className="text-xs sm:text-[13px] font-bold text-slate-900 dark:text-white leading-tight">
+                50+ Speed-Tested Hubs &amp; Stays
               </p>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight">
+              <p className="text-[11px] font-medium text-slate-600 dark:text-slate-300 leading-tight mt-0.5">
                 Kathmandu • Pokhara • Bandipur • Everest
               </p>
             </div>
           </div>
 
           {/* Vertical Divider */}
-          <div className="hidden sm:block w-[1px] h-6 bg-slate-200 dark:bg-[#27272A]" />
+          <div className="hidden sm:block w-[1px] h-7 bg-slate-200 dark:bg-[#27272A]" />
 
           {/* Trust Value Props */}
-          <div className="flex items-center gap-3 text-[11px] font-semibold text-slate-600 dark:text-slate-300">
+          <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 text-xs font-semibold text-slate-700 dark:text-slate-200">
             <span className="inline-flex items-center gap-1.5">
-              <Wifi size={12} className="text-[#C2410C] dark:text-[#FB923C]" />
-              <span>100+ Mbps Fiber</span>
+              <Wifi size={13} className="text-[#C2410C] dark:text-[#FB923C]" />
+              <span>Speed-Tested Wi-Fi</span>
             </span>
-            <span className="text-slate-300 dark:text-slate-700">•</span>
+            <span className="text-slate-300 dark:text-slate-700 hidden sm:inline">•</span>
             <span className="inline-flex items-center gap-1.5">
-              <ShieldCheck size={12} className="text-[#023629] dark:text-[#34D399]" />
-              <span>0% Commission Direct Contact</span>
+              <ShieldCheck size={13} className="text-[#023629] dark:text-[#34D399]" />
+              <span>No booking fees. Contact hosts directly.</span>
             </span>
           </div>
         </div>

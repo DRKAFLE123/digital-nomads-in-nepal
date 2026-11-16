@@ -29,7 +29,7 @@ export default function TopPartnerRibbon({
       }`}
       aria-label="Host and Partner Announcement"
     >
-      <div className="w-full h-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between text-[11px] sm:text-xs">
+      <div className="w-full h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between text-[11px] sm:text-xs">
         
         {/* Left: Indicator & Hook */}
         <div className="flex items-center gap-1.5 sm:gap-2 text-[#F5F5F0] min-w-0 truncate">
