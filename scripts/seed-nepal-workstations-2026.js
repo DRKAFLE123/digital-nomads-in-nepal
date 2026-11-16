@@ -39,7 +39,7 @@ const nepalWorkstations = [
     contactEmail: "hello@workaround.com.np",
     website: "https://workaround.com.np",
     photoUrl: "https://images.unsplash.com/photo-1527192491265-7e15c55b1ed2?auto=format&fit=crop&w=1200&q=80",
-    facilities: ["Dual Fiber ISPs", "Power Generator Backup", "Hot Desks", "Private Offices", "Event Hall", "Free Tea & Coffee"]
+    facilities: ["Backup internet", "Power backup", "Hot Desks", "Private Offices", "Event Hall", "Free Tea & Coffee"]
   },
   {
     name: "Rem.work HQ",
@@ -440,7 +440,7 @@ const nepalWorkstations = [
     contactEmail: "vantage.coworking@gmail.com",
     website: null,
     photoUrl: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=80",
-    facilities: ["Panoramic Valley View", "Himalayan Java Coffee Downstairs", "Dual Fiber ISPs", "Full Generator Backup", "Private Meeting Pods"]
+    facilities: ["Panoramic Valley View", "Himalayan Java Coffee Downstairs", "Backup internet", "Power backup", "Private Meeting Pods"]
   },
   {
     name: "Cowork @ Sattya",
@@ -575,7 +575,7 @@ const nepalWorkstations = [
     contactEmail: "flex@hotelsarowar.com",
     website: null,
     photoUrl: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=80",
-    facilities: ["Hotel Amenities Access", "Dual Fiber ISPs", "Instant Generator Backup", "Executive Boardrooms", "On-site Restaurant"]
+    facilities: ["Hotel Amenities Access", "Backup internet", "Power backup", "Executive Boardrooms", "On-site Restaurant"]
   },
 
   // ─── BHAKTAPUR ──────────────────────────────────────────

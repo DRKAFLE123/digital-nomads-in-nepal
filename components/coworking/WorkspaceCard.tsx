@@ -3,7 +3,8 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState } from "react"
 import Link from "next/link"
-import { MapPin, Star, Heart, Wifi, Zap } from "lucide-react"
+import { MapPin, Star, Heart, Wifi, Zap, X } from "lucide-react"
+import { useSession } from "next-auth/react"
 
 export type Unit = {
   type: string
@@ -172,8 +173,50 @@ function getBadge(hub: Hub, offeringType: "work" | "stay" | "work_and_stay") {
   }
 }
 
+function formatFacilityChip(facility: string): string {
+  const lower = facility.toLowerCase()
+
+  // Dual fiber / multiple ISPs / redundant connection -> "Backup internet"
+  if (
+    lower.includes("dual fiber") ||
+    lower.includes("fiber isps") ||
+    lower.includes("dual isp") ||
+    lower.includes("secondary isp") ||
+    lower.includes("backup isp") ||
+    lower.includes("redundant internet") ||
+    lower.includes("backup internet")
+  ) {
+    return "Backup internet"
+  }
+
+  // Speed figures (e.g. "100 Mbps", "100+ Mbps", "150 Mbps Fiber") -> "100 Mbps tested"
+  const mbpsMatch = facility.match(/(\d+\+?\s*mbps)/i)
+  if (mbpsMatch) {
+    return `${mbpsMatch[1]} tested`
+  }
+
+  // General fiber / wifi
+  if (lower.includes("high-speed fiber") || lower.includes("fast fiber") || lower.includes("fiber wi-fi")) {
+    return "Fast fiber"
+  }
+
+  // Power generator / backup -> "Power backup"
+  if (
+    lower.includes("generator") ||
+    lower.includes("power backup") ||
+    lower.includes("ups") ||
+    lower.includes("solar backup")
+  ) {
+    return "Power backup"
+  }
+
+  return facility
+}
+
 export default function WorkspaceCard({ hub }: WorkspaceCardProps) {
+  const { data: session } = useSession()
   const [favorited, setFavorited] = useState(false)
+  const [showSignInPrompt, setShowSignInPrompt] = useState(false)
   const photos = parsePhotos(hub.photoUrl)
   const offeringType = classifyOfferingType(hub)
   const badge = getBadge(hub, offeringType)
@@ -188,37 +231,80 @@ export default function WorkspaceCard({ hub }: WorkspaceCardProps) {
 
   // Extract clean chips (max 3)
   const chips: { label: string; icon?: React.ElementType }[] = []
-  const hasFiber = facs.some(f => f.toLowerCase().includes("fiber") || f.toLowerCase().includes("wifi") || f.toLowerCase().includes("mbps"))
-  const hasBackup = facs.some(f => f.toLowerCase().includes("generator") || f.toLowerCase().includes("backup") || f.toLowerCase().includes("ups") || f.toLowerCase().includes("solar"))
 
-  if (hasFiber) {
-    const fiberText = facs.find(f => f.toLowerCase().includes("fiber") || f.toLowerCase().includes("mbps")) || "Dual fiber"
-    chips.push({ label: fiberText.length > 15 ? "Fast fiber" : fiberText, icon: Wifi })
-  }
-  if (hasBackup && chips.length < 3) {
-    const backupText = facs.find(f => f.toLowerCase().includes("generator") || f.toLowerCase().includes("backup")) || "Generator backup"
-    chips.push({ label: backupText.length > 18 ? "Power backup" : backupText, icon: Zap })
+  // 1. Internet / Connectivity Chip (clear "Backup internet" or speed figure)
+  const internetFac = facs.find(f => {
+    const l = f.toLowerCase()
+    return (
+      l.includes("fiber") ||
+      l.includes("wifi") ||
+      l.includes("wi-fi") ||
+      l.includes("mbps") ||
+      l.includes("isp") ||
+      l.includes("internet")
+    )
+  })
+  if (internetFac) {
+    chips.push({ label: formatFacilityChip(internetFac), icon: Wifi })
   }
 
-  // Fill remaining slots from other amenities
+  // 2. Power Backup Chip (Keep "Power backup")
+  const backupFac = facs.find(f => {
+    const l = f.toLowerCase()
+    return (
+      l.includes("generator") ||
+      l.includes("backup") ||
+      l.includes("ups") ||
+      l.includes("solar")
+    )
+  })
+  if (backupFac && chips.length < 3) {
+    chips.push({ label: formatFacilityChip(backupFac), icon: Zap })
+  }
+
+  // 3. Fill remaining slots from other amenities
   const otherFacs = facs.filter(f => {
     const l = f.toLowerCase()
-    return !l.includes("wifi") && !l.includes("fiber") && !l.includes("generator") && !l.includes("backup") && !l.includes("ups")
+    return (
+      !l.includes("wifi") &&
+      !l.includes("wi-fi") &&
+      !l.includes("fiber") &&
+      !l.includes("mbps") &&
+      !l.includes("isp") &&
+      !l.includes("internet") &&
+      !l.includes("generator") &&
+      !l.includes("backup") &&
+      !l.includes("ups") &&
+      !l.includes("solar")
+    )
   })
 
   while (chips.length < 3 && otherFacs.length > 0) {
     const next = otherFacs.shift()
-    if (next) chips.push({ label: next })
+    if (next) chips.push({ label: formatFacilityChip(next) })
   }
 
-  // If DB had empty facilities, fallback to realistic defaults
+  // Fallback defaults if no facilities listed
   if (chips.length === 0) {
-    chips.push({ label: "Fast fiber", icon: Wifi })
-    chips.push({ label: "Generator backup", icon: Zap })
+    chips.push({ label: "Backup internet", icon: Wifi })
+    chips.push({ label: "Power backup", icon: Zap })
     chips.push({ label: "24/7 access" })
   }
 
   const remainingCount = facs.length > chips.length ? facs.length - chips.length : 0
+
+  const handleToggleFavorite = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    if (!session) {
+      setShowSignInPrompt(true)
+      setTimeout(() => setShowSignInPrompt(false), 4500)
+      return
+    }
+
+    setFavorited((prev) => !prev)
+  }
 
   // Price formatting adapted to offering type (Work, Stay, Work + Stay)
   let priceLine = "Inquire for rates"
@@ -281,23 +367,67 @@ export default function WorkspaceCard({ hub }: WorkspaceCardProps) {
           )}
         </div>
 
-        {/* Top-Right Save Heart */}
+        {/* High-Contrast Semi-Transparent Circle for Save Heart */}
         <button
           type="button"
-          onClick={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            setFavorited(!favorited)
-          }}
-          className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center transition-all z-10 ${
+          onClick={handleToggleFavorite}
+          className={`absolute top-3 right-3 w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all z-20 cursor-pointer shadow-md backdrop-blur-md border ${
             favorited
-              ? "bg-rose-500 text-white"
-              : "bg-black/40 hover:bg-black/70 text-white backdrop-blur-xs border border-white/10"
+              ? "bg-rose-500 hover:bg-rose-600 border-rose-400 text-white shadow-rose-500/30"
+              : "bg-black/60 hover:bg-black/80 dark:bg-black/70 dark:hover:bg-black/90 border-white/30 text-white hover:scale-105 active:scale-95"
           }`}
-          aria-label={favorited ? "Saved" : "Save workspace"}
+          aria-label={favorited ? "Saved to favorites" : "Save to favorites"}
+          title={favorited ? "Saved" : "Save to favorites"}
         >
-          <Heart size={14} className={favorited ? "fill-white" : ""} />
+          <Heart
+            size={16}
+            strokeWidth={2.4}
+            className={`transition-colors duration-200 ${
+              favorited ? "fill-white text-white" : "text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]"
+            }`}
+          />
         </button>
+
+        {/* Floating Sign-in Notification for Logged-Out Users */}
+        {showSignInPrompt && (
+          <div
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+            }}
+            className="absolute top-2 inset-x-2 z-30 p-2 sm:p-2.5 rounded-xl bg-slate-950/95 dark:bg-[#0c0c0e]/95 text-white shadow-2xl border border-white/20 backdrop-blur-xl flex items-center justify-between gap-2 animate-in fade-in zoom-in-95 duration-200"
+          >
+            <div className="flex items-center gap-1.5 min-w-0">
+              <Heart size={13} className="text-rose-400 shrink-0 fill-rose-400/40" />
+              <span className="text-[11.5px] font-semibold text-gray-100 truncate">
+                Sign in to save favorites
+              </span>
+            </div>
+            <div className="flex items-center gap-1 shrink-0">
+              <Link
+                href="/auth/signin"
+                onClick={(e) => {
+                  e.stopPropagation()
+                }}
+                className="px-2.5 py-1 bg-[#C2410C] hover:bg-[#9A3412] text-white text-[11px] font-bold rounded-full shadow-sm active:scale-95 transition-all cursor-pointer whitespace-nowrap"
+              >
+                Sign In
+              </Link>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  setShowSignInPrompt(false)
+                }}
+                className="p-1 text-white/50 hover:text-white rounded-full transition-colors cursor-pointer"
+                aria-label="Dismiss sign in prompt"
+              >
+                <X size={12} />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Card Body */}
