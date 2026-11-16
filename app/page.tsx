@@ -286,23 +286,23 @@ export default async function Home() {
         <HeroSection />
 
         {/* 2. Featured Workspaces */}
-        <section className="w-full py-20 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#FAF7F2] dark:bg-[#0B0B0C] border-t border-[#E8E2D8] dark:border-[#26262A]">
+        <section className="w-full pt-7 pb-16 sm:pt-9 sm:pb-20 px-4 sm:px-6 lg:px-8 bg-[#FAF7F2] dark:bg-[#0B0B0C] border-t border-[#E8E2D8] dark:border-[#26262A]">
           <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 sm:mb-12">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-6 sm:mb-7">
               <div>
-                <p className="text-xs font-semibold tracking-[0.08em] uppercase text-[#C2410C] dark:text-[#FB923C] mb-2">
+                <p className="text-[11px] font-semibold tracking-[0.08em] uppercase text-[#C2410C] dark:text-[#FB923C] mb-1">
                   Work infrastructure
                 </p>
-                <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight">
+                <h2 className="font-serif text-2xl sm:text-3xl lg:text-[38px] font-bold text-gray-900 dark:text-[#F5F5F4] tracking-tight leading-tight">
                   Featured workspaces
                 </h2>
-                <p className="text-sm sm:text-base text-gray-600 dark:text-[#A8A8B0] font-normal mt-2 max-w-xl">
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-[#A8A8B0] font-normal mt-1 max-w-xl">
                   Fast fiber, backup power and quiet call areas, checked by our team.
                 </p>
               </div>
               <Link
                 href="/workspaces"
-                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#C2410C] dark:text-[#FB923C] hover:underline group"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#C2410C] dark:text-[#FB923C] hover:underline group shrink-0"
               >
                 <span>View all workspaces</span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
