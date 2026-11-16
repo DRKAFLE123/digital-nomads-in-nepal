@@ -248,14 +248,21 @@ export default function WorkspaceCard({ hub }: WorkspaceCardProps) {
     chips.push({ label: formatFacilityChip(internetFac), icon: Wifi })
   }
 
-  // 2. Power Backup Chip (Keep "Power backup")
+  // 2. Power Backup Chip (Keep "Power backup", avoid matching "Backup internet")
   const backupFac = facs.find(f => {
     const l = f.toLowerCase()
     return (
-      l.includes("generator") ||
-      l.includes("backup") ||
-      l.includes("ups") ||
-      l.includes("solar")
+      !l.includes("internet") &&
+      !l.includes("wifi") &&
+      !l.includes("fiber") &&
+      !l.includes("isp") &&
+      (l.includes("generator") ||
+        l.includes("power") ||
+        l.includes("backup") ||
+        l.includes("ups") ||
+        l.includes("solar") ||
+        l.includes("inverter") ||
+        l.includes("electricity"))
     )
   })
   if (backupFac && chips.length < 3) {

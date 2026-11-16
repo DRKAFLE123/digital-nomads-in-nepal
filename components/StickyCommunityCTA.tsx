@@ -36,7 +36,7 @@ export default function StickyCommunityCTA() {
 
   return createPortal(
     <div className="fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom,0px))] inset-x-3.5 max-w-[340px] mx-auto z-[90] md:hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
-      <div className="flex items-center justify-between gap-1 p-1 bg-slate-950/92 dark:bg-[#101012]/95 backdrop-blur-2xl border border-white/20 dark:border-white/10 rounded-full shadow-[0_16px_40px_-6px_rgba(0,0,0,0.65)] ring-1 ring-white/10">
+      <div className="flex items-center justify-between gap-1 p-1 bg-white/95 dark:bg-[#101012]/95 backdrop-blur-2xl border border-slate-200/90 dark:border-white/10 rounded-full shadow-[0_12px_36px_-6px_rgba(0,0,0,0.18)] dark:shadow-[0_16px_40px_-6px_rgba(0,0,0,0.65)] ring-1 ring-black/5 dark:ring-white/10">
         {/* Find a Space Primary Action Button */}
         <Link
           href="/workspaces"
@@ -49,16 +49,16 @@ export default function StickyCommunityCTA() {
         {/* Sign up / Community Secondary Action Button */}
         <Link
           href={session ? "/community" : "/auth/signin"}
-          className="flex-1 flex items-center justify-center gap-1.5 bg-white/10 hover:bg-white/15 text-white font-bold py-2 px-3 rounded-full text-[12.5px] border border-white/15 active:scale-95 transition-all whitespace-nowrap cursor-pointer"
+          className="flex-1 flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-white/10 dark:hover:bg-white/15 text-slate-800 dark:text-white font-bold py-2 px-3 rounded-full text-[12.5px] border border-slate-200/80 dark:border-white/15 active:scale-95 transition-all whitespace-nowrap cursor-pointer"
         >
           {session ? (
             <>
-              <MessageSquare size={13.5} className="text-[#FB923C] shrink-0" />
+              <MessageSquare size={13.5} className="text-[#C2410C] dark:text-[#FB923C] shrink-0" />
               <span>Community</span>
             </>
           ) : (
             <>
-              <UserPlus size={13.5} className="text-[#FB923C] shrink-0" />
+              <UserPlus size={13.5} className="text-[#C2410C] dark:text-[#FB923C] shrink-0" />
               <span>Sign up</span>
             </>
           )}
@@ -67,7 +67,7 @@ export default function StickyCommunityCTA() {
         {/* Discreet Dismiss Button */}
         <button
           onClick={() => setIsDismissed(true)}
-          className="w-7 h-7 flex items-center justify-center rounded-full text-white/50 hover:text-white hover:bg-white/10 transition-colors shrink-0 ml-0.5 cursor-pointer"
+          className="w-7 h-7 flex items-center justify-center rounded-full text-slate-400 hover:text-slate-700 dark:text-white/50 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-colors shrink-0 ml-0.5 cursor-pointer"
           aria-label="Dismiss action bar"
           title="Dismiss"
         >
