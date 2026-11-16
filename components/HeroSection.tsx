@@ -152,9 +152,9 @@ export default function HeroSection() {
 
       <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
         {/* Compact Eyebrow Badge */}
-        <div className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#023629] dark:text-[#34D399] bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/90 dark:border-emerald-800/60 px-3.5 py-1 rounded-full mb-2.5 shadow-xs">
-          <Compass size={12} className="text-[#023629] dark:text-[#34D399]" />
-          <span>The Himalayan Remote Work &amp; Guide Ecosystem</span>
+        <div className="inline-flex items-center gap-1.5 text-[10.5px] sm:text-xs font-semibold tracking-wide text-[#023629] dark:text-[#34D399] bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/90 dark:border-emerald-800/60 px-3 py-1 sm:px-3.5 rounded-full mb-2.5 shadow-xs whitespace-nowrap">
+          <Compass size={12} className="text-[#023629] dark:text-[#34D399] shrink-0" />
+          <span>Work remotely from the Himalayas</span>
         </div>
 
         {/* High-Contrast Editorial Heading - Compact & Punchy */}
