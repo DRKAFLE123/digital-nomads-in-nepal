@@ -2,6 +2,7 @@
 "use client"
 
 import { useState, Suspense } from "react"
+import Image from "next/image"
 import { signIn } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
@@ -209,11 +210,26 @@ function UnifiedAuthForm() {
         {/* Brand Header for Mobile */}
         <div className="lg:hidden text-center mb-6">
           <Link href="/" className="inline-flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-[#023629] flex items-center justify-center text-white shadow-xs">
-              <Mountain size={16} />
+            <div className="relative h-8 w-16 overflow-hidden flex-shrink-0">
+              <Image
+                src="/branding/logo-mark.svg"
+                alt="Digital Nomads in Nepal Logo"
+                fill
+                className="object-contain object-left dark:hidden"
+                priority
+                unoptimized
+              />
+              <Image
+                src="/branding/logo-mark-white.svg"
+                alt="Digital Nomads in Nepal Logo"
+                fill
+                className="object-contain object-left hidden dark:block"
+                priority
+                unoptimized
+              />
             </div>
             <span className="font-extrabold text-base text-slate-900 dark:text-white">
-              Digital Nomads <span className="text-[#CD6003]">in Nepal</span>
+              Digital Nomads <span className="text-[#C2410C]">in Nepal</span>
             </span>
           </Link>
         </div>
@@ -224,15 +240,30 @@ function UnifiedAuthForm() {
           {/* Left Column: Hero & Community Highlights (Visible on lg+) */}
           <div className="hidden lg:flex lg:col-span-6 flex-col justify-between space-y-8 pr-4">
             <div>
-              <Link href="/" className="inline-flex items-center gap-2.5 mb-8 group">
-                <div className="w-9 h-9 rounded-xl bg-[#023629] flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform">
-                  <Mountain size={18} />
+              <Link href="/" className="inline-flex items-center gap-3 mb-8 group">
+                <div className="relative h-9 w-20 overflow-hidden flex-shrink-0 group-hover:scale-105 transition-transform">
+                  <Image
+                    src="/branding/logo-mark.svg"
+                    alt="Digital Nomads in Nepal Logo"
+                    fill
+                    className="object-contain object-left dark:hidden"
+                    priority
+                    unoptimized
+                  />
+                  <Image
+                    src="/branding/logo-mark-white.svg"
+                    alt="Digital Nomads in Nepal Logo"
+                    fill
+                    className="object-contain object-left hidden dark:block"
+                    priority
+                    unoptimized
+                  />
                 </div>
                 <div className="flex flex-col text-left">
                   <span className="font-extrabold text-base tracking-tight text-slate-900 dark:text-white leading-none">
-                    Digital Nomads <span className="text-[#CD6003]">in Nepal</span>
+                    Digital Nomads <span className="text-[#C2410C]">in Nepal</span>
                   </span>
-                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">
+                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">
                     Live • Work • Explore
                   </span>
                 </div>
@@ -694,7 +725,7 @@ function UnifiedAuthForm() {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="w-full mt-2 bg-[#023629] hover:bg-[#034a38] text-white font-bold text-xs sm:text-sm py-2.5 sm:py-3 rounded-xl transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full mt-2 bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold text-xs sm:text-sm py-2.5 sm:py-3 rounded-xl transition-all shadow-md shadow-[#C2410C]/20 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.99]"
                     >
                       <span>
                         {loading 

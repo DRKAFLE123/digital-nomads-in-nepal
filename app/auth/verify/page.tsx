@@ -71,7 +71,7 @@ function VerifyEmailContent() {
           <div className="pt-4 space-y-3">
             <Link
               href="/local-guides/dashboard"
-              className="w-full inline-flex items-center justify-center gap-2 bg-[#023629] hover:bg-[#023629]/90 text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-md hover:shadow-lg"
+              className="w-full inline-flex items-center justify-center gap-2 bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-md hover:shadow-lg"
             >
               <span>Go to Guide Dashboard</span>
               <ArrowRight size={16} />
@@ -100,7 +100,7 @@ function VerifyEmailContent() {
           <div className="pt-4 space-y-3">
             <Link
               href="/auth/signin"
-              className="w-full inline-flex items-center justify-center gap-2 bg-[#023629] hover:bg-[#023629]/90 text-white font-bold py-3 px-6 rounded-xl transition-all"
+              className="w-full inline-flex items-center justify-center gap-2 bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold py-3 px-6 rounded-xl transition-all shadow-sm"
             >
               Sign In to Your Account
             </Link>
