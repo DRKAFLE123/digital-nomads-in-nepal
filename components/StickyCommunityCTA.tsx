@@ -46,7 +46,7 @@ export default function StickyCommunityCTA() {
           <span>Find a space</span>
         </Link>
 
-        {/* Sign up / Community Secondary Action Button */}
+        {/* Join free / Community Secondary Action Button */}
         <Link
           href={session ? "/community" : "/auth/signin"}
           className="flex-1 flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-white/10 dark:hover:bg-white/15 text-slate-800 dark:text-white font-bold py-2 px-3 rounded-full text-[12.5px] border border-slate-200/80 dark:border-white/15 active:scale-95 transition-all whitespace-nowrap cursor-pointer"
@@ -59,7 +59,7 @@ export default function StickyCommunityCTA() {
           ) : (
             <>
               <UserPlus size={13.5} className="text-[#C2410C] dark:text-[#FB923C] shrink-0" />
-              <span>Sign up</span>
+              <span>Join free</span>
             </>
           )}
         </Link>
