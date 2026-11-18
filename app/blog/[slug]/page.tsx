@@ -461,7 +461,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
             <RelatedPosts posts={related} />
 
             {/* Newsletter Bottom */}
-            <div className="mt-16 pt-10 border-t border-[#222222]">
+            <div className="mt-16 pt-10 border-t border-gray-200 dark:border-[#222222]">
               <NewsletterSignup />
             </div>
           </article>
