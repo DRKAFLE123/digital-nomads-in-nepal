@@ -53,12 +53,16 @@ export default function TopPartnerRibbon({
           {/* Workspace / Host Link */}
           <Link
             href={isHost ? "/owner/dashboard" : "/register/space"}
-            className="inline-flex items-center gap-1.5 font-semibold text-[#F5F5F0] hover:text-white transition-colors py-0.5 px-1.5 sm:px-2 rounded-md hover:bg-white/10 active:scale-95 text-[10.5px] sm:text-xs"
+            className={`inline-flex items-center gap-1.5 font-bold transition-all py-1 px-2.5 rounded-full text-[11px] sm:text-xs active:scale-95 ${
+              isHost
+                ? "bg-emerald-500/20 hover:bg-emerald-500/30 text-[#E6F4EA] border border-emerald-500/35 hover:border-emerald-400/60 shadow-xs"
+                : "text-[#F5F5F0] hover:text-white hover:bg-white/10"
+            }`}
           >
-            <Building2 className="w-3.5 h-3.5 text-[#C58B55]" />
+            <Building2 className={`w-3.5 h-3.5 ${isHost ? "text-emerald-400" : "text-[#C58B55]"}`} />
             <span>{isHost ? "Host Dashboard" : "List Your Space"}</span>
             {isHost && Boolean(roleInfo?.pendingOwnerBookings) && (
-              <span className="ml-1 px-1.5 py-0.2 rounded-full bg-emerald-500 text-white text-[9px] font-bold">
+              <span className="ml-0.5 px-1.5 py-0.2 rounded-full bg-emerald-500 text-white text-[9px] font-extrabold shadow-xs">
                 {roleInfo.pendingOwnerBookings}
               </span>
             )}
@@ -69,12 +73,16 @@ export default function TopPartnerRibbon({
           {/* Guide Link */}
           <Link
             href={isGuide ? "/guides/dashboard" : "/guides/register"}
-            className="inline-flex items-center gap-1.5 font-semibold text-[#D6A06A] hover:text-[#E5B483] transition-colors py-0.5 px-1.5 sm:px-2 rounded-md hover:bg-white/10 active:scale-95 text-[10.5px] sm:text-xs"
+            className={`inline-flex items-center gap-1.5 font-bold transition-all py-1 px-2.5 rounded-full text-[11px] sm:text-xs active:scale-95 ${
+              isGuide
+                ? "bg-amber-500/20 hover:bg-amber-500/30 text-[#FFF4E5] border border-amber-500/35 hover:border-amber-400/60 shadow-xs"
+                : "text-[#D6A06A] hover:text-[#E5B483] hover:bg-white/10"
+            }`}
           >
-            <Compass className="w-3.5 h-3.5 text-[#D6A06A]" />
+            <Compass className={`w-3.5 h-3.5 ${isGuide ? "text-amber-400" : "text-[#D6A06A]"}`} />
             <span>{isGuide ? "Guide Console" : "Join as Local Guide"}</span>
             {isGuide && Boolean(roleInfo?.pendingGuideInquiries) && (
-              <span className="ml-1 px-1.5 py-0.2 rounded-full bg-amber-500 text-slate-950 text-[9px] font-bold">
+              <span className="ml-0.5 px-1.5 py-0.2 rounded-full bg-amber-500 text-slate-950 text-[9px] font-extrabold shadow-xs">
                 {roleInfo.pendingGuideInquiries}
               </span>
             )}

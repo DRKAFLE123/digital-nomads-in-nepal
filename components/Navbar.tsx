@@ -760,36 +760,6 @@ export default function Navbar() {
               </div>
             )}
 
-            {/* Mode Switcher: Only shown if user actually added a hosting space or registered as a local expert */}
-            {mounted && pathname.startsWith("/owner") ? (
-              <Link
-                href="/workspaces"
-                className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-blue-50/80 hover:bg-blue-100/90 dark:bg-blue-950/40 dark:hover:bg-blue-900/50 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 border border-blue-200/80 dark:border-blue-800/50 shadow-xs group"
-                title="Switch back to live listings"
-              >
-                <Compass size={13} className="text-blue-600 dark:text-blue-400 group-hover:rotate-45 transition-transform" />
-                <span>Switch to listing</span>
-              </Link>
-            ) : mounted && roleInfo.isOwner ? (
-              <Link
-                href="/owner/dashboard"
-                className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-blue-50/80 hover:bg-blue-100/90 dark:bg-blue-950/40 dark:hover:bg-blue-900/50 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 border border-blue-200/80 dark:border-blue-800/50 shadow-xs group"
-                title="Switch to your Host Dashboard"
-              >
-                <Building2 size={13} className="text-blue-600 dark:text-blue-400" />
-                <span>Switch to hosting</span>
-              </Link>
-            ) : mounted && roleInfo.isGuide ? (
-              <Link
-                href="/guides/dashboard"
-                className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-emerald-50/80 hover:bg-emerald-100/90 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/50 shadow-xs group"
-                title="Switch to Guide Console"
-              >
-                <Compass size={13} className="text-emerald-600 dark:text-emerald-400" />
-                <span>Guide Console</span>
-              </Link>
-            ) : null}
-
             {/* Currency Dropdown Selector (Booking.com Style) */}
             <CurrencySelector isSolid={isSolid} />
 
