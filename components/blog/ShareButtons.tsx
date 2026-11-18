@@ -92,7 +92,7 @@ export default function ShareButtons({
             rel="noopener noreferrer"
             aria-label={link.label}
             title={link.label}
-            className={`w-7 h-7 rounded-lg flex items-center justify-center bg-gray-100 dark:bg-[#1E1E22] text-gray-600 dark:text-gray-300 transition-all active:scale-95 ${link.hoverColor}`}
+            className={`w-8 h-8 rounded-xl flex items-center justify-center bg-gray-100 dark:bg-[#1E1E22] text-gray-600 dark:text-gray-300 transition-all active:scale-95 ${link.hoverColor}`}
           >
             {link.icon}
           </a>
@@ -102,7 +102,7 @@ export default function ShareButtons({
           onClick={handleCopy}
           aria-label="Copy link"
           title={copied ? "Link Copied!" : "Copy Link"}
-          className={`h-7 px-2.5 rounded-lg flex items-center gap-1.5 text-xs font-semibold transition-all active:scale-95 ${
+          className={`h-8 px-3 rounded-xl flex items-center gap-1.5 text-xs font-semibold transition-all active:scale-95 ${
             copied
               ? "bg-emerald-600 text-white shadow-xs"
               : "bg-gray-100 dark:bg-[#1E1E22] text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-[#28282D]"

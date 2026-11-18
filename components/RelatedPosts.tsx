@@ -13,10 +13,10 @@ export default function RelatedPosts({ posts }: { posts: GridPost[] }) {
           <span className="absolute bottom-[-13px] left-0 w-16 h-0.5 bg-primary" />
         </h3>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5 sm:gap-x-8 sm:gap-y-6">
         {posts.map((post) => (
-          <Link key={post.slug} href={`/blog/${post.slug}`} className="flex gap-4 group">
-            <div className="relative w-28 h-20 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200 dark:border-[#26262A] bg-gray-100 dark:bg-neutral-900 shadow-xs">
+          <Link key={post.slug} href={`/blog/${post.slug}`} className="flex gap-3.5 sm:gap-4 group">
+            <div className="relative w-24 h-18 sm:w-28 sm:h-20 rounded-xl overflow-hidden flex-shrink-0 border border-gray-200 dark:border-[#26262A] bg-gray-100 dark:bg-neutral-900 shadow-xs">
               <Image
                 src={post.coverImage || "https://images.unsplash.com/photo-1544735716-392fe2449fee?auto=format&fit=crop&q=80"}
                 alt={post.title}
@@ -28,10 +28,10 @@ export default function RelatedPosts({ posts }: { posts: GridPost[] }) {
               <span className="text-[10px] text-primary font-bold uppercase tracking-wider mb-1">
                 {post.category}
               </span>
-              <h4 className="text-sm md:text-base font-bold text-gray-900 dark:text-white group-hover:text-primary dark:group-hover:text-primary transition-colors leading-snug line-clamp-2">
+              <h4 className="text-xs sm:text-sm md:text-base font-bold text-gray-900 dark:text-white group-hover:text-primary dark:group-hover:text-primary transition-colors leading-snug line-clamp-2">
                 {post.title}
               </h4>
-              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">
+              <span className="text-[10px] sm:text-[11px] text-gray-500 dark:text-gray-400 mt-1">
                 {new Date(post.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
               </span>
             </div>

@@ -7,10 +7,11 @@ type TOCItem = { id: string; text: string; level: number }
 interface TableOfContentsProps {
   source: string
   postTitle?: string
+  hideShare?: boolean
   children?: ReactNode
 }
 
-export default function TableOfContents({ source, postTitle, children }: TableOfContentsProps) {
+export default function TableOfContents({ source, postTitle, hideShare = false, children }: TableOfContentsProps) {
   const [toc, setToc] = useState<TOCItem[]>([])
   const [activeId, setActiveId] = useState("")
 
@@ -67,7 +68,7 @@ export default function TableOfContents({ source, postTitle, children }: TableOf
       </ul>
 
       {/* Share Buttons at Bottom of Table of Contents */}
-      {postTitle && (
+      {postTitle && !hideShare && (
         <div className="mt-5 pt-4 border-t border-gray-100 dark:border-[#222225]">
           <ShareButtons title={postTitle} />
         </div>

@@ -212,57 +212,57 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       <Navbar />
       <main className="min-h-screen bg-background pb-20">
         {/* Editorial Masthead Header */}
-        <header className="pt-28 sm:pt-32 pb-8 sm:pb-10 px-5 sm:px-8 lg:px-10 max-w-5xl mx-auto">
+        <header className="pt-24 sm:pt-32 pb-6 sm:pb-10 px-4 sm:px-8 lg:px-10 max-w-5xl mx-auto">
           {/* Breadcrumb Navigation */}
-          <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-muted-foreground mb-6 overflow-x-auto scrollbar-none py-0.5">
+          <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-muted-foreground mb-4 sm:mb-6 overflow-x-auto scrollbar-none py-0.5">
             <Link href="/" className="hover:text-foreground transition-colors shrink-0">Home</Link>
             <ChevronRight size={12} className="opacity-50 shrink-0" />
             <Link href="/blog" className="hover:text-foreground transition-colors shrink-0">Field Guides</Link>
             <ChevronRight size={12} className="opacity-50 shrink-0" />
-            <span className="text-[#C2410C] dark:text-[#FB923C] font-semibold truncate max-w-[220px] sm:max-w-sm">
+            <span className="text-[#C2410C] dark:text-[#FB923C] font-semibold truncate max-w-[180px] sm:max-w-sm">
               {post.category || "Guide"}
             </span>
           </nav>
 
           {/* Category Badge */}
-          <div className="mb-4">
-            <span className="inline-flex items-center px-3.5 py-1 rounded-full text-[11px] font-bold bg-[#C2410C] text-white uppercase tracking-wider shadow-xs">
+          <div className="mb-3 sm:mb-4">
+            <span className="inline-flex items-center px-3 sm:px-3.5 py-1 rounded-full text-[10px] sm:text-[11px] font-bold bg-[#C2410C] text-white uppercase tracking-wider shadow-xs">
               {post.category}
             </span>
           </div>
 
           {/* Majestic Editorial Title */}
-          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-[52px] font-bold text-gray-900 dark:text-[#F5F5F4] leading-[1.14] tracking-tight mb-6">
+          <h1 className="font-serif text-2xl sm:text-4xl md:text-5xl lg:text-[50px] font-bold text-gray-900 dark:text-[#F5F5F4] leading-[1.2] sm:leading-[1.14] tracking-tight mb-4 sm:mb-6 break-words">
             {post.title}
           </h1>
 
           {/* Optional Excerpt / Lede Subtitle */}
           {post.excerpt && (
-            <p className="font-serif italic text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed mb-6 max-w-3xl">
+            <p className="font-serif italic text-sm sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed mb-5 sm:mb-6 max-w-3xl">
               {post.excerpt}
             </p>
           )}
 
           {/* Author Byline & Publishing Metadata Row */}
-          <div className="flex flex-wrap items-center justify-between gap-4 py-4 border-y border-[#E8E2D8] dark:border-[#26262A] text-xs sm:text-sm text-gray-600 dark:text-gray-300">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#C2410C] to-[#9A3412] text-white flex items-center justify-center font-black text-xs shadow-xs select-none ring-2 ring-[#C2410C]/20">
+          <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4 py-3 sm:py-4 border-y border-[#E8E2D8] dark:border-[#26262A] text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+            <div className="flex items-center gap-2.5 sm:gap-3">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-[#C2410C] to-[#9A3412] text-white flex items-center justify-center font-black text-xs shadow-xs select-none ring-2 ring-[#C2410C]/20">
                 {post.author?.[0]?.toUpperCase() || "D"}
               </div>
               <div>
-                <span className="font-bold text-gray-900 dark:text-white block leading-tight">
+                <span className="font-bold text-gray-900 dark:text-white block leading-tight text-xs sm:text-sm">
                   {post.author}
                 </span>
-                <span className="text-[11px] text-gray-500 dark:text-gray-400">
+                <span className="text-[10px] sm:text-[11px] text-gray-500 dark:text-gray-400">
                   Nepal Field Correspondent
                 </span>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+            <div className="flex items-center gap-3 sm:gap-4 text-xs text-gray-500 dark:text-gray-400">
               <span className="flex items-center gap-1.5">
                 <Calendar size={13} className="text-[#C2410C] dark:text-[#FB923C]" />
-                {new Date(post.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                {new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
               </span>
               <span className="opacity-40">•</span>
               <span className="flex items-center gap-1.5">
@@ -273,8 +273,8 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           </div>
         </header>
 
-        {/* Cinematic Cover Image (Full Resolution, 16:9 / 21:9 Aspect Ratio, NO blur, NO foggy gradient, NO overlapping card) */}
-        <div className="max-w-5xl mx-auto px-5 sm:px-8 lg:px-10 mb-10 sm:mb-12">
+        {/* Cinematic Cover Image */}
+        <div className="max-w-5xl mx-auto px-4 sm:px-8 lg:px-10 mb-8 sm:mb-12">
           <div className="relative aspect-[16/10] sm:aspect-[21/10] w-full rounded-2xl sm:rounded-3xl overflow-hidden border border-[#E8E2D8] dark:border-[#26262A] shadow-xl bg-[#141416]">
             <Image 
               src={post.coverImage || "https://images.unsplash.com/photo-1544735716-392fe2449fee?auto=format&fit=crop&q=80"}
@@ -284,7 +284,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
               priority
             />
           </div>
-          <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-2.5 px-1 flex items-center gap-1.5 italic">
+          <p className="text-[10px] sm:text-[11px] text-gray-500 dark:text-gray-400 mt-2 px-1 flex items-center gap-1.5 italic">
             <Camera size={12} className="opacity-60 shrink-0" />
             Field photography • {post.category || "Nomad Guide"} in Nepal
           </p>
@@ -312,7 +312,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
             {post.affiliates && <AffiliateDisclaimer />}
 
             {/* Mobile / Tablet Quick Share Pill Bar */}
-            <div className="lg:hidden mb-6 p-3.5 rounded-2xl bg-gray-50 dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] flex items-center justify-between gap-3 shadow-2xs">
+            <div className="lg:hidden mb-6 p-3 sm:p-3.5 rounded-2xl bg-gray-50 dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] flex items-center justify-between gap-3 shadow-2xs">
               <span className="text-xs font-bold text-gray-700 dark:text-gray-300">Share Guide:</span>
               <ShareButtons title={post.title} layout="compact" />
             </div>
@@ -325,12 +325,12 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                   <span className="text-gray-400 group-open:rotate-180 transition-transform text-xs">▼</span>
                 </summary>
                 <div className="mt-4 pt-3 border-t border-gray-100 dark:border-[#222225]">
-                  <TableOfContents source={post.content} postTitle={post.title} />
+                  <TableOfContents source={post.content} postTitle={post.title} hideShare={true} />
                 </div>
               </details>
             </div>
             
-            <div className="prose prose-neutral dark:prose-invert prose-lg max-w-none text-[17.5px] sm:text-[18px] leading-[1.85] tracking-normal text-gray-800 dark:text-gray-300 prose-headings:font-serif prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-gray-950 dark:prose-headings:text-gray-50 prose-p:text-gray-800 dark:prose-p:text-gray-300 prose-p:leading-[1.85] prose-p:mb-8 prose-a:text-[#C2410C] dark:prose-a:text-[#FB923C] hover:prose-a:underline prose-strong:text-gray-950 dark:prose-strong:text-white prose-strong:font-bold prose-img:rounded-2xl prose-img:shadow-md prose-blockquote:border-l-4 prose-blockquote:border-[#C2410C] prose-blockquote:italic prose-blockquote:font-serif prose-blockquote:text-lg sm:prose-blockquote:text-xl prose-blockquote:text-gray-700 dark:prose-blockquote:text-gray-300 prose-blockquote:my-8 prose-blockquote:pl-6 [&>p:first-of-type]:first-letter:float-left [&>p:first-of-type]:first-letter:text-5xl [&>p:first-of-type]:first-letter:sm:text-6xl [&>p:first-of-type]:first-letter:font-serif [&>p:first-of-type]:first-letter:font-bold [&>p:first-of-type]:first-letter:mr-3.5 [&>p:first-of-type]:first-letter:leading-none [&>p:first-of-type]:first-letter:text-gray-950 dark:[&>p:first-of-type]:first-letter:text-white">
+            <div className="prose prose-neutral dark:prose-invert prose-lg max-w-none text-[16px] sm:text-[17.5px] leading-[1.78] sm:leading-[1.85] tracking-normal text-gray-800 dark:text-gray-300 prose-headings:font-serif prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-gray-950 dark:prose-headings:text-gray-50 prose-p:text-gray-800 dark:prose-p:text-gray-300 prose-p:leading-[1.78] sm:prose-p:leading-[1.85] prose-p:mb-6 sm:prose-p:mb-8 prose-a:text-[#C2410C] dark:prose-a:text-[#FB923C] hover:prose-a:underline prose-strong:text-gray-950 dark:prose-strong:text-white prose-strong:font-bold prose-img:rounded-xl sm:prose-img:rounded-2xl prose-img:shadow-md sm:[&>p:first-of-type]:first-letter:float-left sm:[&>p:first-of-type]:first-letter:text-6xl sm:[&>p:first-of-type]:first-letter:font-serif sm:[&>p:first-of-type]:first-letter:font-bold sm:[&>p:first-of-type]:first-letter:mr-3.5 sm:[&>p:first-of-type]:first-letter:leading-none sm:[&>p:first-of-type]:first-letter:text-gray-950 dark:sm:[&>p:first-of-type]:first-letter:text-white">
               <ReactMarkdown 
                 remarkPlugins={[remarkGfm]}
                 components={{
@@ -352,7 +352,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                       
                       if (videoId) {
                         return (
-                          <span className="block my-8 w-full aspect-video rounded-xl overflow-hidden border border-border shadow-lg">
+                          <span className="block my-6 sm:my-8 w-full aspect-video rounded-xl sm:rounded-2xl overflow-hidden border border-gray-200 dark:border-[#26262A] shadow-lg">
                             <iframe
                               src={`https://www.youtube.com/embed/${videoId}`}
                               title="YouTube video player"
@@ -366,7 +366,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                       }
                     }
                     return (
-                      <a href={href} className="text-[#C2410C] dark:text-[#FB923C] hover:underline" target="_blank" rel="noopener noreferrer" {...props}>
+                      <a href={href} className="text-[#C2410C] dark:text-[#FB923C] hover:underline break-words" target="_blank" rel="noopener noreferrer" {...props}>
                         {children}
                       </a>
                     )
@@ -374,13 +374,64 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                   h2: ({ children, ...props }) => {
                     const text = getFlattenedText(children)
                     const id = text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')
-                    return <h2 id={id} className="text-gray-900 dark:text-white font-serif font-bold text-2xl sm:text-3xl mt-12 mb-5 pt-6 border-t border-gray-100 dark:border-[#222225] first:border-t-0 first:pt-0" {...props}>{children}</h2>
+                    return <h2 id={id} className="text-gray-900 dark:text-white font-serif font-bold text-xl sm:text-2xl md:text-3xl mt-10 sm:mt-12 mb-4 pt-5 border-t border-gray-100 dark:border-[#222225] first:border-t-0 first:pt-0 scroll-mt-24 sm:scroll-mt-28 break-words" {...props}>{children}</h2>
                   },
                   h3: ({ children, ...props }) => {
                     const text = getFlattenedText(children)
                     const id = text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')
-                    return <h3 id={id} className="text-gray-900 dark:text-white font-serif font-bold text-xl sm:text-2xl mt-9 mb-3.5" {...props}>{children}</h3>
-                  }
+                    return <h3 id={id} className="text-gray-900 dark:text-white font-serif font-bold text-lg sm:text-xl md:text-2xl mt-7 sm:mt-9 mb-3 scroll-mt-24 sm:scroll-mt-28 break-words" {...props}>{children}</h3>
+                  },
+                  table: ({ children, ...props }) => (
+                    <div className="my-6 sm:my-8 w-full overflow-x-auto rounded-xl sm:rounded-2xl border border-gray-200 dark:border-[#26262A] shadow-xs overscroll-x-contain">
+                      <table className="w-full text-left text-xs sm:text-sm border-collapse min-w-[500px]" {...props}>
+                        {children}
+                      </table>
+                    </div>
+                  ),
+                  thead: ({ children, ...props }) => (
+                    <thead className="bg-gray-100/90 dark:bg-[#1A1A1E] text-gray-900 dark:text-white border-b border-gray-200 dark:border-[#26262A]" {...props}>
+                      {children}
+                    </thead>
+                  ),
+                  th: ({ children, ...props }) => (
+                    <th className="px-3.5 py-2.5 sm:py-3 font-bold text-gray-900 dark:text-white text-xs uppercase tracking-wider whitespace-nowrap" {...props}>
+                      {children}
+                    </th>
+                  ),
+                  td: ({ children, ...props }) => (
+                    <td className="px-3.5 py-2.5 sm:py-3 border-b border-gray-100 dark:border-[#202024] text-xs sm:text-sm text-gray-700 dark:text-gray-300 align-top" {...props}>
+                      {children}
+                    </td>
+                  ),
+                  code: ({ inline, className, children, ...props }: any) => {
+                    if (inline) {
+                      return (
+                        <code className="px-1.5 py-0.5 rounded-md bg-gray-100 dark:bg-[#1A1A1E] text-xs font-mono text-[#C2410C] dark:text-[#FB923C] break-words" {...props}>
+                          {children}
+                        </code>
+                      )
+                    }
+                    return (
+                      <div className="my-6 overflow-x-auto rounded-xl border border-gray-200 dark:border-[#26262A] bg-gray-950 p-4 text-xs font-mono text-gray-200">
+                        <code {...props}>{children}</code>
+                      </div>
+                    )
+                  },
+                  blockquote: ({ children, ...props }) => (
+                    <blockquote className="border-l-4 border-[#C2410C] bg-[#FAF8F5] dark:bg-[#141416] p-4 sm:p-5 rounded-r-2xl my-6 sm:my-8 text-base sm:text-lg italic font-serif text-gray-800 dark:text-gray-200 shadow-2xs" {...props}>
+                      {children}
+                    </blockquote>
+                  ),
+                  img: ({ src, alt, ...props }) => (
+                    <span className="block my-6 sm:my-8 rounded-xl sm:rounded-2xl overflow-hidden border border-gray-200 dark:border-[#26262A] shadow-md">
+                      <img src={src} alt={alt || "Field guide photography"} className="w-full h-auto object-cover" {...props} />
+                      {alt && (
+                        <span className="block text-center text-[10px] sm:text-[11px] text-gray-500 dark:text-gray-400 py-2 px-3 bg-gray-50 dark:bg-[#161618] border-t border-gray-200 dark:border-[#26262A] italic">
+                          {alt}
+                        </span>
+                      )}
+                    </span>
+                  )
                 }}
               >
                 {post.content}

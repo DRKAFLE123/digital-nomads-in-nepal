@@ -31,20 +31,20 @@ export default function NewsletterSignup() {
   }
 
   return (
-    <div className="relative overflow-hidden rounded-3xl bg-card border border-border p-8 sm:p-12 md:p-16 shadow-2xl transition-all">
+    <div className="relative overflow-hidden rounded-3xl bg-card border border-border p-5 sm:p-10 md:p-14 shadow-2xl transition-all">
       {/* Subtle background glow */}
       <div className="absolute top-0 right-0 -translate-y-12 translate-x-12 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 translate-y-12 -translate-x-12 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative z-10 max-w-3xl mx-auto text-center">
-        <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary/15 border border-primary/30 text-primary text-xs font-black uppercase tracking-wider mb-4 shadow-sm">
+        <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary/15 border border-primary/30 text-primary text-xs font-black uppercase tracking-wider mb-3 sm:mb-4 shadow-sm">
           🎁 Free 2026 Starter Kit
         </div>
 
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-foreground tracking-tight mb-4">
+        <h2 className="text-2xl sm:text-3xl md:text-5xl font-black text-foreground tracking-tight mb-3 sm:mb-4">
           Get the Nepal Nomad Starter Kit
         </h2>
-        <p className="text-muted-foreground text-base sm:text-lg mb-8 max-w-xl mx-auto leading-relaxed">
+        <p className="text-muted-foreground text-sm sm:text-base md:text-lg mb-6 sm:mb-8 max-w-xl mx-auto leading-relaxed">
           The definitive survival toolkit for remote workers, freelancers, and adventurers touching down in Nepal.
         </p>
 
