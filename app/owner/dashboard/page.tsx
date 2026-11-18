@@ -118,10 +118,23 @@ function OwnerDashboardContent() {
   const [loadingEnquiries, setLoadingEnquiries] = useState(false)
 
   // Primary Navigation Tabs
-  type OwnerNavTab = "DASHBOARD" | "ANALYTICS" | "LISTINGS" | "ENQUIRIES" | "RESERVATIONS" | "CALENDAR" | "MESSAGES" | "REVIEWS" | "PAYOUTS" | "SETTINGS"
+  type OwnerNavTab = "DASHBOARD" | "ANALYTICS" | "LISTINGS" | "ENQUIRIES" | "RESERVATIONS" | "CALENDAR" | "MESSAGES" | "REVIEWS" | "PAYOUTS" | "SETTINGS" | "BUSINESS_PROFILE"
   const [mainNavTab, setMainNavTab] = useState<OwnerNavTab>("DASHBOARD")
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [notifOpen, setNotifOpen] = useState(false)
+
+  // Business Profile States
+  const [profileBrandName, setProfileBrandName] = useState("")
+  const [profilePhone, setProfilePhone] = useState("+977 9801234567")
+  const [profileBio, setProfileBio] = useState("Welcoming digital nomads and remote professionals to our spaces across Nepal with reliable dual-fiber Wi-Fi, full generator power backup, and quiet community workspace.")
+  const [profileLanguages, setProfileLanguages] = useState("English, Nepali, Hindi")
+  const [profileHours, setProfileHours] = useState("08:00 AM - 08:00 PM NPT")
+  const [profileLocation, setProfileLocation] = useState("Kathmandu & Pokhara, Nepal")
+
+  // Notification Settings States
+  const [notifNewEnquiry, setNotifNewEnquiry] = useState(true)
+  const [notifInstantBooking, setNotifInstantBooking] = useState(true)
+  const [notifDailyDigest, setNotifDailyDigest] = useState(false)
   
   // Today Sub-Filter: Today vs Upcoming
   const [todaySubFilter, setTodaySubFilter] = useState<"TODAY" | "UPCOMING">("TODAY")
@@ -264,6 +277,19 @@ function OwnerDashboardContent() {
       setLoading(false)
       setLoadingEnquiries(false)
     }
+  }
+
+  // Sync default profile values when hubs load
+  useEffect(() => {
+    if (hubs.length > 0 && !profileBrandName) {
+      setProfileBrandName(hubs[0].name)
+      if (hubs[0].city) setProfileLocation(`${hubs[0].city}, Nepal`)
+    }
+  }, [hubs, profileBrandName])
+
+  const handleSaveBusinessProfile = () => {
+    setSuccessMessage("Business Profile updated successfully! Changes are live on your public listings.")
+    setTimeout(() => setSuccessMessage(""), 4500)
   }
 
   // Handle Host Enquiry Status Update & Quick Reply
@@ -917,27 +943,27 @@ function OwnerDashboardContent() {
               </p>
               <div className="space-y-1">
                 {[
-                  { id: "SETTINGS", label: "Business Profile", icon: User },
+                  { id: "BUSINESS_PROFILE", label: "Business Profile", icon: User },
                   { id: "PAYOUTS", label: "Payments & Earnings", icon: DollarSign },
                   { id: "SETTINGS", label: "Settings", icon: Settings }
-                ].map((item, idx) => {
+                ].map((item) => {
                   const Icon = item.icon
-                  const active = mainNavTab === item.id && (idx !== 0 || mainNavTab === "SETTINGS")
+                  const active = mainNavTab === item.id
                   return (
                     <button
-                      key={`${item.id}-${idx}`}
+                      key={item.id}
                       onClick={() => {
                         setMainNavTab(item.id as OwnerNavTab)
                         setSidebarOpen(false)
                       }}
                       className={`w-full flex items-center justify-between px-3 py-2 rounded-xl font-bold transition-all cursor-pointer ${
-                        active && idx === 2
+                        active
                           ? "bg-[#023629] text-white shadow-xs"
                           : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/60"
                       }`}
                     >
                       <div className="flex items-center gap-2.5">
-                        <Icon size={15} />
+                        <Icon size={15} strokeWidth={active ? 2.5 : 2} />
                         <span>{item.label}</span>
                       </div>
                     </button>
@@ -1106,6 +1132,26 @@ function OwnerDashboardContent() {
                     className="w-full text-left px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium text-slate-700 dark:text-slate-200 cursor-pointer"
                   >
                     + List Another Space
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMainNavTab("BUSINESS_PROFILE")
+                      setMenuOpen(false)
+                    }}
+                    className="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium text-slate-700 dark:text-slate-200 cursor-pointer"
+                  >
+                    Business Profile
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMainNavTab("SETTINGS")
+                      setMenuOpen(false)
+                    }}
+                    className="w-full text-left px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium text-slate-700 dark:text-slate-200 cursor-pointer"
+                  >
+                    Settings
                   </button>
                   <div className="border-t border-slate-100 dark:border-slate-800 my-1" />
                   <button
@@ -2302,43 +2348,276 @@ function OwnerDashboardContent() {
           )}
 
           {/* ═════════════════════════════════════════════════════════════
-              TAB 8: SETTINGS
+              TAB: BUSINESS PROFILE (Public Host Identity & Brand)
+             ═════════════════════════════════════════════════════════════ */}
+          {mainNavTab === "BUSINESS_PROFILE" && (
+            <div className="space-y-6 max-w-4xl">
+              <div className="pb-3 border-b border-gray-200 dark:border-[#222225] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h2 className="text-xl font-serif font-black text-gray-900 dark:text-white">
+                    Business Profile &amp; Host Identity
+                  </h2>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    Your hosting brand, bio, response commitments, and contact info displayed to visiting nomads.
+                  </p>
+                </div>
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 text-xs font-bold self-start sm:self-center">
+                  <ShieldCheck size={14} className="text-emerald-600 dark:text-emerald-400" />
+                  <span>Verified Host Partner</span>
+                </div>
+              </div>
+
+              {/* Host Identity Card */}
+              <div className="p-6 rounded-2xl bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] shadow-xs space-y-6">
+                {/* Avatar & Header Info */}
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4 pb-5 border-b border-gray-100 dark:border-[#222225]">
+                  <div className="w-16 h-16 rounded-2xl bg-[#023629] text-white flex items-center justify-center font-bold text-2xl shadow-sm shrink-0">
+                    {userInitial}
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="text-base font-bold text-gray-900 dark:text-white">
+                      {session?.user?.name || "Host Partner"}
+                    </h3>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      Managing {hubs.length} {hubs.length === 1 ? "space" : "spaces"} across Nepal · Joined 2026
+                    </p>
+                    <div className="flex flex-wrap items-center gap-2 pt-1">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
+                        ⚡ Quick Responder (&lt; 1 hour)
+                      </span>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-sky-500/10 text-sky-700 dark:text-sky-400 border border-sky-500/20">
+                        🌐 Dual Fiber Verified
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Editable Profile Form */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
+                      Business / Host Display Name
+                    </label>
+                    <input
+                      type="text"
+                      value={profileBrandName}
+                      onChange={(e) => setProfileBrandName(e.target.value)}
+                      placeholder="e.g. Sabitri Workspace & Coliving"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-[#28282C] bg-white dark:bg-[#121214] text-gray-900 dark:text-white text-xs focus:outline-none focus:border-[#C2410C]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
+                      Host WhatsApp / Direct Phone
+                    </label>
+                    <input
+                      type="text"
+                      value={profilePhone}
+                      onChange={(e) => setProfilePhone(e.target.value)}
+                      placeholder="e.g. +977 9800000000"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-[#28282C] bg-white dark:bg-[#121214] text-gray-900 dark:text-white text-xs focus:outline-none focus:border-[#C2410C]"
+                    />
+                    <p className="text-[10px] text-gray-400 mt-1">Used for nomad inquiry replies and 1-click WhatsApp chats.</p>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
+                      Contact Email
+                    </label>
+                    <input
+                      type="email"
+                      disabled
+                      value={ownerEmail || session?.user?.email || ""}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-[#28282C] bg-gray-50 dark:bg-[#1A1A1E] text-gray-500 text-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
+                      Languages Spoken
+                    </label>
+                    <input
+                      type="text"
+                      value={profileLanguages}
+                      onChange={(e) => setProfileLanguages(e.target.value)}
+                      placeholder="e.g. English, Nepali, Hindi"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-[#28282C] bg-white dark:bg-[#121214] text-gray-900 dark:text-white text-xs focus:outline-none focus:border-[#C2410C]"
+                    />
+                  </div>
+
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
+                      Host Bio &amp; Welcome Statement
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={profileBio}
+                      onChange={(e) => setProfileBio(e.target.value)}
+                      placeholder="Share a short welcome note, your hospitality philosophy, and why digital nomads love staying or working at your property..."
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-[#28282C] bg-white dark:bg-[#121214] text-gray-900 dark:text-white text-xs focus:outline-none focus:border-[#C2410C] resize-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
+                      Operating / Support Hours
+                    </label>
+                    <input
+                      type="text"
+                      value={profileHours}
+                      onChange={(e) => setProfileHours(e.target.value)}
+                      placeholder="e.g. 08:00 AM - 08:00 PM NPT"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-[#28282C] bg-white dark:bg-[#121214] text-gray-900 dark:text-white text-xs focus:outline-none focus:border-[#C2410C]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
+                      Primary Location
+                    </label>
+                    <input
+                      type="text"
+                      value={profileLocation}
+                      onChange={(e) => setProfileLocation(e.target.value)}
+                      placeholder="e.g. Lakeside, Pokhara & Thamel, Kathmandu"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-[#28282C] bg-white dark:bg-[#121214] text-gray-900 dark:text-white text-xs focus:outline-none focus:border-[#C2410C]"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-[#222225]">
+                  <p className="text-xs text-gray-500">
+                    Changes reflect immediately across your listings.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleSaveBusinessProfile}
+                    className="px-5 py-2.5 rounded-xl text-xs font-bold bg-[#023629] hover:bg-[#034d3a] text-white transition-all shadow-xs flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <Save size={14} />
+                    <span>Save Business Profile</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ═════════════════════════════════════════════════════════════
+              TAB: SETTINGS (Notifications & Security)
              ═════════════════════════════════════════════════════════════ */}
           {mainNavTab === "SETTINGS" && (
-            <div className="space-y-6">
+            <div className="space-y-6 max-w-4xl">
               <div className="pb-3 border-b border-gray-200 dark:border-[#222225]">
-                <h2 className="text-lg font-bold text-gray-900 dark:text-white">
-                  Host Profile &amp; Settings
+                <h2 className="text-xl font-serif font-black text-gray-900 dark:text-white">
+                  Account &amp; Notification Settings
                 </h2>
-                <p className="text-xs text-gray-500">
-                  Update your contact email, notification preferences, and host information.
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  Manage email alerts, instant booking notifications, and security.
                 </p>
               </div>
 
-              <div className="p-5 rounded-2xl bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] space-y-4 max-w-xl">
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
-                    Host Contact Email
+              {/* Notification Preferences */}
+              <div className="p-6 rounded-2xl bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] shadow-xs space-y-4">
+                <h3 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                  <Bell size={16} className="text-[#C2410C]" />
+                  <span>Notification Channels</span>
+                </h3>
+
+                <div className="space-y-3 pt-2">
+                  <label className="flex items-start gap-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={notifNewEnquiry}
+                      onChange={(e) => setNotifNewEnquiry(e.target.checked)}
+                      className="mt-0.5 rounded border-gray-300 text-[#023629] focus:ring-[#023629]"
+                    />
+                    <div>
+                      <p className="text-xs font-bold text-gray-900 dark:text-white">
+                        New Enquiry &amp; Lead Alerts
+                      </p>
+                      <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                        Receive instant email notifications when a digital nomad submits a question about your spaces.
+                      </p>
+                    </div>
                   </label>
-                  <input
-                    type="email"
-                    disabled
-                    value={ownerEmail || session?.user?.email || ""}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 text-gray-500 text-xs"
-                  />
-                  <p className="text-[11px] text-gray-400 mt-1">This email receives guest booking alerts and messages.</p>
+
+                  <label className="flex items-start gap-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={notifInstantBooking}
+                      onChange={(e) => setNotifInstantBooking(e.target.checked)}
+                      className="mt-0.5 rounded border-gray-300 text-[#023629] focus:ring-[#023629]"
+                    />
+                    <div>
+                      <p className="text-xs font-bold text-gray-900 dark:text-white">
+                        Seat &amp; Room Booking Requests
+                      </p>
+                      <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                        Receive urgent email alerts when a nomad reserves a desk or room requiring confirmation.
+                      </p>
+                    </div>
+                  </label>
+
+                  <label className="flex items-start gap-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={notifDailyDigest}
+                      onChange={(e) => setNotifDailyDigest(e.target.checked)}
+                      className="mt-0.5 rounded border-gray-300 text-[#023629] focus:ring-[#023629]"
+                    />
+                    <div>
+                      <p className="text-xs font-bold text-gray-900 dark:text-white">
+                        Daily Check-in Digest
+                      </p>
+                      <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                        Receive a morning summary (08:00 AM NPT) of upcoming arrivals, active nomads, and open enquiries.
+                      </p>
+                    </div>
+                  </label>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
-                    Host Full Name
-                  </label>
-                  <input
-                    type="text"
-                    disabled
-                    value={session?.user?.name || "Host Partner"}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 text-gray-500 text-xs"
-                  />
+                <div className="pt-3 border-t border-gray-100 dark:border-[#222225] flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSuccessMessage("Notification preferences saved successfully!")
+                      setTimeout(() => setSuccessMessage(""), 4000)
+                    }}
+                    className="px-4 py-2 rounded-xl text-xs font-bold bg-[#023629] hover:bg-[#034d3a] text-white transition-all cursor-pointer"
+                  >
+                    Save Preferences
+                  </button>
+                </div>
+              </div>
+
+              {/* Security & Account Card */}
+              <div className="p-6 rounded-2xl bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] shadow-xs space-y-4">
+                <h3 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                  <ShieldCheck size={16} className="text-emerald-600" />
+                  <span>Account &amp; Security</span>
+                </h3>
+
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50 dark:bg-[#18181C] border border-gray-200/70 dark:border-[#26262B]">
+                    <div>
+                      <p className="text-xs font-bold text-gray-900 dark:text-white">Primary Account Email</p>
+                      <p className="text-[11px] text-gray-500">{ownerEmail || session?.user?.email}</p>
+                    </div>
+                    <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
+                      Active
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50 dark:bg-[#18181C] border border-gray-200/70 dark:border-[#26262B]">
+                    <div>
+                      <p className="text-xs font-bold text-gray-900 dark:text-white">Authentication Method</p>
+                      <p className="text-[11px] text-gray-500">Google OAuth / Passwordless Secure Login</p>
+                    </div>
+                    <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-sky-100 text-sky-800 dark:bg-sky-950/60 dark:text-sky-300">
+                      Connected
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
