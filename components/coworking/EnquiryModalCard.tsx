@@ -82,6 +82,7 @@ export default function EnquiryModalCard({ isOpen, onClose, hub }: EnquiryModalC
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    if (!hub) return
     setSubmitting(true)
     setError("")
 
@@ -92,9 +93,23 @@ export default function EnquiryModalCard({ isOpen, onClose, hub }: EnquiryModalC
     }
 
     try {
-      // Simulate sending enquiry to community manager / workspace owner
-      await new Promise((resolve) => setTimeout(resolve, 600))
-      setSuccess(true)
+      const res = await fetch(`/api/work-hubs/${hub.slug}/enquiry`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nomadName: nomadName.trim(),
+          nomadEmail: nomadEmail.trim().toLowerCase(),
+          topic,
+          message: message.trim()
+        })
+      })
+
+      if (res.ok) {
+        setSuccess(true)
+      } else {
+        const errData = await res.json()
+        setError(errData.error || "Failed to send enquiry. Please try again.")
+      }
     } catch (err) {
       console.error(err)
       setError("Failed to send enquiry. Please try again.")
