@@ -49,8 +49,16 @@ import {
   CreditCard,
   ChevronDown,
   LogOut,
-  CalendarCheck
+  CalendarCheck,
+  TrendingUp,
+  HelpCircle,
+  BarChart2
 } from "lucide-react"
+
+import HostTopKpiSummary from "@/components/owner/HostTopKpiSummary"
+import HostEnquiriesSection from "@/components/owner/HostEnquiriesSection"
+import HostListingsSection from "@/components/owner/HostListingsSection"
+import { StoredEnquiry } from "@/app/api/work-hubs/[slug]/enquiry/route"
 
 interface HubData {
   id: string
@@ -104,10 +112,12 @@ function OwnerDashboardContent() {
   // Core Data
   const [ownerEmail, setOwnerEmail] = useState("")
   const [hubs, setHubs] = useState<HubData[]>([])
+  const [enquiries, setEnquiries] = useState<StoredEnquiry[]>([])
   const [loading, setLoading] = useState(false)
+  const [loadingEnquiries, setLoadingEnquiries] = useState(false)
 
-  // Primary Navigation Tabs: Dashboard | Listings | Reservations | Calendar | Messages | Reviews | Payouts | Settings
-  type OwnerNavTab = "DASHBOARD" | "LISTINGS" | "RESERVATIONS" | "CALENDAR" | "MESSAGES" | "REVIEWS" | "PAYOUTS" | "SETTINGS"
+  // Primary Navigation Tabs
+  type OwnerNavTab = "DASHBOARD" | "ANALYTICS" | "LISTINGS" | "ENQUIRIES" | "RESERVATIONS" | "CALENDAR" | "MESSAGES" | "REVIEWS" | "PAYOUTS" | "SETTINGS"
   const [mainNavTab, setMainNavTab] = useState<OwnerNavTab>("DASHBOARD")
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [notifOpen, setNotifOpen] = useState(false)
@@ -189,23 +199,71 @@ function OwnerDashboardContent() {
     }
   }, [session, status, router])
 
-  // Fetch both Space Properties and Guide Profile
+  // Fetch both Space Properties and Enquiries
   const fetchHostData = async (email: string) => {
     if (!email) return
     setLoading(true)
+    setLoadingEnquiries(true)
     try {
-      // 1. Fetch Work Hubs owned by user
-      const hubsRes = await fetch(`/api/owner/hubs?email=${encodeURIComponent(email)}`)
+      const [hubsRes, enquiriesRes] = await Promise.all([
+        fetch(`/api/owner/hubs?email=${encodeURIComponent(email)}`),
+        fetch(`/api/owner/enquiries?email=${encodeURIComponent(email)}`)
+      ])
+
       if (hubsRes.ok) {
         const data = await hubsRes.json()
         setHubs(Array.isArray(data) ? data : [])
       } else {
         setHubs([])
       }
+
+      if (enquiriesRes.ok) {
+        const enqData = await enquiriesRes.json()
+        setEnquiries(Array.isArray(enqData) ? enqData : [])
+      } else {
+        setEnquiries([])
+      }
     } catch (err) {
       console.error("Failed to load host data:", err)
     } finally {
       setLoading(false)
+      setLoadingEnquiries(false)
+    }
+  }
+
+  // Handle Host Enquiry Status Update & Quick Reply
+  const handleUpdateEnquiryStatus = async (
+    enquiryId: string,
+    hubId: string,
+    newStatus: string,
+    replyText?: string
+  ) => {
+    try {
+      const res = await fetch("/api/owner/enquiries", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ enquiryId, hubId, status: newStatus, replyText })
+      })
+
+      if (res.ok) {
+        setEnquiries(prev =>
+          prev.map(e => {
+            if (e.id === enquiryId) {
+              return {
+                ...e,
+                status: newStatus as any,
+                repliedAt: replyText ? new Date().toISOString() : e.repliedAt,
+                replyText: replyText || e.replyText
+              }
+            }
+            return e
+          })
+        )
+        setSuccessMessage(`Enquiry updated to "${newStatus}"`)
+        setTimeout(() => setSuccessMessage(""), 4000)
+      }
+    } catch (err) {
+      console.error("Failed to update enquiry status:", err)
     }
   }
 
@@ -414,6 +472,13 @@ function OwnerDashboardContent() {
   const pendingBookings = allBookings.filter(b => b.status === "PENDING")
   const confirmedBookings = allBookings.filter(b => b.status === "CONFIRMED")
   
+  // Enquiries counts and helpers
+  const newEnquiriesCount = enquiries.filter(e => e.status === "New").length
+  const enquiriesCountByHub = enquiries.reduce<Record<string, number>>((acc, enq) => {
+    acc[enq.hubId] = (acc[enq.hubId] || 0) + 1
+    return acc
+  }, {})
+  
   // Split Analytics by Booking Type (Work, Stay, Work + Stay)
   const workBookingsCount = allBookings.filter(b => {
     const n = (b.notes || "").toLowerCase()
@@ -525,45 +590,188 @@ function OwnerDashboardContent() {
             </button>
           </div>
 
-          {/* Navigation Items (8 options) */}
-          <div className="p-3 space-y-1 overflow-y-auto flex-1 custom-scrollbar">
-            {[
-              { id: "DASHBOARD", label: "Dashboard", icon: LayoutDashboard },
-              { id: "LISTINGS", label: "My Properties", icon: Building2, badge: hubs.length > 0 ? `${hubs.length}` : undefined },
-              { id: "RESERVATIONS", label: "Reservations", icon: CheckCircle2, badge: pendingBookings.length > 0 ? `${pendingBookings.length} new` : undefined, badgeColor: "bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300" },
-              { id: "CALENDAR", label: "Calendar", icon: CalendarIcon },
-              { id: "MESSAGES", label: "Messages", icon: MessageSquare, badge: allBookings.length > 0 ? `${allBookings.length}` : undefined },
-              { id: "REVIEWS", label: "Reviews", icon: Star },
-              { id: "PAYOUTS", label: "Plan & Payouts", icon: DollarSign },
-              { id: "SETTINGS", label: "Settings", icon: Settings },
-            ].map((item) => {
-              const Icon = item.icon
-              const active = mainNavTab === item.id
-              return (
+          {/* Grouped Sidebar Navigation */}
+          <div className="p-3 space-y-4 overflow-y-auto flex-1 custom-scrollbar text-xs">
+            {/* 1. OVERVIEW GROUP */}
+            <div>
+              <p className="px-3 pb-1.5 text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                Overview
+              </p>
+              <div className="space-y-1">
+                {[
+                  { id: "DASHBOARD", label: "Dashboard", icon: LayoutDashboard },
+                  { id: "ANALYTICS", label: "Analytics", icon: TrendingUp }
+                ].map((item) => {
+                  const Icon = item.icon
+                  const active = mainNavTab === item.id
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        setMainNavTab(item.id as OwnerNavTab)
+                        setSidebarOpen(false)
+                      }}
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-xl font-bold transition-all cursor-pointer ${
+                        active
+                          ? "bg-[#023629] text-white shadow-xs"
+                          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/60"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <Icon size={15} strokeWidth={active ? 2.5 : 2} />
+                        <span>{item.label}</span>
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* 2. MY BUSINESS GROUP */}
+            <div>
+              <p className="px-3 pb-1.5 text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                My Business
+              </p>
+              <div className="space-y-1">
                 <button
-                  key={item.id}
                   onClick={() => {
-                    setMainNavTab(item.id as OwnerNavTab)
+                    setMainNavTab("LISTINGS")
                     setSidebarOpen(false)
                   }}
-                  className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                    active
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl font-bold transition-all cursor-pointer ${
+                    mainNavTab === "LISTINGS"
                       ? "bg-[#023629] text-white shadow-xs"
                       : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/60"
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
-                    <Icon size={16} strokeWidth={active ? 2.5 : 2} />
-                    <span>{item.label}</span>
+                    <Building2 size={15} strokeWidth={mainNavTab === "LISTINGS" ? 2.5 : 2} />
+                    <span>My Listings</span>
                   </div>
-                  {item.badge && !active && (
-                    <span className={`px-1.5 py-0.2 rounded-full text-[9px] font-extrabold ${item.badgeColor || "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"}`}>
-                      {item.badge}
+                  {hubs.length > 0 && mainNavTab !== "LISTINGS" && (
+                    <span className="px-1.5 py-0.5 rounded-full text-[9px] font-extrabold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                      {hubs.length}
                     </span>
                   )}
                 </button>
-              )
-            })}
+
+                <Link
+                  href="/register/space"
+                  onClick={() => setSidebarOpen(false)}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl font-bold text-slate-600 dark:text-slate-400 hover:text-[#C2410C] dark:hover:text-[#FB923C] hover:bg-slate-100/80 dark:hover:bg-slate-800/60 transition-all"
+                >
+                  <PlusCircle size={15} className="text-[#C2410C] dark:text-[#FB923C]" />
+                  <span>Add New Listing</span>
+                </Link>
+
+                <button
+                  onClick={() => {
+                    setMainNavTab("ENQUIRIES")
+                    setSidebarOpen(false)
+                  }}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl font-bold transition-all cursor-pointer ${
+                    mainNavTab === "ENQUIRIES"
+                      ? "bg-[#023629] text-white shadow-xs"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/60"
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <MessageSquare size={15} strokeWidth={mainNavTab === "ENQUIRIES" ? 2.5 : 2} />
+                    <span>Enquiries</span>
+                  </div>
+                  {newEnquiriesCount > 0 && mainNavTab !== "ENQUIRIES" && (
+                    <span className="px-2 py-0.5 rounded-full text-[9px] font-black bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-300 border border-amber-300 dark:border-amber-700">
+                      {newEnquiriesCount} New
+                    </span>
+                  )}
+                </button>
+
+                <button
+                  onClick={() => {
+                    setMainNavTab("RESERVATIONS")
+                    setSidebarOpen(false)
+                  }}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl font-bold transition-all cursor-pointer ${
+                    mainNavTab === "RESERVATIONS"
+                      ? "bg-[#023629] text-white shadow-xs"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/60"
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <CalendarCheck size={15} strokeWidth={mainNavTab === "RESERVATIONS" ? 2.5 : 2} />
+                    <span>Bookings</span>
+                  </div>
+                  {pendingBookings.length > 0 && mainNavTab !== "RESERVATIONS" && (
+                    <span className="px-1.5 py-0.5 rounded-full text-[9px] font-black bg-orange-100 text-[#C2410C] dark:bg-orange-950/70 dark:text-[#FB923C] border border-orange-200 dark:border-orange-800">
+                      {pendingBookings.length} Pending
+                    </span>
+                  )}
+                </button>
+
+                <button
+                  onClick={() => {
+                    setMainNavTab("CALENDAR")
+                    setSidebarOpen(false)
+                  }}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl font-bold transition-all cursor-pointer ${
+                    mainNavTab === "CALENDAR"
+                      ? "bg-[#023629] text-white shadow-xs"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/60"
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <CalendarIcon size={15} strokeWidth={mainNavTab === "CALENDAR" ? 2.5 : 2} />
+                    <span>Availability & Calendar</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            {/* 3. ACCOUNT GROUP */}
+            <div>
+              <p className="px-3 pb-1.5 text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                Account
+              </p>
+              <div className="space-y-1">
+                {[
+                  { id: "SETTINGS", label: "Business Profile", icon: User },
+                  { id: "PAYOUTS", label: "Payments & Earnings", icon: DollarSign },
+                  { id: "SETTINGS", label: "Settings", icon: Settings }
+                ].map((item, idx) => {
+                  const Icon = item.icon
+                  const active = mainNavTab === item.id && (idx !== 0 || mainNavTab === "SETTINGS")
+                  return (
+                    <button
+                      key={`${item.id}-${idx}`}
+                      onClick={() => {
+                        setMainNavTab(item.id as OwnerNavTab)
+                        setSidebarOpen(false)
+                      }}
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-xl font-bold transition-all cursor-pointer ${
+                        active && idx === 2
+                          ? "bg-[#023629] text-white shadow-xs"
+                          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/60"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <Icon size={15} />
+                        <span>{item.label}</span>
+                      </div>
+                    </button>
+                  )
+                })}
+
+                <a
+                  href="https://wa.me/9779841234567?text=Hi%2C%20I%20need%20host%20support%20on%20Nomads%20Nepal"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl font-bold text-slate-600 dark:text-slate-400 hover:text-emerald-700 dark:hover:text-emerald-400 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/20 transition-all"
+                >
+                  <HelpCircle size={15} className="text-emerald-600 dark:text-emerald-400" />
+                  <span>Help & Support</span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -763,8 +971,16 @@ function OwnerDashboardContent() {
              ═════════════════════════════════════════════════════════════ */}
           {mainNavTab === "DASHBOARD" && (
             <div className="space-y-6">
-              
-              {/* Celebration Banner if just registered space */}
+              {/* 1. Summary Cards (4 Core KPI Cards for 5-Second Test) */}
+              <HostTopKpiSummary
+                activeListingsCount={hubs.filter(h => h.published !== false).length}
+                newEnquiriesCount={newEnquiriesCount}
+                pendingBookingsCount={pendingBookings.length}
+                confirmedBookingsCount={confirmedBookings.length}
+                onNavigate={(tab) => setMainNavTab(tab)}
+              />
+
+              {/* 2. Urgent Actions / Celebration Banner */}
               {showCelebration && (
                 <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/50 flex items-center justify-between gap-3 text-xs">
                   <div className="flex items-center gap-2.5">
@@ -798,7 +1014,7 @@ function OwnerDashboardContent() {
                 </div>
               )}
 
-              {/* Action Checklist Card */}
+              {/* Action Required Checklist Card */}
               {!dismissChecklist && (
                 <div className="bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] rounded-2xl p-4 sm:p-5 shadow-xs flex items-center justify-between gap-4 transition-all hover:shadow-sm">
                   <div className="flex items-center gap-3.5 min-w-0">
@@ -842,207 +1058,115 @@ function OwnerDashboardContent() {
                 </div>
               )}
 
-              {/* Split Analytics & Nomad Pass Network Section */}
-              <section className="grid grid-cols-1 md:grid-cols-12 gap-4">
-                <div className="md:col-span-8 bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] rounded-2xl p-5 shadow-xs space-y-4">
-                  <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3">
-                    <div>
-                      <span className="text-[10px] font-black uppercase tracking-wider text-gray-400 block">
-                        Bookings Breakdown
+              {/* 3. The Most Important Section: Enquiries (Top-of-Funnel Leads) */}
+              <HostEnquiriesSection
+                enquiries={enquiries}
+                onUpdateStatus={handleUpdateEnquiryStatus}
+                onViewAll={() => setMainNavTab("ENQUIRIES")}
+              />
+
+              {/* 4. Listings Management Section (Work · Stay · Work + Stay) */}
+              <HostListingsSection
+                hubs={hubs}
+                enquiriesCountByHub={enquiriesCountByHub}
+                onEditHub={handleOpenEditModal}
+                onTogglePublished={(hubId) => {
+                  const h = hubs.find(x => x.id === hubId)
+                  if (h) handleTogglePublishStatus(h)
+                }}
+                onNavigateAvailability={() => setMainNavTab("CALENDAR")}
+                onViewAll={() => setMainNavTab("LISTINGS")}
+              />
+
+              {/* 5. Booking Overview (Work · Stay · Work + Stay Breakdown & Check-ins) */}
+              <section className="bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] rounded-2xl p-5 shadow-xs space-y-5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-gray-100 dark:border-gray-800 pb-3">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-gray-400">
+                        Booking Overview
                       </span>
-                      <h3 className="text-sm font-bold text-gray-900 dark:text-white">
-                        Reservations by Offering Type
-                      </h3>
-                    </div>
-                    <span className="text-xs font-bold text-gray-500 font-mono">
-                      {totalBookingsCount} Total Bookings
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
-                    <div className="p-3 rounded-xl bg-[#1B4332]/5 border border-[#1B4332]/20">
-                      <div className="flex items-center gap-1.5 text-[#1B4332] dark:text-[#8FB89A] text-xs font-bold">
-                        <span>💻</span> Work
-                      </div>
-                      <div className="text-xl font-black text-gray-900 dark:text-white mt-1 font-mono">
-                        {workBookingsCount}
-                      </div>
-                      <div className="text-[10px] text-gray-500 mt-0.5">Hot &amp; Dedicated Desks</div>
-                    </div>
-
-                    <div className="p-3 rounded-xl bg-sky-50 dark:bg-sky-950/20 border border-sky-200 dark:border-sky-800/40">
-                      <div className="flex items-center gap-1.5 text-sky-700 dark:text-sky-400 text-xs font-bold">
-                        <span>🛌</span> Stay
-                      </div>
-                      <div className="text-xl font-black text-gray-900 dark:text-white mt-1 font-mono">
-                        {stayBookingsCount}
-                      </div>
-                      <div className="text-[10px] text-gray-500 mt-0.5">Rooms &amp; Apartments</div>
-                    </div>
-
-                    <div className="p-3 rounded-xl bg-[#C2410C]/5 border border-[#C2410C]/20">
-                      <div className="flex items-center gap-1.5 text-[#C2410C] dark:text-[#FB923C] text-xs font-bold">
-                        <span>⚡</span> Work + Stay
-                      </div>
-                      <div className="text-xl font-black text-gray-900 dark:text-white mt-1 font-mono">
-                        {workAndStayBookingsCount}
-                      </div>
-                      <div className="text-[10px] text-gray-500 mt-0.5">All-Inclusive Packages</div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-1.5 pt-0.5">
-                    <div className="h-2 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden flex">
-                      <div
-                        style={{ width: `${totalBookingsCount > 0 ? (workBookingsCount / totalBookingsCount) * 100 : 33.3}%` }}
-                        className="bg-[#1B4332] h-full transition-all duration-300"
-                        title="Work Bookings"
-                      />
-                      <div
-                        style={{ width: `${totalBookingsCount > 0 ? (stayBookingsCount / totalBookingsCount) * 100 : 33.3}%` }}
-                        className="bg-sky-600 h-full transition-all duration-300"
-                        title="Stay Bookings"
-                      />
-                      <div
-                        style={{ width: `${totalBookingsCount > 0 ? (workAndStayBookingsCount / totalBookingsCount) * 100 : 33.4}%` }}
-                        className="bg-[#C2410C] h-full transition-all duration-300"
-                        title="Work + Stay Packages"
-                      />
-                    </div>
-                    <div className="flex items-center justify-between text-[10px] text-gray-400 font-medium">
-                      <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-[#1B4332]" /> Work</span>
-                      <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-sky-600" /> Stay</span>
-                      <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-[#C2410C]" /> Packages</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="md:col-span-4 bg-gradient-to-br from-[#17251E] to-[#0D1812] text-white rounded-2xl p-5 shadow-xs flex flex-col justify-between space-y-4">
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[9.5px] font-black uppercase tracking-widest text-[#D6A06A] bg-white/10 px-2 py-0.5 rounded-full border border-white/10">
-                        NETWORK PARTNER
+                      <span className="text-[10px] font-bold text-primary px-2 py-0.5 rounded-full bg-primary/10">
+                        Work · Stay · Work + Stay
                       </span>
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                     </div>
-                    <h4 className="text-sm font-black text-[#F5F5F0]">
-                      All-Nepal Nomad Pass
-                    </h4>
-                    <p className="text-[11px] text-gray-300 leading-relaxed">
-                      Your spaces are enabled for cross-city nomad passes in Kathmandu, Pokhara, Mustang &amp; Bandipur.
-                    </p>
-                  </div>
-
-                  <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[11px]">
-                    <span className="text-gray-300 font-medium">Redemption:</span>
-                    <span className="font-bold text-[#8FB89A]">Auto-Settled</span>
-                  </div>
-                </div>
-              </section>
-
-              {/* Sub-Navigation Pills: Today vs Upcoming Arrivals */}
-              <div className="flex items-center justify-center gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setTodaySubFilter("TODAY")}
-                  className={`px-6 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                    todaySubFilter === "TODAY"
-                      ? "bg-[#023629] text-white shadow-xs"
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-[#18181B] dark:text-gray-400"
-                  }`}
-                >
-                  Today ({todayBookings.length})
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setTodaySubFilter("UPCOMING")}
-                  className={`px-6 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                    todaySubFilter === "UPCOMING"
-                      ? "bg-[#023629] text-white shadow-xs"
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-[#18181B] dark:text-gray-400"
-                  }`}
-                >
-                  Upcoming ({upcomingBookings.length})
-                </button>
-              </div>
-
-              {/* Active Reservations Feed or Notebook Illustration */}
-              {activeReservations.length === 0 ? (
-                <div className="text-center py-12 sm:py-16 px-4 max-w-md mx-auto">
-                  <div className="relative w-32 h-32 mx-auto mb-6 flex items-center justify-center">
-                    <svg viewBox="0 0 120 120" className="w-28 h-28 drop-shadow-md" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <ellipse cx="60" cy="98" rx="42" ry="7" fill="#000000" fillOpacity="0.08" />
-                      <rect x="18" y="34" width="84" height="60" rx="6" fill="#854D0E" />
-                      <rect x="20" y="32" width="80" height="60" rx="5" fill="#FAF6ED" stroke="#E2D7C3" strokeWidth="2" />
-                      <line x1="60" y1="32" x2="60" y2="92" stroke="#D7C9B1" strokeWidth="2" strokeDasharray="2 2" />
-                      <line x1="28" y1="44" x2="52" y2="44" stroke="#C4B79E" strokeWidth="2" strokeLinecap="round" />
-                      <line x1="28" y1="52" x2="52" y2="52" stroke="#C4B79E" strokeWidth="2" strokeLinecap="round" />
-                      <line x1="28" y1="60" x2="48" y2="60" stroke="#C4B79E" strokeWidth="2" strokeLinecap="round" />
-                      <line x1="28" y1="68" x2="52" y2="68" stroke="#C4B79E" strokeWidth="2" strokeLinecap="round" />
-                      <line x1="28" y1="76" x2="44" y2="76" stroke="#C4B79E" strokeWidth="2" strokeLinecap="round" />
-                      <line x1="68" y1="44" x2="92" y2="44" stroke="#C4B79E" strokeWidth="2" strokeLinecap="round" />
-                      <line x1="68" y1="52" x2="92" y2="52" stroke="#C4B79E" strokeWidth="2" strokeLinecap="round" />
-                      <line x1="68" y1="60" x2="88" y2="60" stroke="#C4B79E" strokeWidth="2" strokeLinecap="round" />
-                      <line x1="68" y1="68" x2="92" y2="68" stroke="#C4B79E" strokeWidth="2" strokeLinecap="round" />
-                      <line x1="68" y1="76" x2="84" y2="76" stroke="#C4B79E" strokeWidth="2" strokeLinecap="round" />
-                      <path d="M57 26 V96 L60 90 L63 96 V26 Z" fill="#E11D48" />
-                    </svg>
-                  </div>
-
-                  <h2 className="font-serif text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2 tracking-tight">
-                    You don’t have any reservations
-                  </h2>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 font-normal leading-relaxed mb-6">
-                    {hubs.length === 0
-                      ? "To get booked, you’ll need to complete and publish your listing."
-                      : "When digital nomads book desks, rooms, or treks, your reservations will appear here."}
-                  </p>
-
-                  <div className="flex flex-wrap items-center justify-center gap-3">
-                    {hubs.length === 0 ? (
-                      <Link
-                        href="/register/space"
-                        className="px-5 py-2.5 rounded-full text-xs font-bold bg-[#023629] text-white hover:bg-[#034a38] transition-colors shadow-sm"
-                      >
-                        + Complete your listing
-                      </Link>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => setMainNavTab("LISTINGS")}
-                        className="px-5 py-2.5 rounded-full text-xs font-bold bg-[#023629] text-white hover:bg-[#034a38] transition-colors shadow-sm cursor-pointer"
-                      >
-                        View your listings
-                      </button>
-                    )}
-                    <Link
-                      href="/workspaces"
-                      className="px-5 py-2.5 rounded-full text-xs font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1C1C1F] border border-gray-200 dark:border-[#26262A] transition-colors"
-                    >
-                      View live site
-                    </Link>
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between pb-2 border-b border-gray-200 dark:border-[#222225]">
-                    <h3 className="font-bold text-sm text-gray-900 dark:text-white">
-                      {todaySubFilter === "TODAY" ? "Today's Active Stays & Check-ins" : "Upcoming Scheduled Reservations"}
+                    <h3 className="text-sm sm:text-base font-bold text-gray-900 dark:text-white mt-0.5">
+                      Total confirmed bookings: <span className="font-mono text-[#023629] dark:text-emerald-400 font-black">{confirmedBookings.length}</span>
                     </h3>
-                    <span className="text-xs text-gray-500">{activeReservations.length} total</span>
                   </div>
 
-                  <div className="divide-y divide-gray-100 dark:divide-[#202024] bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] rounded-2xl overflow-hidden shadow-xs">
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setTodaySubFilter("TODAY")}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        todaySubFilter === "TODAY"
+                          ? "bg-[#023629] text-white shadow-xs"
+                          : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-[#18181B] dark:text-gray-400"
+                      }`}
+                    >
+                      Today ({todayBookings.length})
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setTodaySubFilter("UPCOMING")}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        todaySubFilter === "UPCOMING"
+                          ? "bg-[#023629] text-white shadow-xs"
+                          : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-[#18181B] dark:text-gray-400"
+                      }`}
+                    >
+                      Upcoming ({upcomingBookings.length})
+                    </button>
+                  </div>
+                </div>
+
+                {/* Offering Mix Breakdown Progress */}
+                <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
+                  <div className="p-3 rounded-xl bg-[#1B4332]/5 border border-[#1B4332]/20">
+                    <div className="flex items-center gap-1.5 text-[#1B4332] dark:text-[#8FB89A] text-xs font-bold">
+                      <span>💻</span> Work
+                    </div>
+                    <div className="text-xl font-black text-gray-900 dark:text-white mt-1 font-mono">
+                      {workBookingsCount}
+                    </div>
+                    <div className="text-[10px] text-gray-500 mt-0.5">Hot &amp; Dedicated Desks</div>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-sky-50 dark:bg-sky-950/20 border border-sky-200 dark:border-sky-800/40">
+                    <div className="flex items-center gap-1.5 text-sky-700 dark:text-sky-400 text-xs font-bold">
+                      <span>🛌</span> Stay
+                    </div>
+                    <div className="text-xl font-black text-gray-900 dark:text-white mt-1 font-mono">
+                      {stayBookingsCount}
+                    </div>
+                    <div className="text-[10px] text-gray-500 mt-0.5">Rooms &amp; Apartments</div>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-[#C2410C]/5 border border-[#C2410C]/20">
+                    <div className="flex items-center gap-1.5 text-[#C2410C] dark:text-[#FB923C] text-xs font-bold">
+                      <span>⚡</span> Work + Stay
+                    </div>
+                    <div className="text-xl font-black text-gray-900 dark:text-white mt-1 font-mono">
+                      {workAndStayBookingsCount}
+                    </div>
+                    <div className="text-[10px] text-gray-500 mt-0.5">All-Inclusive Packages</div>
+                  </div>
+                </div>
+
+                {/* Today's check-ins or Active Bookings */}
+                {activeReservations.length > 0 ? (
+                  <div className="divide-y divide-gray-100 dark:divide-[#202024] border border-gray-100 dark:border-[#222226] rounded-xl overflow-hidden">
                     {activeReservations.map((booking: any) => {
                       const hubObj = hubs.find(h => h.id === booking.hubId) || hubs[0]
                       const startDateFormatted = new Date(booking.startDate).toLocaleDateString("en-US", { month: "short", day: "numeric" })
                       const endDateFormatted = new Date(booking.endDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
 
                       return (
-                        <div key={booking.id} className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-gray-50/50 dark:hover:bg-[#18181B] transition-colors">
-                          <div className="space-y-1.5">
+                        <div key={booking.id} className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-gray-50/50 dark:hover:bg-[#18181B] transition-colors">
+                          <div className="space-y-1">
                             <div className="flex items-center gap-2">
-                              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
+                              <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
                                 booking.status === "CONFIRMED"
                                   ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300"
                                   : booking.status === "PENDING"
@@ -1056,12 +1180,12 @@ function OwnerDashboardContent() {
                               </span>
                             </div>
 
-                            <h4 className="text-sm font-bold text-gray-900 dark:text-white">
+                            <h4 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white">
                               {booking.nomadName} <span className="text-xs font-normal text-gray-400 font-mono">({booking.nomadEmail})</span>
                             </h4>
 
-                            <p className="text-xs text-gray-500 flex items-center gap-1.5">
-                              <CalendarIcon size={13} className="text-gray-400" />
+                            <p className="text-[11px] text-gray-500 flex items-center gap-1.5">
+                              <CalendarIcon size={12} className="text-gray-400" />
                               <span>{startDateFormatted} → {endDateFormatted}</span>
                               {booking.notes && <span className="italic">· "{booking.notes}"</span>}
                             </p>
@@ -1072,7 +1196,7 @@ function OwnerDashboardContent() {
                               <button
                                 type="button"
                                 onClick={() => handleUpdateBookingStatus(booking.id, "CONFIRMED")}
-                                className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-colors cursor-pointer"
+                                className="px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-colors cursor-pointer"
                               >
                                 Confirm
                               </button>
@@ -1081,7 +1205,7 @@ function OwnerDashboardContent() {
                               <button
                                 type="button"
                                 onClick={() => handleUpdateBookingStatus(booking.id, "CANCELLED")}
-                                className="px-3.5 py-1.5 rounded-xl text-xs font-semibold text-gray-500 hover:text-red-600 border border-gray-200 dark:border-[#333] hover:border-red-300 transition-colors cursor-pointer"
+                                className="px-3 py-1.5 rounded-xl text-xs font-semibold text-gray-500 hover:text-red-600 border border-gray-200 dark:border-[#333] hover:border-red-300 transition-colors cursor-pointer"
                               >
                                 Decline
                               </button>
@@ -1091,37 +1215,173 @@ function OwnerDashboardContent() {
                       )
                     })}
                   </div>
-                </div>
-              )}
+                ) : totalBookingsCount === 0 ? (
+                  /* Actionable Guidance when 0 bookings (No useless empty charts!) */
+                  <div className="p-5 sm:p-6 rounded-2xl bg-[#FAF8F5] dark:bg-[#1A1A1E] border border-[#E8E2D8] dark:border-[#2D2D32] space-y-4">
+                    <div className="flex items-center gap-2.5">
+                      <span className="text-xl">🚀</span>
+                      <div>
+                        <h4 className="text-sm font-bold text-gray-900 dark:text-white">
+                          How to attract your first nomad booking
+                        </h4>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          Follow these 3 proven steps from top-rated workspaces in Kathmandu and Pokhara:
+                        </p>
+                      </div>
+                    </div>
 
-              {/* Quick Metrics Cards */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-4">
-                <div className="p-4 rounded-2xl bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A]">
-                  <p className="text-xs font-medium text-gray-500">Live Properties</p>
-                  <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                    {hubs.length}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                      <div className="p-3.5 rounded-xl bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] space-y-1.5">
+                        <span className="text-xs font-black text-[#C2410C]">1. Verified Wi-Fi Speeds</span>
+                        <p className="text-[11px] text-gray-600 dark:text-gray-300 leading-snug">
+                          Nomads filter by 100+ Mbps fiber and power backup. Make sure your facility tags are complete.
+                        </p>
+                      </div>
+
+                      <div className="p-3.5 rounded-xl bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] space-y-1.5">
+                        <span className="text-xs font-black text-[#C2410C]">2. High-Res Space Photos</span>
+                        <p className="text-[11px] text-gray-600 dark:text-gray-300 leading-snug">
+                          Listings with photos of ergonomic chairs, call booths, and rooftop views get 4.2x more enquiries.
+                        </p>
+                      </div>
+
+                      <div className="p-3.5 rounded-xl bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] space-y-1.5">
+                        <span className="text-xs font-black text-[#C2410C]">3. Fast Reply Within 2 Hours</span>
+                        <p className="text-[11px] text-gray-600 dark:text-gray-300 leading-snug">
+                          Respond quickly to enquiries in the panel above. Prompt hosts convert 78% of incoming leads into guests.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-6 text-xs text-gray-400">
+                    No active stays or arrivals scheduled for {todaySubFilter === "TODAY" ? "today" : "upcoming dates"}.
+                  </div>
+                )}
+              </section>
+
+              {/* 6. Nomad Pass Network Partner Card */}
+              <div className="bg-gradient-to-br from-[#17251E] to-[#0D1812] text-white rounded-2xl p-5 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="space-y-1.5 max-w-xl">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[9.5px] font-black uppercase tracking-widest text-[#D6A06A] bg-white/10 px-2 py-0.5 rounded-full border border-white/10">
+                      NETWORK PARTNER
+                    </span>
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="text-xs text-emerald-300 font-semibold">Active in Nepal</span>
+                  </div>
+                  <h4 className="text-base font-black text-[#F5F5F0]">
+                    All-Nepal Nomad Pass Network
+                  </h4>
+                  <p className="text-xs text-gray-300 leading-relaxed">
+                    Your properties are integrated into cross-city digital nomad passes across Kathmandu, Pokhara, Lalitpur, and Bandipur. Guest check-ins are verified and settled seamlessly.
                   </p>
                 </div>
-                <div className="p-4 rounded-2xl bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A]">
-                  <p className="text-xs font-medium text-gray-500">Pending Requests</p>
-                  <p className="text-xl sm:text-2xl font-bold text-amber-600 dark:text-amber-400 mt-1">
-                    {pendingBookings.length}
-                  </p>
-                </div>
-                <div className="p-4 rounded-2xl bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A]">
-                  <p className="text-xs font-medium text-gray-500">Confirmed Stays</p>
-                  <p className="text-xl sm:text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">
-                    {confirmedBookings.length}
-                  </p>
-                </div>
-                <div className="p-4 rounded-2xl bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A]">
-                  <p className="text-xs font-medium text-gray-500">Total Inquiries</p>
-                  <p className="text-xl sm:text-2xl font-bold text-[#C2410C] dark:text-[#FB923C] mt-1">
-                    {allBookings.length}
-                  </p>
+
+                <div className="flex items-center gap-2 shrink-0">
+                  <Link
+                    href="/workspaces"
+                    className="px-4 py-2 rounded-xl text-xs font-bold bg-[#C2410C] hover:bg-[#9A3412] text-white transition-colors shadow-xs"
+                  >
+                    View Directory
+                  </Link>
                 </div>
               </div>
 
+            </div>
+          )}
+
+          {/* ═════════════════════════════════════════════════════════════
+              TAB: ENQUIRIES (Dedicated Top-of-Funnel Leads)
+             ═════════════════════════════════════════════════════════════ */}
+          {mainNavTab === "ENQUIRIES" && (
+            <div className="space-y-6">
+              <HostEnquiriesSection
+                enquiries={enquiries}
+                isFullPage={true}
+                onUpdateStatus={handleUpdateEnquiryStatus}
+              />
+            </div>
+          )}
+
+          {/* ═════════════════════════════════════════════════════════════
+              TAB: ANALYTICS (Traction & Conversion Funnel)
+             ═════════════════════════════════════════════════════════════ */}
+          {mainNavTab === "ANALYTICS" && (
+            <div className="space-y-6">
+              <div className="pb-3 border-b border-gray-200 dark:border-[#222225]">
+                <h2 className="text-xl sm:text-2xl font-serif font-bold text-gray-900 dark:text-white">
+                  Hosting Analytics &amp; Conversion
+                </h2>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                  Understand nomad traffic, response velocity, and inquiry-to-booking conversion rates.
+                </p>
+              </div>
+
+              {/* 4 Metric Cards */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
+                <div className="p-4 rounded-2xl bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A]">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-gray-400">Total Inquiries</span>
+                  <p className="text-2xl font-black text-gray-900 dark:text-white mt-1 font-mono">{enquiries.length}</p>
+                  <p className="text-[10px] text-gray-500 mt-1">Direct guest messages</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A]">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-gray-400">New / Unreplied</span>
+                  <p className="text-2xl font-black text-amber-600 dark:text-amber-400 mt-1 font-mono">{newEnquiriesCount}</p>
+                  <p className="text-[10px] text-gray-500 mt-1">Needs host reply</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A]">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-gray-400">Booking Requests</span>
+                  <p className="text-2xl font-black text-primary mt-1 font-mono">{totalBookingsCount}</p>
+                  <p className="text-[10px] text-gray-500 mt-1">{confirmedBookings.length} confirmed</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A]">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-gray-400">Conversion Rate</span>
+                  <p className="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1 font-mono">
+                    {enquiries.length > 0 ? `${Math.round((confirmedBookings.length / enquiries.length) * 100)}%` : "0%"}
+                  </p>
+                  <p className="text-[10px] text-gray-500 mt-1">Inquiries to confirmed stays</p>
+                </div>
+              </div>
+
+              {/* Deep-dive Breakdown */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-5 rounded-2xl bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] space-y-4">
+                  <h3 className="font-bold text-sm text-gray-900 dark:text-white">Offering Mix Breakdown</h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-gray-600 dark:text-gray-300">💻 Work (Hot &amp; Dedicated Desks)</span>
+                      <span className="font-mono font-bold text-gray-900 dark:text-white">{workBookingsCount}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-gray-600 dark:text-gray-300">🛌 Stay (Private Rooms &amp; Apartments)</span>
+                      <span className="font-mono font-bold text-gray-900 dark:text-white">{stayBookingsCount}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-gray-600 dark:text-gray-300">⚡ Work + Stay Packages</span>
+                      <span className="font-mono font-bold text-gray-900 dark:text-white">{workAndStayBookingsCount}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-5 rounded-2xl bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] space-y-4">
+                  <h3 className="font-bold text-sm text-gray-900 dark:text-white">Host Performance Rating</h3>
+                  <div className="space-y-2 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-600 dark:text-gray-300">Average Reply Velocity</span>
+                      <span className="font-bold text-emerald-600 dark:text-emerald-400">Within 1 hour</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-600 dark:text-gray-300">Listing Completeness</span>
+                      <span className="font-bold text-gray-900 dark:text-white">100% (Photos &amp; Fiber Verified)</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-600 dark:text-gray-300">Nomad Pass Partner Status</span>
+                      <span className="font-bold text-primary">Active</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 
@@ -1758,6 +2018,391 @@ function OwnerDashboardContent() {
       {/* ─────────────────────────────────────────────────────────────
           EDIT PROPERTY & FEATURES MODAL
          ───────────────────────────────────────────────────────────── */}
+      {editingHub && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="relative w-full max-w-2xl bg-white dark:bg-[#121214] border border-gray-200 dark:border-[#26262A] rounded-2xl shadow-2xl overflow-hidden my-8 max-h-[90vh] flex flex-col">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-5 border-b border-gray-200 dark:border-[#222225] bg-gray-50/70 dark:bg-[#161619] sticky top-0 z-10">
+              <div>
+                <h3 className="font-serif font-bold text-lg text-gray-900 dark:text-white">
+                  Edit Property Listing
+                </h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                  Update visibility, cover photo, amenities, and details for {editingHub.name}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setEditingHub(null)}
+                className="w-8 h-8 rounded-full bg-gray-100 dark:bg-[#202024] flex items-center justify-center text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors cursor-pointer"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            {/* Modal Scrollable Body */}
+            <div className="p-6 space-y-6 overflow-y-auto custom-scrollbar">
+              {/* 1. VISIBILITY / DRAFT TOGGLE */}
+              <div className="p-4 rounded-xl border border-gray-200 dark:border-[#26262A] bg-gray-50 dark:bg-[#161618] flex items-center justify-between gap-4">
+                <div className="space-y-0.5">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-xs text-gray-900 dark:text-white">
+                      Listing Status &amp; Visibility
+                    </span>
+                    {editPublished ? (
+                      <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 px-2 py-0.5 rounded-full">
+                        ● LIVE
+                      </span>
+                    ) : (
+                      <span className="text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 px-2 py-0.5 rounded-full">
+                        ○ DRAFT / UNLISTED
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {editPublished
+                      ? "Your property is actively listed in the Nepal workspace directory and can receive inquiries."
+                      : "Unlisted: Hidden from public search and category feeds. Only you can view it."}
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setEditPublished(!editPublished)}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-colors shrink-0 flex items-center gap-1.5 cursor-pointer ${
+                    editPublished
+                      ? "bg-amber-100 text-amber-800 hover:bg-amber-200 dark:bg-amber-950/60 dark:text-amber-300"
+                      : "bg-[#023629] text-white hover:bg-[#034a38]"
+                  }`}
+                >
+                  {editPublished ? <EyeOff size={13} /> : <Eye size={13} />}
+                  <span>{editPublished ? "Unlist (Draft)" : "Make Live"}</span>
+                </button>
+              </div>
+
+              {/* 2. COVER PHOTO */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                    Cover Photo
+                  </label>
+                  <span className="text-[11px] text-gray-400">
+                    JPEG, PNG, WebP up to 5MB
+                  </span>
+                </div>
+
+                <div className="relative aspect-video w-full rounded-xl overflow-hidden border border-gray-200 dark:border-[#26262A] bg-gray-100 dark:bg-[#1E1E22]">
+                  {editPhotoUrl ? (
+                    <img
+                      src={editPhotoUrl}
+                      alt="Cover Preview"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 gap-2">
+                      <Camera size={28} />
+                      <span className="text-xs">No cover image uploaded</span>
+                    </div>
+                  )}
+
+                  {uploadingPhoto && (
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-xs flex flex-col items-center justify-center text-white gap-2">
+                      <Loader2 size={24} className="animate-spin" />
+                      <span className="text-xs font-bold">Uploading Cover Photo...</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <label className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 dark:bg-[#1E1E22] hover:bg-gray-200 dark:hover:bg-[#28282D] text-gray-800 dark:text-gray-200 text-xs font-bold rounded-xl cursor-pointer transition-colors">
+                    <Upload size={14} />
+                    <span>Upload New Photo</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handlePhotoUpload}
+                      disabled={uploadingPhoto}
+                      className="hidden"
+                    />
+                  </label>
+                  <input
+                    type="text"
+                    value={editPhotoUrl}
+                    onChange={e => setEditPhotoUrl(e.target.value)}
+                    placeholder="Or paste direct image URL (https://...)"
+                    className="flex-[2] p-2 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-800 dark:text-gray-200 placeholder-gray-400 focus:outline-none focus:border-[#023629]"
+                  />
+                </div>
+              </div>
+
+              {/* 3. BASIC DETAILS */}
+              <div className="space-y-4">
+                <label className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider block">
+                  Property Info
+                </label>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">
+                      Property Name *
+                    </label>
+                    <input
+                      type="text"
+                      value={editName}
+                      onChange={e => setEditName(e.target.value)}
+                      className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-[#023629]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">
+                      Space Type *
+                    </label>
+                    <select
+                      value={editSpaceType}
+                      onChange={e => setEditSpaceType(e.target.value)}
+                      className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-[#023629]"
+                    >
+                      <option value="Coworking Space">Coworking Space</option>
+                      <option value="Coliving & Workation">Coliving &amp; Workation</option>
+                      <option value="Workstation Villa">Workstation Villa</option>
+                      <option value="Hostel with Dedicated Desks">Hostel with Dedicated Desks</option>
+                      <option value="Cafe & Cowork">Cafe &amp; Cowork</option>
+                      <option value="Private Studio Hub">Private Studio Hub</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">
+                      City *
+                    </label>
+                    <input
+                      type="text"
+                      value={editCity}
+                      onChange={e => setEditCity(e.target.value)}
+                      placeholder="e.g. Kathmandu, Pokhara, Lalitpur"
+                      className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-[#023629]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">
+                      Full Address *
+                    </label>
+                    <input
+                      type="text"
+                      value={editAddress}
+                      onChange={e => setEditAddress(e.target.value)}
+                      placeholder="e.g. Thamel, Ward 26, Kathmandu"
+                      className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-[#023629]"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">
+                      Daily Desk Rate ($ USD)
+                    </label>
+                    <input
+                      type="number"
+                      step="1"
+                      min="0"
+                      value={editPriceDaily}
+                      onChange={e => setEditPriceDaily(parseFloat(e.target.value) || 0)}
+                      className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-[#023629]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">
+                      Monthly Coliving/Desk ($ USD)
+                    </label>
+                    <input
+                      type="number"
+                      step="1"
+                      min="0"
+                      value={editPriceMonthly}
+                      onChange={e => setEditPriceMonthly(parseFloat(e.target.value) || 0)}
+                      className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-[#023629]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">
+                      Opening Hours
+                    </label>
+                    <input
+                      type="text"
+                      value={editOpeningHours}
+                      onChange={e => setEditOpeningHours(e.target.value)}
+                      placeholder="e.g. 24/7 Access or 8 AM - 10 PM"
+                      className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-[#023629]"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">
+                    About this Space (Description for Nomads)
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={editDescription}
+                    onChange={e => setEditDescription(e.target.value)}
+                    placeholder="Describe your internet speed, vibe, community, surrounding cafes, power backup..."
+                    className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-[#023629]"
+                  />
+                </div>
+              </div>
+
+              {/* 4. FEATURES & AMENITIES */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                    Amenities &amp; Nomad Features ({editFacilities.length} selected)
+                  </label>
+                  <span className="text-[11px] text-gray-400">
+                    Click to toggle
+                  </span>
+                </div>
+
+                {/* Popular Amenities Chips */}
+                <div className="flex flex-wrap gap-2">
+                  {POPULAR_AMENITIES.map(amenity => {
+                    const selected = editFacilities.includes(amenity)
+                    return (
+                      <button
+                        key={amenity}
+                        type="button"
+                        onClick={() => handleToggleFeature(amenity)}
+                        className={`text-xs px-3 py-1.5 rounded-xl border transition-all text-left flex items-center gap-1.5 cursor-pointer ${
+                          selected
+                            ? "bg-[#023629] text-white border-[#023629] shadow-xs"
+                            : "bg-gray-50 dark:bg-[#1A1A1E] text-gray-700 dark:text-gray-300 border-gray-200 dark:border-[#2C2C30] hover:border-gray-400"
+                        }`}
+                      >
+                        {selected ? <Check size={12} className="stroke-[3]" /> : null}
+                        <span>{amenity}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+
+                {/* Add Custom Feature Input */}
+                <div className="flex items-center gap-2 pt-2">
+                  <input
+                    type="text"
+                    value={customFeatureInput}
+                    onChange={e => setCustomFeatureInput(e.target.value)}
+                    onKeyDown={e => {
+                      if (e.key === "Enter") {
+                        e.preventDefault()
+                        handleAddCustomFeature()
+                      }
+                    }}
+                    placeholder="Add custom feature (e.g. 4K Monitors, Soundproof Booth)..."
+                    className="flex-1 p-2 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-[#023629]"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAddCustomFeature}
+                    className="px-3 py-2 bg-gray-200 dark:bg-[#222226] hover:bg-gray-300 dark:hover:bg-[#2C2C32] text-xs font-semibold rounded-xl text-gray-800 dark:text-gray-200 transition-colors cursor-pointer"
+                  >
+                    + Add
+                  </button>
+                </div>
+
+                {/* Active Custom Features Display */}
+                {editFacilities.filter(f => !POPULAR_AMENITIES.includes(f)).length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {editFacilities.filter(f => !POPULAR_AMENITIES.includes(f)).map(customFeat => (
+                      <span
+                        key={customFeat}
+                        className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"
+                      >
+                        <span>{customFeat}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveFeature(customFeat)}
+                          className="hover:text-red-500 cursor-pointer"
+                        >
+                          <X size={12} />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* 5. CONTACT & EXTERNAL LINKS */}
+              <div className="space-y-3">
+                <label className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider block">
+                  Host Contact &amp; Links
+                </label>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">
+                      Contact / Inquiries Email *
+                    </label>
+                    <input
+                      type="email"
+                      value={editContactEmail}
+                      onChange={e => setEditContactEmail(e.target.value)}
+                      className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-[#023629]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">
+                      Website / Booking Link (Optional)
+                    </label>
+                    <input
+                      type="url"
+                      value={editWebsite}
+                      onChange={e => setEditWebsite(e.target.value)}
+                      placeholder="https://yourspace.com"
+                      className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-[#023629]"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 border-t border-gray-200 dark:border-[#222225] bg-gray-50 dark:bg-[#141416] flex items-center justify-end gap-3 sticky bottom-0 z-10">
+              <button
+                type="button"
+                onClick={() => setEditingHub(null)}
+                className="px-4 py-2 text-xs font-semibold rounded-xl border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-[#1E1E22] text-gray-700 dark:text-gray-300 transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={updatingHub || uploadingPhoto}
+                onClick={handleSaveHubEdits}
+                className="px-5 py-2 text-xs font-bold rounded-xl bg-[#023629] hover:bg-[#034a38] text-white shadow-xs transition-colors flex items-center gap-1.5 disabled:opacity-60 cursor-pointer"
+              >
+                {updatingHub ? (
+                  <>
+                    <Loader2 size={13} className="animate-spin" />
+                    <span>Saving Changes...</span>
+                  </>
+                ) : (
+                  <>
+                    <Check size={14} />
+                    <span>Save Changes</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
