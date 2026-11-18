@@ -13,7 +13,7 @@ export async function generateMetadata({
   }).catch(() => null)
 
   const baseUrl = "https://digitalnomadsinnepal.com"
-  const url = `${baseUrl}/resources/coworking/${params.slug}`
+  const url = `${baseUrl}/workspaces/${params.slug}`
 
   if (!hub || !hub.published) {
     return {

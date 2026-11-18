@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }).catch(() => null)
 
   const hubUrl = `${SITE_URL}/workspaces/${params.slug}`
-  const title = hub ? `${hub.name} | Verified Workspace in ${hub.city}, Nepal` : "Workspace in Nepal | Digital Nomads in Nepal"
+  const title = hub ? `${hub.name} (${hub.city}): Coworking & Desk` : "Workspace in Nepal | Digital Nomads in Nepal"
   const description = hub?.description
     ? `${hub.description.slice(0, 155)}...`
     : `Verified coworking space and nomad workspace in Nepal with high-speed internet and power backup.`

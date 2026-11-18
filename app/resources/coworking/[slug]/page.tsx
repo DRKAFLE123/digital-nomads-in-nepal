@@ -237,12 +237,6 @@ export default function CoworkingDetailPage({ params }: { params: { slug: string
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
 
-  useEffect(() => {
-    if (params.slug?.toLowerCase().includes("sofa")) {
-      router.replace("/")
-    }
-  }, [params.slug, router])
-
   // Enquiry, Booking & Amenities Modal State
   const [bookingModalOpen, setBookingModalOpen] = useState(false)
   const [enquiryModalOpen, setEnquiryModalOpen] = useState(false)

@@ -71,12 +71,12 @@ const DEFAULT_POPULAR_POSTS: PopularPost[] = [
     featured: true
   },
   {
-    slug: "cost-of-living-nepal-2026-nomad-budget",
-    title: "Cost of Living in Nepal: A 2026 Budget Guide for Remote Workers",
+    slug: "cost-of-living-in-nepal-2026-2027",
+    title: "Cost of Living in Nepal 2026: Monthly Budget for Digital Nomads",
     excerpt: "Break down your monthly budget for living and working remotely in Nepal. From rent in Kathmandu/Pokhara to food, transport, and leisure costs.",
     category: "Cost of Living",
     coverImage: "/blog-cost-of-living.png",
-    readTime: "7 min read",
+    readTime: "10 min read",
   },
   {
     slug: "top-10-destinations-nepal-remote-workers-2026",

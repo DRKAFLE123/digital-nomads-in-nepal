@@ -59,29 +59,29 @@ export const PACKAGE_TIERS: Array<{
   icon: string
   highlight?: boolean
 }> = [
-  {
-    id: "desk_only",
-    tag: "Option A",
-    title: "💻 Desk Only",
-    desc: "Dedicated workspace seat with verified fiber Wi-Fi & backup power.",
-    icon: "💻",
-  },
-  {
-    id: "workation_all_inclusive",
-    tag: "Option B • Popular",
-    title: "⚡ Room + Desk Workation",
-    desc: "Private room + guaranteed dedicated desk with backup power & breakfast.",
-    icon: "⚡",
-    highlight: true,
-  },
-  {
-    id: "stay_coworking_voucher",
-    tag: "Option C",
-    title: "🎟️ Stay + Coworking Pass",
-    desc: "Nomad room stay with multi-day passes to walk to nearby verified coworking hubs.",
-    icon: "🎟️",
-  },
-]
+    {
+      id: "desk_only",
+      tag: "Option A",
+      title: "💻 Desk Only",
+      desc: "Dedicated workspace seat with verified fiber Wi-Fi & backup power.",
+      icon: "💻",
+    },
+    {
+      id: "workation_all_inclusive",
+      tag: "Option B • Popular",
+      title: "⚡ Room + Desk Workation",
+      desc: "Private room + guaranteed dedicated desk with backup power & breakfast.",
+      icon: "⚡",
+      highlight: true,
+    },
+    {
+      id: "stay_coworking_voucher",
+      tag: "Option C",
+      title: "🎟️ Stay + Coworking Pass",
+      desc: "Nomad room stay with multi-day passes to walk to nearby verified coworking hubs.",
+      icon: "🎟️",
+    },
+  ]
 
 export const UNIT_OPTIONS = [
   { id: "hot_desk", label: "Hot Desk / Flexi Seat", defaultMonthly: 80, defaultDaily: 5 },
@@ -405,10 +405,10 @@ export default function BookingModalCard({
           ) : (
             /* FORM & FIXED PRICE SUMMARY GRID */
             <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-              
+
               {/* LEFT COLUMN: FORM INPUTS (7 COLS) */}
               <div className="lg:col-span-7 space-y-3.5">
-                
+
                 {error && (
                   <div className="p-3 bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs rounded-xl animate-in fade-in duration-150">
                     {error}
@@ -441,11 +441,10 @@ export default function BookingModalCard({
                               setSelectedUnit("dedicated_desk")
                             }
                           }}
-                          className={`p-3 rounded-2xl border text-left transition-all duration-200 cursor-pointer flex flex-col justify-between space-y-1.5 ${
-                            isSelected
+                          className={`p-3 rounded-2xl border text-left transition-all duration-200 cursor-pointer flex flex-col justify-between space-y-1.5 ${isSelected
                               ? "bg-[#C2410C]/8 dark:bg-[#C2410C]/15 border-[#C2410C] shadow-xs ring-1 ring-[#C2410C]"
                               : "bg-[#FBF9F5] dark:bg-[#181818] border-[#E8E2D8] dark:border-[#282828] hover:border-gray-400"
-                          }`}
+                            }`}
                         >
                           <div>
                             <div className="flex items-center justify-between">

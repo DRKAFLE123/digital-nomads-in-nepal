@@ -61,11 +61,20 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const post = await prisma.post.findUnique({ where: { slug: params.slug } })
   if (!post) return {}
   
-  const postUrl = `${SITE_URL}/blog/${params.slug}`
+  // Consolidate legacy slug to authoritative canonical URL
+  const canonicalSlug = params.slug === "cost-of-living-nepal-2026-nomad-budget"
+    ? "cost-of-living-in-nepal-2026-2027"
+    : params.slug
+  const postUrl = `${SITE_URL}/blog/${canonicalSlug}`
   const imageUrl = post.coverImage || `${SITE_URL}/hero-bg.png`
 
+  // Keep title concise to prevent truncation in Google SERPs (55-60 char sweet spot)
+  const metaTitle = post.title.includes("Digital Nomads in Nepal") || post.title.length > 50
+    ? post.title
+    : `${post.title} | Digital Nomads in Nepal`
+
   return {
-    title: `${post.title} | Digital Nomads in Nepal`,
+    title: metaTitle,
     description: post.excerpt,
     alternates: {
       canonical: postUrl,
