@@ -48,6 +48,7 @@ interface HostListingsSectionProps {
   onTogglePublished?: (hubId: string, currentPublished: boolean) => void
   onNavigateAvailability?: () => void
   onViewAll?: () => void
+  onAddNew?: () => void
 }
 
 export function getListingOfferingType(hub: HubCardData): "Work" | "Stay" | "Work + Stay" {
@@ -69,7 +70,8 @@ export default function HostListingsSection({
   onEditHub,
   onTogglePublished,
   onNavigateAvailability,
-  onViewAll
+  onViewAll,
+  onAddNew
 }: HostListingsSectionProps) {
   const [filter, setFilter] = useState<"ALL" | "LIVE" | "DRAFT">("ALL")
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null)
@@ -110,13 +112,24 @@ export default function HostListingsSection({
         </div>
 
         <div className="flex items-center gap-2 self-start sm:self-center">
-          <Link
-            href="/register/space"
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#023629] hover:bg-[#034a38] text-white shadow-2xs transition-colors"
-          >
-            <PlusCircle size={13} />
-            <span>+ Add New Listing</span>
-          </Link>
+          {onAddNew ? (
+            <button
+              type="button"
+              onClick={onAddNew}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#023629] hover:bg-[#034a38] text-white shadow-2xs transition-colors cursor-pointer"
+            >
+              <PlusCircle size={13} />
+              <span>+ Add New Listing</span>
+            </button>
+          ) : (
+            <Link
+              href="/register/space"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#023629] hover:bg-[#034a38] text-white shadow-2xs transition-colors"
+            >
+              <PlusCircle size={13} />
+              <span>+ Add New Listing</span>
+            </Link>
+          )}
           {!isFullPage && onViewAll && (
             <button
               type="button"

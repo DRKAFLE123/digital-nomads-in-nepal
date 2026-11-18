@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, Suspense } from "react"
+import { useState, useEffect, Suspense, useMemo } from "react"
 import Link from "next/link"
 import { useSession, signOut } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -52,7 +52,8 @@ import {
   CalendarCheck,
   TrendingUp,
   HelpCircle,
-  BarChart2
+  BarChart2,
+  AlertCircle
 } from "lucide-react"
 
 import HostTopKpiSummary from "@/components/owner/HostTopKpiSummary"
@@ -177,6 +178,40 @@ function OwnerDashboardContent() {
   const [updatingHub, setUpdatingHub] = useState(false)
   const [togglingHubId, setTogglingHubId] = useState<string | null>(null)
   const [listingFilter, setListingFilter] = useState<"ALL" | "LIVE" | "DRAFT">("ALL")
+
+  // In-Dashboard Add New Property Modal State
+  const [isAddPropertyOpen, setIsAddPropertyOpen] = useState(false)
+  const [newPropName, setNewPropName] = useState("")
+  const [newPropCity, setNewPropCity] = useState("Kathmandu")
+  const [newPropAddress, setNewPropAddress] = useState("")
+  const [newPropSpaceType, setNewPropSpaceType] = useState("Coworking Space")
+  const [newPropPriceDaily, setNewPropPriceDaily] = useState<number>(8)
+  const [newPropPriceMonthly, setNewPropPriceMonthly] = useState<number>(120)
+  const [newPropOpeningHours, setNewPropOpeningHours] = useState("24/7 Access")
+  const [newPropPhotoUrl, setNewPropPhotoUrl] = useState("")
+  const [newPropFacilities, setNewPropFacilities] = useState<string[]>([
+    "High-Speed Fiber Wi-Fi (100+ Mbps)",
+    "24/7 Power Backup (Generator / Solar)",
+    "Ergonomic Chairs & Workstations"
+  ])
+  const [newPropDescription, setNewPropDescription] = useState("")
+  const [creatingProperty, setCreatingProperty] = useState(false)
+  const [addPropError, setAddPropError] = useState("")
+  const [uploadingNewPhoto, setUploadingNewPhoto] = useState(false)
+
+  // Booking Overview Multi-Filter System
+  type HorizonFilterType = "TODAY" | "UPCOMING" | "THIS_MONTH" | "ALL"
+  type OfferingFilterType = "ALL" | "WORK" | "STAY" | "WORK_AND_STAY"
+  const [dashboardTimeFilter, setDashboardTimeFilter] = useState<HorizonFilterType>("TODAY")
+  const [dashboardOfferingFilter, setDashboardOfferingFilter] = useState<OfferingFilterType>("ALL")
+  const [dashboardStatusFilter, setDashboardStatusFilter] = useState<"ALL" | "PENDING" | "CONFIRMED">("ALL")
+  
+  // Current month string "YYYY-MM"
+  const currentMonthStr = useMemo(() => {
+    const d = new Date()
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`
+  }, [])
+  const [selectedMonthFilter, setSelectedMonthFilter] = useState<string>(currentMonthStr)
 
   // Calendar Month State
   const [calendarDate, setCalendarDate] = useState(new Date())
@@ -467,6 +502,106 @@ function OwnerDashboardContent() {
     }
   }
 
+  // In-Dashboard Property Creation Handler
+  const handleCreateProperty = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setAddPropError("")
+    if (!newPropName.trim() || !newPropCity.trim()) {
+      setAddPropError("Please provide a property name and city.")
+      return
+    }
+
+    setCreatingProperty(true)
+    try {
+      const res = await fetch("/api/work-hubs/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: newPropName.trim(),
+          city: newPropCity.trim(),
+          address: newPropAddress.trim() || `${newPropCity.trim()}, Nepal`,
+          description: newPropDescription.trim() || `${newPropName.trim()} in ${newPropCity.trim()}, Nepal.`,
+          spaceType: newPropSpaceType,
+          priceDaily: newPropPriceDaily,
+          priceMonthly: newPropPriceMonthly,
+          openingHours: newPropOpeningHours,
+          photoUrl: newPropPhotoUrl.trim() || "https://images.unsplash.com/photo-1544735716-392fe2449fee?auto=format&fit=crop&q=80",
+          facilities: newPropFacilities,
+          contactEmail: ownerEmail || session?.user?.email,
+          ownerEmail: ownerEmail || session?.user?.email,
+          ownerName: session?.user?.name || "Host Partner"
+        })
+      })
+
+      if (res.ok) {
+        const created = await res.json()
+        const newHub: HubData = created.hub || {
+          id: created.id || `hub_${Date.now()}`,
+          name: newPropName.trim(),
+          slug: created.slug || newPropName.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+          city: newPropCity.trim(),
+          address: newPropAddress.trim() || `${newPropCity.trim()}, Nepal`,
+          spaceType: newPropSpaceType,
+          priceDaily: newPropPriceDaily,
+          priceMonthly: newPropPriceMonthly,
+          openingHours: newPropOpeningHours,
+          photoUrl: newPropPhotoUrl.trim(),
+          facilities: newPropFacilities,
+          contactEmail: ownerEmail || session?.user?.email || "",
+          published: true,
+          bookings: []
+        }
+
+        setHubs(prev => [newHub, ...prev])
+        setIsAddPropertyOpen(false)
+        setSuccessMessage(`🎉 "${newPropName}" was successfully added to your dashboard!`)
+        setTimeout(() => setSuccessMessage(""), 4500)
+
+        // Reset inputs
+        setNewPropName("")
+        setNewPropAddress("")
+        setNewPropDescription("")
+        setNewPropPhotoUrl("")
+      } else {
+        const err = await res.json()
+        setAddPropError(err.error || "Failed to create property.")
+      }
+    } catch (err) {
+      console.error(err)
+      setAddPropError("An unexpected error occurred. Please try again.")
+    } finally {
+      setCreatingProperty(false)
+    }
+  }
+
+  const handleNewPhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploadingNewPhoto(true)
+    try {
+      const formData = new FormData()
+      formData.append("file", file)
+      const res = await fetch("/api/upload", { method: "POST", body: formData })
+      if (res.ok) {
+        const data = await res.json()
+        if (data.url) setNewPropPhotoUrl(data.url)
+      } else {
+        alert("Photo upload failed. Please try again.")
+      }
+    } catch (err) {
+      console.error(err)
+      alert("Error uploading photo")
+    } finally {
+      setUploadingNewPhoto(false)
+    }
+  }
+
+  const handleToggleNewFacility = (fac: string) => {
+    setNewPropFacilities(prev =>
+      prev.includes(fac) ? prev.filter(f => f !== fac) : [...prev, fac]
+    )
+  }
+
   // Aggregate Metrics
   const allBookings = hubs.flatMap(h => h.bookings || [])
   const pendingBookings = allBookings.filter(b => b.status === "PENDING")
@@ -497,8 +632,10 @@ function OwnerDashboardContent() {
 
   const totalBookingsCount = allBookings.length
 
-  // Today's Bookings
+  // Date and Time Filtering Logic
   const todayDateStr = new Date().toISOString().slice(0, 10)
+  const currentMonthDateStr = selectedMonthFilter || currentMonthStr
+
   const todayBookings = allBookings.filter(b => {
     const s = new Date(b.startDate).toISOString().slice(0, 10)
     const e = new Date(b.endDate).toISOString().slice(0, 10)
@@ -510,7 +647,50 @@ function OwnerDashboardContent() {
     return s > todayDateStr
   })
 
-  const activeReservations = todaySubFilter === "TODAY" ? todayBookings : upcomingBookings
+  const thisMonthBookings = allBookings.filter(b => {
+    const s = new Date(b.startDate).toISOString().slice(0, 7)
+    const e = new Date(b.endDate).toISOString().slice(0, 7)
+    return s === currentMonthDateStr || e === currentMonthDateStr
+  })
+
+  // Multi-Filter Reservoir for Booking Overview
+  const filteredReservations = allBookings.filter(b => {
+    // 1. Time Horizon Filter
+    const s = new Date(b.startDate).toISOString().slice(0, 10)
+    const e = new Date(b.endDate).toISOString().slice(0, 10)
+    const sMonth = s.slice(0, 7)
+    const eMonth = e.slice(0, 7)
+
+    if (dashboardTimeFilter === "TODAY") {
+      if (!(todayDateStr >= s && todayDateStr <= e)) return false
+    } else if (dashboardTimeFilter === "UPCOMING") {
+      if (s <= todayDateStr) return false
+    } else if (dashboardTimeFilter === "THIS_MONTH") {
+      if (sMonth !== currentMonthDateStr && eMonth !== currentMonthDateStr) return false
+    }
+
+    // 2. Offering keyword filter
+    const notesLower = (b.notes || "").toLowerCase()
+    const isStay = notesLower.includes("stay") || notesLower.includes("room") || notesLower.includes("coliving")
+    const isWorkAndStay = notesLower.includes("workation") || notesLower.includes("work + stay") || notesLower.includes("package")
+    
+    if (dashboardOfferingFilter === "WORK") {
+      if (isStay || isWorkAndStay) return false
+    } else if (dashboardOfferingFilter === "STAY") {
+      if (!isStay || isWorkAndStay) return false
+    } else if (dashboardOfferingFilter === "WORK_AND_STAY") {
+      if (!isWorkAndStay) return false
+    }
+
+    // 3. Status filter
+    if (dashboardStatusFilter !== "ALL" && b.status !== dashboardStatusFilter) {
+      return false
+    }
+
+    return true
+  })
+
+  const activeReservations = filteredReservations
 
   // Filtered Hubs (All vs Live vs Draft)
   const filteredHubs = hubs.filter(hub => {
@@ -655,14 +835,17 @@ function OwnerDashboardContent() {
                   )}
                 </button>
 
-                <Link
-                  href="/register/space"
-                  onClick={() => setSidebarOpen(false)}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl font-bold text-slate-600 dark:text-slate-400 hover:text-[#C2410C] dark:hover:text-[#FB923C] hover:bg-slate-100/80 dark:hover:bg-slate-800/60 transition-all"
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsAddPropertyOpen(true)
+                    setSidebarOpen(false)
+                  }}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl font-bold text-slate-600 dark:text-slate-400 hover:text-[#C2410C] dark:hover:text-[#FB923C] hover:bg-slate-100/80 dark:hover:bg-slate-800/60 transition-all cursor-pointer text-left"
                 >
                   <PlusCircle size={15} className="text-[#C2410C] dark:text-[#FB923C]" />
                   <span>Add New Listing</span>
-                </Link>
+                </button>
 
                 <button
                   onClick={() => {
@@ -914,13 +1097,16 @@ function OwnerDashboardContent() {
                   >
                     View Public Directory
                   </Link>
-                  <Link
-                    href="/register/space"
-                    onClick={() => setMenuOpen(false)}
-                    className="block px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium text-slate-700 dark:text-slate-200"
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsAddPropertyOpen(true)
+                      setMenuOpen(false)
+                    }}
+                    className="w-full text-left px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium text-slate-700 dark:text-slate-200 cursor-pointer"
                   >
                     + List Another Space
-                  </Link>
+                  </button>
                   <div className="border-t border-slate-100 dark:border-slate-800 my-1" />
                   <button
                     type="button"
@@ -1040,12 +1226,13 @@ function OwnerDashboardContent() {
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0">
-                    <Link
-                      href={hubs.length === 0 ? "/register/space" : "/workspaces"}
-                      className="px-4 py-2 rounded-xl text-xs font-bold bg-[#023629] text-white hover:bg-[#034a38] transition-colors shadow-xs"
+                    <button
+                      type="button"
+                      onClick={() => hubs.length === 0 ? setIsAddPropertyOpen(true) : setMainNavTab("LISTINGS")}
+                      className="px-4 py-2 rounded-xl text-xs font-bold bg-[#023629] text-white hover:bg-[#034a38] transition-colors shadow-xs cursor-pointer"
                     >
                       {hubs.length === 0 ? "Get Started" : "View Live Listings"}
-                    </Link>
+                    </button>
                     <button
                       type="button"
                       onClick={() => setDismissChecklist(true)}
@@ -1070,6 +1257,7 @@ function OwnerDashboardContent() {
                 hubs={hubs}
                 enquiriesCountByHub={enquiriesCountByHub}
                 onEditHub={handleOpenEditModal}
+                onAddNew={() => setIsAddPropertyOpen(true)}
                 onTogglePublished={(hubId) => {
                   const h = hubs.find(x => x.id === hubId)
                   if (h) handleTogglePublishStatus(h)
@@ -1080,7 +1268,7 @@ function OwnerDashboardContent() {
 
               {/* 5. Booking Overview (Work · Stay · Work + Stay Breakdown & Check-ins) */}
               <section className="bg-white dark:bg-[#141416] border border-gray-200 dark:border-[#26262A] rounded-2xl p-5 shadow-xs space-y-5">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-gray-100 dark:border-gray-800 pb-3">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-gray-100 dark:border-gray-800 pb-3">
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="text-[10px] font-black uppercase tracking-wider text-gray-400">
@@ -1095,28 +1283,159 @@ function OwnerDashboardContent() {
                     </h3>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  {/* Top Right Horizon & Month Switcher */}
+                  <div className="flex flex-wrap items-center gap-2">
+                    {/* Time Horizon Pills */}
+                    <div className="flex items-center gap-1 p-1 bg-gray-100 dark:bg-[#18181A] border border-gray-200/80 dark:border-gray-800 rounded-xl">
+                      <button
+                        type="button"
+                        onClick={() => setDashboardTimeFilter("TODAY")}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          dashboardTimeFilter === "TODAY"
+                            ? "bg-[#023629] text-white shadow-xs"
+                            : "text-gray-500 hover:text-gray-900 dark:hover:text-white"
+                        }`}
+                      >
+                        Today ({todayBookings.length})
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setDashboardTimeFilter("UPCOMING")}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          dashboardTimeFilter === "UPCOMING"
+                            ? "bg-[#023629] text-white shadow-xs"
+                            : "text-gray-500 hover:text-gray-900 dark:hover:text-white"
+                        }`}
+                      >
+                        Upcoming ({upcomingBookings.length})
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setDashboardTimeFilter("THIS_MONTH")}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          dashboardTimeFilter === "THIS_MONTH"
+                            ? "bg-[#023629] text-white shadow-xs"
+                            : "text-gray-500 hover:text-gray-900 dark:hover:text-white"
+                        }`}
+                      >
+                        This Month ({thisMonthBookings.length})
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setDashboardTimeFilter("ALL")}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          dashboardTimeFilter === "ALL"
+                            ? "bg-[#023629] text-white shadow-xs"
+                            : "text-gray-500 hover:text-gray-900 dark:hover:text-white"
+                        }`}
+                      >
+                        All ({allBookings.length})
+                      </button>
+                    </div>
+
+                    {/* Month Switcher Dropdown */}
+                    <select
+                      value={selectedMonthFilter}
+                      onChange={(e) => {
+                        setSelectedMonthFilter(e.target.value)
+                        setDashboardTimeFilter("THIS_MONTH")
+                      }}
+                      className="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-[#18181B] border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-200 cursor-pointer focus:outline-none"
+                    >
+                      <option value="2026-11">Nov 2026</option>
+                      <option value="2026-12">Dec 2026</option>
+                      <option value="2027-01">Jan 2027</option>
+                      <option value="2027-02">Feb 2027</option>
+                      <option value="2027-03">Mar 2027</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Secondary Keyword & Status Filter Strip */}
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-gray-100 dark:border-gray-800/80">
+                  <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+                    <span className="text-[10px] font-bold uppercase text-gray-400 mr-1">Offering:</span>
                     <button
                       type="button"
-                      onClick={() => setTodaySubFilter("TODAY")}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                        todaySubFilter === "TODAY"
-                          ? "bg-[#023629] text-white shadow-xs"
-                          : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-[#18181B] dark:text-gray-400"
+                      onClick={() => setDashboardOfferingFilter("ALL")}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                        dashboardOfferingFilter === "ALL"
+                          ? "bg-[#023629] text-white shadow-2xs"
+                          : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200"
                       }`}
                     >
-                      Today ({todayBookings.length})
+                      All
                     </button>
                     <button
                       type="button"
-                      onClick={() => setTodaySubFilter("UPCOMING")}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                        todaySubFilter === "UPCOMING"
-                          ? "bg-[#023629] text-white shadow-xs"
-                          : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-[#18181B] dark:text-gray-400"
+                      onClick={() => setDashboardOfferingFilter("WORK")}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1 ${
+                        dashboardOfferingFilter === "WORK"
+                          ? "bg-[#1B4332] text-white shadow-2xs"
+                          : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200"
                       }`}
                     >
-                      Upcoming ({upcomingBookings.length})
+                      <span>💻</span> Work
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDashboardOfferingFilter("STAY")}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1 ${
+                        dashboardOfferingFilter === "STAY"
+                          ? "bg-sky-700 text-white shadow-2xs"
+                          : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200"
+                      }`}
+                    >
+                      <span>🛌</span> Stay
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDashboardOfferingFilter("WORK_AND_STAY")}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1 ${
+                        dashboardOfferingFilter === "WORK_AND_STAY"
+                          ? "bg-[#C2410C] text-white shadow-2xs"
+                          : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200"
+                      }`}
+                    >
+                      <span>⚡</span> Work + Stay
+                    </button>
+                  </div>
+
+                  {/* Status Keywords */}
+                  <div className="flex items-center gap-1 text-[11px]">
+                    <span className="text-[10px] font-bold uppercase text-gray-400 mr-1">Status:</span>
+                    <button
+                      type="button"
+                      onClick={() => setDashboardStatusFilter("ALL")}
+                      className={`px-2 py-0.5 rounded-md font-bold cursor-pointer ${
+                        dashboardStatusFilter === "ALL"
+                          ? "bg-gray-800 text-white dark:bg-gray-200 dark:text-black"
+                          : "text-gray-500 hover:text-gray-900 dark:hover:text-white"
+                      }`}
+                    >
+                      All
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDashboardStatusFilter("PENDING")}
+                      className={`px-2 py-0.5 rounded-md font-bold cursor-pointer flex items-center gap-1 ${
+                        dashboardStatusFilter === "PENDING"
+                          ? "bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-300 font-extrabold"
+                          : "text-amber-600 dark:text-amber-400 hover:underline"
+                      }`}
+                    >
+                      ● Pending ({pendingBookings.length})
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDashboardStatusFilter("CONFIRMED")}
+                      className={`px-2 py-0.5 rounded-md font-bold cursor-pointer flex items-center gap-1 ${
+                        dashboardStatusFilter === "CONFIRMED"
+                          ? "bg-emerald-100 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-300 font-extrabold"
+                          : "text-emerald-600 dark:text-emerald-400 hover:underline"
+                      }`}
+                    >
+                      ✓ Confirmed ({confirmedBookings.length})
                     </button>
                   </div>
                 </div>
@@ -1254,8 +1573,19 @@ function OwnerDashboardContent() {
                     </div>
                   </div>
                 ) : (
-                  <div className="text-center py-6 text-xs text-gray-400">
-                    No active stays or arrivals scheduled for {todaySubFilter === "TODAY" ? "today" : "upcoming dates"}.
+                  <div className="text-center py-8 text-xs text-gray-400 space-y-2">
+                    <p>No reservations matching the active filters ({dashboardTimeFilter}, {dashboardOfferingFilter !== "ALL" ? dashboardOfferingFilter : "All Offerings"}).</p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDashboardTimeFilter("ALL")
+                        setDashboardOfferingFilter("ALL")
+                        setDashboardStatusFilter("ALL")
+                      }}
+                      className="px-3.5 py-1.5 rounded-xl bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 text-xs font-bold text-gray-700 dark:text-gray-300 cursor-pointer transition-colors"
+                    >
+                      Clear all filters
+                    </button>
                   </div>
                 )}
               </section>
@@ -1401,13 +1731,14 @@ function OwnerDashboardContent() {
                   </p>
                 </div>
 
-                <Link
-                  href="/register/space"
-                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold bg-[#023629] hover:bg-[#034a38] text-white shadow-xs transition-colors self-start sm:self-center"
+                <button
+                  type="button"
+                  onClick={() => setIsAddPropertyOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold bg-[#023629] hover:bg-[#034a38] text-white shadow-xs transition-colors self-start sm:self-center cursor-pointer"
                 >
                   <PlusCircle size={14} />
                   <span>+ List another property</span>
-                </Link>
+                </button>
               </div>
 
               {/* Filter Pills: All / Live / Draft */}
@@ -2400,6 +2731,254 @@ function OwnerDashboardContent() {
                 )}
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─────────────────────────────────────────────────────────────
+          IN-DASHBOARD ADD NEW PROPERTY MODAL
+         ───────────────────────────────────────────────────────────── */}
+      {isAddPropertyOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="relative w-full max-w-2xl bg-white dark:bg-[#121214] border border-gray-200 dark:border-[#26262A] rounded-2xl shadow-2xl overflow-hidden my-8 max-h-[90vh] flex flex-col">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-5 border-b border-gray-200 dark:border-[#222225] bg-gray-50/70 dark:bg-[#161619] sticky top-0 z-10">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-[#C2410C] dark:text-[#FB923C] bg-[#C2410C]/10 px-2 py-0.5 rounded-full">
+                    New Listing
+                  </span>
+                  <span className="text-[10px] text-gray-400 font-semibold">
+                    Instant in-dashboard creation
+                  </span>
+                </div>
+                <h3 className="font-serif font-bold text-lg text-gray-900 dark:text-white mt-1">
+                  List a New Property on Nomads Nepal
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsAddPropertyOpen(false)}
+                className="w-8 h-8 rounded-full bg-gray-100 dark:bg-[#202024] flex items-center justify-center text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors cursor-pointer"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            {/* Modal Form Body */}
+            <form onSubmit={handleCreateProperty} className="p-6 space-y-5 overflow-y-auto custom-scrollbar flex-1">
+              {addPropError && (
+                <div className="p-3 bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs rounded-xl flex items-center gap-2">
+                  <AlertCircle size={15} />
+                  <span>{addPropError}</span>
+                </div>
+              )}
+
+              {/* 1. Basic Info */}
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                      Property Name *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={newPropName}
+                      onChange={(e) => setNewPropName(e.target.value)}
+                      placeholder="e.g. Lakeside Nomad Hub"
+                      className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-[#023629]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                      Space Type *
+                    </label>
+                    <select
+                      value={newPropSpaceType}
+                      onChange={(e) => setNewPropSpaceType(e.target.value)}
+                      className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-[#023629]"
+                    >
+                      <option value="Coworking Space">Coworking Space (Work)</option>
+                      <option value="Coliving & Workation">Coliving &amp; Workation (Work + Stay)</option>
+                      <option value="Nomad Hostel / Hotel">Nomad Hostel / Hotel (Stay)</option>
+                      <option value="Workstation Villa">Workstation Villa (Work + Stay)</option>
+                      <option value="Cafe & Cowork">Cafe &amp; Cowork (Work)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                      City *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={newPropCity}
+                      onChange={(e) => setNewPropCity(e.target.value)}
+                      placeholder="e.g. Kathmandu, Pokhara, Lalitpur, Bhaktapur"
+                      className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-[#023629]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                      Full Address
+                    </label>
+                    <input
+                      type="text"
+                      value={newPropAddress}
+                      onChange={(e) => setNewPropAddress(e.target.value)}
+                      placeholder="e.g. Lakeside Ward 6, Pokhara"
+                      className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-[#023629]"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* 2. Rates & Hours */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    Daily Rate ($ USD)
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    step="1"
+                    value={newPropPriceDaily}
+                    onChange={(e) => setNewPropPriceDaily(parseFloat(e.target.value) || 0)}
+                    className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-[#023629]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    Monthly Rate ($ USD)
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    step="1"
+                    value={newPropPriceMonthly}
+                    onChange={(e) => setNewPropPriceMonthly(parseFloat(e.target.value) || 0)}
+                    className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-[#023629]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    Opening Hours
+                  </label>
+                  <input
+                    type="text"
+                    value={newPropOpeningHours}
+                    onChange={(e) => setNewPropOpeningHours(e.target.value)}
+                    placeholder="e.g. 24/7 Access"
+                    className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-[#023629]"
+                  />
+                </div>
+              </div>
+
+              {/* 3. Verified Amenities */}
+              <div className="space-y-2">
+                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                  Verified Nomad Amenities ({newPropFacilities.length} selected)
+                </label>
+                <div className="flex flex-wrap gap-1.5">
+                  {POPULAR_AMENITIES.map((amenity) => {
+                    const isSelected = newPropFacilities.includes(amenity)
+                    return (
+                      <button
+                        key={amenity}
+                        type="button"
+                        onClick={() => handleToggleNewFacility(amenity)}
+                        className={`text-xs px-2.5 py-1.5 rounded-xl border transition-all text-left flex items-center gap-1.5 cursor-pointer ${
+                          isSelected
+                            ? "bg-[#023629] text-white border-[#023629] shadow-2xs"
+                            : "bg-gray-50 dark:bg-[#1A1A1E] text-gray-700 dark:text-gray-300 border-gray-200 dark:border-[#2C2C30] hover:border-gray-400"
+                        }`}
+                      >
+                        {isSelected && <Check size={12} className="stroke-[3]" />}
+                        <span>{amenity}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+
+              {/* 4. Cover Photo */}
+              <div className="space-y-2">
+                <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300">
+                  Cover Photo (Upload or URL)
+                </label>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <label className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 dark:bg-[#1E1E22] hover:bg-gray-200 dark:hover:bg-[#28282D] text-gray-800 dark:text-gray-200 text-xs font-bold rounded-xl cursor-pointer transition-colors shrink-0">
+                    <Upload size={14} />
+                    <span>{uploadingNewPhoto ? "Uploading..." : "Upload Photo"}</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleNewPhotoUpload}
+                      disabled={uploadingNewPhoto}
+                      className="hidden"
+                    />
+                  </label>
+                  <input
+                    type="text"
+                    value={newPropPhotoUrl}
+                    onChange={(e) => setNewPropPhotoUrl(e.target.value)}
+                    placeholder="Or paste direct image URL (https://...)"
+                    className="flex-1 p-2 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-800 dark:text-gray-200 placeholder-gray-400 focus:outline-none focus:border-[#023629]"
+                  />
+                </div>
+              </div>
+
+              {/* 5. Description */}
+              <div>
+                <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  About this Space
+                </label>
+                <textarea
+                  rows={2}
+                  value={newPropDescription}
+                  onChange={(e) => setNewPropDescription(e.target.value)}
+                  placeholder="Describe your workspace, vibe, community, surrounding cafes, power backup..."
+                  className="w-full p-2.5 text-xs bg-gray-50 dark:bg-[#161618] border border-gray-200 dark:border-[#2E2E33] rounded-xl text-gray-900 dark:text-white focus:outline-none focus:border-[#023629]"
+                />
+              </div>
+
+              {/* Modal Footer */}
+              <div className="p-4 border-t border-gray-200 dark:border-[#222225] bg-gray-50 dark:bg-[#141416] flex items-center justify-end gap-3 sticky bottom-0 z-10 -mx-6 -mb-6">
+                <button
+                  type="button"
+                  onClick={() => setIsAddPropertyOpen(false)}
+                  className="px-4 py-2 text-xs font-semibold rounded-xl border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-[#1E1E22] text-gray-700 dark:text-gray-300 transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={creatingProperty || uploadingNewPhoto}
+                  className="px-5 py-2 text-xs font-bold rounded-xl bg-[#023629] hover:bg-[#034a38] text-white shadow-xs transition-colors flex items-center gap-1.5 disabled:opacity-60 cursor-pointer"
+                >
+                  {creatingProperty ? (
+                    <>
+                      <Loader2 size={13} className="animate-spin" />
+                      <span>Creating Space...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Check size={14} />
+                      <span>Create Property Listing</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
