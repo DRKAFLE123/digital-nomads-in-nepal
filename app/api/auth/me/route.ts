@@ -81,9 +81,20 @@ export async function GET(req: NextRequest) {
       }
     }
 
+    const isEmailVerified = Boolean(user?.emailVerified)
+
     return NextResponse.json({
       isLoggedIn: true,
-      user: user ? { id: user.id, name: user.name, email: user.email, role: isOwner ? "OWNER" : isGuide ? "GUIDE" : user.role } : null,
+      user: user
+        ? {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: isOwner ? "OWNER" : isGuide ? "GUIDE" : user.role,
+            emailVerified: user.emailVerified ? user.emailVerified.toISOString() : null
+          }
+        : null,
+      isEmailVerified,
       role: isOwner ? "OWNER" : isGuide ? "GUIDE" : user?.role || "NOMAD",
       isOwner,
       isGuide,

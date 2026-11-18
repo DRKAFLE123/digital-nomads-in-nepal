@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     }
 
     if (user.emailVerified) {
-      return NextResponse.json({ success: true, message: "Your email is already verified." })
+      return NextResponse.json({ success: true, alreadyVerified: true, message: "Your email is already verified." })
     }
 
     // Generate new token

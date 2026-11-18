@@ -122,6 +122,8 @@ function OwnerDashboardContent() {
   const [mainNavTab, setMainNavTab] = useState<OwnerNavTab>("DASHBOARD")
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [notifOpen, setNotifOpen] = useState(false)
+  const [messagesOpen, setMessagesOpen] = useState(false)
+  const [isEmailVerified, setIsEmailVerified] = useState<boolean>(true)
 
   // Business Profile States
   const [profileBrandName, setProfileBrandName] = useState("")
@@ -163,7 +165,12 @@ function OwnerDashboardContent() {
         body: JSON.stringify({ email: session.user.email }),
       })
       const data = await res.json()
-      setResendStatus(data.message || "Fresh verification link sent!")
+      if (data.alreadyVerified) {
+        setIsEmailVerified(true)
+        setResendStatus("Email is already verified!")
+      } else {
+        setResendStatus(data.message || "Fresh verification link sent!")
+      }
     } catch {
       setResendStatus("Failed to send verification link.")
     } finally {
@@ -244,6 +251,20 @@ function OwnerDashboardContent() {
       const email = session.user.email
       setOwnerEmail(email)
       fetchHostData(email)
+
+      // Check live email verification status
+      if ((session.user as any)?.emailVerified) {
+        setIsEmailVerified(true)
+      } else {
+        fetch(`/api/auth/me?email=${encodeURIComponent(email)}`)
+          .then((res) => res.json())
+          .then((data) => {
+            if (data && typeof data.isEmailVerified === "boolean") {
+              setIsEmailVerified(data.isEmailVerified)
+            }
+          })
+          .catch(() => {})
+      }
     }
   }, [session, status, router])
 
@@ -1032,22 +1053,39 @@ function OwnerDashboardContent() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2.5 sm:gap-3.5">
+          <div className="flex items-center gap-2.5 sm:gap-3.5 relative">
+            {/* Click-outside backdrop for header popovers */}
+            {(notifOpen || messagesOpen || menuOpen) && (
+              <div
+                className="fixed inset-0 z-40 bg-transparent"
+                onClick={() => {
+                  setNotifOpen(false)
+                  setMessagesOpen(false)
+                  setMenuOpen(false)
+                }}
+              />
+            )}
+
             {/* + List Space CTA */}
-            <Link
-              href="/register/space"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-white bg-[#023629] hover:bg-[#034a38] rounded-xl transition-all shadow-xs"
+            <button
+              type="button"
+              onClick={() => setIsAddPropertyOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-white bg-[#023629] hover:bg-[#034a38] rounded-xl transition-all shadow-xs cursor-pointer z-10"
             >
               <PlusCircle size={13} />
               <span className="hidden sm:inline">+ List Another Space</span>
               <span className="sm:hidden">+ Space</span>
-            </Link>
+            </button>
 
             {/* Notification Bell */}
-            <div className="relative">
+            <div className="relative z-50">
               <button 
                 type="button"
-                onClick={() => setNotifOpen(!notifOpen)}
+                onClick={() => {
+                  setNotifOpen(!notifOpen)
+                  setMessagesOpen(false)
+                  setMenuOpen(false)
+                }}
                 className="p-2 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 relative cursor-pointer"
                 title="Notifications"
               >
@@ -1082,24 +1120,103 @@ function OwnerDashboardContent() {
               )}
             </div>
 
-            {/* Messages Shortcut */}
-            <button
-              type="button"
-              onClick={() => setMainNavTab("MESSAGES")}
-              className="p-2 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 relative cursor-pointer"
-              title="Nomad Inquiries"
-            >
-              <MessageSquare size={16} />
-              {allBookings.length > 0 && (
-                <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full absolute top-1.5 right-1.5" />
-              )}
-            </button>
-
-            {/* Profile Menu Dropdown */}
-            <div className="relative pl-2 border-l border-slate-200 dark:border-slate-800">
+            {/* Messages / Inquiries Dropdown */}
+            <div className="relative z-50">
               <button
                 type="button"
-                onClick={() => setMenuOpen(!menuOpen)}
+                onClick={() => {
+                  setMessagesOpen(!messagesOpen)
+                  setNotifOpen(false)
+                  setMenuOpen(false)
+                }}
+                className="p-2 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 relative cursor-pointer"
+                title="Nomad Messages & Inquiries"
+              >
+                <MessageSquare size={16} />
+                {newEnquiriesCount > 0 ? (
+                  <span className="w-2 h-2 bg-amber-500 rounded-full absolute top-1.5 right-1.5 animate-pulse" />
+                ) : enquiries.length > 0 ? (
+                  <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full absolute top-1.5 right-1.5" />
+                ) : null}
+              </button>
+
+              {/* Messages Popover Dropdown */}
+              {messagesOpen && (
+                <div className="absolute right-0 mt-2 w-80 sm:w-88 bg-white dark:bg-[#161618] border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl py-3 z-50 text-xs animate-in fade-in zoom-in-95">
+                  <div className="px-4 pb-2 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <MessageSquare size={14} className="text-[#C2410C]" />
+                      <span className="font-extrabold text-slate-900 dark:text-white">Nomad Messages</span>
+                    </div>
+                    {newEnquiriesCount > 0 && (
+                      <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
+                        {newEnquiriesCount} new
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="max-h-72 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800">
+                    {enquiries.length === 0 ? (
+                      <div className="p-6 text-center text-slate-400">
+                        <MessageSquare size={22} className="mx-auto mb-1.5 opacity-40" />
+                        <p className="font-bold text-slate-700 dark:text-slate-300">No incoming messages yet</p>
+                        <p className="text-[11px] text-slate-500 mt-0.5">When nomads contact you about your spaces, their messages appear here.</p>
+                      </div>
+                    ) : (
+                      enquiries.slice(0, 4).map((enq) => (
+                        <div
+                          key={enq.id}
+                          onClick={() => {
+                            setMainNavTab("ENQUIRIES")
+                            setMessagesOpen(false)
+                          }}
+                          className="p-3 hover:bg-slate-50 dark:hover:bg-slate-800/60 cursor-pointer transition-colors space-y-1"
+                        >
+                          <div className="flex items-center justify-between gap-1">
+                            <span className="font-bold text-slate-900 dark:text-white truncate">
+                              {enq.nomadName}
+                            </span>
+                            <span className="text-[10px] text-slate-400 shrink-0">
+                              {new Date(enq.createdAt).toLocaleDateString([], { month: "short", day: "numeric" })}
+                            </span>
+                          </div>
+                          <div className="text-[11px] font-medium text-slate-500 dark:text-slate-400 truncate">
+                            {enq.unitType} · <span className="text-slate-400">{enq.city}</span>
+                          </div>
+                          <p className="text-[11px] text-slate-600 dark:text-slate-300 italic truncate line-clamp-1">
+                            &ldquo;{enq.message}&rdquo;
+                          </p>
+                        </div>
+                      ))
+                    )}
+                  </div>
+
+                  <div className="p-2 pt-2.5 border-t border-slate-100 dark:border-slate-800 text-center">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMainNavTab("ENQUIRIES")
+                        setMessagesOpen(false)
+                      }}
+                      className="w-full py-2 px-3 rounded-xl bg-slate-100 dark:bg-[#202024] hover:bg-[#023629] hover:text-white text-slate-700 dark:text-slate-200 text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs"
+                    >
+                      <span>Open Enquiries Inbox ({enquiries.length})</span>
+                      <ArrowRight size={12} />
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Profile Menu Dropdown */}
+            <div className="relative pl-2 border-l border-slate-200 dark:border-slate-800 z-50">
+              <button
+                type="button"
+                onClick={() => {
+                  setMenuOpen(!menuOpen)
+                  setNotifOpen(false)
+                  setMessagesOpen(false)
+                }}
                 className="flex items-center gap-2 p-1 pl-2 border border-slate-200 dark:border-slate-700 rounded-full hover:shadow-xs transition-all bg-white dark:bg-[#141416] cursor-pointer"
               >
                 <div className="w-7 h-7 rounded-full bg-[#023629] text-white flex items-center justify-center font-bold text-xs shadow-xs">
@@ -1169,7 +1286,7 @@ function OwnerDashboardContent() {
         </header>
 
         {/* Email Verification Alert Banner */}
-        {session?.user && !(session.user as any)?.emailVerified && (
+        {session?.user && !isEmailVerified && (
           <div className="bg-amber-50 dark:bg-amber-950/40 border-b border-amber-200 dark:border-amber-900/60 px-4 py-2.5 text-xs text-amber-900 dark:text-amber-200 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2 max-w-5xl mx-auto w-full">
               <span className="text-amber-600">⚠️</span>
@@ -2601,11 +2718,15 @@ function OwnerDashboardContent() {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50 dark:bg-[#18181C] border border-gray-200/70 dark:border-[#26262B]">
                     <div>
-                      <p className="text-xs font-bold text-gray-900 dark:text-white">Primary Account Email</p>
+                      <p className="text-xs font-bold text-gray-900 dark:text-white">Email Verification Status</p>
                       <p className="text-[11px] text-gray-500">{ownerEmail || session?.user?.email}</p>
                     </div>
-                    <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
-                      Active
+                    <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${
+                      isEmailVerified
+                        ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300"
+                        : "bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300"
+                    }`}>
+                      {isEmailVerified ? "Verified ✓" : "Pending Verification"}
                     </span>
                   </div>
 

@@ -41,6 +41,19 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id
         token.role = (user as { id: string; role: string }).role
         token.emailVerified = (user as any).emailVerified
+      } else if (token.id && !token.emailVerified) {
+        // Automatically refresh verification status from DB if verified via Gmail link
+        try {
+          const dbUser = await prisma.user.findUnique({
+            where: { id: token.id as string },
+            select: { emailVerified: true }
+          })
+          if (dbUser?.emailVerified) {
+            token.emailVerified = dbUser.emailVerified.toISOString()
+          }
+        } catch {
+          // Ignore transient DB read error
+        }
       }
       return token
     },
