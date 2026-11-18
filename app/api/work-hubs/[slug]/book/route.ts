@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit"
 
@@ -24,28 +26,29 @@ export async function POST(
       return NextResponse.json({ error: "Work hub not found" }, { status: 404 })
     }
 
+    const session = await getServerSession(authOptions)
     const body = await req.json()
     const { nomadName, nomadEmail, startDate, endDate, notes } = body
 
-    if (!nomadName || !nomadEmail || !startDate || !endDate) {
+    if (!nomadName || (!nomadEmail && !session?.user?.email) || !startDate || !endDate) {
       return NextResponse.json({ error: "Missing required booking fields." }, { status: 400 })
     }
 
-    const normalizedEmail = String(nomadEmail).trim().toLowerCase()
+    const normalizedEmail = (session?.user?.email || String(nomadEmail)).trim().toLowerCase()
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(normalizedEmail) || normalizedEmail.length > 100) {
       return NextResponse.json({ error: "Please provide a valid email address." }, { status: 400 })
     }
 
-    const start = new Date(startDate)
-    const end = new Date(endDate)
+    const start = new Date(startDate + "T00:00:00")
+    const end = new Date(endDate + "T23:59:59")
 
     if (isNaN(start.getTime()) || isNaN(end.getTime())) {
       return NextResponse.json({ error: "Invalid start or end date format." }, { status: 400 })
     }
 
-    if (start >= end) {
-      return NextResponse.json({ error: "Check-out date must be strictly after check-in date." }, { status: 400 })
+    if (end < start) {
+      return NextResponse.json({ error: "End date must be on or after start date." }, { status: 400 })
     }
 
     // Do not allow reservations in the past (allow small grace buffer for timezones)
@@ -63,8 +66,8 @@ export async function POST(
         nomadEmail: normalizedEmail,
         status: { in: ["PENDING", "CONFIRMED"] },
         AND: [
-          { startDate: { lt: end } },
-          { endDate: { gt: start } }
+          { startDate: { lte: end } },
+          { endDate: { gte: start } }
         ]
       }
     })
@@ -79,7 +82,7 @@ export async function POST(
     const booking = await prisma.hubBooking.create({
       data: {
         hubId: hub.id,
-        nomadName: String(nomadName).trim().slice(0, 100),
+        nomadName: (session?.user?.name || String(nomadName)).trim().slice(0, 100),
         nomadEmail: normalizedEmail,
         startDate: start,
         endDate: end,
@@ -88,7 +91,9 @@ export async function POST(
       }
     })
 
-    return NextResponse.json(booking, { status: 201 })
+    const refCode = `DNN-${booking.id.slice(-4).toUpperCase()}`
+
+    return NextResponse.json({ ...booking, refCode }, { status: 201 })
   } catch (err) {
     console.error("Booking request failed:", err)
     return NextResponse.json({ error: "Booking request failed" }, { status: 500 })
