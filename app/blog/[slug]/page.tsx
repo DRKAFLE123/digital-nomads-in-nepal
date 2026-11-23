@@ -64,6 +64,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   // Consolidate legacy slug to authoritative canonical URL
   const canonicalSlug = params.slug === "cost-of-living-nepal-2026-nomad-budget"
     ? "cost-of-living-in-nepal-2026-2027"
+    : params.slug === "cost-of-living-kathmandu-nomad-guide"
+    ? "cost-of-living-in-kathmandu-2026"
     : params.slug
   const postUrl = `${SITE_URL}/blog/${canonicalSlug}`
   const imageUrl = post.coverImage || `${SITE_URL}/hero-bg.png`

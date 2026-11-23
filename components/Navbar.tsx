@@ -312,7 +312,7 @@ export default function Navbar() {
         { name: "Practical Guides", desc: "Comprehensive guides for SIM cards, transport, visas & money.", href: "/practical-guides" },
         { name: "SIM Cards & Data Guide", desc: "Ncell vs NTC 4G/5G, eSIMs and airport kiosk setup.", href: "/nepal-sim-cards-guide" },
         { name: "Transportation Guide", desc: "Pathao, InDrive ride-hailing, taxis & domestic flights.", href: "/nepal-transportation-guide" },
-        { name: "Nomad Visa Guide", desc: "150-day tourist visa rules, entry & immigration extensions.", href: "/nomad-visa-guide" },
+        { name: "Nomad Visa Guide", desc: "150-day tourist visa rules, entry & immigration extensions.", href: "/blog/nepal-digital-nomad-visa-guide-2026" },
       ]
     },
     {
@@ -368,7 +368,7 @@ export default function Navbar() {
         { name: "Pokhara Nomads Basecamp 2026", desc: "Nepal's remote work summit", href: "/blog/pokhara-nomads-basecamp-summit-2026" },
         { name: "Nepal Nomad Visa (2026)", desc: "Visa requirements & updates", href: "/blog/nepal-digital-nomad-visa-guide-2026" },
         { name: "Top 10 Nomad Destinations", desc: "Best hubs across Nepal", href: "/blog/top-10-destinations-nepal-remote-workers-2026" },
-        { name: "Cost of Living Guide", desc: "Monthly budget breakdown", href: "/blog/cost-of-living-nepal-2026-nomad-budget" },
+        { name: "Cost of Living Guide", desc: "Monthly budget breakdown", href: "/blog/cost-of-living-in-nepal-2026-2027" },
       ]
     },
   ]
@@ -742,7 +742,7 @@ export default function Navbar() {
 
                     {roleInfo.isGuide && (
                       <Link
-                        href="/guides/dashboard"
+                        href="/local-guides/dashboard"
                         onClick={() => setNotificationsOpen(false)}
                         className="block p-2.5 rounded-xl bg-[#FBF9F5] hover:bg-[#F3EFE6] dark:bg-[#161616] dark:hover:bg-[#1C1C1C] border border-[#E8E2D8] dark:border-gray-800 transition-colors"
                       >

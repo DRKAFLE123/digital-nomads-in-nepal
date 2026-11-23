@@ -69,7 +69,7 @@ const nextConfig = {
       },
       {
         source: '/resources/visa',
-        destination: '/nomad-visa-guide',
+        destination: '/blog/nepal-digital-nomad-visa-guide-2026',
         permanent: true,
       },
       {
@@ -94,7 +94,7 @@ const nextConfig = {
       },
       {
         source: '/resources/cost-of-living',
-        destination: '/nepal-cost-of-living-guide',
+        destination: '/blog/cost-of-living-in-nepal-2026-2027',
         permanent: true,
       },
       {
@@ -230,7 +230,12 @@ const nextConfig = {
       },
       {
         source: '/guides/cost-of-living-kathmandu',
-        destination: '/blog/cost-of-living-kathmandu-nomad-guide',
+        destination: '/blog/cost-of-living-in-kathmandu-2026',
+        permanent: true,
+      },
+      {
+        source: '/blog/cost-of-living-kathmandu-nomad-guide',
+        destination: '/blog/cost-of-living-in-kathmandu-2026',
         permanent: true,
       },
       {

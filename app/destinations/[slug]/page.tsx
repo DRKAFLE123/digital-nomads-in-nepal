@@ -448,12 +448,12 @@ export default async function DestinationPage({ params }: { params: { slug: stri
               <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
                 <h4 className="font-bold text-foreground mb-4">Required Resource Guides</h4>
                 <ul className="space-y-3 text-sm">
-                  <li><Link href="/resources/coworking" className="text-primary hover:underline font-medium">→ Vetted Coworking Spaces &amp; Hubs</Link></li>
+                  <li><Link href="/workspaces" className="text-primary hover:underline font-medium">→ Vetted Coworking Spaces &amp; Hubs</Link></li>
                   <li><Link href="/stay" className="text-primary hover:underline font-medium">→ Work-Friendly Stays &amp; Coliving</Link></li>
-                  <li><Link href="/resources/visa" className="text-primary hover:underline font-medium">→ Nepal Nomad Visa &amp; Legal Info</Link></li>
-                  <li><Link href="/resources/cost-of-living" className="text-primary hover:underline font-medium">→ Detailed Cost of Living Breakdown</Link></li>
-                  <li><Link href="/resources/sim-cards" className="text-primary hover:underline font-medium">→ SIM Cards &amp; Internet Setup</Link></li>
-                  <li><Link href="/resources/transportation" className="text-primary hover:underline font-medium">→ Local Transport, Pathao &amp; Flights</Link></li>
+                  <li><Link href="/blog/nepal-digital-nomad-visa-guide-2026" className="text-primary hover:underline font-medium">→ Nepal Nomad Visa &amp; Legal Info</Link></li>
+                  <li><Link href={slug === 'kathmandu' ? '/blog/cost-of-living-in-kathmandu-2026' : '/blog/cost-of-living-in-nepal-2026-2027'} className="text-primary hover:underline font-medium">→ Detailed Cost of Living Breakdown</Link></li>
+                  <li><Link href="/nepal-sim-cards-guide" className="text-primary hover:underline font-medium">→ SIM Cards &amp; Internet Setup</Link></li>
+                  <li><Link href="/nepal-transportation-guide" className="text-primary hover:underline font-medium">→ Local Transport, Pathao &amp; Flights</Link></li>
                 </ul>
               </div>
             </div>

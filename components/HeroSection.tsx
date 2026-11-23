@@ -96,7 +96,7 @@ const QUICK_FILTERS = [
   },
   {
     label: "Local Guides",
-    href: "/guides",
+    href: "/local-guides",
     icon: Users,
     iconColor: "text-[#023629] dark:text-emerald-400",
   },
@@ -206,7 +206,7 @@ export default function HeroSection() {
     if (cat === "stay") {
       router.push(`/stay${cityQuery}`)
     } else if (cat === "guide") {
-      router.push(`/guides${cityQuery}`)
+      router.push(`/local-guides${cityQuery}`)
     } else if (cat === "treks") {
       router.push(`/destinations${cityQuery}`)
     } else if (cat === "cafes") {

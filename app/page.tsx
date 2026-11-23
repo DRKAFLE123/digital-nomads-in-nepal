@@ -38,7 +38,7 @@ import { prisma } from "@/lib/prisma"
 export const dynamic = "force-dynamic"
 
 export const metadata = {
-  title: "Digital Nomads in Nepal | Live, Work & Explore",
+  title: "Digital Nomads in Nepal: Coworking, Stays & Visa Guides",
   description: "The definitive platform for remote workers in Nepal. Find verified coworking spaces, work-friendly stays, licensed trekking guides, cost of living breakdowns, and an active nomad community.",
   alternates: {
     canonical: "https://digitalnomadsinnepal.com",
@@ -196,7 +196,7 @@ export default async function Home() {
     showTiktok: true,
     youtube: "https://youtube.com/@digitalnomadsinnepal?si=fPjO8sPkEvfJ73zu",
     showYoutube: true,
-    instagram: "https://instagram.com",
+    instagram: "https://www.instagram.com/digitalnomadsnepal",
     showInstagram: true,
     twitter: "https://twitter.com",
     showTwitter: false,
@@ -377,7 +377,7 @@ export default async function Home() {
                 </p>
               </div>
               <Link
-                href="/guides"
+                href="/local-guides"
                 className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#C2410C] dark:text-[#FB923C] hover:text-[#9A3412] hover:underline group shrink-0"
               >
                 <span>Browse all guides marketplace</span>
@@ -399,7 +399,7 @@ export default async function Home() {
                 return (
                   <Link
                     key={guide.id}
-                    href={`/guides/${guide.id}`}
+                    href={`/local-guides/${guide.id}`}
                     className="group block bg-white dark:bg-[#141416] border border-[#E8E2D8] dark:border-[#26262A] rounded-2xl overflow-hidden hover:-translate-y-1 hover:border-[#023629] dark:hover:border-[#FB923C]/60 hover:shadow-xl transition-all duration-200 flex flex-col justify-between"
                   >
                     {/* Top Soft Gradient Banner with Circular Avatar & NPL Code Badge */}
@@ -501,13 +501,13 @@ export default async function Home() {
               </p>
               <div className="flex items-center gap-3">
                 <Link
-                  href="/guides/register"
+                  href="/local-guides/register"
                   className="px-4 py-2 border border-slate-300 dark:border-slate-700 hover:border-slate-400 text-gray-800 dark:text-gray-200 text-xs font-bold rounded-xl transition-all"
                 >
                   Join as Local Expert
                 </Link>
                 <Link
-                  href="/guides"
+                  href="/local-guides"
                   className="px-5 py-2 bg-[#023629] hover:bg-[#034a38] text-white text-xs font-bold rounded-xl transition-all shadow-xs inline-flex items-center gap-1.5"
                 >
                   <span>Explore Guides Marketplace</span>
@@ -547,7 +547,7 @@ export default async function Home() {
               {stays.map(stay => (
                 <Link
                   key={stay.id}
-                  href={`/stay?type=${encodeURIComponent(stay.type.toLowerCase())}`}
+                  href={`/stay#${stay.id}`}
                   className="group block bg-[#FAF7F2] dark:bg-[#0B0B0C] border border-[#E8E2D8] dark:border-[#26262A] rounded-2xl overflow-hidden hover:-translate-y-1 hover:shadow-xl transition-all duration-200 select-none"
                 >
                   <div className="relative aspect-[4/3] w-full bg-[#1A1A1C] overflow-hidden">
@@ -657,7 +657,7 @@ export default async function Home() {
                     Do quick 3 to 4 day treks like Poon Hill, Australian Camp, or Mardi Himal directly from your desk in Pokhara.
                   </p>
                 </div>
-                <Link href="/guides" className="text-xs font-bold text-[#C2410C] dark:text-[#FB923C] hover:text-[#9A3412] inline-flex items-center gap-1.5 group-hover:translate-x-1 transition-all">
+                <Link href="/local-guides" className="text-xs font-bold text-[#C2410C] dark:text-[#FB923C] hover:text-[#9A3412] inline-flex items-center gap-1.5 group-hover:translate-x-1 transition-all">
                   <span>Find trekking guides</span>
                   <ArrowRight size={13} />
                 </Link>
@@ -810,7 +810,7 @@ export default async function Home() {
                 <div className="space-y-4">
                   {/* Card 1 */}
                   <Link
-                    href="/blog/cost-of-living-nepal-2026-nomad-budget"
+                    href="/blog/cost-of-living-in-nepal-2026-2027"
                     className="p-5 sm:p-6 border border-white/10 border-l-4 border-l-[#C2410C] bg-[#1C1C1F] rounded-2xl hover:border-[#FB923C]/60 hover:-translate-y-0.5 transition-all duration-300 shadow-sm block group"
                   >
                     <div className="flex items-center justify-between mb-1.5">
@@ -827,13 +827,13 @@ export default async function Home() {
                       </span>
                     </div>
                     <p className="text-gray-400 text-xs sm:text-sm leading-relaxed pl-10 font-normal">
-                      Live comfortably in private furnished apartments, dine out daily at healthy cafes, and access coworking spaces for $500–$1,200/month total.
+                      Live comfortably in private furnished apartments, dine out daily at healthy cafes, and access coworking spaces for $500–$1,000/month total.
                     </p>
                   </Link>
 
                   {/* Card 2 */}
                   <Link
-                    href="/guides"
+                    href="/local-guides"
                     className="p-5 sm:p-6 border border-white/10 border-l-4 border-l-[#C2410C] bg-[#1C1C1F] rounded-2xl hover:border-[#FB923C]/60 hover:-translate-y-0.5 transition-all duration-300 shadow-sm block group"
                   >
                     <div className="flex items-center justify-between mb-1.5">

@@ -21,24 +21,10 @@ const fraunces = Fraunces({
 
 export const metadata: Metadata = {
   title: {
-    default: "Digital Nomads in Nepal | Workspaces, Stays & Remote Work Guides",
+    default: "Digital Nomads in Nepal: Coworking, Stays & Visa Guides",
     template: "%s | Digital Nomads in Nepal",
   },
   description: "The complete platform for remote workers in Nepal. Vetted workspaces, work-friendly stays, local guides, cost of living breakdowns, and digital nomad hubs.",
-  keywords: [
-    "digital nomads in nepal",
-    "digital nomad nepal",
-    "remote work nepal",
-    "coworking space kathmandu",
-    "coworking pokhara",
-    "nepal digital nomad visa",
-    "work from nepal",
-    "coliving nepal",
-    "nepal internet speed for remote work",
-    "cost of living nepal digital nomad",
-    "best places to work in kathmandu",
-    "work friendly stays nepal",
-  ],
   metadataBase: new URL('https://digitalnomadsinnepal.com'),
   icons: {
     icon: [
@@ -56,16 +42,16 @@ export const metadata: Metadata = {
   },
   manifest: '/manifest.webmanifest',
   openGraph: {
-    title: 'Digital Nomads in Nepal | Workspaces, Stays & Remote Work Guides',
+    title: 'Digital Nomads in Nepal: Coworking, Stays & Visa Guides',
     description: 'Find vetted workspaces, work-friendly stays, local guides, practical resources and places to live and work across Nepal.',
     url: 'https://digitalnomadsinnepal.com',
     siteName: 'Digital Nomads in Nepal',
     images: [
       {
-        url: '/branding/logo-horizontal.png',
+        url: '/hero-bg.png',
         width: 1200,
-        height: 300,
-        alt: 'Digital Nomads in Nepal Logo',
+        height: 630,
+        alt: 'Digital Nomads in Nepal - Coworking, Stays & Mountain Workations',
       },
     ],
     locale: 'en_US',
@@ -73,9 +59,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Digital Nomads in Nepal | Workspaces, Stays & Remote Work Guides',
+    title: 'Digital Nomads in Nepal: Coworking, Stays & Visa Guides',
     description: 'Find vetted workspaces, work-friendly stays, local guides, practical resources and places to live and work across Nepal.',
-    images: ['/webisteofficiallogo-removebg-preview.png'],
+    images: ['/hero-bg.png'],
   },
 };
 
@@ -87,7 +73,7 @@ const jsonLd = {
       '@id': 'https://digitalnomadsinnepal.com/#organization',
       name: 'Digital Nomads in Nepal',
       url: 'https://digitalnomadsinnepal.com',
-      logo: 'https://digitalnomadsinnepal.com/webisteofficiallogo-removebg-preview.png',
+      logo: 'https://digitalnomadsinnepal.com/branding/logo-horizontal.png',
       description: 'Community and resource hub for remote workers, freelancers, and digital nomads in Nepal.',
     },
     {
